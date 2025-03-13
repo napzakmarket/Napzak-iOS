@@ -17,6 +17,9 @@
 		D045DECD2D8372D800EB1EB6 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = D045DECC2D8372D800EB1EB6 /* KakaoSDKUser */; };
 		D045DED02D83732D00EB1EB6 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = D045DECF2D83732D00EB1EB6 /* Moya */; };
 		D045DED32D83736600EB1EB6 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D045DED22D83736600EB1EB6 /* Lottie */; };
+		D045DEDD2D83750400EB1EB6 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D045DEDA2D83750400EB1EB6 /* Pretendard-SemiBold.otf */; };
+		D045DEDE2D83750400EB1EB6 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D045DED82D83750400EB1EB6 /* Pretendard-Bold.otf */; };
+		D045DEE22D83759500EB1EB6 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D045DEE12D83759500EB1EB6 /* Pretendard-Regular.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +28,10 @@
 		D045DEB72D83723A00EB1EB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D045DEB82D83723A00EB1EB6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D045DEB92D83723A00EB1EB6 /* Napzak_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Napzak_iOSApp.swift; sourceTree = "<group>"; };
+		D045DED82D83750400EB1EB6 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
+		D045DEDA2D83750400EB1EB6 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
+		D045DEE12D83759500EB1EB6 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
+		D045DEE32D8375D800EB1EB6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,12 +78,56 @@
 		D045DEBA2D83723A00EB1EB6 /* Napzak-iOS */ = {
 			isa = PBXGroup;
 			children = (
-				D045DEB62D83723A00EB1EB6 /* Preview Content */,
-				D045DEB72D83723A00EB1EB6 /* Assets.xcassets */,
-				D045DEB82D83723A00EB1EB6 /* ContentView.swift */,
-				D045DEB92D83723A00EB1EB6 /* Napzak_iOSApp.swift */,
+				D045DED42D83747300EB1EB6 /* Application */,
+				D045DED52D8374BF00EB1EB6 /* Global */,
+				D045DED62D8374C700EB1EB6 /* Presentation */,
 			);
 			path = "Napzak-iOS";
+			sourceTree = "<group>";
+		};
+		D045DED42D83747300EB1EB6 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				D045DEB92D83723A00EB1EB6 /* Napzak_iOSApp.swift */,
+				D045DEB62D83723A00EB1EB6 /* Preview Content */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		D045DED52D8374BF00EB1EB6 /* Global */ = {
+			isa = PBXGroup;
+			children = (
+				D045DED72D8374F000EB1EB6 /* Resources */,
+			);
+			path = Global;
+			sourceTree = "<group>";
+		};
+		D045DED62D8374C700EB1EB6 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				D045DEB82D83723A00EB1EB6 /* ContentView.swift */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		D045DED72D8374F000EB1EB6 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D045DEDB2D83750400EB1EB6 /* Fonts */,
+				D045DEB72D83723A00EB1EB6 /* Assets.xcassets */,
+				D045DEE32D8375D800EB1EB6 /* Info.plist */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		D045DEDB2D83750400EB1EB6 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				D045DED82D83750400EB1EB6 /* Pretendard-Bold.otf */,
+				D045DEDA2D83750400EB1EB6 /* Pretendard-SemiBold.otf */,
+				D045DEE12D83759500EB1EB6 /* Pretendard-Regular.otf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -154,6 +205,9 @@
 			files = (
 				D045DEBB2D83723A00EB1EB6 /* Preview Assets.xcassets in Resources */,
 				D045DEBC2D83723A00EB1EB6 /* Assets.xcassets in Resources */,
+				D045DEE22D83759500EB1EB6 /* Pretendard-Regular.otf in Resources */,
+				D045DEDD2D83750400EB1EB6 /* Pretendard-SemiBold.otf in Resources */,
+				D045DEDE2D83750400EB1EB6 /* Pretendard-Bold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,11 +353,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Napzak-iOS/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Napzak-iOS/Application/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2G7ZY93ALK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Napzak-iOS/Global/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -332,11 +387,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Napzak-iOS/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Napzak-iOS/Application/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2G7ZY93ALK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Napzak-iOS/Global/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
