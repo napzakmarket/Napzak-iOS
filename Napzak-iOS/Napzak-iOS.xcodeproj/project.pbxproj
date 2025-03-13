@@ -20,6 +20,7 @@
 		D045DEDD2D83750400EB1EB6 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D045DEDA2D83750400EB1EB6 /* Pretendard-SemiBold.otf */; };
 		D045DEDE2D83750400EB1EB6 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D045DED82D83750400EB1EB6 /* Pretendard-Bold.otf */; };
 		D045DEE22D83759500EB1EB6 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D045DEE12D83759500EB1EB6 /* Pretendard-Regular.otf */; };
+		D045DEE82D83786800EB1EB6 /* ColorLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEE42D83786800EB1EB6 /* ColorLiteral.swift */; };
 		D045DEEA2D837B9D00EB1EB6 /* FontLiterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEE92D837B9D00EB1EB6 /* FontLiterial.swift */; };
 		D045DEEC2D837D7D00EB1EB6 /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D045DEEB2D837D7D00EB1EB6 /* Pretendard-Medium.otf */; };
 /* End PBXBuildFile section */
@@ -34,6 +35,7 @@
 		D045DEDA2D83750400EB1EB6 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
 		D045DEE12D83759500EB1EB6 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		D045DEE32D8375D800EB1EB6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D045DEE42D83786800EB1EB6 /* ColorLiteral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorLiteral.swift; sourceTree = "<group>"; };
 		D045DEE92D837B9D00EB1EB6 /* FontLiterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontLiterial.swift; sourceTree = "<group>"; };
 		D045DEEB2D837D7D00EB1EB6 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -138,6 +140,7 @@
 		D045DEE62D83786800EB1EB6 /* Literals */ = {
 			isa = PBXGroup;
 			children = (
+				D045DEE42D83786800EB1EB6 /* ColorLiteral.swift */,
 				D045DEE92D837B9D00EB1EB6 /* FontLiterial.swift */,
 			);
 			path = Literals;
@@ -232,6 +235,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D045DEE82D83786800EB1EB6 /* ColorLiteral.swift in Sources */,
 				D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */,
 				D045DEEA2D837B9D00EB1EB6 /* FontLiterial.swift in Sources */,
 				D045DEBE2D83723A00EB1EB6 /* Napzak_iOSApp.swift in Sources */,
