@@ -94,6 +94,7 @@
 			children = (
 				D045DED42D83747300EB1EB6 /* Application */,
 				D045DED52D8374BF00EB1EB6 /* Global */,
+				D045DEFF2D83852600EB1EB6 /* Network */,
 				D045DED62D8374C700EB1EB6 /* Presentation */,
 			);
 			path = "Napzak-iOS";
@@ -125,6 +126,16 @@
 			isa = PBXGroup;
 			children = (
 				D045DEB82D83723A00EB1EB6 /* ContentView.swift */,
+				D045DF002D83855B00EB1EB6 /* Splash */,
+				D045DF0B2D83856F00EB1EB6 /* Onboarding */,
+				D045DF102D83856F00EB1EB6 /* Home */,
+				D045DF192D83856F00EB1EB6 /* Search */,
+				D045DF2E2D83856F00EB1EB6 /* Register */,
+				D045DF332D83856F00EB1EB6 /* Chat */,
+				D045DF382D83856F00EB1EB6 /* ProductDetail */,
+				D045DF432D83856F00EB1EB6 /* TabBar */,
+				D045DF482D83856F00EB1EB6 /* Market */,
+				D045DF3D2D83856F00EB1EB6 /* Mypage */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -189,6 +200,83 @@
 			children = (
 			);
 			path = Core;
+			sourceTree = "<group>";
+		};
+		D045DEFF2D83852600EB1EB6 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		D045DF002D83855B00EB1EB6 /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
+		D045DF0B2D83856F00EB1EB6 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		D045DF102D83856F00EB1EB6 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		D045DF192D83856F00EB1EB6 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		D045DF2E2D83856F00EB1EB6 /* Register */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Register;
+			sourceTree = "<group>";
+		};
+		D045DF332D83856F00EB1EB6 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		D045DF382D83856F00EB1EB6 /* ProductDetail */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ProductDetail;
+			sourceTree = "<group>";
+		};
+		D045DF3D2D83856F00EB1EB6 /* Mypage */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Mypage;
+			sourceTree = "<group>";
+		};
+		D045DF432D83856F00EB1EB6 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
+		D045DF482D83856F00EB1EB6 /* Market */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Market;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
