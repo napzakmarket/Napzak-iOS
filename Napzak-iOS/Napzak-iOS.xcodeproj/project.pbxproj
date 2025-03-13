@@ -6,23 +6,38 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D045DEBB2D83723A00EB1EB6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */; };
+		D045DEBC2D83723A00EB1EB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB72D83723A00EB1EB6 /* Assets.xcassets */; };
+		D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEB82D83723A00EB1EB6 /* ContentView.swift */; };
+		D045DEBE2D83723A00EB1EB6 /* Napzak_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEB92D83723A00EB1EB6 /* Napzak_iOSApp.swift */; };
+		D045DEC12D83725100EB1EB6 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D045DEC02D83725100EB1EB6 /* Kingfisher */; };
+		D045DEC92D8372D800EB1EB6 /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D045DEC82D8372D800EB1EB6 /* KakaoSDKAuth */; };
+		D045DECB2D8372D800EB1EB6 /* KakaoSDKCommon in Frameworks */ = {isa = PBXBuildFile; productRef = D045DECA2D8372D800EB1EB6 /* KakaoSDKCommon */; };
+		D045DECD2D8372D800EB1EB6 /* KakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = D045DECC2D8372D800EB1EB6 /* KakaoSDKUser */; };
+		D045DED02D83732D00EB1EB6 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = D045DECF2D83732D00EB1EB6 /* Moya */; };
+		D045DED32D83736600EB1EB6 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D045DED22D83736600EB1EB6 /* Lottie */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Napzak-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D045DEB72D83723A00EB1EB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D045DEB82D83723A00EB1EB6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D045DEB92D83723A00EB1EB6 /* Napzak_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Napzak_iOSApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		D045DE9D2D836F0500EB1EB6 /* Napzak-iOS */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Napzak-iOS";
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		D045DE982D836F0500EB1EB6 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D045DECD2D8372D800EB1EB6 /* KakaoSDKUser in Frameworks */,
+				D045DEC12D83725100EB1EB6 /* Kingfisher in Frameworks */,
+				D045DECB2D8372D800EB1EB6 /* KakaoSDKCommon in Frameworks */,
+				D045DED02D83732D00EB1EB6 /* Moya in Frameworks */,
+				D045DEC92D8372D800EB1EB6 /* KakaoSDKAuth in Frameworks */,
+				D045DED32D83736600EB1EB6 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -32,7 +47,7 @@
 		D045DE922D836F0500EB1EB6 = {
 			isa = PBXGroup;
 			children = (
-				D045DE9D2D836F0500EB1EB6 /* Napzak-iOS */,
+				D045DEBA2D83723A00EB1EB6 /* Napzak-iOS */,
 				D045DE9C2D836F0500EB1EB6 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +58,25 @@
 				D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D045DEB62D83723A00EB1EB6 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		D045DEBA2D83723A00EB1EB6 /* Napzak-iOS */ = {
+			isa = PBXGroup;
+			children = (
+				D045DEB62D83723A00EB1EB6 /* Preview Content */,
+				D045DEB72D83723A00EB1EB6 /* Assets.xcassets */,
+				D045DEB82D83723A00EB1EB6 /* ContentView.swift */,
+				D045DEB92D83723A00EB1EB6 /* Napzak_iOSApp.swift */,
+			);
+			path = "Napzak-iOS";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -60,11 +94,14 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				D045DE9D2D836F0500EB1EB6 /* Napzak-iOS */,
-			);
 			name = "Napzak-iOS";
 			packageProductDependencies = (
+				D045DEC02D83725100EB1EB6 /* Kingfisher */,
+				D045DEC82D8372D800EB1EB6 /* KakaoSDKAuth */,
+				D045DECA2D8372D800EB1EB6 /* KakaoSDKCommon */,
+				D045DECC2D8372D800EB1EB6 /* KakaoSDKUser */,
+				D045DECF2D83732D00EB1EB6 /* Moya */,
+				D045DED22D83736600EB1EB6 /* Lottie */,
 			);
 			productName = "Napzak-iOS";
 			productReference = D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */;
@@ -94,6 +131,12 @@
 			);
 			mainGroup = D045DE922D836F0500EB1EB6;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D045DEBF2D83725100EB1EB6 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				D045DEC72D8372D800EB1EB6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				D045DECE2D83732D00EB1EB6 /* XCRemoteSwiftPackageReference "Moya" */,
+				D045DED12D83736600EB1EB6 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D045DE9C2D836F0500EB1EB6 /* Products */;
 			projectDirPath = "";
@@ -109,6 +152,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D045DEBB2D83723A00EB1EB6 /* Preview Assets.xcassets in Resources */,
+				D045DEBC2D83723A00EB1EB6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +164,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */,
+				D045DEBE2D83723A00EB1EB6 /* Napzak_iOSApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -332,6 +379,74 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D045DEBF2D83725100EB1EB6 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.3.0;
+			};
+		};
+		D045DEC72D8372D800EB1EB6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.24.0;
+			};
+		};
+		D045DECE2D83732D00EB1EB6 /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.3;
+			};
+		};
+		D045DED12D83736600EB1EB6 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D045DEC02D83725100EB1EB6 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D045DEBF2D83725100EB1EB6 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		D045DEC82D8372D800EB1EB6 /* KakaoSDKAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D045DEC72D8372D800EB1EB6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKAuth;
+		};
+		D045DECA2D8372D800EB1EB6 /* KakaoSDKCommon */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D045DEC72D8372D800EB1EB6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKCommon;
+		};
+		D045DECC2D8372D800EB1EB6 /* KakaoSDKUser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D045DEC72D8372D800EB1EB6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKUser;
+		};
+		D045DECF2D83732D00EB1EB6 /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D045DECE2D83732D00EB1EB6 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
+		};
+		D045DED22D83736600EB1EB6 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D045DED12D83736600EB1EB6 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D045DE932D836F0500EB1EB6 /* Project object */;
 }
