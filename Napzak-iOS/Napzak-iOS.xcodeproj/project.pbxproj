@@ -103,6 +103,11 @@
 		D045DED52D8374BF00EB1EB6 /* Global */ = {
 			isa = PBXGroup;
 			children = (
+				D045DEF02D837E5300EB1EB6 /* Core */,
+				D045DEEF2D837E4B00EB1EB6 /* Modifiers */,
+				D045DEEE2D837E4400EB1EB6 /* Extensions */,
+				D045DEED2D837E3C00EB1EB6 /* Components */,
+				D045DEE62D83786800EB1EB6 /* Literals */,
 				D045DED72D8374F000EB1EB6 /* Resources */,
 			);
 			path = Global;
@@ -144,6 +149,34 @@
 				D045DEE92D837B9D00EB1EB6 /* FontLiterial.swift */,
 			);
 			path = Literals;
+			sourceTree = "<group>";
+		};
+		D045DEED2D837E3C00EB1EB6 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		D045DEEE2D837E4400EB1EB6 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		D045DEEF2D837E4B00EB1EB6 /* Modifiers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Modifiers;
+			sourceTree = "<group>";
+		};
+		D045DEF02D837E5300EB1EB6 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Core;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
