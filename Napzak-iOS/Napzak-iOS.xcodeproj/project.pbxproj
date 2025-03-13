@@ -23,6 +23,10 @@
 		D045DEE82D83786800EB1EB6 /* ColorLiteral.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEE42D83786800EB1EB6 /* ColorLiteral.swift */; };
 		D045DEEA2D837B9D00EB1EB6 /* FontLiterial.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEE92D837B9D00EB1EB6 /* FontLiterial.swift */; };
 		D045DEEC2D837D7D00EB1EB6 /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = D045DEEB2D837D7D00EB1EB6 /* Pretendard-Medium.otf */; };
+		D045DEF82D8383CC00EB1EB6 /* Encodable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEF72D8383CC00EB1EB6 /* Encodable+.swift */; };
+		D045DEF92D8383CC00EB1EB6 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEF62D8383CC00EB1EB6 /* String+.swift */; };
+		D045DEFA2D8383CC00EB1EB6 /* TextEditor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEF42D8383CC00EB1EB6 /* TextEditor+.swift */; };
+		D045DEFC2D8383CC00EB1EB6 /* TextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEF32D8383CC00EB1EB6 /* TextField+.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +42,10 @@
 		D045DEE42D83786800EB1EB6 /* ColorLiteral.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorLiteral.swift; sourceTree = "<group>"; };
 		D045DEE92D837B9D00EB1EB6 /* FontLiterial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontLiterial.swift; sourceTree = "<group>"; };
 		D045DEEB2D837D7D00EB1EB6 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.otf"; sourceTree = "<group>"; };
+		D045DEF32D8383CC00EB1EB6 /* TextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextField+.swift"; sourceTree = "<group>"; };
+		D045DEF42D8383CC00EB1EB6 /* TextEditor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextEditor+.swift"; sourceTree = "<group>"; };
+		D045DEF62D8383CC00EB1EB6 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
+		D045DEF72D8383CC00EB1EB6 /* Encodable+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +169,10 @@
 		D045DEEE2D837E4400EB1EB6 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D045DEF32D8383CC00EB1EB6 /* TextField+.swift */,
+				D045DEF42D8383CC00EB1EB6 /* TextEditor+.swift */,
+				D045DEF62D8383CC00EB1EB6 /* String+.swift */,
+				D045DEF72D8383CC00EB1EB6 /* Encodable+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -269,6 +281,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				D045DEE82D83786800EB1EB6 /* ColorLiteral.swift in Sources */,
+				D045DEF82D8383CC00EB1EB6 /* Encodable+.swift in Sources */,
+				D045DEF92D8383CC00EB1EB6 /* String+.swift in Sources */,
+				D045DEFA2D8383CC00EB1EB6 /* TextEditor+.swift in Sources */,
+				D045DEFC2D8383CC00EB1EB6 /* TextField+.swift in Sources */,
 				D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */,
 				D045DEEA2D837B9D00EB1EB6 /* FontLiterial.swift in Sources */,
 				D045DEBE2D83723A00EB1EB6 /* Napzak_iOSApp.swift in Sources */,
