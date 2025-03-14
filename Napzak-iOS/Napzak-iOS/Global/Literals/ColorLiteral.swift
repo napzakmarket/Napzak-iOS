@@ -45,7 +45,7 @@ extension Color {
         self.init(.sRGB, red: red, green: green, blue: blue, opacity: opacity)
     }
     
-    static func napzakPirmary(_ color: Primary) -> Color {
+    static func napzakPrimary(_ color: Primary) -> Color {
         return Color(hex: color.rawValue)
     }
     
