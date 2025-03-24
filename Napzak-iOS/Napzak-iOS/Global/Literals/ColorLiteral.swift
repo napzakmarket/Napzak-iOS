@@ -9,18 +9,19 @@ import SwiftUI
 
 enum Primary: String {
     case purple100 = "F1EAFF"
-    case purple200 = "C8AEFF"
-    case purple300 = "7534FF"
+    case purple200 = "DFD0FF"
+    case purple500 = "7534FF"
 }
 
 enum GrayScale: String {
     case white = "FFFFFF"
+    case gray10 = "FAFAFA"
     case gray50 = "F5F5F5"
     case gray100 = "D9D9D9"
     case gray200 = "BCBCBC"
     case gray300 = "7F7F7F"
     case gray400 = "545454"
-    case gray500 = "1A1A1A"
+    case gray500 = "3B3B3B"
     case black = "2C2C2C"
 }
 
@@ -30,9 +31,14 @@ enum State: String {
 }
 
 enum Transparency: String {
-    case purple100 = "F1EAFF"
-    case purple300 = "7534FF"
-    case gray500 = "1A1A1A"
+    case transPurple100 = "F1EAFF"
+    case transPurple300 = "7534FF"
+    case transBlack = "1A1A1A"
+}
+
+enum Kakao: String {
+    case kakaoYellow = "FBE902"
+    case kakaoBrown = "3E2B2F"
 }
 
 extension Color {
@@ -60,5 +66,9 @@ extension Color {
     static func napzakTransparency(_ color: Transparency) -> Color {
         let opacity = 0.7
         return Color(hex: color.rawValue, opacity: opacity)
+    }
+    
+    static func napzakKakao(_ color: Kakao) -> Color {
+        return Color(hex: color.rawValue)
     }
 }
