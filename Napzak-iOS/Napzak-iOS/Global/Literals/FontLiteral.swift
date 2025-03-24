@@ -1,5 +1,5 @@
 //
-//  FontLiterial.swift
+//  FontLiteral.swift
 //  Napzakm-iOS
 //
 //  Created by 조혜린 on 3/14/25.
