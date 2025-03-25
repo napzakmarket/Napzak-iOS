@@ -36,10 +36,10 @@ enum Transparency: String {
     case transBlack = "1A1A1A"
 }
 
-enum Kakao: String {
-    case kakaoYellow = "FBE902"
-    case kakaoBrown = "3E2B2F"
-}
+//enum Kakao: String {
+//    case kakaoYellow = "FBE902"
+//    case kakaoBrown = "3E2B2F"
+//}
 
 extension Color {
     init(hex: String, opacity: Double = 1.0) {
@@ -68,7 +68,7 @@ extension Color {
         return Color(hex: color.rawValue, opacity: opacity)
     }
     
-    static func napzakKakao(_ color: Kakao) -> Color {
-        return Color(hex: color.rawValue)
-    }
+//    static func napzakKakao(_ color: Kakao) -> Color {
+//        return Color(hex: color.rawValue)
+//    }
 }
