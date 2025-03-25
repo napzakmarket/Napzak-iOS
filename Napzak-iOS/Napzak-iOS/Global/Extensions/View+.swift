@@ -8,11 +8,15 @@
 import SwiftUI
 
 extension View {
-    func applyNapzakTextStyle(napzakFontStyle: NapzakFontStyle) -> some View {
-        let font = Font.toUIFont(napzakFontStyle)
-        let fontSpacing: CGFloat = font.lineHeight / 100 * 28 / 4
-        let letterSpacing: CGFloat = -0.2
-
-        return self.modifier(NapzakTextStyleModifier(fontSpacing: fontSpacing, letterSpacing: letterSpacing))
+    func applyNapzakFont(_ style: NapzakFontStyle) -> some View {
+        let font = Font.toUIFont(style)
+        let fontSpacing: CGFloat = font.lineHeight * 0.28 / 2
+        let letterSpacing: CGFloat = font.pointSize * (-0.02)
+        
+        return self
+            .font(.napzakFont(style))
+            .padding(.vertical, fontSpacing)
+            .lineSpacing(fontSpacing * 2)
+            .tracking(letterSpacing)
     }
 }
