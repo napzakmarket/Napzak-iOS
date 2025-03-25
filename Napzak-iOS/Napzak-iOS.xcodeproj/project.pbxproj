@@ -27,7 +27,6 @@
 		D045DEF92D8383CC00EB1EB6 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEF62D8383CC00EB1EB6 /* String+.swift */; };
 		D045DEFA2D8383CC00EB1EB6 /* TextEditor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEF42D8383CC00EB1EB6 /* TextEditor+.swift */; };
 		D045DEFC2D8383CC00EB1EB6 /* TextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEF32D8383CC00EB1EB6 /* TextField+.swift */; };
-		D05A03902D91B65E00659C74 /* NapzakTextStyleModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05A038F2D91B65E00659C74 /* NapzakTextStyleModifier.swift */; };
 		D05A03922D91B67200659C74 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05A03912D91B67200659C74 /* View+.swift */; };
 /* End PBXBuildFile section */
 
@@ -48,7 +47,6 @@
 		D045DEF42D8383CC00EB1EB6 /* TextEditor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextEditor+.swift"; sourceTree = "<group>"; };
 		D045DEF62D8383CC00EB1EB6 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		D045DEF72D8383CC00EB1EB6 /* Encodable+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+.swift"; sourceTree = "<group>"; };
-		D05A038F2D91B65E00659C74 /* NapzakTextStyleModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NapzakTextStyleModifier.swift; sourceTree = "<group>"; };
 		D05A03912D91B67200659C74 /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -196,7 +194,6 @@
 		D045DEEF2D837E4B00EB1EB6 /* Modifiers */ = {
 			isa = PBXGroup;
 			children = (
-				D05A038F2D91B65E00659C74 /* NapzakTextStyleModifier.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -379,7 +376,6 @@
 				D045DEF92D8383CC00EB1EB6 /* String+.swift in Sources */,
 				D045DEFA2D8383CC00EB1EB6 /* TextEditor+.swift in Sources */,
 				D045DEFC2D8383CC00EB1EB6 /* TextField+.swift in Sources */,
-				D05A03902D91B65E00659C74 /* NapzakTextStyleModifier.swift in Sources */,
 				D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */,
 				D045DEEA2D837B9D00EB1EB6 /* FontLiteral.swift in Sources */,
 				D05A03922D91B67200659C74 /* View+.swift in Sources */,
