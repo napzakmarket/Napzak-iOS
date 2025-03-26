@@ -34,6 +34,8 @@ struct OnboardingTermsView: View {
                     title: "(필수) 이용약관",
                     isAgreed: $isTermsAgreed
                 ) {
+                    // TODO: 이용약관 외부 링크로 이동 처리
+                    
                     print("이용약관 외부 링크 이동")
                 }
                 .padding(.top, 10)
@@ -42,6 +44,8 @@ struct OnboardingTermsView: View {
                     title: "(필수) 개인정보처리방침",
                     isAgreed: $isPrivacyAgreed
                 ) {
+                    // TODO: 개인정보처리방침 외부 링크로 이동 처리
+                    
                     print("개인정보처리방침 외부 링크 이동")
                 }
                 
@@ -51,6 +55,8 @@ struct OnboardingTermsView: View {
                     title: "다음으로",
                     isEnabled: isAllAgreed
                 ) {
+                    // TODO: 다음 화면으로 이동 (ex. 닉네임 입력 화면)
+                    
                     print("다음으로")
                 }
                 .padding(.bottom, 75)

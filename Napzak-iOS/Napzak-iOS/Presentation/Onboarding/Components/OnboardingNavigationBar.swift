@@ -13,6 +13,8 @@ struct OnboardingNavigationBar: View {
     var body: some View {
         HStack {
             Button {
+                // TODO: Destination 뒤로가기 동작 구현
+                
                 print("눌림")
             } label: {
                 Image(.iconBack)
