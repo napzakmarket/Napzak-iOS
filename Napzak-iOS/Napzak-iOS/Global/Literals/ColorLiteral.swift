@@ -25,7 +25,7 @@ enum GrayScale: String {
     case black = "2C2C2C"
 }
 
-enum State: String {
+enum StateColors: String {
     case red = "EF4849"
     case green = "1BD368"
 }
@@ -59,7 +59,7 @@ extension Color {
         return Color(hex: color.rawValue)
     }
     
-    static func napzakState(_ color: State) -> Color {
+    static func napzakState(_ color: StateColors) -> Color {
         return Color(hex: color.rawValue)
     }
     
