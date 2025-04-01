@@ -10,7 +10,8 @@ import SwiftUI
 struct UsernameInputField: View {
     @State private var username: String = ""
     @State private var validationState: UsernameValidation = .empty
-    @State private var isButtonEnabled: Bool = false
+    @State private var isCheckButtonEnabled: Bool = false
+    @Binding var isPrimaryButtonEnabled: Bool
     
     let pattern = "[^A-Za-z0-9가-힣ㄱ-ㅎㅏ-ㅣ]"
     
@@ -35,20 +36,21 @@ struct UsernameInputField: View {
                     print("서버로 이름 확인 요청: \(username)")
                     print("글자수: \(username.count)")
                 } label: {
-                    isButtonEnabled ? Image(.namecheckDefault) : Image(.namecheckDisabled)
+                    isCheckButtonEnabled ? Image(.namecheckDefault) : Image(.namecheckDisabled)
                 }
-                .disabled(!isButtonEnabled)
+                .disabled(!isCheckButtonEnabled)
             }
             .padding([.vertical, .trailing], 10)
             .padding(.leading, 16)
             .background(Color.napzakGrayScale(.gray50))
-            .cornerRadius(8)
+            .cornerRadius(14)
             
             
             HStack(spacing: 6) {
                 Circle()
                     .fill(validationState.color)
                     .frame(width: 5, height: 5)
+                    .padding(.leading, 6)
                 
                 Text(validationState.message)
                     .applyNapzakFont(.caption1SemiBold12)
@@ -68,7 +70,8 @@ extension UsernameInputField {
             username = String(name.prefix(20))
         }
         
-        isButtonEnabled = false
+        isCheckButtonEnabled = false
+        isPrimaryButtonEnabled = false
         
         if name.isEmpty {
             validationState = .empty
@@ -78,11 +81,13 @@ extension UsernameInputField {
             validationState = .invalidSpecialChar
         } else {
             validationState = .valid
-            isButtonEnabled = true
+            isCheckButtonEnabled = true
+            isPrimaryButtonEnabled = true
         }
     }
 }
 
 #Preview {
-    UsernameInputField()
+    UsernameInputField(isPrimaryButtonEnabled: .constant(true))
+        .padding(.horizontal, 20)
 }
