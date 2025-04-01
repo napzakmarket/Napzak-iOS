@@ -15,7 +15,7 @@ struct OnboardingNavigationBar: View {
             Button {
                 // TODO: Destination 뒤로가기 동작 구현
                 
-                print("눌림")
+                print("뒤로가기 눌림")
             } label: {
                 Image(.iconBack)
                     .frame(width: 44, height: 44)
