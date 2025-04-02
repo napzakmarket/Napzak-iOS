@@ -9,6 +9,7 @@ import SwiftUI
 
 struct UsernameInputView: View {
     @State private var isNextButtonEnabled: Bool = false
+    @FocusState private var isKeyboardActive: Bool
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -28,6 +29,7 @@ struct UsernameInputView: View {
                     .padding(.top, 10)
                 
                 UsernameInputField(isPrimaryButtonEnabled: $isNextButtonEnabled)
+                    .focused($isKeyboardActive)
                     .padding(.top, 30)
                 
                 Spacer()
@@ -45,6 +47,11 @@ struct UsernameInputView: View {
             }
             .padding(.horizontal, 20)
         }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            isKeyboardActive = false
+        }
+        .ignoresSafeArea(.keyboard)
     }
 }
 
