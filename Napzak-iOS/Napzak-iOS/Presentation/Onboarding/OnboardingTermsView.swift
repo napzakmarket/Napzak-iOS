@@ -63,7 +63,7 @@ struct OnboardingTermsView: View {
             }
             .padding(.horizontal, 20)
         }
-        .onChange(of: isAllAgreed) { _, newValue in
+        .onChange(of: isAllAgreed) { newValue in
             if newValue {
                 isTermsAgreed = true
                 isPrivacyAgreed = true
@@ -74,10 +74,10 @@ struct OnboardingTermsView: View {
                 }
             }
         }
-        .onChange(of: isTermsAgreed) { _, _ in
+        .onChange(of: isTermsAgreed) { _ in
             updateAllAgreeState()
         }
-        .onChange(of: isPrivacyAgreed) { _, _ in
+        .onChange(of: isPrivacyAgreed) { _ in
             updateAllAgreeState()
         }
     }
