@@ -10,7 +10,15 @@ import SwiftUI
 struct PrimaryButton: View {
     let title: String
     let isEnabled: Bool
+    let showsArrow: Bool
     let action: () -> Void
+    
+    init(title: String, isEnabled: Bool, showsArrow: Bool = false, action: @escaping () -> Void) {
+        self.title = title
+        self.isEnabled = isEnabled
+        self.showsArrow = showsArrow
+        self.action = action
+    }
     
     var body: some View {
         Button {
@@ -20,7 +28,9 @@ struct PrimaryButton: View {
                 Text(title)
                     .applyNapzakFont(.body4Bold14)
                     .foregroundStyle(Color.napzakGrayScale(.white))
-                Image(.iconNext)
+                if showsArrow {
+                    Image(.iconNext)
+                }
             }
             .frame(maxWidth: .infinity, minHeight: 50)
         }
@@ -30,5 +40,5 @@ struct PrimaryButton: View {
 }
 
 #Preview {
-    PrimaryButton(title: "다음으로", isEnabled: false, action: {print("다음으로")})
+    PrimaryButton(title: "다음으로", isEnabled: false, showsArrow: true,  action: {print("다음으로")})
 }
