@@ -29,7 +29,7 @@ enum UsernameValidation {
         case .invalidDuplicate:
             return "이미 사용중인 이름이에요."
         case .invalidNumberOnly:
-            return "숫자만으로 구성된 이름을 사용할 수 없어요."
+            return "숫자만으로는 이름을 만들 수 없어요."
         case .empty:
             return ""
         }

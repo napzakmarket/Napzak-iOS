@@ -23,7 +23,7 @@ struct UsernameInputView: View {
                     .frame(width: 162)
                     .padding(.top, 20)
                 
-                Text("띄어쓰기 없이 한글, 영문, 숫자만 사용할 수 있어요 (최대 20자)")
+                Text("띄어쓰기 없이 한글, 영문, 숫자만 사용할 수 있어요 (2~20자)")
                     .applyNapzakFont(.caption3Regular12)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
                     .padding(.top, 10)

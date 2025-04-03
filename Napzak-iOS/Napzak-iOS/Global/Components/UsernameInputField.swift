@@ -45,18 +45,24 @@ struct UsernameInputField: View {
             .background(Color.napzakGrayScale(.gray50))
             .cornerRadius(14)
             
-            
-            HStack(spacing: 6) {
-                Circle()
-                    .fill(validationState.color)
-                    .frame(width: 5, height: 5)
-                    .padding(.leading, 6)
+            VStack(spacing: 0) {
+                HStack(spacing: 6) {
+                    Circle()
+                        .fill(validationState.color)
+                        .frame(width: 5, height: 5)
+                        .padding(.leading, 6)
+                    
+                    Text(validationState.message)
+                        .applyNapzakFont(.caption1SemiBold12)
+                        .foregroundStyle(validationState.color)
+                }
                 
-                Text(validationState.message)
-                    .applyNapzakFont(.caption1SemiBold12)
-                    .foregroundStyle(validationState.color)
+                
+                Text(validationState == .invalidNumberOnly ? " 한글이나 영문을 함께 사용해주세요." : "")
+                .applyNapzakFont(.caption1SemiBold12)
+                .foregroundStyle(validationState.color)
+                .padding(.leading, 12)  
             }
-            
         }
         .onChange(of: username) { newValue in
             validateUsername(newValue)
