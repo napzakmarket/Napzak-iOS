@@ -1,5 +1,5 @@
 //
-//  TermsAgreeRow.swift
+//  CheckRow.swift
 //  Napzak-iOS
 //
 //  Created by 조호근 on 3/27/25.
@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct TermsAgreeRow: View {
+struct CheckRow: View {
     let title: String
     @Binding var isAgreed: Bool
-    var hasArrow: Bool = true
+    var rowType: RowType = .none
     var action: (() -> Void)? = nil
     
     var body: some View {
@@ -27,7 +27,7 @@ struct TermsAgreeRow: View {
             
             Spacer()
             
-            if hasArrow {
+            if rowType == .arrow {
                 Button {
                     action?()
                 } label: {
@@ -36,11 +36,11 @@ struct TermsAgreeRow: View {
             }
         }
         .frame(height: 50)
-        .background(hasArrow ? nil : Color.napzakGrayScale(.gray50))
+        .background(rowType == .background ? Color.napzakGrayScale(.gray50) : nil)
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
 }
 
 #Preview {
-    TermsAgreeRow(title: "약관 전체 동의", isAgreed: .constant(true), hasArrow: true)
+    CheckRow(title: "약관 전체 동의", isAgreed: .constant(true), rowType: .background)
 }

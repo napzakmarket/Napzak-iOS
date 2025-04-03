@@ -28,8 +28,9 @@
 		D045DEFA2D8383CC00EB1EB6 /* TextEditor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEF42D8383CC00EB1EB6 /* TextEditor+.swift */; };
 		D045DEFC2D8383CC00EB1EB6 /* TextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEF32D8383CC00EB1EB6 /* TextField+.swift */; };
 		D05A03922D91B67200659C74 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05A03912D91B67200659C74 /* View+.swift */; };
+		D64922D12D9EF5CB00716740 /* RowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64922D02D9EF5CB00716740 /* RowType.swift */; };
 		D67C17762D9AEDC000CFCDFA /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */; };
-		D67C17772D9AEDC000CFCDFA /* TermsAgreeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17732D9AEDC000CFCDFA /* TermsAgreeRow.swift */; };
+		D67C17772D9AEDC000CFCDFA /* CheckRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17732D9AEDC000CFCDFA /* CheckRow.swift */; };
 		D67C17782D9AEDC000CFCDFA /* OnboardingNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17712D9AEDC000CFCDFA /* OnboardingNavigationBar.swift */; };
 		D67C17792D9AEDC000CFCDFA /* OnboardingTermsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17752D9AEDC000CFCDFA /* OnboardingTermsView.swift */; };
 		D67C177B2D9AEEDD00CFCDFA /* UsernameInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C177A2D9AEEDD00CFCDFA /* UsernameInputView.swift */; };
@@ -55,9 +56,10 @@
 		D045DEF62D8383CC00EB1EB6 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		D045DEF72D8383CC00EB1EB6 /* Encodable+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+.swift"; sourceTree = "<group>"; };
 		D05A03912D91B67200659C74 /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
+		D64922D02D9EF5CB00716740 /* RowType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowType.swift; sourceTree = "<group>"; };
 		D67C17712D9AEDC000CFCDFA /* OnboardingNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNavigationBar.swift; sourceTree = "<group>"; };
 		D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
-		D67C17732D9AEDC000CFCDFA /* TermsAgreeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsAgreeRow.swift; sourceTree = "<group>"; };
+		D67C17732D9AEDC000CFCDFA /* CheckRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckRow.swift; sourceTree = "<group>"; };
 		D67C17752D9AEDC000CFCDFA /* OnboardingTermsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTermsView.swift; sourceTree = "<group>"; };
 		D67C177A2D9AEEDD00CFCDFA /* UsernameInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameInputView.swift; sourceTree = "<group>"; };
 		D67C177C2D9B07E300CFCDFA /* UsernameInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameInputField.swift; sourceTree = "<group>"; };
@@ -190,6 +192,8 @@
 		D045DEED2D837E3C00EB1EB6 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */,
+				D67C17732D9AEDC000CFCDFA /* CheckRow.swift */,
 				D67C177C2D9B07E300CFCDFA /* UsernameInputField.swift */,
 			);
 			path = Components;
@@ -305,8 +309,6 @@
 			isa = PBXGroup;
 			children = (
 				D67C17712D9AEDC000CFCDFA /* OnboardingNavigationBar.swift */,
-				D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */,
-				D67C17732D9AEDC000CFCDFA /* TermsAgreeRow.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -315,6 +317,7 @@
 			isa = PBXGroup;
 			children = (
 				D67C177F2D9B085600CFCDFA /* UsernameValidation.swift */,
+				D64922D02D9EF5CB00716740 /* RowType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -412,6 +415,7 @@
 				D045DEF82D8383CC00EB1EB6 /* Encodable+.swift in Sources */,
 				D045DEF92D8383CC00EB1EB6 /* String+.swift in Sources */,
 				D045DEFA2D8383CC00EB1EB6 /* TextEditor+.swift in Sources */,
+				D64922D12D9EF5CB00716740 /* RowType.swift in Sources */,
 				D045DEFC2D8383CC00EB1EB6 /* TextField+.swift in Sources */,
 				D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */,
 				D045DEEA2D837B9D00EB1EB6 /* FontLiteral.swift in Sources */,
@@ -419,7 +423,7 @@
 				D67C177B2D9AEEDD00CFCDFA /* UsernameInputView.swift in Sources */,
 				D05A03922D91B67200659C74 /* View+.swift in Sources */,
 				D67C17762D9AEDC000CFCDFA /* PrimaryButton.swift in Sources */,
-				D67C17772D9AEDC000CFCDFA /* TermsAgreeRow.swift in Sources */,
+				D67C17772D9AEDC000CFCDFA /* CheckRow.swift in Sources */,
 				D67C17782D9AEDC000CFCDFA /* OnboardingNavigationBar.swift in Sources */,
 				D67C17792D9AEDC000CFCDFA /* OnboardingTermsView.swift in Sources */,
 				D67C17802D9B085600CFCDFA /* UsernameValidation.swift in Sources */,

@@ -23,16 +23,17 @@ struct OnboardingTermsView: View {
                 .padding([.leading, .top], 20)
             
             Group {
-                TermsAgreeRow(
+                CheckRow(
                     title: "약관 전체 동의",
                     isAgreed: $isAllAgreed,
-                    hasArrow: false
+                    rowType: .background
                 )
                 .padding(.top, 30)
                 
-                TermsAgreeRow(
+                CheckRow(
                     title: "(필수) 이용약관",
-                    isAgreed: $isTermsAgreed
+                    isAgreed: $isTermsAgreed,
+                    rowType: .arrow
                 ) {
                     // TODO: 이용약관 외부 링크로 이동 처리
                     
@@ -40,9 +41,10 @@ struct OnboardingTermsView: View {
                 }
                 .padding(.top, 10)
                 
-                TermsAgreeRow(
+                CheckRow(
                     title: "(필수) 개인정보처리방침",
-                    isAgreed: $isPrivacyAgreed
+                    isAgreed: $isPrivacyAgreed,
+                    rowType: .arrow
                 ) {
                     // TODO: 개인정보처리방침 외부 링크로 이동 처리
                     
