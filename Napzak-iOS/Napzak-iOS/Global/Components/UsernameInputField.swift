@@ -25,6 +25,7 @@ struct UsernameInputField: View {
                 )
                 .applyNapzakFont(.caption1SemiBold12)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
+                .tint(Color.napzakGrayScale(.gray500))
                 
                 Button {
 //                    활성화된 [이름 확인] 버튼 선택 시 다음 항목 검증:
