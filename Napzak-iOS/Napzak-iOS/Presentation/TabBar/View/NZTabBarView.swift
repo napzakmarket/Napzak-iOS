@@ -64,6 +64,9 @@ struct NZTabBarView: View {
                 }
             }
             .edgesIgnoringSafeArea(.bottom)
+            .fullScreenCover(isPresented: $isRegisterViewPresented) {
+                RView(isRegisterTabSelected: $isRegisterTabSelected, isRegisterViewPresented: $isRegisterViewPresented)
+            }
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .sView:
@@ -159,9 +162,6 @@ struct NZTabBarView: View {
             Color.napzakGrayScale(.white)
                 .shadow(color: .black.opacity(0.4), radius: 0.4)
         )
-        .fullScreenCover(isPresented: $isRegisterViewPresented) {
-            RView(isRegisterTabSelected: $isRegisterTabSelected, isRegisterViewPresented: $isRegisterViewPresented)
-        }
     }
 }
 
