@@ -20,6 +20,8 @@ struct NZTabBarView: View {
     
     //MARK: - Property Wrappers
     
+    @EnvironmentObject private var navigationRouter: NavigationRouter
+    
     @State private var selectedTab: NZTab = .home
     @State private var isRegisterTabSelected = false
     @State private var isRegisterViewPresented = false
@@ -29,17 +31,17 @@ struct NZTabBarView: View {
     //MARK: - Body
         
     var body: some View {
-        NavigationStack(path: $path) {
+        NavigationStack(path: $navigationRouter.path) {
             ZStack(alignment: .bottom) {
                 TabView(selection: $selectedTab) {
                     Group {
-                        HView(path: $path)
+                        HView()
                             .tag(NZTab.home)
-                        SView(path: $path)
+                        SView()
                             .tag(NZTab.search)
-                        CView(path: $path)
+                        CView()
                             .tag(NZTab.chat)
-                        MView(path: $path)
+                        MView()
                             .tag(NZTab.my)
                     }
                     .toolbar(.hidden, for: .tabBar)
@@ -62,11 +64,12 @@ struct NZTabBarView: View {
                 }
             }
             .edgesIgnoringSafeArea(.bottom)
-            .navigationDestination(for: String.self) { string in
-                if string == "SView" {
-                    SView(path: $path)
-                } else if string == "MView" {
-                    MView(path: $path)
+            .navigationDestination(for: Route.self) { route in
+                switch route {
+                case .sView:
+                    SView()
+                case .mView:
+                    MView()
                 }
             }
         }
@@ -174,14 +177,12 @@ private extension NZTabBarView {
 // 아래로 전부! 임시로 띄울 뷰, 삭제 예정
 // 로직만 확인해주세요
 struct HView: View {
-    
-    @Binding var path: NavigationPath
+    @EnvironmentObject private var navigationRouter: NavigationRouter
     
     var body: some View {
         VStack {
             Button {
-                print("")
-                path.append("SView")
+                navigationRouter.push(next: .sView)
             } label: {
                 Text("눌러")
                     .background(.red)
@@ -193,13 +194,12 @@ struct HView: View {
 }
 
 struct SView: View {
-    @Binding var path: NavigationPath
-    
+    @EnvironmentObject private var navigationRouter: NavigationRouter
+
     var body: some View {
         VStack {
             Button {
-                print("버튼 눌림")
-                path.append("MView")
+                navigationRouter.push(next: .mView)
             } label: {
                 Text("다음")
                     .background(.red)
@@ -233,13 +233,12 @@ struct RView: View {
 }
 
 struct CView: View {
-    
-    @Binding var path: NavigationPath
+    @EnvironmentObject private var navigationRouter: NavigationRouter
     
     var body: some View {
         VStack {
             Button {
-                path.append("SView")
+                navigationRouter.push(next: .sView)
             } label: {
                 Text("눌러")
                     .background(.red)
@@ -251,14 +250,18 @@ struct CView: View {
 }
 
 struct MView: View {
-    
-    @Binding var path: NavigationPath
-    
+    @EnvironmentObject private var navigationRouter: NavigationRouter
+
     var body: some View {
         VStack {
             Button {
-                print("버튼 눌림")
-                path = NavigationPath()
+                navigationRouter.pop()
+            } label: {
+                Text("뒤로가기")
+                    .background(.red)
+            }
+            Button {
+                navigationRouter.reset()
             } label: {
                 Text("맨처음")
                     .background(.red)
