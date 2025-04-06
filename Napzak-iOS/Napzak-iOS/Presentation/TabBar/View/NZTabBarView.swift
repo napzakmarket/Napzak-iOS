@@ -11,7 +11,7 @@ struct NZTabBarView: View {
     
     //MARK: - Enum
     
-    enum Tab {
+    enum NZTab {
         case home
         case search
         case chat
@@ -20,8 +20,7 @@ struct NZTabBarView: View {
     
     //MARK: - Property Wrappers
     
-    @State private var selectedTab: Tab = .home
-    @State private var previousTab: Tab = .home
+    @State private var selectedTab: NZTab = .home
     @State private var isRegisterTabSelected = false
     @State private var isRegisterViewPresented = false
     
@@ -35,13 +34,13 @@ struct NZTabBarView: View {
                 TabView(selection: $selectedTab) {
                     Group {
                         HView(path: $path)
-                            .tag(Tab.home)
+                            .tag(NZTab.home)
                         SView(path: $path)
-                            .tag(Tab.search)
+                            .tag(NZTab.search)
                         CView(path: $path)
-                            .tag(Tab.chat)
+                            .tag(NZTab.chat)
                         MView(path: $path)
-                            .tag(Tab.my)
+                            .tag(NZTab.my)
                     }
                     .toolbar(.hidden, for: .tabBar)
                 }
@@ -167,7 +166,7 @@ private extension NZTabBarView {
     
     //MARK: - Private Method
     
-    func isSelectedTab(_ tab: Tab) -> Bool {
+    func isSelectedTab(_ tab: NZTab) -> Bool {
         return selectedTab == tab && !isRegisterTabSelected
     }
 }
