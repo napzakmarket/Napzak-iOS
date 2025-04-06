@@ -11,6 +11,8 @@ struct RegisterFloatingView: View {
     
     //MARK: - Property Wrappers
     
+    @Binding var isRegisterViewPresented: Bool
+    
     @State private var isHighlightedSellArea = false
     @State private var isHighlightedBuyArea = false
 
@@ -57,6 +59,7 @@ struct RegisterFloatingView: View {
                     isHighlightedSellArea = false
                     
                     //TODO: 팔아요 등록 뷰 present
+                    isRegisterViewPresented = true
                 }
         )
     }
@@ -84,6 +87,7 @@ struct RegisterFloatingView: View {
                     isHighlightedBuyArea = false
                     
                     //TODO: 구해요 등록 뷰 present
+                    isRegisterViewPresented = true
                 }
         )
     }
@@ -91,5 +95,5 @@ struct RegisterFloatingView: View {
 }
 
 #Preview {
-    RegisterFloatingView()
+    RegisterFloatingView(isRegisterViewPresented: .constant(false))
 }

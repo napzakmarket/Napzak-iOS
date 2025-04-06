@@ -23,6 +23,7 @@ struct NZTabBarView: View {
     @State private var selectedTab: Tab = .home
     @State private var previousTab: Tab = .home
     @State private var isRegisterTabSelected = false
+    @State private var isRegisterViewPresented = false
     
     @State var path = NavigationPath()
     
@@ -39,7 +40,7 @@ struct NZTabBarView: View {
                             .tag(Tab.search)
                         CView(path: $path)
                             .tag(Tab.chat)
-                        MView()
+                        MView(path: $path)
                             .tag(Tab.my)
                     }
                     .toolbar(.hidden, for: .tabBar)
@@ -56,7 +57,7 @@ struct NZTabBarView: View {
                 
                 VStack(spacing: 10) {
                     if  isRegisterTabSelected {
-                        RegisterFloatingView()
+                        RegisterFloatingView(isRegisterViewPresented: $isRegisterViewPresented)
                     }
                     tabBar
                 }
@@ -65,8 +66,8 @@ struct NZTabBarView: View {
             .navigationDestination(for: String.self) { string in
                 if string == "SView" {
                     SView(path: $path)
-                } else if string == "RView" {
-                    RView(path: $path)
+                } else if string == "MView" {
+                    MView(path: $path)
                 }
             }
         }
@@ -156,6 +157,9 @@ struct NZTabBarView: View {
             Color.napzakGrayScale(.white)
                 .shadow(color: .black.opacity(0.4), radius: 0.4)
         )
+        .fullScreenCover(isPresented: $isRegisterViewPresented) {
+            RView(isRegisterTabSelected: $isRegisterTabSelected, isRegisterViewPresented: $isRegisterViewPresented)
+        }
     }
 }
 
@@ -168,7 +172,8 @@ private extension NZTabBarView {
     }
 }
 
-// 임시로 띄울 뷰, 삭제 예정
+// 아래로 전부! 임시로 띄울 뷰, 삭제 예정
+// 로직만 확인해주세요
 struct HView: View {
     
     @Binding var path: NavigationPath
@@ -195,7 +200,7 @@ struct SView: View {
         VStack {
             Button {
                 print("버튼 눌림")
-                path.append("RView")
+                path.append("MView")
             } label: {
                 Text("다음")
                     .background(.red)
@@ -207,20 +212,23 @@ struct SView: View {
 }
 
 struct RView: View {
-    
-    @Binding var path: NavigationPath
+    @Binding var isRegisterTabSelected: Bool
+    @Binding var isRegisterViewPresented: Bool
     
     var body: some View {
         VStack {
             Button {
                 print("버튼 눌림")
-                path = NavigationPath()
+                isRegisterViewPresented = false
             } label: {
-                Text("맨처음")
+                Text("닫기")
                     .background(.red)
             }
             Text("등록")
                 .applyNapzakFont(.title1Bold22)
+        }
+        .onAppear {
+            isRegisterTabSelected = false
         }
     }
 }
@@ -244,9 +252,21 @@ struct CView: View {
 }
 
 struct MView: View {
+    
+    @Binding var path: NavigationPath
+    
     var body: some View {
-        Text("마이")
-            .applyNapzakFont(.title1Bold22)
+        VStack {
+            Button {
+                print("버튼 눌림")
+                path = NavigationPath()
+            } label: {
+                Text("맨처음")
+                    .background(.red)
+            }
+            Text("마이")
+                .applyNapzakFont(.title1Bold22)
+        }
     }
 }
 
