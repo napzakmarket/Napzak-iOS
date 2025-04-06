@@ -274,4 +274,5 @@ struct MView: View {
 
 #Preview {
     NZTabBarView()
+        .environmentObject(NavigationRouter())
 }
