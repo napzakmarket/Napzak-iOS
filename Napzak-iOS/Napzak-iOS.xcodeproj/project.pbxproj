@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6CC472312DA431A10086E345 /* SellRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472302DA431A10086E345 /* SellRegisterView.swift */; };
+		6CC472332DA432370086E345 /* SellRegisterHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472322DA432370086E345 /* SellRegisterHeader.swift */; };
 		D045DEBB2D83723A00EB1EB6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */; };
 		D045DEBC2D83723A00EB1EB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB72D83723A00EB1EB6 /* Assets.xcassets */; };
 		D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEB82D83723A00EB1EB6 /* ContentView.swift */; };
@@ -39,6 +41,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6CC472302DA431A10086E345 /* SellRegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterView.swift; sourceTree = "<group>"; };
+		6CC472322DA432370086E345 /* SellRegisterHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterHeader.swift; sourceTree = "<group>"; };
 		D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Napzak-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D045DEB72D83723A00EB1EB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -86,8 +90,17 @@
 		6C9938C02DA0233200627DEE /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				6CC472322DA432370086E345 /* SellRegisterHeader.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		6CC4722F2DA431660086E345 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6CC472302DA431A10086E345 /* SellRegisterView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		D045DE922D836F0500EB1EB6 = {
@@ -274,6 +287,7 @@
 			isa = PBXGroup;
 			children = (
 				6C9938C02DA0233200627DEE /* Components */,
+				6CC4722F2DA431660086E345 /* View */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -422,11 +436,13 @@
 				D045DEE82D83786800EB1EB6 /* ColorLiteral.swift in Sources */,
 				D045DEF82D8383CC00EB1EB6 /* Encodable+.swift in Sources */,
 				D045DEF92D8383CC00EB1EB6 /* String+.swift in Sources */,
+				6CC472312DA431A10086E345 /* SellRegisterView.swift in Sources */,
 				D045DEFA2D8383CC00EB1EB6 /* TextEditor+.swift in Sources */,
 				D64922D12D9EF5CB00716740 /* RowType.swift in Sources */,
 				D045DEFC2D8383CC00EB1EB6 /* TextField+.swift in Sources */,
 				D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */,
 				D045DEEA2D837B9D00EB1EB6 /* FontLiteral.swift in Sources */,
+				6CC472332DA432370086E345 /* SellRegisterHeader.swift in Sources */,
 				D67C177D2D9B07E300CFCDFA /* UsernameInputField.swift in Sources */,
 				D67C177B2D9AEEDD00CFCDFA /* UsernameInputView.swift in Sources */,
 				D05A03922D91B67200659C74 /* View+.swift in Sources */,
