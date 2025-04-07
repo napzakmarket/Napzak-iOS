@@ -11,7 +11,7 @@ import Kingfisher
 struct GenreCell: View {
     
     let genre: PreferGenre
-    @Binding var isSelected: Bool
+    var isSelected: Bool
     
     var body: some View {
         VStack(spacing: 7) {
@@ -24,9 +24,6 @@ struct GenreCell: View {
                     isSelected ? .caption1SemiBold12 : .caption3Regular12)
                 .foregroundStyle(
                     isSelected ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray300))
-        }
-        .onTapGesture {
-            isSelected.toggle()
         }
     }
 }
@@ -61,10 +58,10 @@ extension GenreCell {
 
 #Preview {
     struct PreviewContainer: View {
-        @State private var isSelected: Bool = false
+        var isSelected: Bool = false
         
         var body: some View {
-            GenreCell(genre: PreferGenre.sample, isSelected: $isSelected)
+            GenreCell(genre: PreferGenre.sample, isSelected: isSelected)
         }
     }
     
