@@ -11,14 +11,22 @@ struct SellRegisterView: View {
     var body: some View {
         VStack{
             SellRegisterHeader()
+            
             ScrollView {
-                Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+                RegisterImageSection()
+                    .padding(.top, 30)
+                    .padding(.horizontal, 28)
+                
+                
+                
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            
         }
-
     }
 }
 
 #Preview {
     SellRegisterView()
 }
+
