@@ -12,9 +12,6 @@ struct GenreSelectionView: View {
     @StateObject private var viewModel = GenreSelectionViewModel()
     @FocusState private var isSearchFocused: Bool
     @State private var isSearchCompleted: Bool = false
-    @State private var keyboardHeight: CGFloat = 0
-    
-    @State private var cancellable: AnyCancellable?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -38,9 +35,7 @@ struct GenreSelectionView: View {
                 .edgesIgnoringSafeArea(.bottom)
                 .frame(height: 108)
                 .frame(maxWidth: .infinity)
-                .offset(y: keyboardHeight > 0 ? -keyboardHeight + 40 : 0)
                 .allowsHitTesting(false)
-                .animation(.easeInOut(duration: 0.1), value: keyboardHeight)
                 
                 bottomButtonView
                     .padding(.horizontal, 20)
@@ -54,19 +49,6 @@ struct GenreSelectionView: View {
             if isSearchFocused {
                 isSearchFocused = false
             }
-        }
-        .onAppear {
-            cancellable = Publishers.Merge(
-                NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
-                    .map { ($0.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect)?.height ?? 0 },
-                NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)
-                    .map { _ in CGFloat(0) }
-            )
-            .receive(on: RunLoop.main)
-            .assign(to: \.keyboardHeight, on: self)
-        }
-        .onDisappear {
-            cancellable?.cancel()
         }
     }
 }
