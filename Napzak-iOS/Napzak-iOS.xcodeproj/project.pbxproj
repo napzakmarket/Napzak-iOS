@@ -10,6 +10,7 @@
 		6CC472312DA431A10086E345 /* SellRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472302DA431A10086E345 /* SellRegisterView.swift */; };
 		6CC472332DA432370086E345 /* SellRegisterHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472322DA432370086E345 /* SellRegisterHeader.swift */; };
 		6CC472352DA440B70086E345 /* RegisterImageSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472342DA440B70086E345 /* RegisterImageSection.swift */; };
+		6CC472372DA4474A0086E345 /* RegisterGenreSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472362DA4474A0086E345 /* RegisterGenreSection.swift */; };
 		D045DEBB2D83723A00EB1EB6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */; };
 		D045DEBC2D83723A00EB1EB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB72D83723A00EB1EB6 /* Assets.xcassets */; };
 		D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEB82D83723A00EB1EB6 /* ContentView.swift */; };
@@ -45,6 +46,7 @@
 		6CC472302DA431A10086E345 /* SellRegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterView.swift; sourceTree = "<group>"; };
 		6CC472322DA432370086E345 /* SellRegisterHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterHeader.swift; sourceTree = "<group>"; };
 		6CC472342DA440B70086E345 /* RegisterImageSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterImageSection.swift; sourceTree = "<group>"; };
+		6CC472362DA4474A0086E345 /* RegisterGenreSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterGenreSection.swift; sourceTree = "<group>"; };
 		D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Napzak-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D045DEB72D83723A00EB1EB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -94,6 +96,7 @@
 			children = (
 				6CC472322DA432370086E345 /* SellRegisterHeader.swift */,
 				6CC472342DA440B70086E345 /* RegisterImageSection.swift */,
+				6CC472362DA4474A0086E345 /* RegisterGenreSection.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -447,6 +450,7 @@
 				D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */,
 				D045DEEA2D837B9D00EB1EB6 /* FontLiteral.swift in Sources */,
 				6CC472332DA432370086E345 /* SellRegisterHeader.swift in Sources */,
+				6CC472372DA4474A0086E345 /* RegisterGenreSection.swift in Sources */,
 				D67C177D2D9B07E300CFCDFA /* UsernameInputField.swift in Sources */,
 				D67C177B2D9AEEDD00CFCDFA /* UsernameInputView.swift in Sources */,
 				D05A03922D91B67200659C74 /* View+.swift in Sources */,

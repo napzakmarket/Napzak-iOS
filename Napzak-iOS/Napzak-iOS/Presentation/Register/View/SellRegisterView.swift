@@ -13,20 +13,37 @@ struct SellRegisterView: View {
             SellRegisterHeader()
             
             ScrollView {
-                RegisterImageSection()
-                    .padding(.top, 30)
-                    .padding(.horizontal, 28)
-                
-                
+                VStack(spacing: 0) {
+                    RegisterImageSection()
+                        .padding(.top, 30)
+                        .padding(.horizontal, 28)
+                        .padding(.bottom, 27)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    RegisterGenreSection()
+                        .padding(.horizontal, 18)
+                        .frame(maxWidth: .infinity)
+                        .padding(.bottom, 21)
+                    
+                    Rectangle()
+                        .fill(Color.napzakGrayScale(.gray10))
+                        .frame(height: 4)
+                    
+                    
+                    
+                }
                 
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
         }
+        .frame(maxWidth: .infinity)
+        
     }
 }
 
 #Preview {
     SellRegisterView()
 }
+
 
