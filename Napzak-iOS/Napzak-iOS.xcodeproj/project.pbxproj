@@ -12,6 +12,7 @@
 		6CC472352DA440B70086E345 /* RegisterImageSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472342DA440B70086E345 /* RegisterImageSection.swift */; };
 		6CC472372DA4474A0086E345 /* RegisterGenreSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472362DA4474A0086E345 /* RegisterGenreSection.swift */; };
 		6CC472392DA44C5F0086E345 /* RegisterTitleSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472382DA44C5F0086E345 /* RegisterTitleSection.swift */; };
+		6CC4723B2DA453270086E345 /* RegisterDescriptionSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC4723A2DA453270086E345 /* RegisterDescriptionSection.swift */; };
 		D045DEBB2D83723A00EB1EB6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */; };
 		D045DEBC2D83723A00EB1EB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB72D83723A00EB1EB6 /* Assets.xcassets */; };
 		D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEB82D83723A00EB1EB6 /* ContentView.swift */; };
@@ -49,6 +50,7 @@
 		6CC472342DA440B70086E345 /* RegisterImageSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterImageSection.swift; sourceTree = "<group>"; };
 		6CC472362DA4474A0086E345 /* RegisterGenreSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterGenreSection.swift; sourceTree = "<group>"; };
 		6CC472382DA44C5F0086E345 /* RegisterTitleSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterTitleSection.swift; sourceTree = "<group>"; };
+		6CC4723A2DA453270086E345 /* RegisterDescriptionSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterDescriptionSection.swift; sourceTree = "<group>"; };
 		D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Napzak-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D045DEB72D83723A00EB1EB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -100,6 +102,7 @@
 				6CC472342DA440B70086E345 /* RegisterImageSection.swift */,
 				6CC472362DA4474A0086E345 /* RegisterGenreSection.swift */,
 				6CC472382DA44C5F0086E345 /* RegisterTitleSection.swift */,
+				6CC4723A2DA453270086E345 /* RegisterDescriptionSection.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -442,6 +445,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6CC4723B2DA453270086E345 /* RegisterDescriptionSection.swift in Sources */,
 				D045DEE82D83786800EB1EB6 /* ColorLiteral.swift in Sources */,
 				D045DEF82D8383CC00EB1EB6 /* Encodable+.swift in Sources */,
 				D045DEF92D8383CC00EB1EB6 /* String+.swift in Sources */,
