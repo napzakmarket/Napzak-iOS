@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SellRegisterView: View {
+    
     var body: some View {
         VStack{
             SellRegisterHeader()
@@ -28,8 +29,12 @@ struct SellRegisterView: View {
                     Rectangle()
                         .fill(Color.napzakGrayScale(.gray10))
                         .frame(height: 4)
+                        .padding(.bottom, 29)
                     
-                    
+                    RegisterTitleSection()
+                        .padding(.horizontal, 28)
+                        .frame(maxWidth: .infinity)
+
                     
                 }
                 
@@ -45,5 +50,7 @@ struct SellRegisterView: View {
 #Preview {
     SellRegisterView()
 }
+
+
 
 
