@@ -83,6 +83,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6C9938C02DA0233200627DEE /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		D045DE922D836F0500EB1EB6 = {
 			isa = PBXGroup;
 			children = (
@@ -266,6 +273,7 @@
 		D045DF2E2D83856F00EB1EB6 /* Register */ = {
 			isa = PBXGroup;
 			children = (
+				6C9938C02DA0233200627DEE /* Components */,
 			);
 			path = Register;
 			sourceTree = "<group>";
