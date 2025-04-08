@@ -18,7 +18,7 @@ struct BuyRegisterPrice: View {
             Text("희망 가격")
                 .applyNapzakFont(.body4Bold14)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
-                .padding(.bottom, 24)
+                .padding(.bottom, 4)
             
             Text("얼마에 거래하고 싶으신가요? (1천원 단위, 최대 100만원)")
                 .applyNapzakFont(.caption2Medium12)
