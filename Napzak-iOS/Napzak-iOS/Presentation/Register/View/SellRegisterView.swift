@@ -14,13 +14,13 @@ struct SellRegisterView: View {
             
             ScrollView {
                 VStack(spacing: 0) {
-                    RegisterImageSection()
+                    RegisterImage()
                         .padding(.top, 30)
                         .padding(.horizontal, 28)
                         .padding(.bottom, 27)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    RegisterGenreSection()
+                    RegisterGenre()
                         .padding(.horizontal, 18)
                         .frame(maxWidth: .infinity)
                         .padding(.bottom, 21)
@@ -30,12 +30,12 @@ struct SellRegisterView: View {
                         .frame(height: 4)
                         .padding(.bottom, 29)
                     
-                    RegisterTitleSection()
+                    RegisterTitle()
                         .padding(.horizontal, 28)
                         .frame(maxWidth: .infinity)
                         .padding(.bottom, 10)
                     
-                    RegisterDescriptionSection()
+                    RegisterDescription()
                         .padding(.horizontal, 28)
                         .frame(maxWidth: .infinity)
                         .padding(.bottom, 23)
