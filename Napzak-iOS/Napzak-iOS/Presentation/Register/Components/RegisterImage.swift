@@ -1,5 +1,5 @@
 //
-//  RegisterImageSection.swift
+//  RegisterImage.swift
 //  Napzak-iOS
 //
 //  Created by OneTen on 4/8/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RegisterImageSection: View {
+struct RegisterImage: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("상품 이미지")

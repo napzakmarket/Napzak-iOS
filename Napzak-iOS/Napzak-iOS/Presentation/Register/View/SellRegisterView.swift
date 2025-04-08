@@ -14,20 +14,8 @@ struct SellRegisterView: View {
             
             ScrollView {
                 VStack(spacing: 0) {
+                    
                     extraView
-
-                    Button {
-                        print("버튼 눌림")
-                    } label: {
-                        Text("등록하기")
-                            .applyNapzakFont(.body4Bold14)
-                            .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity, minHeight: 50)
-                    }
-                    .background(Color.napzakGrayScale(.gray100))
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
-                    .padding(.horizontal, 28)
-                    .frame(maxWidth: .infinity)
                     
                 }
             }
@@ -40,13 +28,13 @@ struct SellRegisterView: View {
 extension SellRegisterView {
     private var extraView: some View {
         Group {
-            RegisterImageSection()
+            RegisterImage()
                 .padding(.top, 30)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 27)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            RegisterGenreSection()
+            RegisterGenre()
                 .padding(.horizontal, 18)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 21)
@@ -56,12 +44,12 @@ extension SellRegisterView {
                 .frame(height: 4)
                 .padding(.bottom, 29)
             
-            RegisterTitleSection()
+            RegisterTitle()
                 .padding(.horizontal, 28)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 10)
             
-            RegisterDescriptionSection()
+            RegisterDescription()
                 .padding(.horizontal, 28)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 23)
@@ -71,14 +59,34 @@ extension SellRegisterView {
                 .frame(height: 4)
                 .padding(.bottom, 23)
             
-            RegisterProductStateSection()
+            SellRegisterProductState()
+                .padding(.horizontal, 28)
+                .padding(.bottom, 30)
+            
+            SellRegisterPrice()
                 .padding(.horizontal, 28)
                 .padding(.bottom, 30)
             
         }
+    }
+    
+    private var registerButton: some View {
+        Button {
+            print("버튼 눌림")
+        } label: {
+            Text("등록하기")
+                .applyNapzakFont(.body4Bold14)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity, minHeight: 50)
+        }
+        .background(Color.napzakGrayScale(.gray100))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .padding(.horizontal, 28)
+        .frame(maxWidth: .infinity)
     }
 }
 
 #Preview {
     SellRegisterView()
 }
+

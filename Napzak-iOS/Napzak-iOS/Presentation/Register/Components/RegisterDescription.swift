@@ -1,5 +1,5 @@
 //
-//  RegisterDescriptionSection.swift
+//  RegisterDescription.swift
 //  Napzak-iOS
 //
 //  Created by OneTen on 4/8/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RegisterDescriptionSection: View {
+struct RegisterDescription: View {
     @State var description: String = ""
 
     var body: some View {
@@ -56,5 +56,5 @@ struct RegisterDescriptionSection: View {
 
 
 #Preview {
-    RegisterDescriptionSection()
+    RegisterDescription()
 }

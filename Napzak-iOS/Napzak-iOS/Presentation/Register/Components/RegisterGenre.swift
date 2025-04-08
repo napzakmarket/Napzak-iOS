@@ -1,5 +1,5 @@
 //
-//  RegisterGenreSection.swift
+//  RegisterGenre.swift
 //  Napzak-iOS
 //
 //  Created by OneTen on 4/8/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RegisterGenreSection: View {
+struct RegisterGenre: View {
     var body: some View {
         HStack{
             Text("장르")
@@ -31,5 +31,5 @@ struct RegisterGenreSection: View {
 }
 
 #Preview {
-    RegisterGenreSection()
+    RegisterGenre()
 }

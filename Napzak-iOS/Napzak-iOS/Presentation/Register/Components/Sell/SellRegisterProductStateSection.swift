@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct RegisterProductStateSection: View {
+struct SellRegisterProductState: View {
     @State var productState: String = ""
     
     private let options = ["미개봉", "아주 좋은 상태", "약간의 사용감", "사용감 있음"]
