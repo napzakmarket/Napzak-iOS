@@ -117,6 +117,10 @@
 				6CC472322DA432370086E345 /* SellRegisterHeader.swift */,
 				6CB945532DA55E230020A17D /* SellRegisterProductStateSection.swift */,
 				6CB945552DA5680B0020A17D /* SellRegisterPrice.swift */,
+				6CC472342DA440B70086E345 /* RegisterImage.swift */,
+				6CC472362DA4474A0086E345 /* RegisterGenre.swift */,
+				6CC472382DA44C5F0086E345 /* RegisterTitle.swift */,
+				6CC4723A2DA453270086E345 /* RegisterDescription.swift */,
 			);
 			path = Sell;
 			sourceTree = "<group>";
