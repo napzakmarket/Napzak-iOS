@@ -20,7 +20,7 @@ struct RegisterImageSection: View {
                 .foregroundStyle(Color.napzakGrayScale(.gray300))
                 .padding(.bottom, 16)
             
-            VStack{
+            VStack(spacing: 0){
                 Image(.iconPhotoPicker)
                 
                 Text("사진 0/10")
