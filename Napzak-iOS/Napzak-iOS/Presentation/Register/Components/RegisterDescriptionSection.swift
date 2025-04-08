@@ -22,17 +22,15 @@ struct RegisterDescriptionSection: View {
                     .maxLength(430, text: $description)
                     .applyNapzakFont(.body5SemiBold14)
                     .foregroundStyle(Color.napzakGrayScale(.gray500))
-                    .padding(.leading, 8)
-                    .padding(.trailing, 3)
-                    .padding(.vertical, 5)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 7)
                 
                 if description.isEmpty {
                     Text("자세히 작성하면 더 빠르고 원활한 거래를 할 수 있어요 예) 상품 상태, 한정판 여부, 네고 가능 여부 등")
                         .applyNapzakFont(.body5SemiBold14)
                         .foregroundStyle(Color.napzakGrayScale(.gray200))
-                        .padding(.leading, 14)
-                        .padding(.trailing, 9)
-                        .padding(.vertical, 14)
+                        .padding(.leading, 12)
+                        .padding(.vertical, 16)
                 }
             }
             .frame(height: 136)

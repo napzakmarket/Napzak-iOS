@@ -44,6 +44,20 @@ struct SellRegisterView: View {
                         .fill(Color.napzakGrayScale(.gray10))
                         .frame(height: 4)
                         .padding(.bottom, 23)
+                    
+                    Button {
+                        print("버튼 눌림")
+                    } label: {
+                        Text("등록하기")
+                            .applyNapzakFont(.body4Bold14)
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity, minHeight: 50)
+                    }
+                    .background(Color.napzakGrayScale(.gray100))
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .padding(.horizontal, 28)
+                    .frame(maxWidth: .infinity)
+
 
                 }
                 
