@@ -8,19 +8,23 @@
 import SwiftUI
 
 struct BuyRegisterView: View {
+
+    
     var body: some View {
         VStack{
             BuyRegisterHeader()
             
             ScrollView {
                 VStack(spacing: 0) {
+                    
                     BuyRegisterContent
+                    
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
             registerButton
-
+            
         }
         .frame(maxWidth: .infinity)
         .scrollIndicators(.hidden)
@@ -61,6 +65,8 @@ extension BuyRegisterView {
                 .frame(height: 4)
                 .padding(.bottom, 23)
             
+            BuyRegisterPrice()
+                .padding(.horizontal, 28)
             
         }
     }

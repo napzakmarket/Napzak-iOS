@@ -1,13 +1,13 @@
 //
-//  SellRegisterPrice.swift
+//  BuyRegisterPrice.swift
 //  Napzak-iOS
 //
-//  Created by OneTen on 4/8/25.
+//  Created by OneTen on 4/9/25.
 //
 
 import SwiftUI
 
-struct SellRegisterPrice: View {
+struct BuyRegisterPrice: View {
     @State var price: String = ""
     @State var priceError: Bool = false
     private let maxPrice: Int = 1_000_000       // 최대 금액 100만원
@@ -15,12 +15,12 @@ struct SellRegisterPrice: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("가격")
+            Text("희망 가격")
                 .applyNapzakFont(.body4Bold14)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
-                .padding(.bottom, 4)
+                .padding(.bottom, 24)
             
-            Text("얼마에 거래하고 싶으신가요? (최대 100만원)")
+            Text("얼마에 거래하고 싶으신가요? (1천원 단위, 최대 100만원)")
                 .applyNapzakFont(.caption2Medium12)
                 .foregroundStyle(Color.napzakGrayScale(.gray300))
                 .padding(.bottom, 24)
@@ -52,7 +52,7 @@ struct SellRegisterPrice: View {
                     .stroke(priceError ? .red : Color.napzakGrayScale(.gray100), lineWidth: 1)
             }
             .padding(.bottom, priceError ? 8 : 14)
-
+            
             if priceError {
                 HStack{
                     Spacer()
@@ -62,7 +62,7 @@ struct SellRegisterPrice: View {
                         .foregroundStyle(.red)
                 }
                 .padding(.bottom, 8)
-
+                
             }
             
             HStack(spacing: 8) { // 버튼 사이 간격 설정

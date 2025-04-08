@@ -63,14 +63,18 @@ extension SellRegisterView {
             
             SellRegisterProductState()
                 .padding(.horizontal, 28)
+                .frame(maxWidth: .infinity)
                 .padding(.bottom, 30)
             
             SellRegisterPrice()
                 .padding(.horizontal, 28)
+                .frame(maxWidth: .infinity)
                 .padding(.bottom, 30)
             
             SellRegisterDelivery()
                 .padding(.horizontal, 28)
+                .frame(maxWidth: .infinity)
+
             
         }
     }
