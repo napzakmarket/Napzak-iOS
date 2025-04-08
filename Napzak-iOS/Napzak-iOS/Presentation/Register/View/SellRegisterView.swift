@@ -14,19 +14,21 @@ struct SellRegisterView: View {
             
             ScrollView {
                 VStack(spacing: 0) {
-                    
-                    extraView
-                    
+                    SellRegisterContent
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            
+            registerButton
+
         }
         .frame(maxWidth: .infinity)
+        .scrollIndicators(.hidden)
     }
 }
 
 extension SellRegisterView {
-    private var extraView: some View {
+    private var SellRegisterContent: some View {
         Group {
             RegisterImage()
                 .padding(.top, 30)
@@ -66,6 +68,9 @@ extension SellRegisterView {
             SellRegisterPrice()
                 .padding(.horizontal, 28)
                 .padding(.bottom, 30)
+            
+            SellRegisterDelivery()
+                .padding(.horizontal, 28)
             
         }
     }
