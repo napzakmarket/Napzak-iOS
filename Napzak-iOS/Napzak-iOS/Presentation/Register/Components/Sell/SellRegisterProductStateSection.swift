@@ -17,6 +17,7 @@ struct SellRegisterProductState: View {
             Text("상품 상태")
                 .applyNapzakFont(.body4Bold14)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
+                .frame(height: 18)
                 .padding(.bottom, 24)
             
             LazyVGrid(
@@ -32,8 +33,8 @@ struct SellRegisterProductState: View {
                     } label: {
                         Text(option)
                             .applyNapzakFont(.body5SemiBold14)
-                            .frame(height: 42) // ❗️높이만 지정
-                            .frame(maxWidth: .infinity) // 그리드 셀 안에서 최대 너비
+                            .frame(height: 42)
+                            .frame(maxWidth: .infinity)
                             .foregroundColor(productState == option ?
                                              Color.napzakPrimary(.purple500) :
                                                 Color.napzakGrayScale(.gray200)

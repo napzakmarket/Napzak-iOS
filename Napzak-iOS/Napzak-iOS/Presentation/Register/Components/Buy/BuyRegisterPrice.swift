@@ -18,11 +18,13 @@ struct BuyRegisterPrice: View {
             Text("희망 가격")
                 .applyNapzakFont(.body4Bold14)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
+                .frame(height: 18)
                 .padding(.bottom, 4)
             
             Text("얼마에 거래하고 싶으신가요? (1천원 단위, 최대 100만원)")
                 .applyNapzakFont(.caption2Medium12)
                 .foregroundStyle(Color.napzakGrayScale(.gray300))
+                .frame(height: 15)
                 .padding(.bottom, 24)
             
             HStack(alignment: .center, spacing: 0){
@@ -60,6 +62,7 @@ struct BuyRegisterPrice: View {
                     Text("가격 설정은 1,000원 단위로만 가능해요")
                         .applyNapzakFont(.caption1SemiBold12)
                         .foregroundStyle(.red)
+                        .frame(height: 13)
                 }
                 .padding(.bottom, 8)
                 

@@ -26,6 +26,7 @@ struct SellRegisterDelivery: View {
             Text("배송 방법")
                 .applyNapzakFont(.body4Bold14)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
+                .frame(height: 18)
                 .padding(.bottom, 24)
             
             deliveryRow(title: "배송비 포함", isSelected: deliveryType == .included) {
@@ -42,6 +43,7 @@ struct SellRegisterDelivery: View {
                     VStack(spacing: 12) {
                         HStack {
                             Image(normalDelivery ? .buttonCheckboxFill : .buttonCheckbox)
+                                .frame(width: 24, height: 24)
                                 .onTapGesture {
                                     normalDelivery.toggle()
                                 }
@@ -49,6 +51,7 @@ struct SellRegisterDelivery: View {
                             Text("일반 택배")
                                 .applyNapzakFont(.body6Regular14)
                                 .foregroundStyle(Color.napzakGrayScale(.gray400))
+                                .frame(height: 18)
                             
                             Spacer()
                             
@@ -73,6 +76,7 @@ struct SellRegisterDelivery: View {
                         
                         HStack {
                             Image(halfDelivery ? .buttonCheckboxFill : .buttonCheckbox)
+                                .frame(width: 24, height: 24)
                                 .onTapGesture {
                                     halfDelivery.toggle()
                                 }
@@ -80,6 +84,7 @@ struct SellRegisterDelivery: View {
                             Text("반값/알뜰 택배")
                                 .applyNapzakFont(.body6Regular14)
                                 .foregroundStyle(Color.napzakGrayScale(.gray400))
+                                .frame(height: 18)
                             
                             Spacer()
                             
@@ -130,6 +135,7 @@ extension SellRegisterDelivery {
             Text(title)
                 .applyNapzakFont(.body4Bold14)
                 .foregroundStyle(Color.napzakGrayScale(.gray400))
+                .frame(height: 18)
             
             Spacer()
         }

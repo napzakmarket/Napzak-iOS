@@ -50,6 +50,7 @@ extension BuyRegisterHeader {
             Text("구해요 등록")
                 .applyNapzakFont(.body1Bold16)
                 .foregroundStyle(Color.napzakGrayScale(.gray400))
+                .frame(height: 18)
             
             Spacer()
         }
