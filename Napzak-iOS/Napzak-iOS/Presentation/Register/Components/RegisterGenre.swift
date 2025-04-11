@@ -27,6 +27,7 @@ struct RegisterGenre: View {
                 .padding(.vertical, 8)
             
         }
+        .frame(height: 34)
     }
 }
 

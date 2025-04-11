@@ -51,7 +51,8 @@ struct SellRegisterView: View {
                         Text("등록하기")
                             .applyNapzakFont(.body4Bold14)
                             .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity, minHeight: 50)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 50)
                     }
                     .background(Color.napzakGrayScale(.gray100))
                     .clipShape(RoundedRectangle(cornerRadius: 14))
