@@ -15,6 +15,7 @@ struct RegisterTitle: View {
             Text("상품명")
                 .applyNapzakFont(.body4Bold14)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
+                .frame(height: 18)
                 .padding(.bottom, 23)
             
             TextField("정확한 상품명을 포함하면 거래 확률이 올라가요", text: $title)
@@ -39,6 +40,8 @@ struct RegisterTitle: View {
                     .applyNapzakFont(.caption3Regular12)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
             }
+            .frame(height: 13)
+
             
         }
     }

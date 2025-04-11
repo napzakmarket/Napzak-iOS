@@ -15,6 +15,7 @@ struct RegisterDescription: View {
             Text("상품 설명")
                 .applyNapzakFont(.body4Bold14)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
+                .frame(height: 18)
                 .padding(.bottom, 23)
             
             ZStack(alignment: .topLeading){
@@ -49,6 +50,7 @@ struct RegisterDescription: View {
                     .applyNapzakFont(.caption3Regular12)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
             }
+            .frame(height: 13)
             
         }
     }
