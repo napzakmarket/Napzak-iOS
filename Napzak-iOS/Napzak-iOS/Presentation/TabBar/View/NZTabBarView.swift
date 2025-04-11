@@ -25,9 +25,7 @@ struct NZTabBarView: View {
     @State private var selectedTab: NZTab = .home
     @State private var isRegisterTabSelected = false
     @State private var isRegisterViewPresented = false
-    
-    @State var path = NavigationPath()
-    
+        
     //MARK: - Body
         
     var body: some View {
