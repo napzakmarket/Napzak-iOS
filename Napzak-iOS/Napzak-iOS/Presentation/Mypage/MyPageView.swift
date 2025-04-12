@@ -17,15 +17,18 @@ struct MyPageView: View {
     var body: some View {
         VStack(spacing: 0) {
             profileCard
-            
             marketButton
-            
             menuGrid
+
+            Spacer().frame(height: 30)
             
-            Spacer()
+            Rectangle()
+                .fill(Color.napzakGrayScale(.gray10))
+                .edgesIgnoringSafeArea(.bottom)
         }
         .background(Color.napzakGrayScale(.white))
     }
+
     
     private var profileCard: some View {
         HStack(spacing: 14) {
@@ -162,7 +165,6 @@ struct MyPageView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
-
 
 #Preview {
     MyPageView()
