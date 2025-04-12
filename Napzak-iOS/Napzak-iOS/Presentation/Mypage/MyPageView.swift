@@ -109,29 +109,52 @@ struct MyPageView: View {
         
         let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 3)
         
-        return LazyVGrid(columns: columns, spacing: 40) {
-            ForEach(menuItems, id: \.title) { item in
-                menuItem(title: item.title, iconName: item.icon)
+        return LazyVGrid(columns: columns, spacing: 0) {
+            ForEach(menuItems.indices, id: \.self) { index in
+                ZStack {
+                    menuItem(title: menuItems[index].title, iconName: menuItems[index].icon)
+                }
+                .frame(maxWidth: .infinity, minHeight: 96)
+                .background(Color.napzakGrayScale(.gray10))
+                .overlay(
+                    VStack {
+                        if index < 3 {
+                            Spacer()
+                            Rectangle()
+                                .fill(Color.napzakGrayScale(.gray50))
+                                .frame(height: 4)
+                        }
+                    }
+                )
+                .overlay(
+                    HStack {
+                        if (index + 1) % 3 != 0 {
+                            Spacer()
+                            Rectangle()
+                                .fill(Color.napzakGrayScale(.gray50))
+                                .frame(width: 4)
+                        }
+                    }
+                )
             }
         }
-        .padding(.vertical, 20)
         .background(Color.napzakGrayScale(.gray10))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .clipShape(RoundedRectangle(cornerRadius: 20))
         .padding(.horizontal, 27)
         .padding(.top, 40)
     }
-    
+
     private func menuItem(title: String, iconName: String) -> some View {
-        VStack(spacing: 0) {
+        VStack(spacing: 10) {
             Image(iconName)
                 .resizable()
-                .frame(width: 32)
-                .padding(10)
+                .frame(width: 32, height: 27)
             
             Text(title)
                 .font(.napzakFont(.caption1SemiBold12))
-                .foregroundColor(Color.napzakGrayScale(.gray400))
+                .foregroundColor(Color.napzakGrayScale(.gray500))
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
