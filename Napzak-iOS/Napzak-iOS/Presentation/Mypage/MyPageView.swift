@@ -75,25 +75,30 @@ struct MyPageView: View {
     }
     
     private var marketButton: some View {
-        Button {
-            // 내 마켓 보기
-        } label: {
-            HStack {
-                Spacer()
-                Text("내 마켓 보기")
-                    .font(.napzakFont(.caption1SemiBold12))
-                    .foregroundColor(Color.napzakGrayScale(.gray300))
-                
-                
-                Image("arrow_right")
-                Spacer()
-                
+        VStack(spacing: 0) {
+            Button {
+                // 내 마켓 보기
+            } label: {
+                HStack {
+                    Spacer()
+                    Text("내 마켓 보기")
+                        .font(.napzakFont(.caption1SemiBold12))
+                        .foregroundColor(Color.napzakGrayScale(.gray300))
+                    
+                    Image("arrow_right")
+                    Spacer()
+                }
+                .padding()
+                .background(Color.napzakGrayScale(.gray10))
+                .clipShape(RoundedRectangle(cornerRadius: 17))
             }
-            .padding()
-            .background(Color.napzakGrayScale(.gray10))
-            .clipShape(RoundedRectangle(cornerRadius: 17))
             .padding(.horizontal, 27)
             .padding(.top, 20)
+            
+            Rectangle()
+                .fill(Color.napzakGrayScale(.gray10))
+                .frame(height: 4)
+                .padding(.top, 20)
         }
     }
     
@@ -141,7 +146,7 @@ struct MyPageView: View {
         .background(Color.napzakGrayScale(.gray10))
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .padding(.horizontal, 27)
-        .padding(.top, 40)
+        .padding(.top, 20)
     }
 
     private func menuItem(title: String, iconName: String) -> some View {
