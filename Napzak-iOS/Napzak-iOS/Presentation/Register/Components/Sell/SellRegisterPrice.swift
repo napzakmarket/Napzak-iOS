@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SellRegisterPrice: View {
     @State var price: String = ""
-    @State var priceError: Bool = false
     private let maxPrice: Int = 1_000_000       // 최대 금액 100만원
     let addPrices = ["+1,000원", "+5,000원", "+10,000원", "+100,000원"]
     
@@ -32,41 +31,23 @@ struct SellRegisterPrice: View {
                     .keyboardType(.decimalPad)
                     .applyNapzakFont(.body4Bold14)
                     .multilineTextAlignment(.trailing)
-                    .foregroundStyle(priceError ? .red : Color.napzakGrayScale(.gray400))
+                    .foregroundStyle(Color.napzakGrayScale(.gray400))
                     .onChange(of: price) { newValue in
                         price = newValue.convertPrice(maxPrice: maxPrice)
-                        if price.convertInt() % 1000 != 0 {
-                            priceError = true
-                        } else {
-                            priceError = false
-                        }
                     }
                 
-                Text(" 원대")
+                Text(" 원")
                     .applyNapzakFont(.body5SemiBold14)
                     .foregroundStyle(
-                        price == "" ? Color.napzakGrayScale(.gray200) : priceError ? .red : Color.napzakGrayScale(.gray400))
+                        price == "" ? Color.napzakGrayScale(.gray200) : Color.napzakGrayScale(.gray400))
                     .padding(.trailing, 12)
             }
             .frame(height: 50)
             .overlay {
                 RoundedRectangle(cornerRadius: 14)
-                    .stroke(priceError ? .red : Color.napzakGrayScale(.gray100), lineWidth: 1)
+                    .stroke(Color.napzakGrayScale(.gray100), lineWidth: 1)
             }
-            .padding(.bottom, priceError ? 8 : 14)
-
-            if priceError {
-                HStack{
-                    Spacer()
-                    
-                    Text("가격 설정은 1,000원 단위로만 가능해요")
-                        .applyNapzakFont(.caption1SemiBold12)
-                        .foregroundStyle(.red)
-                        .frame(height: 13)
-                }
-                .padding(.bottom, 8)
-
-            }
+            .padding(.bottom, 14)
             
             HStack(spacing: 8) { // 버튼 사이 간격 설정
                 ForEach(addPrices, id: \.self) { addPrice in

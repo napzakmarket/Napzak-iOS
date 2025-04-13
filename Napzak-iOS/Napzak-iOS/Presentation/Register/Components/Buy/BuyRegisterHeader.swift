@@ -12,6 +12,7 @@ struct BuyRegisterHeader: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            Spacer()
             ZStack{
                 backButton
                 navigationTitle
@@ -20,7 +21,9 @@ struct BuyRegisterHeader: View {
             
             Divider()
         }
-        
+        .background(.white)
+        .frame(height: 110)
+
     }
 }
 

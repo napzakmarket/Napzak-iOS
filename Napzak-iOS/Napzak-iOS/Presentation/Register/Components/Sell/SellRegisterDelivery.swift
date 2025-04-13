@@ -119,7 +119,7 @@ struct SellRegisterDelivery: View {
                     .stroke(Color.napzakGrayScale(.gray50))
             )
         }
-        .padding(.bottom, deliveryType == .separate ? 95 : 34)
+        .padding(.bottom, 25)
 
         
     }

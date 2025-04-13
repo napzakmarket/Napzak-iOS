@@ -8,12 +8,11 @@
 import SwiftUI
 
 struct BuyRegisterView: View {
-
     
     var body: some View {
-        VStack{
+        VStack(spacing: 0){
             BuyRegisterHeader()
-            
+
             ScrollView {
                 VStack(spacing: 0) {
                     
@@ -26,8 +25,11 @@ struct BuyRegisterView: View {
             registerButton
             
         }
+        .ignoresSafeArea()
         .frame(maxWidth: .infinity)
         .scrollIndicators(.hidden)
+        .background(Color.napzakGrayScale(.gray10))
+
     }
 }
 
@@ -39,34 +41,46 @@ extension BuyRegisterView {
                 .padding(.horizontal, 28)
                 .padding(.bottom, 27)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .background(.white)
             
             RegisterGenre()
                 .padding(.horizontal, 18)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 21)
+                .background(.white)
             
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))
                 .frame(height: 4)
                 .padding(.bottom, 29)
-            
+                .background(.white)
+
             RegisterTitle()
                 .padding(.horizontal, 28)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 10)
-            
+                .background(.white)
+
             RegisterDescription()
                 .padding(.horizontal, 28)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 23)
-            
+                .background(.white)
+
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))
                 .frame(height: 4)
                 .padding(.bottom, 23)
-            
+                .background(.white)
+
             BuyRegisterPrice()
                 .padding(.horizontal, 28)
+                .padding(.bottom, 32)
+                .background(.white)
+
+            BuyRegisterSuggestPrice()
+                .padding(.horizontal, 28)
+
             
         }
     }
@@ -83,11 +97,16 @@ extension BuyRegisterView {
         .background(Color.napzakGrayScale(.gray100))
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .padding(.horizontal, 28)
+        .padding(.top, 18)
+        .padding(.bottom, 40)
         .frame(maxWidth: .infinity)
+        .background(.white)
     }
+    
 }
 
 
 #Preview {
     BuyRegisterView()
 }
+

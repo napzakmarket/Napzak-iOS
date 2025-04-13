@@ -22,8 +22,10 @@ struct SellRegisterView: View {
             registerButton
 
         }
+        .ignoresSafeArea()
         .frame(maxWidth: .infinity)
         .scrollIndicators(.hidden)
+        
     }
 }
 
@@ -91,7 +93,10 @@ extension SellRegisterView {
         .background(Color.napzakGrayScale(.gray100))
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .padding(.horizontal, 28)
+        .padding(.top, 18)
+        .padding(.bottom, 40)
         .frame(maxWidth: .infinity)
+        .background(.white)
     }
 }
 
