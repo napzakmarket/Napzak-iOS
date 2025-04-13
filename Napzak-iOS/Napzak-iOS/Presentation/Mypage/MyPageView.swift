@@ -160,7 +160,7 @@ struct MyPageView: View {
             
             Text(title)
                 .font(.napzakFont(.caption1SemiBold12))
-                .foregroundColor(Color.napzakGrayScale(.gray500))
+                .foregroundColor(Color.napzakGrayScale(.gray400))
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
