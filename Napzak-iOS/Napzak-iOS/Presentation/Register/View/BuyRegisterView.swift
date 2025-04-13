@@ -86,21 +86,26 @@ extension BuyRegisterView {
     }
     
     private var registerButton: some View {
-        Button {
-            print("버튼 눌림")
-        } label: {
-            Text("등록하기")
-                .applyNapzakFont(.body4Bold14)
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity, minHeight: 50)
+        VStack(spacing: 0) {
+            Rectangle()
+                .fill(Color.black.opacity(0.05))
+                .frame(height: 1)
+            
+            Button {
+                print("버튼 눌림")
+            } label: {
+                Text("등록하기")
+                    .applyNapzakFont(.body4Bold14)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity, minHeight: 50)
+            }
+            .background(Color.napzakGrayScale(.gray100))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
+            .padding(.horizontal, 28)
+            .padding(.top, 18)
+            .padding(.bottom, 40)
+            .background(.white)
         }
-        .background(Color.napzakGrayScale(.gray100))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
-        .padding(.horizontal, 28)
-        .padding(.top, 18)
-        .padding(.bottom, 40)
-        .frame(maxWidth: .infinity)
-        .background(.white)
     }
     
 }

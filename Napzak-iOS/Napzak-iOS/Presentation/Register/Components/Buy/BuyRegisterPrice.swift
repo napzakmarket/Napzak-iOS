@@ -56,11 +56,17 @@ struct BuyRegisterPrice: View {
             .padding(.bottom, priceError ? 8 : 14)
             
             if priceError {
-                HStack{
+                HStack(alignment: .center, spacing: 0){
                     Spacer()
                     
+                    Image(.iconWarning)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 9, height: 9)
+                        .padding(.trailing, 2)
+                    
                     Text("가격 설정은 1,000원 단위로만 가능해요")
-                        .applyNapzakFont(.caption1SemiBold12)
+                        .applyNapzakFont(.caption1SemiBold10)
                         .foregroundStyle(.red)
                         .frame(height: 13)
                 }
