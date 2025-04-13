@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D0180D602D9F001E006A748F /* RegisterFloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0180D5F2D9F0013006A748F /* RegisterFloatingView.swift */; };
 		6C6CBDF92DA574A300763CBA /* SellRegisterDelivery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6CBDF82DA574A300763CBA /* SellRegisterDelivery.swift */; };
 		6C6CBDFB2DA589DD00763CBA /* BuyRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6CBDFA2DA589DD00763CBA /* BuyRegisterView.swift */; };
 		6C6CBE012DA58A5600763CBA /* BuyRegisterHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6CBDFF2DA58A5600763CBA /* BuyRegisterHeader.swift */; };
@@ -40,6 +41,8 @@
 		D045DEFA2D8383CC00EB1EB6 /* TextEditor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEF42D8383CC00EB1EB6 /* TextEditor+.swift */; };
 		D045DEFC2D8383CC00EB1EB6 /* TextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEF32D8383CC00EB1EB6 /* TextField+.swift */; };
 		D05A03922D91B67200659C74 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05A03912D91B67200659C74 /* View+.swift */; };
+		D06F13962DA300CB0029698C /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06F13952DA300C30029698C /* NavigationRouter.swift */; };
+		D07BF2762D9D16A3000E4FD5 /* NZTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07BF2752D9D169F000E4FD5 /* NZTabBarView.swift */; };
 		D64922D12D9EF5CB00716740 /* RowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64922D02D9EF5CB00716740 /* RowType.swift */; };
 		D67C17762D9AEDC000CFCDFA /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */; };
 		D67C17772D9AEDC000CFCDFA /* CheckRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17732D9AEDC000CFCDFA /* CheckRow.swift */; };
@@ -51,6 +54,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D0180D5F2D9F0013006A748F /* RegisterFloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFloatingView.swift; sourceTree = "<group>"; };
 		6C6CBDF82DA574A300763CBA /* SellRegisterDelivery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterDelivery.swift; sourceTree = "<group>"; };
 		6C6CBDFA2DA589DD00763CBA /* BuyRegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyRegisterView.swift; sourceTree = "<group>"; };
 		6C6CBDFF2DA58A5600763CBA /* BuyRegisterHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyRegisterHeader.swift; sourceTree = "<group>"; };
@@ -80,6 +84,8 @@
 		D045DEF62D8383CC00EB1EB6 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		D045DEF72D8383CC00EB1EB6 /* Encodable+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+.swift"; sourceTree = "<group>"; };
 		D05A03912D91B67200659C74 /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
+		D06F13952DA300C30029698C /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
+		D07BF2752D9D169F000E4FD5 /* NZTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NZTabBarView.swift; sourceTree = "<group>"; };
 		D64922D02D9EF5CB00716740 /* RowType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowType.swift; sourceTree = "<group>"; };
 		D67C17712D9AEDC000CFCDFA /* OnboardingNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNavigationBar.swift; sourceTree = "<group>"; };
 		D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
@@ -258,6 +264,7 @@
 		D045DEED2D837E3C00EB1EB6 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				D06F13952DA300C30029698C /* NavigationRouter.swift */,
 				D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */,
 				D67C17732D9AEDC000CFCDFA /* CheckRow.swift */,
 				D67C177C2D9B07E300CFCDFA /* UsernameInputField.swift */,
@@ -362,6 +369,7 @@
 		D045DF432D83856F00EB1EB6 /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
+				D07BF2742D9D169A000E4FD5 /* View */,
 			);
 			path = TabBar;
 			sourceTree = "<group>";
@@ -371,6 +379,15 @@
 			children = (
 			);
 			path = Market;
+			sourceTree = "<group>";
+		};
+		D07BF2742D9D169A000E4FD5 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D07BF2752D9D169F000E4FD5 /* NZTabBarView.swift */,
+				D0180D5F2D9F0013006A748F /* RegisterFloatingView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		D67C17742D9AEDC000CFCDFA /* Components */ = {
@@ -498,6 +515,8 @@
 				D67C177B2D9AEEDD00CFCDFA /* UsernameInputView.swift in Sources */,
 				6C6CBDFB2DA589DD00763CBA /* BuyRegisterView.swift in Sources */,
 				D05A03922D91B67200659C74 /* View+.swift in Sources */,
+				D07BF2762D9D16A3000E4FD5 /* NZTabBarView.swift in Sources */,
+				D06F13962DA300CB0029698C /* NavigationRouter.swift in Sources */,
 				6CB945542DA55E230020A17D /* SellRegisterProductStateSection.swift in Sources */,
 				D67C17762D9AEDC000CFCDFA /* PrimaryButton.swift in Sources */,
 				6C6CBE012DA58A5600763CBA /* BuyRegisterHeader.swift in Sources */,
@@ -508,6 +527,7 @@
 				D67C17802D9B085600CFCDFA /* UsernameValidation.swift in Sources */,
 				6C6CBDF92DA574A300763CBA /* SellRegisterDelivery.swift in Sources */,
 				D045DEBE2D83723A00EB1EB6 /* Napzak_iOSApp.swift in Sources */,
+				D0180D602D9F001E006A748F /* RegisterFloatingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
