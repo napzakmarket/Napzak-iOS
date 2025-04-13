@@ -59,15 +59,12 @@ struct SellRegisterView: View {
                     .padding(.horizontal, 28)
                     .frame(maxWidth: .infinity)
 
-
                 }
                 
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            
         }
         .frame(maxWidth: .infinity)
-        
     }
 }
 

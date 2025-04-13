@@ -20,7 +20,6 @@ struct SellRegisterHeader: View {
             
             Divider()
         }
-        
     }
 }
 
