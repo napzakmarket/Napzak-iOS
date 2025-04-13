@@ -122,7 +122,7 @@ struct MyPageView: View {
                 ZStack {
                     menuItem(title: menuItems[index].title, iconName: menuItems[index].icon)
                 }
-                .frame(maxWidth: .infinity, minHeight: 96)
+                .frame(maxWidth: .infinity, minHeight: 81)
                 .background(Color.napzakGrayScale(.gray10))
                 .overlay(
                     VStack {
@@ -153,7 +153,7 @@ struct MyPageView: View {
     }
 
     private func menuItem(title: String, iconName: String) -> some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 5) {
             Image(iconName)
                 .resizable()
                 .frame(width: 36, height: 36)
@@ -162,7 +162,6 @@ struct MyPageView: View {
                 .font(.napzakFont(.caption1SemiBold12))
                 .foregroundColor(Color.napzakGrayScale(.gray400))
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
