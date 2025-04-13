@@ -156,7 +156,7 @@ struct MyPageView: View {
         VStack(spacing: 10) {
             Image(iconName)
                 .resizable()
-                .frame(width: 32, height: 27)
+                .frame(width: 36, height: 36)
             
             Text(title)
                 .font(.napzakFont(.caption1SemiBold12))
