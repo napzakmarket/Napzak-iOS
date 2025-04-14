@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D0180D602D9F001E006A748F /* RegisterFloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0180D5F2D9F0013006A748F /* RegisterFloatingView.swift */; };
+		6CC472312DA431A10086E345 /* SellRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472302DA431A10086E345 /* SellRegisterView.swift */; };
+		6CC472332DA432370086E345 /* SellRegisterHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472322DA432370086E345 /* SellRegisterHeader.swift */; };
+		6CC472352DA440B70086E345 /* RegisterImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472342DA440B70086E345 /* RegisterImage.swift */; };
+		6CC472372DA4474A0086E345 /* RegisterGenre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472362DA4474A0086E345 /* RegisterGenre.swift */; };
+		6CC472392DA44C5F0086E345 /* RegisterTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472382DA44C5F0086E345 /* RegisterTitle.swift */; };
+		6CC4723B2DA453270086E345 /* RegisterDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC4723A2DA453270086E345 /* RegisterDescription.swift */; };
 		D045DEBB2D83723A00EB1EB6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */; };
 		D045DEBC2D83723A00EB1EB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB72D83723A00EB1EB6 /* Assets.xcassets */; };
 		D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEB82D83723A00EB1EB6 /* ContentView.swift */; };
@@ -38,6 +45,8 @@
 		D63270342DA3AC10002414DA /* GenreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63270312DA3AC10002414DA /* GenreCell.swift */; };
 		D63270352DA3AC10002414DA /* GenreGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63270322DA3AC10002414DA /* GenreGridView.swift */; };
 		D63270372DA3AC55002414DA /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63270362DA3AC55002414DA /* ToastMessageView.swift */; };
+		D06F13962DA300CB0029698C /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06F13952DA300C30029698C /* NavigationRouter.swift */; };
+		D07BF2762D9D16A3000E4FD5 /* NZTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07BF2752D9D169F000E4FD5 /* NZTabBarView.swift */; };
 		D64922D12D9EF5CB00716740 /* RowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64922D02D9EF5CB00716740 /* RowType.swift */; };
 		D67C17762D9AEDC000CFCDFA /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */; };
 		D67C17772D9AEDC000CFCDFA /* CheckRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17732D9AEDC000CFCDFA /* CheckRow.swift */; };
@@ -49,6 +58,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D0180D5F2D9F0013006A748F /* RegisterFloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFloatingView.swift; sourceTree = "<group>"; };
+		6CC472302DA431A10086E345 /* SellRegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterView.swift; sourceTree = "<group>"; };
+		6CC472322DA432370086E345 /* SellRegisterHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterHeader.swift; sourceTree = "<group>"; };
+		6CC472342DA440B70086E345 /* RegisterImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterImage.swift; sourceTree = "<group>"; };
+		6CC472362DA4474A0086E345 /* RegisterGenre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterGenre.swift; sourceTree = "<group>"; };
+		6CC472382DA44C5F0086E345 /* RegisterTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterTitle.swift; sourceTree = "<group>"; };
+		6CC4723A2DA453270086E345 /* RegisterDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterDescription.swift; sourceTree = "<group>"; };
 		D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Napzak-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D045DEB72D83723A00EB1EB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -76,6 +92,8 @@
 		D63270312DA3AC10002414DA /* GenreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreCell.swift; sourceTree = "<group>"; };
 		D63270322DA3AC10002414DA /* GenreGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreGridView.swift; sourceTree = "<group>"; };
 		D63270362DA3AC55002414DA /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
+		D06F13952DA300C30029698C /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
+		D07BF2752D9D169F000E4FD5 /* NZTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NZTabBarView.swift; sourceTree = "<group>"; };
 		D64922D02D9EF5CB00716740 /* RowType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowType.swift; sourceTree = "<group>"; };
 		D67C17712D9AEDC000CFCDFA /* OnboardingNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNavigationBar.swift; sourceTree = "<group>"; };
 		D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
@@ -103,6 +121,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6C9938C02DA0233200627DEE /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				6CC472322DA432370086E345 /* SellRegisterHeader.swift */,
+				6CC472342DA440B70086E345 /* RegisterImage.swift */,
+				6CC472362DA4474A0086E345 /* RegisterGenre.swift */,
+				6CC472382DA44C5F0086E345 /* RegisterTitle.swift */,
+				6CC4723A2DA453270086E345 /* RegisterDescription.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		6CC4722F2DA431660086E345 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				6CC472302DA431A10086E345 /* SellRegisterView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		D045DE922D836F0500EB1EB6 = {
 			isa = PBXGroup;
 			children = (
@@ -212,6 +250,7 @@
 		D045DEED2D837E3C00EB1EB6 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				D06F13952DA300C30029698C /* NavigationRouter.swift */,
 				D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */,
 				D67C17732D9AEDC000CFCDFA /* CheckRow.swift */,
 				D67C177C2D9B07E300CFCDFA /* UsernameInputField.swift */,
@@ -288,6 +327,8 @@
 		D045DF2E2D83856F00EB1EB6 /* Register */ = {
 			isa = PBXGroup;
 			children = (
+				6C9938C02DA0233200627DEE /* Components */,
+				6CC4722F2DA431660086E345 /* View */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -316,6 +357,7 @@
 		D045DF432D83856F00EB1EB6 /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
+				D07BF2742D9D169A000E4FD5 /* View */,
 			);
 			path = TabBar;
 			sourceTree = "<group>";
@@ -360,6 +402,15 @@
 				D67C17752D9AEDC000CFCDFA /* OnboardingTermsView.swift */,
 				D67C177A2D9AEEDD00CFCDFA /* UsernameInputView.swift */,
 				D63270282DA30609002414DA /* GenreSelectionView.swift */,
+            );
+            path = View;
+            sourceTree = "<group>";
+        };
+		D07BF2742D9D169A000E4FD5 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D07BF2752D9D169F000E4FD5 /* NZTabBarView.swift */,
+				D0180D5F2D9F0013006A748F /* RegisterFloatingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -491,6 +542,14 @@
 				D63270162DA19639002414DA /* SearchBar.swift in Sources */,
 				D63270222DA2C5EF002414DA /* GenreName.swift in Sources */,
 				D63270252DA2C879002414DA /* GenreChip.swift in Sources */,
+				6CC4723B2DA453270086E345 /* RegisterDescription.swift in Sources */,
+				D045DEE82D83786800EB1EB6 /* ColorLiteral.swift in Sources */,
+				D045DEF82D8383CC00EB1EB6 /* Encodable+.swift in Sources */,
+				D045DEF92D8383CC00EB1EB6 /* String+.swift in Sources */,
+				6CC472312DA431A10086E345 /* SellRegisterView.swift in Sources */,
+				D045DEFA2D8383CC00EB1EB6 /* TextEditor+.swift in Sources */,
+				D64922D12D9EF5CB00716740 /* RowType.swift in Sources */,
+				6CC472352DA440B70086E345 /* RegisterImage.swift in Sources */,
 				D045DEFC2D8383CC00EB1EB6 /* TextField+.swift in Sources */,
 				D63270342DA3AC10002414DA /* GenreCell.swift in Sources */,
 				D63270372DA3AC55002414DA /* ToastMessageView.swift in Sources */,
@@ -498,16 +557,22 @@
 				D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */,
 				D63270202DA28E9C002414DA /* PreferGenre.swift in Sources */,
 				D045DEEA2D837B9D00EB1EB6 /* FontLiteral.swift in Sources */,
+				6CC472332DA432370086E345 /* SellRegisterHeader.swift in Sources */,
+				6CC472372DA4474A0086E345 /* RegisterGenre.swift in Sources */,
 				D67C177D2D9B07E300CFCDFA /* UsernameInputField.swift in Sources */,
 				D67C177B2D9AEEDD00CFCDFA /* UsernameInputView.swift in Sources */,
 				D05A03922D91B67200659C74 /* View+.swift in Sources */,
+				D07BF2762D9D16A3000E4FD5 /* NZTabBarView.swift in Sources */,
+				D06F13962DA300CB0029698C /* NavigationRouter.swift in Sources */,
 				D67C17762D9AEDC000CFCDFA /* PrimaryButton.swift in Sources */,
 				D632702D2DA37E93002414DA /* GenreSelectionViewModel.swift in Sources */,
 				D67C17772D9AEDC000CFCDFA /* CheckRow.swift in Sources */,
 				D67C17782D9AEDC000CFCDFA /* OnboardingNavigationBar.swift in Sources */,
 				D67C17792D9AEDC000CFCDFA /* OnboardingTermsView.swift in Sources */,
+				6CC472392DA44C5F0086E345 /* RegisterTitle.swift in Sources */,
 				D67C17802D9B085600CFCDFA /* UsernameValidation.swift in Sources */,
 				D045DEBE2D83723A00EB1EB6 /* Napzak_iOSApp.swift in Sources */,
+				D0180D602D9F001E006A748F /* RegisterFloatingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
