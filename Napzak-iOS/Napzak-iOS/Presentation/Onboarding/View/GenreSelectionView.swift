@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Combine
 
 struct GenreSelectionView: View {
     @StateObject private var viewModel = GenreSelectionViewModel()
@@ -107,7 +106,8 @@ extension GenreSelectionView {
             ZStack(alignment: .top) {
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        Color.gray.opacity(0.2),
+                        Color.gray.opacity(0.15),
+                        Color.gray.opacity(0.05),
                         Color.gray.opacity(0.0)
                     ]),
                     startPoint: .top,
@@ -124,7 +124,7 @@ extension GenreSelectionView {
                 )
                 .padding(.horizontal, 20)
             }
-            .padding(.top, 14)
+            .padding(.top, 16)
         }
     }
     
