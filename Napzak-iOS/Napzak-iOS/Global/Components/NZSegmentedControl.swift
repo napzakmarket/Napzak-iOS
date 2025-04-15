@@ -11,7 +11,7 @@ struct NZSegmentedControl: View {
     
     //MARK: - Property Wrappers
     
-    @Binding var selectedIndex: Int
+    @Binding var selectedTabIndex: Int
     
     //MARK: - Properties
     
@@ -41,11 +41,11 @@ extension NZSegmentedControl {
         LazyVGrid(columns: columns) {
             ForEach(tabs.indices, id: \.self) { i in
                 Button {
-                    selectedIndex = i
+                    selectedTabIndex = i
                 } label: {
                     Text(tabs[i])
-                        .applyNapzakFont(selectedIndex == i ? .body1Bold16 : .body2SemiBold16)
-                        .foregroundStyle(selectedIndex == i ? Color.napzakPrimary(.purple500): Color.napzakGrayScale(.gray200))
+                        .applyNapzakFont(selectedTabIndex == i ? .body1Bold16 : .body2SemiBold16)
+                        .foregroundStyle(selectedTabIndex == i ? Color.napzakPrimary(.purple500): Color.napzakGrayScale(.gray200))
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 36)
@@ -56,7 +56,7 @@ extension NZSegmentedControl {
     private var segmentedHighlighter: some View {
         LazyVGrid(columns: columns) {
             ForEach(tabs.indices, id: \.self) { i in
-                Color.napzakPrimary(.purple500).opacity(selectedIndex == i ? 1 : 0)
+                Color.napzakPrimary(.purple500).opacity(selectedTabIndex == i ? 1 : 0)
                     .frame(height: 2)
             }
         }
@@ -65,10 +65,10 @@ extension NZSegmentedControl {
 
 #Preview {
     struct PreviewContainer: View {
-        @State var selectedIndex = 0
+        @State var selectedTabIndex = 0
         
         var body: some View {
-            NZSegmentedControl(selectedIndex: $selectedIndex, tabs: ["팔아요", "구해요"], spacing: 16)
+            NZSegmentedControl(selectedTabIndex: $selectedTabIndex, tabs: ["팔아요", "구해요"], spacing: 16)
         }
     }
     
