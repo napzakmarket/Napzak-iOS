@@ -11,17 +11,19 @@ struct FilterContainerView: View {
     
     //MARK: - Property Wrappers
     
+    @Binding var selectedTabIndex: Int
     @Binding var selectedGenres: [String]
-    @Binding var isUnopened: Bool?
+    @Binding var isUnopened: Bool
     @Binding var isOnSale: Bool
     
     var body: some View {
         HStack(alignment: .center, spacing: 6) {
             genreFilterChip
-            if let isUnopened {
+            if selectedTabIndex == 0 {
                 unopenedFilterChip
             }
             onSaleFilterChip
+            Spacer()
         }
         .frame(height: 28)
         .frame(maxWidth: 255)
@@ -65,11 +67,9 @@ struct FilterContainerView: View {
     
     var unopenedFilterChip: some View {
         Button {
-            isUnopened?.toggle()
+            isUnopened.toggle()
         } label: {
-            if let isUnopened {
                 Image(isUnopened ? .btnFilterUnopenedSelected : .btnFilterUnopened)
-            }
         }
     }
 
@@ -86,11 +86,11 @@ struct FilterContainerView: View {
     struct PreviewContainer: View {
         @State var selectedTabIndex = 0
         @State var selectedGenres = [String]()
-        @State var isUnopened: Bool? = false
+        @State var isUnopened = false
         @State var isOnSale = false
 
         var body: some View {
-            FilterContainerView(selectedGenres: $selectedGenres, isUnopened: $isUnopened, isOnSale: $isOnSale)
+            FilterContainerView(selectedTabIndex: $selectedTabIndex, selectedGenres: $selectedGenres, isUnopened: $isUnopened, isOnSale: $isOnSale)
         }
     }
     
