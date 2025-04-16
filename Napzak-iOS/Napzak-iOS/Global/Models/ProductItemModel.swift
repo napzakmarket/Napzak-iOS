@@ -1,0 +1,134 @@
+//
+//  ProductItemModel.swift
+//  Napzak-iOS
+//
+//  Created by 조혜린 on 4/16/25.
+//
+
+struct ProductItemModel: Identifiable {
+    ///상품 목록 아이템 모델 구조체
+
+    let id: Int
+    let genreName: String
+    let productName: String
+    let photo: String
+    let price: Int
+    let uploadTime: String
+    var isInterested: Bool
+    let tradeType: TradeType
+    let tradeStatus: TradeStatus
+    let isPriceNegotiable: Bool?
+    let isOwnedByCurrentUser: Bool
+    let interestCount: Int
+    let chatCount: Int
+}
+
+extension ProductItemModel {
+    static let dummyProducts: [ProductItemModel] = [
+        ProductItemModel(
+            id: 1,
+            genreName: "산리오",
+            productName: "딸기 마이멜로디 마스코트 인형",
+            photo: "https://example.com/photo1.jpg",
+            price: 35000,
+            uploadTime: "3시간 전",
+            isInterested: true,
+            tradeType: .buy,
+            tradeStatus: .beforeTrade,
+            isPriceNegotiable: true,
+            isOwnedByCurrentUser: false,
+            interestCount: 30,
+            chatCount: 10
+        ),
+        ProductItemModel(
+            id: 2,
+            genreName: "디즈니",
+            productName: "미키마우스 한정판 피규어",
+            photo: "https://example.com/photo2.jpg",
+            price: 50000,
+            uploadTime: "1일 전",
+            isInterested: false,
+            tradeType: .sell,
+            tradeStatus: .beforeTrade,
+            isPriceNegotiable: nil,
+            isOwnedByCurrentUser: false,
+            interestCount: 30,
+            chatCount: 10
+        ),
+        ProductItemModel(
+            id: 3,
+            genreName: "포켓몬",
+            productName: "피카츄 봉제인형",
+            photo: "https://example.com/photo3.jpg",
+            price: 27000,
+            uploadTime: "2일 전",
+            isInterested: true,
+            tradeType: .sell,
+            tradeStatus: .reserved,
+            isPriceNegotiable: nil,
+            isOwnedByCurrentUser: true,
+            interestCount: 30,
+            chatCount: 10
+        ),
+        ProductItemModel(
+            id: 4,
+            genreName: "마블",
+            productName: "아이언맨 액션 피규어",
+            photo: "https://example.com/photo4.jpg",
+            price: 60000,
+            uploadTime: "5시간 전",
+            isInterested: false,
+            tradeType: .sell,
+            tradeStatus: .reserved,
+            isPriceNegotiable: nil,
+            isOwnedByCurrentUser: false,
+            interestCount: 30,
+            chatCount: 10
+        ),
+        ProductItemModel(
+            id: 5,
+            genreName: "DC 코믹스",
+            productName: "배트맨 한정판 마스크",
+            photo: "https://example.com/photo5.jpg",
+            price: 80000,
+            uploadTime: "1시간 전",
+            isInterested: true,
+            tradeType: .buy,
+            tradeStatus: .completed,
+            isPriceNegotiable: nil,
+            isOwnedByCurrentUser: false,
+            interestCount: 30,
+            chatCount: 10
+        ),
+        ProductItemModel(
+            id: 6,
+            genreName: "지브리",
+            productName: "토토로 인형 세트",
+            photo: "https://example.com/photo6.jpg",
+            price: 45000,
+            uploadTime: "3일 전",
+            isInterested: false,
+            tradeType: .sell,
+            tradeStatus: .beforeTrade,
+            isPriceNegotiable: nil,
+            isOwnedByCurrentUser: true,
+            interestCount: 30,
+            chatCount: 10
+        ),
+        ProductItemModel(
+            id: 7,
+            genreName: "스타워즈",
+            productName: "다스베이더 광선검",
+            photo: "https://example.com/photo7.jpg",
+            price: 70000,
+            uploadTime: "30분 전",
+            isInterested: true,
+            tradeType: .sell,
+            tradeStatus: .beforeTrade,
+            isPriceNegotiable: nil,
+            isOwnedByCurrentUser: false,
+            interestCount: 30,
+            chatCount: 10
+        )
+    ]
+}
