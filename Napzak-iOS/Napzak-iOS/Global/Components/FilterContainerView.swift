@@ -52,7 +52,7 @@ struct FilterContainerView: View {
                             .applyNapzakFont(.caption1SemiBold12)
                     }
                     
-                    Image(.iconArrowDownSelected)
+                    Image(.iconArrowDown)
                         .resizable()
                         .frame(width: 7, height: 4)
                         .padding(.leading, 4)
