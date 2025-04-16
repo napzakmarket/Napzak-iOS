@@ -42,27 +42,27 @@ struct MyPageView: View {
             
             VStack(alignment: .leading, spacing:7) {
                 Text(storeNickName)
-                    .font(.napzakFont(.body4Bold14))
+                    .applyNapzakFont(.body4Bold14)
                     .foregroundColor(Color.napzakPrimary(.purple500))
                 
                 HStack(spacing: 14) {
                     HStack(spacing: 2) {
                         Text(sellingText)
-                            .font(.napzakFont(.caption2Medium12))
+                            .applyNapzakFont(.caption2Medium12)
                             .foregroundColor(Color.napzakGrayScale(.gray500))
                         
                         Text(sellingCount)
-                            .font(.napzakFont(.caption1SemiBold12))
+                            .applyNapzakFont(.caption1SemiBold12)
                             .foregroundColor(Color.napzakGrayScale(.gray500))
                     }
                     
                     HStack(spacing: 2) {
                         Text(buyingText)
-                            .font(.napzakFont(.caption2Medium12))
+                            .applyNapzakFont(.caption2Medium12)
                             .foregroundColor(Color.napzakGrayScale(.gray500))
                         
                         Text(buyingCount)
-                            .font(.napzakFont(.caption1SemiBold12))
+                            .applyNapzakFont(.caption1SemiBold12)
                             .foregroundColor(Color.napzakGrayScale(.gray500))
                     }
                 }
@@ -85,7 +85,7 @@ struct MyPageView: View {
                 HStack {
                     Spacer()
                     Text("내 마켓 보기")
-                        .font(.napzakFont(.caption1SemiBold12))
+                        .applyNapzakFont(.caption1SemiBold12)
                         .foregroundColor(Color.napzakGrayScale(.gray300))
                     
                     Image("arrow_right")
@@ -160,7 +160,7 @@ struct MyPageView: View {
                 .frame(width: 36, height: 36)
             
             Text(title)
-                .font(.napzakFont(.caption1SemiBold12))
+                .applyNapzakFont(.caption1SemiBold12)
                 .foregroundColor(Color.napzakGrayScale(.gray400))
         }
     }
