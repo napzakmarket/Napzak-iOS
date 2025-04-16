@@ -16,11 +16,10 @@ struct UsernameInputView: View {
             OnboardingNavigationBar(step: 2)
             
             Group {
-                Text("납작마켓에서 사용할 이름을 알려주세요")
+                Text("납작마켓에서 사용할\n이름을 알려주세요")
                     .lineLimit(2)
                     .applyNapzakFont(.title2Bold20)
                     .foregroundStyle(Color.napzakGrayScale(.gray400))
-                    .frame(width: 162)
                     .padding(.top, 20)
                 
                 Text("띄어쓰기 없이 한글, 영문, 숫자만 사용할 수 있어요 (2~20자)")
