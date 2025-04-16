@@ -115,38 +115,18 @@ struct MyPageView: View {
             ("고객센터", "group6_icn")
         ]
         
-        let columns = Array(repeating: GridItem(.flexible(), spacing: 0), count: 3)
+        let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 3)
         
-        return LazyVGrid(columns: columns, spacing: 0) {
+        return LazyVGrid(columns: columns, spacing: 4) {
             ForEach(menuItems.indices, id: \.self) { index in
                 ZStack {
                     menuItem(title: menuItems[index].title, iconName: menuItems[index].icon)
                 }
-                .frame(maxWidth: .infinity, minHeight: 81)
+                .frame(maxWidth: .infinity, minHeight: 82)
                 .background(Color.napzakGrayScale(.gray10))
-                .overlay(
-                    VStack {
-                        if index < 3 {
-                            Spacer()
-                            Rectangle()
-                                .fill(Color.napzakGrayScale(.gray50))
-                                .frame(height: 4)
-                        }
-                    }
-                )
-                .overlay(
-                    HStack {
-                        if (index + 1) % 3 != 0 {
-                            Spacer()
-                            Rectangle()
-                                .fill(Color.napzakGrayScale(.gray50))
-                                .frame(width: 4)
-                        }
-                    }
-                )
             }
         }
-        .background(Color.napzakGrayScale(.gray10))
+        .background(Color.napzakGrayScale(.gray50))
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .padding(.horizontal, 27)
         .padding(.top, 20)
