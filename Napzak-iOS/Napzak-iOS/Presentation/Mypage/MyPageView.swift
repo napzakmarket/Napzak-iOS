@@ -20,7 +20,7 @@ struct MyPageView: View {
             marketButton
             menuGrid
 
-            Spacer().frame(height: 30)
+            Spacer()
             
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))
@@ -150,6 +150,7 @@ struct MyPageView: View {
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .padding(.horizontal, 27)
         .padding(.top, 20)
+        .padding(.bottom,30)
     }
 
     private func menuItem(title: String, iconName: String) -> some View {
