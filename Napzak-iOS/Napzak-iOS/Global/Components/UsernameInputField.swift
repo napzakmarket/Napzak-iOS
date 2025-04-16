@@ -25,6 +25,7 @@ struct UsernameInputField: View {
                 )
                 .applyNapzakFont(.caption1SemiBold12)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
+                .tint(Color.napzakGrayScale(.gray500))
                 
                 Button {
 //                    활성화된 [이름 확인] 버튼 선택 시 다음 항목 검증:
@@ -34,6 +35,7 @@ struct UsernameInputField: View {
                     print("서버로 이름 확인 요청: \(username)")
                     print("글자수: \(username.count)")
                     
+                    validationState = .valid
                     isPrimaryButtonEnabled = true
                 } label: {
                     isCheckButtonEnabled ? Image(.namecheckDefault) : Image(.namecheckDisabled)
@@ -56,7 +58,6 @@ struct UsernameInputField: View {
                         .applyNapzakFont(.caption1SemiBold12)
                         .foregroundStyle(validationState.color)
                 }
-                
                 
                 Text(validationState == .invalidNumberOnly ? " 한글이나 영문을 함께 사용해주세요." : "")
                 .applyNapzakFont(.caption1SemiBold12)
@@ -81,6 +82,7 @@ extension UsernameInputField {
         
         isCheckButtonEnabled = false
         isPrimaryButtonEnabled = false
+        validationState = .empty
         
         if name.isEmpty {
             validationState = .empty
@@ -93,7 +95,6 @@ extension UsernameInputField {
         } else if !isValidUsername(name) {
             validationState = .empty
         } else {
-            validationState = .valid
             isCheckButtonEnabled = true
         }
     }
