@@ -27,7 +27,7 @@ struct RegisterDescription: View {
                     .padding(.vertical, 7)
                 
                 if description.isEmpty {
-                    Text("자세히 작성하면 더 빠르고 원활한 거래를 할 수 있어요 예) 상품 상태, 한정판 여부, 네고 가능 여부 등")
+                    Text("자세히 작성하면 더 빠르고 원활한 거래를 할 수 있어요 \n예) 상품 상태, 한정판 여부, 네고 가능 여부 등")
                         .applyNapzakFont(.body5SemiBold14)
                         .foregroundStyle(Color.napzakGrayScale(.gray200))
                         .padding(.leading, 12)
@@ -51,7 +51,6 @@ struct RegisterDescription: View {
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
             }
             .frame(height: 13)
-            
         }
     }
 }

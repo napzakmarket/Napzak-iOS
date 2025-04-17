@@ -13,6 +13,7 @@ struct RegisterGenre: View {
             Text("장르")
                 .applyNapzakFont(.body4Bold14)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
+                .frame(height: 18)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
             
@@ -25,7 +26,6 @@ struct RegisterGenre: View {
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
-            
         }
         .frame(height: 34)
     }

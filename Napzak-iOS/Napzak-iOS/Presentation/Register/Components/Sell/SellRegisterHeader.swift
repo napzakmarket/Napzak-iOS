@@ -12,14 +12,16 @@ struct SellRegisterHeader: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            Spacer()
             ZStack{
-                backButton
+                clearButton
                 navigationTitle
             }
             .padding(.bottom, 20)
             
             Divider()
         }
+        .frame(height: 110)
     }
 }
 
@@ -27,7 +29,7 @@ struct SellRegisterHeader: View {
 
 extension SellRegisterHeader {
     
-    private var backButton: some View {
+    private var clearButton: some View {
         HStack {
             Spacer()
             
@@ -53,9 +55,7 @@ extension SellRegisterHeader {
             
             Spacer()
         }
-        
     }
-    
 }
 
 
