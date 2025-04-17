@@ -1,20 +1,21 @@
 //
-//  SellRegisterView.swift
+//  BuyRegisterView.swift
 //  Napzak-iOS
 //
-//  Created by OneTen on 4/8/25.
+//  Created by OneTen on 4/9/25.
 //
 
 import SwiftUI
 
-struct SellRegisterView: View {
+struct BuyRegisterView: View {
+    
     var body: some View {
         VStack(spacing: 0){
-            SellRegisterHeader()
-            
+            BuyRegisterHeader()
+
             ScrollView {
                 VStack(spacing: 0) {
-                    SellRegisterContent
+                    BuyRegisterContent
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -24,50 +25,54 @@ struct SellRegisterView: View {
         .ignoresSafeArea()
         .frame(maxWidth: .infinity)
         .scrollIndicators(.hidden)
+        .background(Color.napzakGrayScale(.gray10))
     }
 }
 
-extension SellRegisterView {
-    private var SellRegisterContent: some View {
+extension BuyRegisterView {
+    private var BuyRegisterContent: some View {
         Group {
             RegisterImage()
                 .padding(.top, 30)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 27)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .background(.white)
             
             RegisterGenre()
                 .padding(.horizontal, 18)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 21)
+                .background(.white)
             
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))
                 .frame(height: 4)
                 .padding(.bottom, 29)
-            
+                .background(.white)
+
             RegisterTitle()
                 .padding(.horizontal, 28)
                 .padding(.bottom, 10)
-            
+                .background(.white)
+
             RegisterDescription()
                 .padding(.horizontal, 28)
                 .padding(.bottom, 23)
-            
+                .background(.white)
+
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))
                 .frame(height: 4)
                 .padding(.bottom, 23)
-            
-            SellRegisterProductState()
+                .background(.white)
+
+            BuyRegisterPrice()
                 .padding(.horizontal, 28)
-                .padding(.bottom, 30)
-            
-            SellRegisterPrice()
-                .padding(.horizontal, 28)
-                .padding(.bottom, 30)
-            
-            SellRegisterDelivery()
+                .padding(.bottom, 32)
+                .background(.white)
+
+            BuyRegisterSuggestPrice()
                 .padding(.horizontal, 28)
         }
     }
@@ -93,9 +98,11 @@ extension SellRegisterView {
             .padding(.bottom, 40)
         }
     }
+    
 }
 
+
 #Preview {
-    SellRegisterView()
+    BuyRegisterView()
 }
 

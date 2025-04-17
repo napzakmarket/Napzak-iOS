@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C6CBDF92DA574A300763CBA /* SellRegisterDelivery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6CBDF82DA574A300763CBA /* SellRegisterDelivery.swift */; };
+		6C6CBDFB2DA589DD00763CBA /* BuyRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6CBDFA2DA589DD00763CBA /* BuyRegisterView.swift */; };
+		6C6CBE012DA58A5600763CBA /* BuyRegisterHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6CBDFF2DA58A5600763CBA /* BuyRegisterHeader.swift */; };
+		6C6CBE032DA5906600763CBA /* BuyRegisterPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6CBE022DA5906600763CBA /* BuyRegisterPrice.swift */; };
+		6CB945542DA55E230020A17D /* SellRegisterProductStateSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB945532DA55E230020A17D /* SellRegisterProductStateSection.swift */; };
+		6CB945562DA5680B0020A17D /* SellRegisterPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB945552DA5680B0020A17D /* SellRegisterPrice.swift */; };
 		8740EB562DA8D65C008C035E /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8740EB552DA8D656008C035E /* MyPageView.swift */; };
 		D0180D602D9F001E006A748F /* RegisterFloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0180D5F2D9F0013006A748F /* RegisterFloatingView.swift */; };
 		6CC472312DA431A10086E345 /* SellRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472302DA431A10086E345 /* SellRegisterView.swift */; };
@@ -15,6 +21,8 @@
 		6CC472372DA4474A0086E345 /* RegisterGenre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472362DA4474A0086E345 /* RegisterGenre.swift */; };
 		6CC472392DA44C5F0086E345 /* RegisterTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472382DA44C5F0086E345 /* RegisterTitle.swift */; };
 		6CC4723B2DA453270086E345 /* RegisterDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC4723A2DA453270086E345 /* RegisterDescription.swift */; };
+		6CFFB2152DAC27BD0000F622 /* BuyRegisterSuggestPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CFFB2142DAC27BD0000F622 /* BuyRegisterSuggestPrice.swift */; };
+		D0180D602D9F001E006A748F /* RegisterFloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0180D5F2D9F0013006A748F /* RegisterFloatingView.swift */; };
 		D045DEBB2D83723A00EB1EB6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */; };
 		D045DEBC2D83723A00EB1EB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB72D83723A00EB1EB6 /* Assets.xcassets */; };
 		D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEB82D83723A00EB1EB6 /* ContentView.swift */; };
@@ -59,6 +67,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6C6CBDF82DA574A300763CBA /* SellRegisterDelivery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterDelivery.swift; sourceTree = "<group>"; };
+		6C6CBDFA2DA589DD00763CBA /* BuyRegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyRegisterView.swift; sourceTree = "<group>"; };
+		6C6CBDFF2DA58A5600763CBA /* BuyRegisterHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyRegisterHeader.swift; sourceTree = "<group>"; };
+		6C6CBE022DA5906600763CBA /* BuyRegisterPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyRegisterPrice.swift; sourceTree = "<group>"; };
+		6CB945532DA55E230020A17D /* SellRegisterProductStateSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterProductStateSection.swift; sourceTree = "<group>"; };
+		6CB945552DA5680B0020A17D /* SellRegisterPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterPrice.swift; sourceTree = "<group>"; };
 		D0180D5F2D9F0013006A748F /* RegisterFloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFloatingView.swift; sourceTree = "<group>"; };
 		8740EB552DA8D656008C035E /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 
@@ -68,6 +82,8 @@
 		6CC472362DA4474A0086E345 /* RegisterGenre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterGenre.swift; sourceTree = "<group>"; };
 		6CC472382DA44C5F0086E345 /* RegisterTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterTitle.swift; sourceTree = "<group>"; };
 		6CC4723A2DA453270086E345 /* RegisterDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterDescription.swift; sourceTree = "<group>"; };
+		6CFFB2142DAC27BD0000F622 /* BuyRegisterSuggestPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyRegisterSuggestPrice.swift; sourceTree = "<group>"; };
+		D0180D5F2D9F0013006A748F /* RegisterFloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFloatingView.swift; sourceTree = "<group>"; };
 		D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Napzak-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D045DEB72D83723A00EB1EB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -124,10 +140,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6C6CBE002DA58A5600763CBA /* Buy */ = {
+			isa = PBXGroup;
+			children = (
+				6C6CBDFF2DA58A5600763CBA /* BuyRegisterHeader.swift */,
+				6C6CBE022DA5906600763CBA /* BuyRegisterPrice.swift */,
+				6CFFB2142DAC27BD0000F622 /* BuyRegisterSuggestPrice.swift */,
+			);
+			path = Buy;
+			sourceTree = "<group>";
+		};
 		6C9938C02DA0233200627DEE /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				6CC472322DA432370086E345 /* SellRegisterHeader.swift */,
+				6C6CBE002DA58A5600763CBA /* Buy */,
+				6CB945522DA55E180020A17D /* Sell */,
 				6CC472342DA440B70086E345 /* RegisterImage.swift */,
 				6CC472362DA4474A0086E345 /* RegisterGenre.swift */,
 				6CC472382DA44C5F0086E345 /* RegisterTitle.swift */,
@@ -136,10 +163,22 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		6CB945522DA55E180020A17D /* Sell */ = {
+			isa = PBXGroup;
+			children = (
+				6CC472322DA432370086E345 /* SellRegisterHeader.swift */,
+				6CB945532DA55E230020A17D /* SellRegisterProductStateSection.swift */,
+				6CB945552DA5680B0020A17D /* SellRegisterPrice.swift */,
+				6C6CBDF82DA574A300763CBA /* SellRegisterDelivery.swift */,
+			);
+			path = Sell;
+			sourceTree = "<group>";
+		};
 		6CC4722F2DA431660086E345 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				6CC472302DA431A10086E345 /* SellRegisterView.swift */,
+				6C6CBDFA2DA589DD00763CBA /* BuyRegisterView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -548,11 +587,14 @@
 				D63270252DA2C879002414DA /* GenreChip.swift in Sources */,
 				6CC4723B2DA453270086E345 /* RegisterDescription.swift in Sources */,
 				D045DEE82D83786800EB1EB6 /* ColorLiteral.swift in Sources */,
+				6CB945562DA5680B0020A17D /* SellRegisterPrice.swift in Sources */,
+				6C6CBE032DA5906600763CBA /* BuyRegisterPrice.swift in Sources */,
 				D045DEF82D8383CC00EB1EB6 /* Encodable+.swift in Sources */,
 				D045DEF92D8383CC00EB1EB6 /* String+.swift in Sources */,
 				6CC472312DA431A10086E345 /* SellRegisterView.swift in Sources */,
 				D045DEFA2D8383CC00EB1EB6 /* TextEditor+.swift in Sources */,
 				D64922D12D9EF5CB00716740 /* RowType.swift in Sources */,
+				6CFFB2152DAC27BD0000F622 /* BuyRegisterSuggestPrice.swift in Sources */,
 
 				8740EB562DA8D65C008C035E /* MyPageView.swift in Sources */,
 
@@ -569,16 +611,20 @@
 				6CC472372DA4474A0086E345 /* RegisterGenre.swift in Sources */,
 				D67C177D2D9B07E300CFCDFA /* UsernameInputField.swift in Sources */,
 				D67C177B2D9AEEDD00CFCDFA /* UsernameInputView.swift in Sources */,
+				6C6CBDFB2DA589DD00763CBA /* BuyRegisterView.swift in Sources */,
 				D05A03922D91B67200659C74 /* View+.swift in Sources */,
 				D07BF2762D9D16A3000E4FD5 /* NZTabBarView.swift in Sources */,
 				D06F13962DA300CB0029698C /* NavigationRouter.swift in Sources */,
+				6CB945542DA55E230020A17D /* SellRegisterProductStateSection.swift in Sources */,
 				D67C17762D9AEDC000CFCDFA /* PrimaryButton.swift in Sources */,
+				6C6CBE012DA58A5600763CBA /* BuyRegisterHeader.swift in Sources */,
 				D632702D2DA37E93002414DA /* GenreSelectionViewModel.swift in Sources */,
 				D67C17772D9AEDC000CFCDFA /* CheckRow.swift in Sources */,
 				D67C17782D9AEDC000CFCDFA /* OnboardingNavigationBar.swift in Sources */,
 				D67C17792D9AEDC000CFCDFA /* OnboardingTermsView.swift in Sources */,
 				6CC472392DA44C5F0086E345 /* RegisterTitle.swift in Sources */,
 				D67C17802D9B085600CFCDFA /* UsernameValidation.swift in Sources */,
+				6C6CBDF92DA574A300763CBA /* SellRegisterDelivery.swift in Sources */,
 				D045DEBE2D83723A00EB1EB6 /* Napzak_iOSApp.swift in Sources */,
 				D0180D602D9F001E006A748F /* RegisterFloatingView.swift in Sources */,
 			);

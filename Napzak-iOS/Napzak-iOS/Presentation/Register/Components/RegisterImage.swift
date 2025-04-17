@@ -30,7 +30,6 @@ struct RegisterImage: View {
                     .applyNapzakFont(.caption3Regular12)
                     .foregroundStyle(Color.napzakPrimary(.purple500))
                     .frame(height: 13)
-                
             }
             .frame(width: 88, height: 88)
             .background(Color.napzakPrimary(.purple100))
