@@ -31,7 +31,6 @@ enum NapzakFontStyle {
     
     //caption
     case caption1SemiBold12
-    case caption1SemiBold10
     case caption2Medium12
     case caption3Regular12
     case caption4SemiBold10
@@ -62,7 +61,6 @@ extension Font {
             
         //caption
         case .caption1SemiBold12: return pretendardFont(weight: .semiBold, size: 12)
-        case .caption1SemiBold10: return pretendardFont(weight: .semiBold, size: 10)
         case .caption2Medium12: return pretendardFont(weight: .medium, size: 12)
         case .caption3Regular12: return pretendardFont(weight: .regular, size: 12)
         case .caption4SemiBold10: return pretendardFont(weight: .semiBold, size: 10)
@@ -88,7 +86,6 @@ extension Font {
             
         //caption
         case .caption1SemiBold12: return UIFont(name: FontWeight.semiBold.rawValue, size: 12)!
-        case .caption1SemiBold10: return UIFont(name: FontWeight.semiBold.rawValue, size: 10)!
         case .caption2Medium12: return UIFont(name: FontWeight.medium.rawValue, size: 12)!
         case .caption3Regular12: return UIFont(name: FontWeight.regular.rawValue, size: 12)!
         case .caption4SemiBold10: return UIFont(name: FontWeight.semiBold.rawValue, size: 10)!
