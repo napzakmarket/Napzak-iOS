@@ -14,7 +14,7 @@ struct BuyRegisterHeader: View {
         VStack(spacing: 0) {
             Spacer()
             ZStack{
-                backButton
+                clearButton
                 navigationTitle
             }
             .padding(.bottom, 20)
@@ -23,7 +23,6 @@ struct BuyRegisterHeader: View {
         }
         .background(.white)
         .frame(height: 110)
-
     }
 }
 
@@ -31,7 +30,7 @@ struct BuyRegisterHeader: View {
 
 extension BuyRegisterHeader {
     
-    private var backButton: some View {
+    private var clearButton: some View {
         HStack {
             Spacer()
             
@@ -41,7 +40,6 @@ extension BuyRegisterHeader {
                 Image(.iconClose)
             }
             .frame(width: 24, height: 24)
-            
         }
         .padding(.trailing, 20)
     }
@@ -57,7 +55,6 @@ extension BuyRegisterHeader {
             
             Spacer()
         }
-        
     }
     
 }

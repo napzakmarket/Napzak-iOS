@@ -51,7 +51,6 @@ struct RegisterDescription: View {
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
             }
             .frame(height: 13)
-            
         }
     }
 }

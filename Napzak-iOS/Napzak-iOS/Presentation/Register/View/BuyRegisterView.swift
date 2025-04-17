@@ -15,21 +15,17 @@ struct BuyRegisterView: View {
 
             ScrollView {
                 VStack(spacing: 0) {
-                    
                     BuyRegisterContent
-                    
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             
             registerButton
-            
         }
         .ignoresSafeArea()
         .frame(maxWidth: .infinity)
         .scrollIndicators(.hidden)
         .background(Color.napzakGrayScale(.gray10))
-
     }
 }
 
@@ -57,13 +53,11 @@ extension BuyRegisterView {
 
             RegisterTitle()
                 .padding(.horizontal, 28)
-                .frame(maxWidth: .infinity)
                 .padding(.bottom, 10)
                 .background(.white)
 
             RegisterDescription()
                 .padding(.horizontal, 28)
-                .frame(maxWidth: .infinity)
                 .padding(.bottom, 23)
                 .background(.white)
 
@@ -80,16 +74,14 @@ extension BuyRegisterView {
 
             BuyRegisterSuggestPrice()
                 .padding(.horizontal, 28)
-
-            
         }
     }
     
     private var registerButton: some View {
-        VStack(spacing: 0) {
-            Rectangle()
-                .fill(Color.black.opacity(0.05))
-                .frame(height: 1)
+        ZStack() {
+            Color.napzakGrayScale(.white)
+                .frame(height: 108)
+                .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 1)
             
             Button {
                 print("버튼 눌림")
@@ -104,7 +96,6 @@ extension BuyRegisterView {
             .padding(.horizontal, 28)
             .padding(.top, 18)
             .padding(.bottom, 40)
-            .background(.white)
         }
     }
     

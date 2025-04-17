@@ -120,8 +120,6 @@ struct SellRegisterDelivery: View {
             )
         }
         .padding(.bottom, 25)
-
-        
     }
     
 }

@@ -20,12 +20,10 @@ struct SellRegisterView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             
             registerButton
-
         }
         .ignoresSafeArea()
         .frame(maxWidth: .infinity)
         .scrollIndicators(.hidden)
-
     }
 }
 
@@ -50,12 +48,10 @@ extension SellRegisterView {
             
             RegisterTitle()
                 .padding(.horizontal, 28)
-                .frame(maxWidth: .infinity)
                 .padding(.bottom, 10)
             
             RegisterDescription()
                 .padding(.horizontal, 28)
-                .frame(maxWidth: .infinity)
                 .padding(.bottom, 23)
             
             Rectangle()
@@ -65,27 +61,22 @@ extension SellRegisterView {
             
             SellRegisterProductState()
                 .padding(.horizontal, 28)
-                .frame(maxWidth: .infinity)
                 .padding(.bottom, 30)
             
             SellRegisterPrice()
                 .padding(.horizontal, 28)
-                .frame(maxWidth: .infinity)
                 .padding(.bottom, 30)
             
             SellRegisterDelivery()
                 .padding(.horizontal, 28)
-                .frame(maxWidth: .infinity)
-
-            
         }
     }
     
     private var registerButton: some View {
-        VStack(spacing: 0) {
-            Rectangle()
-                .fill(Color.black.opacity(0.05))
-                .frame(height: 1)
+        ZStack() {
+            Color.napzakGrayScale(.white)
+                .frame(height: 108)
+                .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 1)
             
             Button {
                 print("버튼 눌림")
@@ -100,7 +91,6 @@ extension SellRegisterView {
             .padding(.horizontal, 28)
             .padding(.top, 18)
             .padding(.bottom, 40)
-            .background(.white)
         }
     }
 }

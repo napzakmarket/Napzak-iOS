@@ -26,7 +26,6 @@ struct RegisterGenre: View {
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
                 .padding(.horizontal, 10)
                 .padding(.vertical, 8)
-            
         }
         .frame(height: 34)
     }
