@@ -89,9 +89,21 @@ extension SearchView {
         .clipped()
     }
     
+    var genreListView: some View {
+        LazyVStack(spacing: 0) {
+            ForEach(viewModel.productFetchOption.genres.indices, id: \.self) { i in
+                GenreItemView(genreName: viewModel.productFetchOption.genres[i])
+                    .frame(height: 64)
+            }
+        }
+    }
+    
     var productScrollView: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
+                if !viewModel.productFetchOption.genres.isEmpty {
+                    genreListView
+                }
                 HStack(alignment: .center, spacing: 3) {
                     Text("상품")
                         .foregroundStyle(Color.napzakGrayScale(.gray500))
@@ -113,6 +125,7 @@ extension SearchView {
                         }
                     }
                 }
+                .padding(.horizontal, 28)
                 .frame(height: 58)
                 
                 LazyVGrid(columns: columns, spacing: 20) {
@@ -131,8 +144,8 @@ extension SearchView {
                             }
                     }
                 }
+                .padding(.horizontal, 28)
             }
-            .padding(.horizontal, 28)
             .padding(.bottom, 108)
         }
     }

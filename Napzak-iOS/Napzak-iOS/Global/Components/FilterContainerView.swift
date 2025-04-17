@@ -32,7 +32,7 @@ struct FilterContainerView: View {
     var genreFilterChip: some View {
         Button {
             if selectedGenres.isEmpty {
-                selectedGenres = ["산리오", "d"]
+                selectedGenres = ["산리오", "사카모토데이즈"]
             } else {
                 selectedGenres = []
             }
