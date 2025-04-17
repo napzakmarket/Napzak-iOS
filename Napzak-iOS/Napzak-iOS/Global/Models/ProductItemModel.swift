@@ -79,7 +79,7 @@ extension ProductItemModel {
             uploadTime: "5시간 전",
             isInterested: false,
             tradeType: .sell,
-            tradeStatus: .reserved,
+            tradeStatus: .completed,
             isPriceNegotiable: nil,
             isOwnedByCurrentUser: false,
             interestCount: 30,
