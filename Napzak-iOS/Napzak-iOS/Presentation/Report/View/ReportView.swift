@@ -48,6 +48,7 @@ struct ReportView: View {
     @State private var reasonExpanded: Bool = false
     @State private var selectedReason: String = ""
     @State private var reportDescription: String = ""
+    @State private var contactAddress: String = ""
     
     private let reportDescriptionPlaceholder = "어떤 일이 있었나요? 💬 \n\n자세한 설명일수록 빠른 해결에 도움이 됩니다. \n신고 내용은 비공개로 안전하게 처리되니 안심하세요. \n안전한 거래 공간을 함께 만들어가요!"
     
@@ -59,7 +60,7 @@ struct ReportView: View {
                 separator
                 reportDescriptionSection
                 separator
-
+                contactAddressSection
             }
             submitReportButton
         }
@@ -218,34 +219,50 @@ extension ReportView {
         .padding(.bottom, 8)
     }
     
-    
+    private var contactAddressSection: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("연락처 입력")
+                .applyNapzakFont(.body5SemiBold14)
+                .foregroundStyle(Color.napzakGrayScale(.gray500))
+                .frame(height: 18)
+                .padding(.bottom, 16)
+            
+            TextField("신고 검토결과를 받아볼 이메일 또는 전화번호를 알려주세요", text: $contactAddress)
+                .applyNapzakFont(.caption2Medium12)
+                .foregroundStyle(Color.napzakGrayScale(.gray500))
+                .padding(.horizontal, 16)
+                .padding(.vertical, 17)
+                .frame(height: 50)
+                .background {
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(Color.napzakGrayScale(.gray50))
+                }
+        }
+        .padding(.horizontal, 28)
+        .padding(.bottom, 30)
+
+    }
     
     private var submitReportButton: some View {
-        ZStack() {
-            Color.napzakGrayScale(.white)
-                .frame(height: 108)
-                .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 1)
-            
-            Button {
-                print("버튼 눌림")
-            } label: {
-                Text("제출하기")
-                    .applyNapzakFont(.body4Bold14)
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity, minHeight: 50)
-            }
-            .background(Color.napzakGrayScale(.gray100))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .padding(.horizontal, 28)
-            .padding(.top, 18)
-            .padding(.bottom, 40)
+        Button {
+            print("버튼 눌림")
+        } label: {
+            Text("제출하기")
+                .applyNapzakFont(.body4Bold14)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity, minHeight: 50)
         }
+        .background(Color.napzakGrayScale(.gray100))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .padding(.horizontal, 28)
+        .padding(.top, 18)
+        .padding(.bottom, 40)
     }
 }
 
 #Preview {
     struct PreviewContainer: View {
-        @State var reportType: ReportType = .product
+        @State var reportType: ReportType = .market
         
         var body: some View {
             ReportView(reportType: $reportType)
