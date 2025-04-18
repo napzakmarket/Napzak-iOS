@@ -92,8 +92,14 @@ extension SearchView {
     var genreListView: some View {
         LazyVStack(spacing: 0) {
             ForEach(viewModel.productFetchOption.genres.indices, id: \.self) { i in
-                GenreItemView(genreName: viewModel.productFetchOption.genres[i])
-                    .frame(height: 64)
+                Button {
+                    //TODO: - 장르 페이지로 이동
+                } label: {
+                    GenreItemView(genreName: viewModel.productFetchOption.genres[i])
+                        .frame(height: 64)
+                }
+                Color.napzakGrayScale(.gray10)
+                    .frame(height: 4)
             }
         }
     }

@@ -16,23 +16,18 @@ struct GenreItemView: View {
     //MARK: - Body
     
     var body: some View {
-        VStack(spacing: 0) {
-            HStack(alignment: .center, spacing: 6) {
-                Text(genreName)
-                    .applyNapzakFont(.caption1SemiBold12)
-                    .foregroundColor(Color.napzakGrayScale(.gray500))
-                    .padding(.leading, 28)
-                Image(.imgGenreTag)
-                Spacer()
-                Image(.iconArrowRight)
-                    .padding(.trailing, 28)
-            }
-            .background(Color.napzakGrayScale(.white))
-            .frame(height: 60)
-            
-            Color.napzakGrayScale(.gray10)
-                .frame(height: 4)
+        HStack(alignment: .center, spacing: 6) {
+            Text(genreName)
+                .applyNapzakFont(.caption1SemiBold12)
+                .foregroundColor(Color.napzakGrayScale(.gray500))
+                .padding(.leading, 28)
+            Image(.imgGenreTag)
+            Spacer()
+            Image(.iconArrowRight)
+                .padding(.trailing, 28)
         }
+        .background(Color.napzakGrayScale(.white))
+        .frame(height: 60)
     }
 }
 
