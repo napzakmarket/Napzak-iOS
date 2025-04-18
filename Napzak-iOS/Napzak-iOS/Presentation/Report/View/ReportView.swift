@@ -49,6 +49,7 @@ struct ReportView: View {
     @State private var selectedReason: String = ""
     @State private var reportDescription: String = ""
     @State private var contactAddress: String = ""
+    @State private var showToast: Bool = false
     
     private let reportDescriptionPlaceholder = "어떤 일이 있었나요? 💬 \n\n자세한 설명일수록 빠른 해결에 도움이 됩니다. \n신고 내용은 비공개로 안전하게 처리되니 안심하세요. \n안전한 거래 공간을 함께 만들어가요!"
     
@@ -64,6 +65,15 @@ struct ReportView: View {
             }
             submitReportButton
         }
+        .overlay(
+            Group {
+                if showToast {
+                    toastView
+                }
+            },
+            alignment: .bottom
+        )
+        .animation(.easeInOut(duration: 0.3), value: showToast)
         .ignoresSafeArea()
     }
 }
@@ -245,7 +255,10 @@ extension ReportView {
     
     private var submitReportButton: some View {
         Button {
-            print("버튼 눌림")
+            showToast = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                showToast = false
+            }
         } label: {
             Text("제출하기")
                 .applyNapzakFont(.body4Bold14)
@@ -256,7 +269,26 @@ extension ReportView {
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .padding(.horizontal, 28)
         .padding(.top, 18)
-        .padding(.bottom, 40)
+        .padding(.bottom, 68)
+    }
+    
+    private var toastView: some View {
+        VStack {
+            Spacer()
+            Text("소중한 신고 감사합니다! 🙏\n\n신고 내용을 꼼꼼히 검토하여 \n입력하신 연락처로 결과를 안내해드릴게요.\n추가 정보가 필요할 경우 동일한 연락처로 문의드릴 수 있어요.")
+                .applyNapzakFont(.caption1SemiBold12)
+                .foregroundColor(Color.napzakGrayScale(.white))
+                .multilineTextAlignment(.center)
+                .padding(.vertical, 15)
+                .frame(maxWidth: .infinity)
+                .background(
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(Color.black.opacity(0.6))
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+        }
+        .padding(.horizontal, 28)
+        .padding(.bottom, 143)
     }
 }
 
