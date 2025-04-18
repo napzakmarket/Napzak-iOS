@@ -30,7 +30,7 @@ struct ProductItemView: View {
 
 extension ProductItemView {
     
-    //MARK: - Properties
+    //MARK: - UI Properties
     
     private var productMain: some View {
         ZStack(alignment: .bottom) {

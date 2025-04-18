@@ -35,7 +35,7 @@ extension SearchView {
     
     //MARK: - UI Properties
     
-    var searchHeader: some View {
+    private var searchHeader: some View {
         VStack(spacing: 0){
             searchButton
                 .padding(.horizontal, 27)
@@ -55,7 +55,7 @@ extension SearchView {
         }
     }
     
-    var searchButton: some View {
+    private var searchButton: some View {
         Button {
             // TODO: - 검색 화면 전환
         } label: {
@@ -78,7 +78,7 @@ extension SearchView {
         }
     }
     
-    var shadowBackground: some View {
+    private var shadowBackground: some View {
         ZStack(alignment: .top) {
             Color.napzakGrayScale(.gray10)
             Color.napzakGrayScale(.white)
@@ -89,7 +89,7 @@ extension SearchView {
         .clipped()
     }
     
-    var genreListView: some View {
+    private var genreListView: some View {
         LazyVStack(spacing: 0) {
             ForEach(viewModel.productFetchOption.genres.indices, id: \.self) { i in
                 Button {
@@ -104,7 +104,7 @@ extension SearchView {
         }
     }
     
-    var productScrollView: some View {
+    private var productScrollView: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
                 if !viewModel.productFetchOption.genres.isEmpty {
