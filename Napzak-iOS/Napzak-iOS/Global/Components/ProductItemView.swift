@@ -34,69 +34,14 @@ extension ProductItemView {
     
     private var productMain: some View {
         ZStack(alignment: .bottom) {
-            if let url = URL(string: product.photo) {
-                KFImage(url)
-                    .placeholder {
-                        Rectangle()
-                            .fill(Color.napzakGrayScale(.gray100))
-                            .frame(width: width, height: width * 1.05)
-                    }
-                    .retry(maxCount: 3, interval: .seconds(5))
-                    .onFailure { error  in
-                        print("failure: \(error.localizedDescription)")
-                    }
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: width, height: width * 1.05)
-                    .clipped()
-            } else {
-                Rectangle()
-                    .fill(Color.napzakGrayScale(.gray100))
-                    .frame(width: width, height: width)
-            }
-            
+            productImage
             if product.tradeStatus != .beforeTrade {
-                tradeStatusView
+                tradeStatusOverlay
             }
-            
-            HStack(alignment: .bottom, spacing: 2) {
-                switch product.tradeType {
-                case .sell:
-                    Image(.imgChipSell)
-                        .resizable()
-                        .frame(width: 40, height: 20)
-                case .buy:
-                    Image(.imgChipBuy)
-                        .resizable()
-                        .frame(width: 40, height: 20)
-                }
-                if let isPriceNegotiable = product.isPriceNegotiable {
-                    if isPriceNegotiable {
-                        Image(.imgChipBidding)
-                            .frame(width: 50, height: 20)
-                    }
-                }
-                Spacer()
-                if !product.isOwnedByCurrentUser {
-                    likeButton
-                }
-            }
+            productTypeInterest
         }
         .frame(width: width, height: width * 1.05)
         .clipShape(RoundedRectangle(cornerRadius: 3))
-    }
-    
-    private var likeButton: some View {
-        Button {
-            if shouldToggleInterestState() {
-                product.isInterested.toggle()
-            }
-        } label: {
-            Image(product.isInterested ? .btnHeartSelected : .btnHeartDefault)
-                .resizable()
-                .frame(width: 14, height: 13)
-        }
-        .padding([.bottom, .trailing], 9)
     }
     
     private var productInfo: some View {
@@ -116,29 +61,34 @@ extension ProductItemView {
                 .frame(height: 20)
                 .lineLimit(1)
                 .padding(.top, 4)
-            HStack(alignment: .bottom, spacing: 2) {
-                Text(product.uploadTime)
-                    .applyNapzakFont(.caption5Regular10)
-                    .foregroundStyle(Color.napzakGrayScale(.gray100))
-                    .frame(height: 13)
-                Spacer()
-                Image(.icnChatCount)
-                Text("\(product.chatCount)")
-                    .applyNapzakFont(.caption5Regular10)
-                    .foregroundStyle(Color.napzakGrayScale(.gray100))
-                    .frame(height: 13)
-                Image(.icnHeartCount)
-                    .padding([.leading, .bottom], 1)
-                Text("\(product.interestCount)")
-                    .applyNapzakFont(.caption5Regular10)
-                    .foregroundStyle(Color.napzakGrayScale(.gray100))
-                    .frame(height: 13)
-            }
+            productSummary
         }
         .frame(width: width)
     }
     
-    private var tradeStatusView: some View {
+    private var productImage: some View {
+        Group {
+            if let url = URL(string: product.photo) {
+                KFImage(url)
+                    .placeholder {
+                        Rectangle()
+                            .fill(Color.napzakGrayScale(.gray100))
+                    }
+                    .retry(maxCount: 3, interval: .seconds(5))
+                    .onFailure { error in
+                        print("failure: \(error.localizedDescription)")
+                    }
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                Rectangle()
+                    .fill(Color.napzakGrayScale(.gray100))
+            }
+        }
+        .frame(width: width, height: width * 1.05)
+    }
+    
+    private var tradeStatusOverlay: some View {
         ZStack {
             Color.napzakTransparency(.transBlack)
             VStack(spacing: 6) {
@@ -154,6 +104,65 @@ extension ProductItemView {
                         .foregroundStyle(Color.napzakGrayScale(.white))
                 }
             }
+        }
+    }
+    
+    private var productTypeInterest: some View {
+        HStack(alignment: .bottom, spacing: 2) {
+            switch product.tradeType {
+            case .sell:
+                Image(.imgChipSell)
+                    .resizable()
+                    .frame(width: 40, height: 20)
+            case .buy:
+                Image(.imgChipBuy)
+                    .resizable()
+                    .frame(width: 40, height: 20)
+            }
+            if let isPriceNegotiable = product.isPriceNegotiable {
+                if isPriceNegotiable {
+                    Image(.imgChipBidding)
+                        .frame(width: 50, height: 20)
+                }
+            }
+            Spacer()
+            if !product.isOwnedByCurrentUser {
+                likeButton
+            }
+        }
+    }
+    
+    private var likeButton: some View {
+        Button {
+            if shouldToggleInterestState() {
+                product.isInterested.toggle()
+            }
+        } label: {
+            Image(product.isInterested ? .btnHeartSelected : .btnHeartDefault)
+                .resizable()
+                .frame(width: 14, height: 13)
+        }
+        .padding([.bottom, .trailing], 9)
+    }
+    
+    private var productSummary: some View {
+        HStack(alignment: .bottom, spacing: 2) {
+            Text(product.uploadTime)
+                .applyNapzakFont(.caption5Regular10)
+                .foregroundStyle(Color.napzakGrayScale(.gray100))
+                .frame(height: 13)
+            Spacer()
+            Image(.icnChatCount)
+            Text("\(product.chatCount)")
+                .applyNapzakFont(.caption5Regular10)
+                .foregroundStyle(Color.napzakGrayScale(.gray100))
+                .frame(height: 13)
+            Image(.icnHeartCount)
+                .padding([.leading, .bottom], 1)
+            Text("\(product.interestCount)")
+                .applyNapzakFont(.caption5Regular10)
+                .foregroundStyle(Color.napzakGrayScale(.gray100))
+                .frame(height: 13)
         }
     }
 }
