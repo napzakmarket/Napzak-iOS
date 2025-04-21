@@ -14,7 +14,8 @@ struct SearchView: View {
     @StateObject private var viewModel = SearchViewModel()
     
     @Binding var isGenreSelectModalPresented: Bool
-        
+    @Binding var isSortModalPresented: Bool
+
     //MARK: - Properties
     
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
@@ -44,6 +45,24 @@ struct SearchView: View {
                 GenreSelectModalView(
                     isGenreSelectModalPresented: $isGenreSelectModalPresented,
                     adaptedGenres: $viewModel.productFetchOption.genres
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(2)
+            }
+            
+            if isSortModalPresented {
+                Color.napzakTransparency(.transBlack)
+                    .onTapGesture {
+                        withAnimation {
+                            isSortModalPresented = false
+                        }
+                    }
+                    .transition(.opacity)
+                    .zIndex(1)
+                
+                SortModalView(
+                    isSortModalPresented: $isSortModalPresented,
+                    selectedOption: $viewModel.productFetchOption.sortOption
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
@@ -148,10 +167,12 @@ extension SearchView {
                         .applyNapzakFont(.body5SemiBold14)
                     Spacer()
                     Button {
-                    //TODO: - 상품 정렬
+                        withAnimation {
+                            isSortModalPresented = true
+                        }
                     } label: {
                         HStack(alignment: .center, spacing: 4) {
-                            Text("최신순")
+                            Text("\(viewModel.productFetchOption.sortOption.title)")
                                 .foregroundStyle(Color.napzakGrayScale(.gray200))
                                 .applyNapzakFont(.caption1SemiBold12)
                             Image(.iconArrowDown)
@@ -189,9 +210,10 @@ extension SearchView {
 #Preview {
     struct PreviewContainer: View {
         @State private var isGenreSelectModalPresented = false
-        
+        @State private var isSortModalPresented = false
+
         var body: some View {
-            SearchView(isGenreSelectModalPresented: $isGenreSelectModalPresented)
+            SearchView(isGenreSelectModalPresented: $isGenreSelectModalPresented, isSortModalPresented: $isSortModalPresented)
         }
     }
     

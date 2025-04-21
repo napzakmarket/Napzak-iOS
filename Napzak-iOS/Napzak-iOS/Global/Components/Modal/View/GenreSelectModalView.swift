@@ -27,9 +27,8 @@ struct GenreSelectModalView: View {
             headerView
             applyButtonView
         }
-        .clipShape(.rect(topLeadingRadius: 20, topTrailingRadius: 20))
+        .clipShape(.rect(topLeadingRadius: 31, topTrailingRadius: 31))
         .padding(.top, 250)
-        .ignoresSafeArea()
         .onAppear {
             viewModel.selectedGenres = adaptedGenres
         }
