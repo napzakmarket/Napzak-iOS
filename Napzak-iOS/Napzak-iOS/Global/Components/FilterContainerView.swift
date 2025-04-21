@@ -32,7 +32,9 @@ struct FilterContainerView: View {
     
     var genreFilterChip: some View {
         Button {
-            isGenreSelectModalPresented = true
+            withAnimation {
+                isGenreSelectModalPresented = true
+            }
         } label: {
             if selectedGenres.isEmpty {
                 Image(.btnFilterGenre)

@@ -34,11 +34,22 @@ struct SearchView: View {
             if isGenreSelectModalPresented {
                 Color.napzakTransparency(.transBlack)
                     .onTapGesture {
-                        isGenreSelectModalPresented = false
+                        withAnimation {
+                            isGenreSelectModalPresented = false
+                        }
                     }
-                GenreSelectModalView(isGenreSelectModalPresented: $isGenreSelectModalPresented, adaptedGenres: $viewModel.productFetchOption.genres)
+                    .transition(.opacity)
+                    .zIndex(1)
+                
+                GenreSelectModalView(
+                    isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                    adaptedGenres: $viewModel.productFetchOption.genres
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(2)
             }
         }
+        .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .ignoresSafeArea()
     }
 }

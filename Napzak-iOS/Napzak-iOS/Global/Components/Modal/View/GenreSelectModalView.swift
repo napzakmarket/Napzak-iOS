@@ -45,7 +45,9 @@ extension GenreSelectModalView {
             HStack {
                 Spacer()
                 Button {
-                    isGenreSelectModalPresented = false
+                    withAnimation {
+                        isGenreSelectModalPresented = false
+                    }
                 } label: {
                     Image(.iconCloseModal)
                 }
@@ -131,7 +133,9 @@ extension GenreSelectModalView {
             }
             Button {
                 adaptedGenres = viewModel.selectedGenres
-                isGenreSelectModalPresented = false
+                withAnimation {
+                    isGenreSelectModalPresented = false
+                }
             } label: {
                 Text("적용하기")
                     .applyNapzakFont(.body4Bold14)
