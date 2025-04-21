@@ -66,7 +66,7 @@ struct BuyRegisterPrice: View {
                         .padding(.trailing, 2)
                     
                     Text("가격 설정은 1,000원 단위로만 가능해요")
-                        .applyNapzakFont(.caption1SemiBold10)
+                        .applyNapzakFont(.caption4SemiBold10)
                         .foregroundStyle(.red)
                         .frame(height: 13)
                 }

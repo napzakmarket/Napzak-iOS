@@ -11,7 +11,8 @@ import SwiftUI
 struct Napzak_iOSApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NZTabBarView()
+                .environmentObject(NavigationRouter())
         }
     }
 }

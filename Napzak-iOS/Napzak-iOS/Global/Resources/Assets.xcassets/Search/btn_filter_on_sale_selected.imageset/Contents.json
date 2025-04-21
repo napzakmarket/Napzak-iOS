@@ -1,0 +1,15 @@
+{
+  "images" : [
+    {
+      "filename" : "btn_filter_on_sale_selected.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
+  }
+}
