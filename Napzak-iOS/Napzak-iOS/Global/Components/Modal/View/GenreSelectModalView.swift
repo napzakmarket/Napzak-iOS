@@ -16,6 +16,9 @@ struct GenreSelectModalView: View {
     @State private var inputGenreText = ""
     @State private var isSearchCompleted: Bool = false
     
+    @Binding var isGenreSelectModalPresented: Bool
+    @Binding var adaptedGenres: [GenreName]
+    
     //MARK: - Main Body
     
     var body: some View {
@@ -27,6 +30,9 @@ struct GenreSelectModalView: View {
         .clipShape(.rect(topLeadingRadius: 20, topTrailingRadius: 20))
         .padding(.top, 250)
         .ignoresSafeArea()
+        .onAppear {
+            viewModel.selectedGenres = adaptedGenres
+        }
     }
 }
 
@@ -39,7 +45,7 @@ extension GenreSelectModalView {
             HStack {
                 Spacer()
                 Button {
-                    //모달 닫기
+                    isGenreSelectModalPresented = false
                 } label: {
                     Image(.iconCloseModal)
                 }
@@ -124,7 +130,8 @@ extension GenreSelectModalView {
                     .padding(.bottom, 30)
             }
             Button {
-                //선택한 장르 적용
+                adaptedGenres = viewModel.selectedGenres
+                isGenreSelectModalPresented = false
             } label: {
                 Text("적용하기")
                     .applyNapzakFont(.body4Bold14)
@@ -145,8 +152,11 @@ extension GenreSelectModalView {
 
 #Preview {
     struct PreviewContainer: View {
+        @State private var adaptedGenres: [GenreName] = []
+        @State private var isGenreSelectModalPresented = true
+        
         var body: some View {
-            GenreSelectModalView()
+            GenreSelectModalView(isGenreSelectModalPresented: $isGenreSelectModalPresented, adaptedGenres: $adaptedGenres)
         }
     }
     

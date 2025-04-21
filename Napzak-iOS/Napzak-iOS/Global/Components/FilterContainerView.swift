@@ -11,8 +11,9 @@ struct FilterContainerView: View {
     
     //MARK: - Property Wrappers
     
+    @Binding var isGenreSelectModalPresented: Bool
     @Binding var selectedTabIndex: Int
-    @Binding var selectedGenres: [String]
+    @Binding var selectedGenres: [GenreName]
     @Binding var isUnopened: Bool
     @Binding var isOnSale: Bool
     
@@ -26,22 +27,18 @@ struct FilterContainerView: View {
             Spacer()
         }
         .frame(height: 28)
-        .frame(maxWidth: 255)
+        .frame(maxWidth: 275)
     }
     
     var genreFilterChip: some View {
         Button {
-            if selectedGenres.isEmpty {
-                selectedGenres = ["산리오", "사카모토데이즈"]
-            } else {
-                selectedGenres = []
-            }
+            isGenreSelectModalPresented = true
         } label: {
             if selectedGenres.isEmpty {
                 Image(.btnFilterGenre)
             } else {
                 HStack(spacing: 0) {
-                    Text("\(selectedGenres[0])")
+                    Text("\(selectedGenres[0].name)")
                         .foregroundStyle(Color.napzakGrayScale(.white))
                         .applyNapzakFont(.caption1SemiBold12)
                         .truncationMode(.tail)
@@ -84,13 +81,20 @@ struct FilterContainerView: View {
 
 #Preview {
     struct PreviewContainer: View {
+        @State var isGenreSelectModalPresented = true
         @State var selectedTabIndex = 0
-        @State var selectedGenres = [String]()
+        @State var selectedGenres = [GenreName]()
         @State var isUnopened = false
         @State var isOnSale = false
 
         var body: some View {
-            FilterContainerView(selectedTabIndex: $selectedTabIndex, selectedGenres: $selectedGenres, isUnopened: $isUnopened, isOnSale: $isOnSale)
+            FilterContainerView(
+                isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                selectedTabIndex: $selectedTabIndex,
+                selectedGenres: $selectedGenres,
+                isUnopened: $isUnopened,
+                isOnSale: $isOnSale
+            )
         }
     }
     

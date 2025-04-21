@@ -12,6 +12,8 @@ struct SearchView: View {
     //MARK: - Property Wrappers
 
     @StateObject private var viewModel = SearchViewModel()
+    
+    @Binding var isGenreSelectModalPresented: Bool
         
     //MARK: - Properties
     
@@ -21,11 +23,21 @@ struct SearchView: View {
     //MARK: - Body
     
     var body: some View {
-        VStack(spacing: 0) {
-            searchHeader
-                .padding(.top, 75)
-            productScrollView
-            Spacer()
+        ZStack(alignment: .bottom) {
+            VStack(spacing: 0) {
+                searchHeader
+                    .padding(.top, 75)
+                productScrollView
+                Spacer()
+            }
+            
+            if isGenreSelectModalPresented {
+                Color.napzakTransparency(.transBlack)
+                    .onTapGesture {
+                        isGenreSelectModalPresented = false
+                    }
+                GenreSelectModalView(isGenreSelectModalPresented: $isGenreSelectModalPresented, adaptedGenres: $viewModel.productFetchOption.genres)
+            }
         }
         .ignoresSafeArea()
     }
@@ -47,8 +59,14 @@ extension SearchView {
                 VStack(alignment: .leading, spacing: 0) {
                     NZSegmentedControl(selectedTabIndex: $viewModel.selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
                     
-                    FilterContainerView(selectedTabIndex: $viewModel.selectedTabIndex, selectedGenres: $viewModel.productFetchOption.genres, isUnopened: $viewModel.productFetchOption.isUnopened, isOnSale: $viewModel.productFetchOption.isOnSale)
-                        .frame(height: 54)
+                    FilterContainerView(
+                        isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                        selectedTabIndex: $viewModel.selectedTabIndex,
+                        selectedGenres: $viewModel.productFetchOption.genres,
+                        isUnopened: $viewModel.productFetchOption.isUnopened,
+                        isOnSale: $viewModel.productFetchOption.isOnSale
+                    )
+                    .frame(height: 54)
                 }
                 .padding(.horizontal, 28)
             }
@@ -95,7 +113,7 @@ extension SearchView {
                 Button {
                     //TODO: - 장르 페이지로 이동
                 } label: {
-                    GenreItemView(genreName: viewModel.productFetchOption.genres[i])
+                    GenreItemView(genreName: viewModel.productFetchOption.genres[i].name)
                         .frame(height: 64)
                 }
                 Color.napzakGrayScale(.gray10)
@@ -158,5 +176,13 @@ extension SearchView {
 }
 
 #Preview {
-    SearchView()
+    struct PreviewContainer: View {
+        @State private var isGenreSelectModalPresented = false
+        
+        var body: some View {
+            SearchView(isGenreSelectModalPresented: $isGenreSelectModalPresented)
+        }
+    }
+    
+    return PreviewContainer()
 }
