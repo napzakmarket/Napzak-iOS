@@ -86,7 +86,7 @@ extension ReportView {
             } label: {
                 Image(.iconBack)
             }
-            .frame(width: 16, height: 10)
+            .frame(width: 10, height: 16)
             .padding(.top, 62)
             .padding(.bottom, 22)
             .padding(.leading, 28)
@@ -166,8 +166,6 @@ extension ReportView {
                     .padding(.horizontal, 16)
                     .padding(.vertical, 17)
                 }
-                
-                
             }
             .background(
                 RoundedRectangle(cornerRadius: 14)
