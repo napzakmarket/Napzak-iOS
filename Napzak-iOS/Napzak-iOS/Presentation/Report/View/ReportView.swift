@@ -215,11 +215,11 @@ extension ReportView {
             HStack(spacing: 0) {
                 Spacer()
                 Text(reportDescription.count.description)
-                    .applyNapzakFont(.caption1SemiBold10)
+                    .applyNapzakFont(.caption4SemiBold10)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
                 
                 Text("/430")
-                    .applyNapzakFont(.caption1SemiBold10)
+                    .applyNapzakFont(.caption4SemiBold10)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
             }
             .padding(.top, 8)

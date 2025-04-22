@@ -35,7 +35,7 @@ struct NZTabBarView: View {
                     Group {
                         HView()
                             .tag(NZTab.home)
-                        SView()
+                        SearchView()
                             .tag(NZTab.search)
                         CView()
                             .tag(NZTab.chat)
