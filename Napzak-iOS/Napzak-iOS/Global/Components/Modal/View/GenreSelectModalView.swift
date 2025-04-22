@@ -15,6 +15,7 @@ struct GenreSelectModalView: View {
 
     @State private var inputGenreText = ""
     @State private var isSearchCompleted: Bool = false
+    @FocusState private var isSearchBarFocused: Bool
     
     @Binding var isGenreSelectModalPresented: Bool
     @Binding var adaptedGenres: [GenreName]
@@ -29,6 +30,9 @@ struct GenreSelectModalView: View {
         }
         .clipShape(.rect(topLeadingRadius: 31, topTrailingRadius: 31))
         .padding(.top, 250)
+        .onTapGesture {
+            isSearchBarFocused = false
+        }
         .onAppear {
             viewModel.selectedGenres = adaptedGenres
         }
@@ -68,7 +72,8 @@ extension GenreSelectModalView {
                 SearchBar(
                     placeholder: "어떤 장르의 굿즈인가요? 검색해보세요!",
                     text: $inputGenreText,
-                    isCompleted: $isSearchCompleted
+                    isCompleted: $isSearchCompleted,
+                    isFocused: _isSearchBarFocused
                 )
                 
                 if !viewModel.selectedGenres.isEmpty {
