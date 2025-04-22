@@ -24,20 +24,20 @@ enum ReportType {
         switch self {
         case .product:
             return [
-                "거래 금지 상품을 판매하고 있어요",
-                "부적절한 콘텐츠를 포함하고 있어요",
-                "허위/과장 정보 및 광고를 포함하고 있어요",
-                "욕설/비속어 등 불쾌한 표현을 사용했어요",
-                "거래 과정에서 분쟁이 발생했어요",
-                "기타 문제가 있어요"
+                ReportReasonMessage.prohibitedProduct,
+                ReportReasonMessage.inappropriateContent,
+                ReportReasonMessage.includefalseInfoOrAd,
+                ReportReasonMessage.offensiveLanguage,
+                ReportReasonMessage.dispute,
+                ReportReasonMessage.other
             ]
         case .market:
             return [
-                "비매너 마켓이에요",
-                "사기 행위가 의심돼요",
-                "거래 과정에서 분쟁이 발생했어요",
-                "욕설/비속어 등 불쾌한 표현을 사용했어요",
-                "기타 문제가 있어요"
+                ReportReasonMessage.badManners,
+                ReportReasonMessage.suspectedFraud,
+                ReportReasonMessage.offensiveLanguage,
+                ReportReasonMessage.dispute,
+                ReportReasonMessage.other
             ]
         }
     }
@@ -81,16 +81,16 @@ struct ReportView: View {
 extension ReportView {
     private var reportHeader: some View {
         VStack(alignment: .leading) {
-            Image(.iconBack)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 16, height: 10)
-                .padding(.top, 62)
-                .padding(.bottom, 22)
-                .padding(.leading, 28)
-                .onTapGesture {
-                    print("backButton tapped")
-                }
+            Button {
+                print("backButton tapped")
+            } label: {
+                Image(.iconBack)
+            }
+            .frame(width: 16, height: 10)
+            .padding(.top, 62)
+            .padding(.bottom, 22)
+            .padding(.leading, 28)
+            
             
             Divider()
         }
@@ -192,14 +192,14 @@ extension ReportView {
             ZStack(alignment: .topLeading){
                 TextEditor(text: $reportDescription)
                     .maxLength(200, text: $reportDescription)
-                    .applyNapzakFont(.caption1SemiBold12)
+                    .applyNapzakFont(.caption2Medium12)
                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                     .padding(.horizontal, 9)
                     .padding(.vertical, 7)
                 
                 if reportDescription.isEmpty {
                     Text(reportDescriptionPlaceholder)
-                        .applyNapzakFont(.caption1SemiBold12)
+                        .applyNapzakFont(.caption2Medium12)
                         .foregroundStyle(Color.napzakGrayScale(.gray200))
                         .lineLimit(5)
                         .padding(.horizontal, 16)
@@ -222,7 +222,7 @@ extension ReportView {
                     .applyNapzakFont(.caption4SemiBold10)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
             }
-            .padding(.top, 8)
+            .padding(.top, 9)
             .frame(height: 13)
         }
         .padding(.horizontal, 28)
@@ -256,7 +256,8 @@ extension ReportView {
     private var submitReportButton: some View {
         Button {
             showToast = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+            Task {
+                try? await Task.sleep(nanoseconds: 2_500_000_000)
                 showToast = false
             }
         } label: {
