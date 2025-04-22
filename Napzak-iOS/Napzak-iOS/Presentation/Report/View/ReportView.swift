@@ -134,7 +134,9 @@ extension ReportView {
                         .stroke(Color.napzakGrayScale(.gray200))
                 )
                 .onTapGesture {
-                    reasonExpanded.toggle()
+                    withAnimation {
+                        reasonExpanded.toggle()
+                    }
                 }
                 .onAppear {
                     selectedReason = reportType.reportReasons.first ?? ""
@@ -158,11 +160,14 @@ extension ReportView {
                                         .napzakGrayScale(.gray300))
                                     .frame(height: 15)
                             }
+
                         }
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 17)
                 }
+                
+                
             }
             .background(
                 RoundedRectangle(cornerRadius: 14)
