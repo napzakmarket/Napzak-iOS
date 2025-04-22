@@ -36,6 +36,16 @@ struct GenreSelectModalView: View {
         .onAppear {
             viewModel.selectedGenres = adaptedGenres
         }
+        .gesture(
+            DragGesture()
+                .onEnded { value in
+                    if value.translation.height > 60 {
+                        withAnimation {
+                            isGenreSelectModalPresented = false
+                        }
+                    }
+                }
+        )
     }
 }
 

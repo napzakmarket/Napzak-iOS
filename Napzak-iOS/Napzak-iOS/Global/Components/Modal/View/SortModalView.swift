@@ -55,6 +55,16 @@ struct SortModalView: View {
         .padding(.bottom, 36)
         .background(Color.napzakGrayScale(.white))
         .clipShape(.rect(topLeadingRadius: 31, topTrailingRadius: 31))
+        .gesture(
+            DragGesture()
+                .onEnded { value in
+                    if value.translation.height > 60 {
+                        withAnimation {
+                            isSortModalPresented = false
+                        }
+                    }
+                }
+        )
     }
 }
 
