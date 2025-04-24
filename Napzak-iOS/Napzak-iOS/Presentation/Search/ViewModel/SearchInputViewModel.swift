@@ -15,6 +15,14 @@ final class SearchInputViewModel: ObservableObject {
     @Published var isSearchCompleted: Bool = false
     @Published var searchRecommandations = [String]()
     @Published var genreRecommandations = [PreferGenre]()
+    @Published var genreSearchResults = [
+        GenreName(id: 1, name: "산리오"),
+        GenreName(id: 2, name: "사카모토 데이즈"),
+        GenreName(id: 3, name: "산리오"),
+        GenreName(id: 4, name: "사카모토 데이즈"),
+        GenreName(id: 5, name: "산리오"),
+        GenreName(id: 6, name: "사카모토 데이즈")
+    ]
     
     //MARK: - Init
     

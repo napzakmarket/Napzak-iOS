@@ -30,18 +30,18 @@ struct SearchInputView: View {
     var body: some View {
         ZStack(alignment: .top) {
             Color.napzakGrayScale(.gray10)
+                .ignoresSafeArea(edges: [.bottom])
             
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 46) {
-                    searchRecommendationView
-                    genreRacommandationView
+                if viewModel.searchInputText.isEmpty {
+                    defaultContentView
+                } else {
+                    typingContentView
                 }
             }
-            .padding(.horizontal, 20)
-            
             searchNavigationHeader
         }
-        .ignoresSafeArea()
+        .ignoresSafeArea(edges: [.top])
     }
 }
 
@@ -72,8 +72,47 @@ extension SearchInputView {
         .padding(.bottom, 20)
         .background(
             Color.napzakGrayScale(.white)
-                .shadow(color: .black.opacity(0.1), radius: 4)
+                .shadow(color: .black.opacity(0.1), radius: 2)
         )
+    }
+    
+    private var defaultContentView: some View {
+        VStack(spacing: 46) {
+            searchRecommendationView
+            genreRacommandationView
+        }
+        .padding(.horizontal, 20)
+    }
+    
+    private var typingContentView: some View {
+        LazyVStack(spacing: 0) {
+            ForEach(viewModel.genreSearchResults) { genre in
+                Button {
+                    //TODO: - 장르 페이지로 이동
+                } label: {
+                    GenreItemView(genreName: genre.name)
+                }
+                Color.napzakGrayScale(.gray10)
+                    .frame(height: 8)
+            }
+            Button {
+                //TODO: - 화면 전환
+            } label: {
+                HStack(alignment: .center, spacing: 6) {
+                    Image(.imgSearchInput)
+                        .padding(.leading, 28)
+                    
+                    Text(viewModel.searchInputText)
+                        .applyNapzakFont(.body5SemiBold14)
+                        .foregroundColor(Color.napzakGrayScale(.gray500))
+                    
+                    Spacer()
+                }
+                .frame(height: 60)
+                .background(Color.napzakGrayScale(.white))
+            }
+        }
+        .padding(.top, 131)
     }
     
     private var searchRecommendationView: some View {
@@ -137,7 +176,7 @@ extension SearchInputView {
                     }
                 }
             }
-            .padding(.bottom, 70)
+            .padding(.bottom, 20)
         }
     }
 }
