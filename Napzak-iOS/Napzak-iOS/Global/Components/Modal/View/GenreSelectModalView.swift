@@ -43,6 +43,7 @@ struct GenreSelectModalView: View {
                     }
                 }
         )
+        .animation(.easeInOut, value: viewModel.selectedGenres)
     }
 }
 
@@ -86,6 +87,7 @@ extension GenreSelectModalView {
                 if !viewModel.selectedGenres.isEmpty {
                     ChipsContainerView(selectedGenres: $viewModel.selectedGenres)
                         .frame(height: 29)
+                        .transition(.move(edge: .top).combined(with: .opacity))
                 }
             }
             .padding(.bottom, 23)
@@ -104,7 +106,7 @@ extension GenreSelectModalView {
             
             ScrollView(showsIndicators: false) {
                 LazyVStack(alignment: .leading) {
-                    ForEach(viewModel.allDummyGenres, id: \.self){ genre in
+                    ForEach(viewModel.allGenres, id: \.self){ genre in
                         Button {
                             viewModel.selectGenre(genre)
                         } label: {
