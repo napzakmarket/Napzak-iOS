@@ -43,6 +43,9 @@ struct SearchView: View {
                     .zIndex(1)
                 
                 GenreSelectModalView(
+                    viewModel: GenreSelectModalViewModel(
+                        selectedGenres: viewModel.productFetchOption.genres
+                    ),
                     isGenreSelectModalPresented: $isGenreSelectModalPresented,
                     adaptedGenres: $viewModel.productFetchOption.genres
                 )

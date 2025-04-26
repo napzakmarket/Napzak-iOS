@@ -39,7 +39,9 @@ final class GenreSelectModalViewModel: ObservableObject {
     
     //MARK: - Init
     
-    init() { }
+    init(selectedGenres: [GenreName] = []) {
+        self.selectedGenres = selectedGenres
+    }
 }
 
 extension GenreSelectModalViewModel {

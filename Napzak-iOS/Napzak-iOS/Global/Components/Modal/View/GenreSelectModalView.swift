@@ -11,7 +11,7 @@ struct GenreSelectModalView: View {
     
     //MARK: - Property Wrappers
     
-    @StateObject private var viewModel = GenreSelectModalViewModel()
+    @StateObject var viewModel: GenreSelectModalViewModel
 
     @State private var inputGenreText = ""
     @State private var isSearchCompleted: Bool = false
@@ -32,9 +32,6 @@ struct GenreSelectModalView: View {
         .padding(.top, 250)
         .onTapGesture {
             isSearchBarFocused = false
-        }
-        .onAppear {
-            viewModel.selectedGenres = adaptedGenres
         }
         .gesture(
             DragGesture()
@@ -174,7 +171,13 @@ extension GenreSelectModalView {
         @State private var isGenreSelectModalPresented = true
         
         var body: some View {
-            GenreSelectModalView(isGenreSelectModalPresented: $isGenreSelectModalPresented, adaptedGenres: $adaptedGenres)
+            GenreSelectModalView(
+                viewModel: GenreSelectModalViewModel(
+                    selectedGenres: adaptedGenres
+                ),
+                isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                adaptedGenres: $adaptedGenres
+            )
         }
     }
     
