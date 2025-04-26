@@ -144,7 +144,7 @@ extension GenreSelectionView {
                     .foregroundStyle(Color.napzakGrayScale(.white))
                     .frame(maxWidth: .infinity)
                     .frame(height: 50)
-                    .background(viewModel.selectedGenres.isEmpty ? Color.napzakGrayScale(.gray100) : Color.napzakPrimary(.purple500))
+                    .background(getStartButtonColor())
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
             .disabled(viewModel.selectedGenres.isEmpty)
@@ -158,6 +158,14 @@ extension GenreSelectionView {
             }
         }
         .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
+    }
+}
+
+extension GenreSelectionView {
+    private func getStartButtonColor() -> Color {
+        return viewModel.selectedGenres.isEmpty
+        ? Color.napzakGrayScale(.gray100)
+        : Color.napzakPrimary(.purple500)
     }
 }
 
