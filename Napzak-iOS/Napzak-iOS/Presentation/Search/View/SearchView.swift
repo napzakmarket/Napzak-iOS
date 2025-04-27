@@ -10,6 +10,8 @@ import SwiftUI
 struct SearchView: View {
     
     //MARK: - Property Wrappers
+    
+    @EnvironmentObject private var navigationRouter: NavigationRouter
 
     @StateObject private var viewModel = SearchViewModel()
     
@@ -108,7 +110,7 @@ extension SearchView {
     
     private var searchButton: some View {
         Button {
-            // TODO: - 검색 화면 전환
+            navigationRouter.push(next: .searchInputView)
         } label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 14)

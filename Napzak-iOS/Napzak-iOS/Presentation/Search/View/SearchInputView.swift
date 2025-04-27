@@ -13,6 +13,8 @@ struct SearchInputView: View {
     
     //MARK: - Property Wrappers
     
+    @EnvironmentObject private var navigationRouter: NavigationRouter
+    
     @StateObject private var viewModel = SearchInputViewModel()
         
     @FocusState private var isSearchBarFocused: Bool
@@ -42,6 +44,7 @@ struct SearchInputView: View {
             searchNavigationHeader
         }
         .ignoresSafeArea(edges: [.top])
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 
@@ -52,7 +55,7 @@ extension SearchInputView {
     private var searchNavigationHeader: some View {
         HStack(alignment: .center, spacing: 0) {
             Button {
-                //TODO: - 뒤로가기
+                navigationRouter.pop()
             } label: {
                 Image(.iconBack)
                     .frame(width: 34)
