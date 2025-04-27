@@ -62,8 +62,8 @@
 		D07837B22DB6C156009122F6 /* SortModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07837B12DB6C156009122F6 /* SortModalView.swift */; };
 		D07837B42DB7B906009122F6 /* SearchInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07837B32DB7B900009122F6 /* SearchInputView.swift */; };
 		D07BF2762D9D16A3000E4FD5 /* NZTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07BF2752D9D169F000E4FD5 /* NZTabBarView.swift */; };
-		D0CBB6FF2DB8110300BE20C3 /* PlainGenreChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBB6FE2DB810F300BE20C3 /* PlainGenreChip.swift */; };
-		D0CBB7012DB87CBC00BE20C3 /* PlainGenreChipContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBB7002DB87CB500BE20C3 /* PlainGenreChipContainerView.swift */; };
+		D0CBB6FF2DB8110300BE20C3 /* PlainChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBB6FE2DB810F300BE20C3 /* PlainChip.swift */; };
+		D0CBB7012DB87CBC00BE20C3 /* PlainChipContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBB7002DB87CB500BE20C3 /* PlainChipContainerView.swift */; };
 		D0CBB7032DB893F600BE20C3 /* SearchInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBB7022DB893F000BE20C3 /* SearchInputViewModel.swift */; };
 		D63270162DA19639002414DA /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63270152DA19639002414DA /* SearchBar.swift */; };
 		D63270202DA28E9C002414DA /* PreferGenre.swift in Sources */ = {isa = PBXBuildFile; fileRef = D632701F2DA28E9C002414DA /* PreferGenre.swift */; };
@@ -137,8 +137,8 @@
 		D07837B12DB6C156009122F6 /* SortModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortModalView.swift; sourceTree = "<group>"; };
 		D07837B32DB7B900009122F6 /* SearchInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInputView.swift; sourceTree = "<group>"; };
 		D07BF2752D9D169F000E4FD5 /* NZTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NZTabBarView.swift; sourceTree = "<group>"; };
-		D0CBB6FE2DB810F300BE20C3 /* PlainGenreChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainGenreChip.swift; sourceTree = "<group>"; };
-		D0CBB7002DB87CB500BE20C3 /* PlainGenreChipContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainGenreChipContainerView.swift; sourceTree = "<group>"; };
+		D0CBB6FE2DB810F300BE20C3 /* PlainChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainChip.swift; sourceTree = "<group>"; };
+		D0CBB7002DB87CB500BE20C3 /* PlainChipContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainChipContainerView.swift; sourceTree = "<group>"; };
 		D0CBB7022DB893F000BE20C3 /* SearchInputViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInputViewModel.swift; sourceTree = "<group>"; };
 		D63270152DA19639002414DA /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		D632701F2DA28E9C002414DA /* PreferGenre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferGenre.swift; sourceTree = "<group>"; };
@@ -560,8 +560,8 @@
 		D63270232DA2C802002414DA /* Chip */ = {
 			isa = PBXGroup;
 			children = (
-				D0CBB6FE2DB810F300BE20C3 /* PlainGenreChip.swift */,
-				D0CBB7002DB87CB500BE20C3 /* PlainGenreChipContainerView.swift */,
+				D0CBB6FE2DB810F300BE20C3 /* PlainChip.swift */,
+				D0CBB7002DB87CB500BE20C3 /* PlainChipContainerView.swift */,
 				D63270242DA2C879002414DA /* GenreChip.swift */,
 				D63270262DA2EA9D002414DA /* ChipsContainerView.swift */,
 			);
@@ -709,7 +709,7 @@
 				D045DEE82D83786800EB1EB6 /* ColorLiteral.swift in Sources */,
 				D029060F2DAF9978008515FD /* TradeType.swift in Sources */,
 				D045DEF82D8383CC00EB1EB6 /* Encodable+.swift in Sources */,
-				D0CBB6FF2DB8110300BE20C3 /* PlainGenreChip.swift in Sources */,
+				D0CBB6FF2DB8110300BE20C3 /* PlainChip.swift in Sources */,
 				D045DEF92D8383CC00EB1EB6 /* String+.swift in Sources */,
 				D63270292DA30609002414DA /* GenreSelectionView.swift in Sources */,
 				D045DEFA2D8383CC00EB1EB6 /* TextEditor+.swift in Sources */,
@@ -738,7 +738,7 @@
 				6CC472352DA440B70086E345 /* RegisterImage.swift in Sources */,
 				D029061C2DB16532008515FD /* GenreItemView.swift in Sources */,
 				D045DEFC2D8383CC00EB1EB6 /* TextField+.swift in Sources */,
-				D0CBB7012DB87CBC00BE20C3 /* PlainGenreChipContainerView.swift in Sources */,
+				D0CBB7012DB87CBC00BE20C3 /* PlainChipContainerView.swift in Sources */,
 				D63270342DA3AC10002414DA /* GenreCell.swift in Sources */,
 				D63270372DA3AC55002414DA /* ToastMessageView.swift in Sources */,
 				D63270352DA3AC10002414DA /* GenreGridView.swift in Sources */,

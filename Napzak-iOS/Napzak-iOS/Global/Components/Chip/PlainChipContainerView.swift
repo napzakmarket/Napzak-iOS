@@ -1,5 +1,5 @@
 //
-//  PlainGenreChipContainerView.swift
+//  PlainChipContainerView.swift
 //  Napzak-iOS
 //
 //  Created by 조혜린 on 4/23/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PlainGenreChipContainerView: View {
+struct PlainChipContainerView: View {
     
     //MARK: - Property Wrappers
     
@@ -31,7 +31,7 @@ struct PlainGenreChipContainerView: View {
                     Button {
                         action(title)
                     } label: {
-                        PlainGenreChip(title: title)
+                        PlainChip(title: title)
                     }
                     .alignmentGuide(.leading) { view in
                         if abs(width - view.width) > geomety.size.width {
@@ -75,7 +75,7 @@ struct PlainGenreChipContainerView: View {
 }
 
 #Preview {
-    PlainGenreChipContainerView(
+    PlainChipContainerView(
         titles: [
             "헌터x헌터 룩업",
             "주술회전 고죠 사토루",
