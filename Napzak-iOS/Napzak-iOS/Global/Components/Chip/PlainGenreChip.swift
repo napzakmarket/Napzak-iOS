@@ -1,5 +1,5 @@
 //
-//  SearchChip.swift
+//  PlainGenreChip.swift
 //  Napzak-iOS
 //
 //  Created by 조혜린 on 4/23/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SearchChip: View {
+struct PlainGenreChip: View {
     
     //MARK: - Properties
     
@@ -31,5 +31,5 @@ struct SearchChip: View {
 }
 
 #Preview {
-    SearchChip(title: "헌터x헌터 룩업")
+    PlainGenreChip(title: "헌터x헌터 룩업")
 }

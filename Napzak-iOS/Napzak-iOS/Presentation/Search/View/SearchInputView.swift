@@ -125,7 +125,7 @@ extension SearchInputView {
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
                 .frame(height: 18)
             
-            SearchChipContainerView(
+            PlainGenreChipContainerView(
                 titles: viewModel.searchRecommandations,
                 action: { title in
                     //TODO: - 데이터 넘기며 화면 전환
