@@ -43,6 +43,9 @@ struct SearchInputView: View {
             }
             searchNavigationHeader
         }
+        .onTapGesture {
+            isSearchBarFocused = false
+        }
         .ignoresSafeArea(edges: [.top])
         .toolbar(.hidden, for: .navigationBar)
     }
@@ -68,6 +71,9 @@ extension SearchInputView {
                 isFocused: _isSearchBarFocused
             )
             .frame(height: 38)
+            .onAppear {
+                isSearchBarFocused = true
+            }
         }
         .padding(.leading, 16)
         .padding(.trailing, 28)
