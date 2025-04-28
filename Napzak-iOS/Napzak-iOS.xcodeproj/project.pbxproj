@@ -61,6 +61,7 @@
 		D07837B02DB6295A009122F6 /* GenreSelectModalViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07837AF2DB62955009122F6 /* GenreSelectModalViewModel.swift */; };
 		D07837B22DB6C156009122F6 /* SortModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07837B12DB6C156009122F6 /* SortModalView.swift */; };
 		D07BF2762D9D16A3000E4FD5 /* NZTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07BF2752D9D169F000E4FD5 /* NZTabBarView.swift */; };
+		D0F035272DBF135E003D0CBF /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D0F035262DBF135E003D0CBF /* Config.xcconfig */; };
 		D63270162DA19639002414DA /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63270152DA19639002414DA /* SearchBar.swift */; };
 		D63270202DA28E9C002414DA /* PreferGenre.swift in Sources */ = {isa = PBXBuildFile; fileRef = D632701F2DA28E9C002414DA /* PreferGenre.swift */; };
 		D63270222DA2C5EF002414DA /* GenreName.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63270212DA2C5EF002414DA /* GenreName.swift */; };
@@ -132,6 +133,7 @@
 		D07837AF2DB62955009122F6 /* GenreSelectModalViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreSelectModalViewModel.swift; sourceTree = "<group>"; };
 		D07837B12DB6C156009122F6 /* SortModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortModalView.swift; sourceTree = "<group>"; };
 		D07BF2752D9D169F000E4FD5 /* NZTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NZTabBarView.swift; sourceTree = "<group>"; };
+		D0F035262DBF135E003D0CBF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		D63270152DA19639002414DA /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		D632701F2DA28E9C002414DA /* PreferGenre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferGenre.swift; sourceTree = "<group>"; };
 		D63270212DA2C5EF002414DA /* GenreName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreName.swift; sourceTree = "<group>"; };
@@ -247,6 +249,7 @@
 		D045DE922D836F0500EB1EB6 = {
 			isa = PBXGroup;
 			children = (
+				D0F035262DBF135E003D0CBF /* Config.xcconfig */,
 				D045DEBA2D83723A00EB1EB6 /* Napzak-iOS */,
 				D045DE9C2D836F0500EB1EB6 /* Products */,
 			);
@@ -681,6 +684,7 @@
 				D045DEE22D83759500EB1EB6 /* Pretendard-Regular.otf in Resources */,
 				D045DEDD2D83750400EB1EB6 /* Pretendard-SemiBold.otf in Resources */,
 				D045DEDE2D83750400EB1EB6 /* Pretendard-Bold.otf in Resources */,
+				D0F035272DBF135E003D0CBF /* Config.xcconfig in Resources */,
 				D045DEEC2D837D7D00EB1EB6 /* Pretendard-Medium.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -765,6 +769,7 @@
 /* Begin XCBuildConfiguration section */
 		D045DEA72D836F0700EB1EB6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D0F035262DBF135E003D0CBF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -828,6 +833,7 @@
 		};
 		D045DEA82D836F0700EB1EB6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D0F035262DBF135E003D0CBF /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
