@@ -7,6 +7,42 @@
 
 import SwiftUI
 
+enum ReportType {
+    case product
+    case market
+    
+    var title: String {
+        switch self {
+        case .product:
+            return "상품"
+        case .market:
+            return "마켓"
+        }
+    }
+    
+    var reportReasons: [String] {
+        switch self {
+        case .product:
+            return [
+                ReportReasonMessage.prohibitedProduct,
+                ReportReasonMessage.inappropriateContent,
+                ReportReasonMessage.includefalseInfoOrAd,
+                ReportReasonMessage.offensiveLanguage,
+                ReportReasonMessage.dispute,
+                ReportReasonMessage.other
+            ]
+        case .market:
+            return [
+                ReportReasonMessage.badManners,
+                ReportReasonMessage.suspectedFraud,
+                ReportReasonMessage.offensiveLanguage,
+                ReportReasonMessage.dispute,
+                ReportReasonMessage.other
+            ]
+        }
+    }
+}
+
 struct ReportModel {
     var selectedReason: String = ""
     var reportDescription: String = ""

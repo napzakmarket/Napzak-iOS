@@ -22,6 +22,4 @@ final class RegisterViewModel: ObservableObject {
     let halfMaxDeliveryCharge: Int = 5_000              // 반 값 배달 최대 금액 5000원
     let addPrices = ["+1,000원", "+5,000원", "+10,000원", "+100,000원"]
 
-    
-    
 }
