@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ChipsContainerView: View {
-    @Binding var selectedGenres: [GenreName]
+    @Binding var selectedGenres: [GenreNameModel]
     
     var body: some View {
         HStack(spacing: 6) {
@@ -40,14 +40,14 @@ struct ChipsContainerView: View {
 }
 
 extension ChipsContainerView {
-    private func removeGenre(_ genre: GenreName) {
+    private func removeGenre(_ genre: GenreNameModel) {
         selectedGenres.removeAll { $0.id == genre.id }
     }
 }
 
 #Preview {
     struct PreviewContainer: View {
-        @State private var genres = GenreNameData.sample.genreList
+        @State private var genres = GenreNameModel.sampleGenreList
         
         var body: some View {
             ChipsContainerView(selectedGenres: $genres)

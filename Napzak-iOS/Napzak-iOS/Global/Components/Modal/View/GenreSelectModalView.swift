@@ -18,7 +18,7 @@ struct GenreSelectModalView: View {
     @FocusState private var isSearchBarFocused: Bool
     
     @Binding var isGenreSelectModalPresented: Bool
-    @Binding var adaptedGenres: [GenreName]
+    @Binding var adaptedGenres: [GenreNameModel]
     
     //MARK: - Main Body
     
@@ -169,7 +169,7 @@ extension GenreSelectModalView {
 
 #Preview {
     struct PreviewContainer: View {
-        @State private var adaptedGenres: [GenreName] = []
+        @State private var adaptedGenres: [GenreNameModel] = []
         @State private var isGenreSelectModalPresented = true
         
         var body: some View {
