@@ -14,5 +14,9 @@ final class NetworkService {
     private init() { }
     
     let genreService: GenreServiceProtocol = GenreService()
+    let storeService: StoreServiceProtocol = StoreService()
+    let presignedService: PresignedServiceProtocol = PresignedService()
+    let productService: ProductServiceProtocol = ProductService()
+    let interestService: InterestServiceProtocol = InterestService()
 
 }

@@ -7,8 +7,6 @@
 
 import Moya
 
-import Moya
-
 protocol GenreServiceProtocol {
     func getAllPreferGenre(completion: @escaping (NetworkResult<PreferGenreResponseDTO>) -> ())
     func getSearchPreferGenre(searchWord: String, completion: @escaping(NetworkResult<PreferGenreResponseDTO>) -> ())
