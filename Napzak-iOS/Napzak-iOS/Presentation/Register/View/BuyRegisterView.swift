@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct BuyRegisterView: View {
+    @StateObject private var viewModel = RegisterViewModel()
     
     var body: some View {
         VStack(spacing: 0){
@@ -31,7 +32,7 @@ struct BuyRegisterView: View {
 
 extension BuyRegisterView {
     private var BuyRegisterContent: some View {
-        Group {
+        VStack(spacing: 0) {
             RegisterImage()
                 .padding(.top, 30)
                 .padding(.horizontal, 28)
@@ -51,12 +52,12 @@ extension BuyRegisterView {
                 .padding(.bottom, 29)
                 .background(.white)
 
-            RegisterTitle()
+            RegisterTitle(viewModel: viewModel)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 10)
                 .background(.white)
 
-            RegisterDescription()
+            RegisterDescription(viewModel: viewModel)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 23)
                 .background(.white)
@@ -67,12 +68,12 @@ extension BuyRegisterView {
                 .padding(.bottom, 23)
                 .background(.white)
 
-            BuyRegisterPrice()
+            BuyRegisterPrice(viewModel: viewModel)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 32)
                 .background(.white)
 
-            BuyRegisterSuggestPrice()
+            BuyRegisterSuggestPrice(viewModel: viewModel)
                 .padding(.horizontal, 28)
         }
     }

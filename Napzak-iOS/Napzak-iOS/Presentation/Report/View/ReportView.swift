@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct ReportView: View {
-    
     @StateObject private var viewModel = ReportViewModel()
-    
     @Binding var reportType: ReportType
     
     var body: some View {

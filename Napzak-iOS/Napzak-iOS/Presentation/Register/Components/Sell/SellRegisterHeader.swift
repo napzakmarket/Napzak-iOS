@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct SellRegisterHeader: View {
-    @Environment(\.dismiss) private var dismiss
-    
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
@@ -34,7 +32,7 @@ extension SellRegisterHeader {
             Spacer()
             
             Button {
-                dismiss()
+                //TODO: - 뒤로가기
             } label: {
                 Image(.iconClose)
             }

@@ -8,19 +8,8 @@
 import SwiftUI
 
 struct SellRegisterDelivery: View {
-    enum DeliveryType {
-        case included, separate
-    }
-    
-    @State private var deliveryType: DeliveryType? = nil  // 배달 타입
-    @State var normalDelivery: Bool = false                     // 일반 배달비 선택 여부
-    @State var normalDeliveryCharge: String = ""                // 일반 배달비 금액
-    @State var halfDelivery: Bool = false                       // 알뜰,반값 배달비 선택 여부
-    @State var halfDeliveryCharge: String = ""                  // 알뜰,반값 배달비 금액
-    
-    private let normalMaxDeliveryCharge: Int = 30_000           // 최대 금액 3만원
-    private let halfMaxDeliveryCharge: Int = 5_000              // 최대 금액 5000원
-    
+    @ObservedObject var viewModel: RegisterViewModel
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("배송 방법")
@@ -29,23 +18,23 @@ struct SellRegisterDelivery: View {
                 .frame(height: 18)
                 .padding(.bottom, 24)
             
-            deliveryRow(title: "배송비 포함", isSelected: deliveryType == .included) {
-                deliveryType = .included
+            deliveryRow(title: "배송비 포함", isSelected: viewModel.model.deliveryType == .included) {
+                viewModel.model.deliveryType = .included
             }
             .padding(.bottom, 10)
             
             VStack(spacing: 0) {
-                deliveryRow(title: "배송비 별도", isSelected: deliveryType == .separate) {
-                    deliveryType = .separate
+                deliveryRow(title: "배송비 별도", isSelected: viewModel.model.deliveryType == .separate) {
+                    viewModel.model.deliveryType = .separate
                 }
                 
-                if deliveryType == .separate {
+                if viewModel.model.deliveryType == .separate {
                     VStack(spacing: 12) {
                         HStack {
-                            Image(normalDelivery ? .buttonCheckboxFill : .buttonCheckbox)
+                            Image(viewModel.normalDelivery ? .buttonCheckboxFill : .buttonCheckbox)
                                 .frame(width: 24, height: 24)
                                 .onTapGesture {
-                                    normalDelivery.toggle()
+                                    viewModel.normalDelivery.toggle()
                                 }
                             
                             Text("일반 택배")
@@ -56,16 +45,16 @@ struct SellRegisterDelivery: View {
                             Spacer()
                             
                             HStack(spacing: 0){
-                                TextField("100~30,000", text: $normalDeliveryCharge)
+                                TextField("100~30,000", text: $viewModel.model.standardDeliveryFee)
                                     .multilineTextAlignment(.trailing)
-                                    .onChange(of: normalDeliveryCharge) { newValue in
-                                        normalDeliveryCharge = newValue.convertPrice(maxPrice: normalMaxDeliveryCharge)
+                                    .onChange(of: viewModel.model.standardDeliveryFee) { newValue in
+                                        viewModel.model.standardDeliveryFee = newValue.convertPrice(maxPrice: viewModel.normalMaxDeliveryCharge)
                                     }
                                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                                 
                                 Text(" 원")
                                     .foregroundStyle(
-                                        normalDeliveryCharge.isEmpty ? Color
+                                        viewModel.model.standardDeliveryFee.isEmpty ? Color
                                             .napzakGrayScale(.gray100) : Color
                                             .napzakGrayScale(.gray400)
                                     )
@@ -75,10 +64,10 @@ struct SellRegisterDelivery: View {
                         }
                         
                         HStack {
-                            Image(halfDelivery ? .buttonCheckboxFill : .buttonCheckbox)
+                            Image(viewModel.halfDelivery ? .buttonCheckboxFill : .buttonCheckbox)
                                 .frame(width: 24, height: 24)
                                 .onTapGesture {
-                                    halfDelivery.toggle()
+                                    viewModel.halfDelivery.toggle()
                                 }
                             
                             Text("반값/알뜰 택배")
@@ -89,17 +78,17 @@ struct SellRegisterDelivery: View {
                             Spacer()
                             
                             HStack(spacing: 0){
-                                TextField("0~5,000", text: $halfDeliveryCharge)
+                                TextField("0~5,000", text: $viewModel.model.halfDeliveryCharge)
                                     .multilineTextAlignment(.trailing)
-                                    .onChange(of: halfDeliveryCharge) { newValue in
-                                        halfDeliveryCharge = newValue
-                                            .convertPrice(maxPrice: halfMaxDeliveryCharge)
+                                    .onChange(of: viewModel.model.halfDeliveryCharge) { newValue in
+                                        viewModel.model.halfDeliveryCharge = newValue
+                                            .convertPrice(maxPrice: viewModel.halfMaxDeliveryCharge)
                                     }
                                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                                 
                                 Text(" 원")
                                     .foregroundStyle(
-                                        halfDeliveryCharge.isEmpty ? Color
+                                        viewModel.model.halfDeliveryCharge.isEmpty ? Color
                                             .napzakGrayScale(.gray100) : Color
                                             .napzakGrayScale(.gray400)
                                     )

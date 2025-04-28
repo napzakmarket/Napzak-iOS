@@ -8,10 +8,8 @@
 import SwiftUI
 
 struct SellRegisterPrice: View {
-    @State var price: String = ""
-    private let maxPrice: Int = 1_000_000       // 최대 금액 100만원
-    let addPrices = ["+1,000원", "+5,000원", "+10,000원", "+100,000원"]
-    
+    @ObservedObject var viewModel: RegisterViewModel
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("가격")
@@ -27,19 +25,19 @@ struct SellRegisterPrice: View {
                 .padding(.bottom, 24)
             
             HStack(alignment: .center, spacing: 0){
-                TextField("", text: $price)
+                TextField("", text: $viewModel.model.price)
                     .keyboardType(.decimalPad)
                     .applyNapzakFont(.body4Bold14)
                     .multilineTextAlignment(.trailing)
                     .foregroundStyle(Color.napzakGrayScale(.gray400))
-                    .onChange(of: price) { newValue in
-                        price = newValue.convertPrice(maxPrice: maxPrice)
+                    .onChange(of: viewModel.model.price) { newValue in
+                        viewModel.model.price = newValue.convertPrice(maxPrice: viewModel.maxPrice)
                     }
                 
                 Text(" 원")
                     .applyNapzakFont(.body5SemiBold14)
                     .foregroundStyle(
-                        price == "" ? Color.napzakGrayScale(.gray200) : Color.napzakGrayScale(.gray400))
+                        viewModel.model.price == "" ? Color.napzakGrayScale(.gray200) : Color.napzakGrayScale(.gray400))
                     .padding(.trailing, 12)
             }
             .frame(height: 50)
@@ -50,10 +48,10 @@ struct SellRegisterPrice: View {
             .padding(.bottom, 14)
             
             HStack(spacing: 8) { // 버튼 사이 간격 설정
-                ForEach(addPrices, id: \.self) { addPrice in
+                ForEach(viewModel.addPrices, id: \.self) { addPrice in
                     Button {
-                        price = (price.convertInt() + addPrice.convertInt()).description
-                            .convertPrice(maxPrice: maxPrice)
+                        viewModel.model.price = (viewModel.model.price.convertInt() + addPrice.convertInt()).description
+                            .convertPrice(maxPrice: viewModel.maxPrice)
                     } label: {
                         Text(addPrice)
                             .applyNapzakFont(.caption2Medium12)

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RegisterDescription: View {
-    @State var description: String = ""
+    @ObservedObject var viewModel: RegisterViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -19,14 +19,14 @@ struct RegisterDescription: View {
                 .padding(.bottom, 23)
             
             ZStack(alignment: .topLeading){
-                TextEditor(text: $description)
-                    .maxLength(430, text: $description)
+                TextEditor(text: $viewModel.model.description)
+                    .maxLength(430, text: $viewModel.model.description)
                     .applyNapzakFont(.body5SemiBold14)
                     .foregroundStyle(Color.napzakGrayScale(.gray500))
                     .padding(.horizontal, 6)
                     .padding(.vertical, 7)
                 
-                if description.isEmpty {
+                if viewModel.model.description.isEmpty {
                     Text("자세히 작성하면 더 빠르고 원활한 거래를 할 수 있어요 \n예) 상품 상태, 한정판 여부, 네고 가능 여부 등")
                         .applyNapzakFont(.body5SemiBold14)
                         .foregroundStyle(Color.napzakGrayScale(.gray200))
@@ -42,9 +42,9 @@ struct RegisterDescription: View {
             
             HStack(spacing: 0) {
                 Spacer()
-                Text(description.count.description)
+                Text(viewModel.model.description.count.description)
                     .applyNapzakFont(.caption3Regular12)
-                    .foregroundStyle(description.count == 0 ? Color.napzakGrayScale(.gray300) : Color.napzakGrayScale(.gray500))
+                    .foregroundStyle(viewModel.model.description.count == 0 ? Color.napzakGrayScale(.gray300) : Color.napzakGrayScale(.gray500))
                 
                 Text("/430")
                     .applyNapzakFont(.caption3Regular12)
@@ -53,9 +53,4 @@ struct RegisterDescription: View {
             .frame(height: 13)
         }
     }
-}
-
-
-#Preview {
-    RegisterDescription()
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RegisterTitle: View {
-    @State var title: String = ""
+    @ObservedObject var viewModel: RegisterViewModel
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -18,8 +18,8 @@ struct RegisterTitle: View {
                 .frame(height: 18)
                 .padding(.bottom, 23)
             
-            TextField("정확한 상품명을 포함하면 거래 확률이 올라가요", text: $title)
-                .maxLength(48, text: $title)
+            TextField("정확한 상품명을 포함하면 거래 확률이 올라가요", text: $viewModel.model.title)
+                .maxLength(48, text: $viewModel.model.title)
                 .applyNapzakFont(.body5SemiBold14)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
                 .padding(.horizontal, 14)
@@ -32,9 +32,9 @@ struct RegisterTitle: View {
             
             HStack(spacing: 0) {
                 Spacer()
-                Text(title.count.description)
+                Text(viewModel.model.title.count.description)
                     .applyNapzakFont(.caption3Regular12)
-                    .foregroundStyle(title.count == 0 ? Color.napzakGrayScale(.gray300) : Color.napzakGrayScale(.gray500))
+                    .foregroundStyle(viewModel.model.title.count == 0 ? Color.napzakGrayScale(.gray300) : Color.napzakGrayScale(.gray500))
                 
                 Text("/48")
                     .applyNapzakFont(.caption3Regular12)
@@ -43,8 +43,4 @@ struct RegisterTitle: View {
             .frame(height: 13)
         }
     }
-}
-
-#Preview {
-    RegisterTitle()
 }
