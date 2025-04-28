@@ -12,4 +12,5 @@ typealias GenreNameResponseDTO = BaseResponseDTO<GenreNameData>
 struct GenreNameData: Decodable {
     let genreList: [GenreDTO]
     let nextCursor: String?
+    let externalLink: String?
 }
