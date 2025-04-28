@@ -7,51 +7,11 @@
 
 import SwiftUI
 
-enum ReportType {
-    case product
-    case market
-    
-    var title: String {
-        switch self {
-        case .product:
-            return "상품"
-        case .market:
-            return "마켓"
-        }
-    }
-    
-    var reportReasons: [String] {
-        switch self {
-        case .product:
-            return [
-                ReportReasonMessage.prohibitedProduct,
-                ReportReasonMessage.inappropriateContent,
-                ReportReasonMessage.includefalseInfoOrAd,
-                ReportReasonMessage.offensiveLanguage,
-                ReportReasonMessage.dispute,
-                ReportReasonMessage.other
-            ]
-        case .market:
-            return [
-                ReportReasonMessage.badManners,
-                ReportReasonMessage.suspectedFraud,
-                ReportReasonMessage.offensiveLanguage,
-                ReportReasonMessage.dispute,
-                ReportReasonMessage.other
-            ]
-        }
-    }
-}
-
 struct ReportView: View {
-    @Binding var reportType: ReportType
-    @State private var reasonExpanded: Bool = false
-    @State private var selectedReason: String = ""
-    @State private var reportDescription: String = ""
-    @State private var contactAddress: String = ""
-    @State private var showToast: Bool = false
     
-    private let reportDescriptionPlaceholder = "어떤 일이 있었나요? 💬 \n\n자세한 설명일수록 빠른 해결에 도움이 됩니다. \n신고 내용은 비공개로 안전하게 처리되니 안심하세요. \n안전한 거래 공간을 함께 만들어가요!"
+    @StateObject private var viewModel = ReportViewModel()
+    
+    @Binding var reportType: ReportType
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0){
@@ -67,13 +27,13 @@ struct ReportView: View {
         }
         .overlay(
             Group {
-                if showToast {
+                if viewModel.showToast {
                     toastView
                 }
             },
             alignment: .bottom
         )
-        .animation(.easeInOut(duration: 0.3), value: showToast)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
         .ignoresSafeArea()
     }
 }
@@ -82,6 +42,7 @@ extension ReportView {
     private var reportHeader: some View {
         VStack(alignment: .leading) {
             Button {
+                //Todo: - 뒤로가기
                 print("backButton tapped")
             } label: {
                 Image(.iconBack)
@@ -90,7 +51,6 @@ extension ReportView {
             .padding(.top, 62)
             .padding(.bottom, 22)
             .padding(.leading, 28)
-            
             
             Divider()
         }
@@ -113,14 +73,14 @@ extension ReportView {
             
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: .center) {
-                    Text(selectedReason)
+                    Text(viewModel.selectedReason)
                         .applyNapzakFont(.caption1SemiBold12)
                         .foregroundStyle(Color.napzakGrayScale(.gray300))
                         .frame(height: 15)
                     
                     Spacer()
                     
-                    Image(systemName: reasonExpanded ? "chevron.up" : "chevron.down")
+                    Image(systemName: viewModel.reasonExpanded ? "chevron.up" : "chevron.down")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 10, height: 6)
@@ -135,32 +95,32 @@ extension ReportView {
                 )
                 .onTapGesture {
                     withAnimation {
-                        reasonExpanded.toggle()
+                        viewModel.reasonExpanded.toggle()
                     }
                 }
                 .onAppear {
-                    selectedReason = reportType.reportReasons.first ?? ""
+                    viewModel.selectedReason = reportType.reportReasons.first ?? ""
                 }
                 
-                if reasonExpanded {
+                if viewModel.reasonExpanded {
                     VStack(alignment: .leading, spacing: 16) {
                         ForEach(
                             reportType.reportReasons,
                             id: \.self
                         ) { reason in
                             Button(action: {
-                                selectedReason = reason
-                                reasonExpanded = false
+                                viewModel.selectedReason = reason
+                                viewModel.reasonExpanded = false
                             }) {
                                 Text(reason)
                                     .applyNapzakFont(
-                                        reason == selectedReason ? .caption1SemiBold12 : .caption2Medium12)
-                                    .foregroundColor(reason == selectedReason ? Color
+                                        reason == viewModel.selectedReason ? .caption1SemiBold12 : .caption2Medium12)
+                                    .foregroundColor(reason == viewModel.selectedReason ? Color
                                         .napzakPrimary(.purple500) : Color
                                         .napzakGrayScale(.gray300))
                                     .frame(height: 15)
                             }
-
+                            
                         }
                     }
                     .padding(.horizontal, 16)
@@ -193,15 +153,15 @@ extension ReportView {
                 .padding(.bottom, 16)
             
             ZStack(alignment: .topLeading){
-                TextEditor(text: $reportDescription)
-                    .maxLength(200, text: $reportDescription)
+                TextEditor(text: $viewModel.reportDescription)
+                    .maxLength(200, text: $viewModel.reportDescription)
                     .applyNapzakFont(.caption2Medium12)
                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                     .padding(.horizontal, 9)
                     .padding(.vertical, 7)
                 
-                if reportDescription.isEmpty {
-                    Text(reportDescriptionPlaceholder)
+                if viewModel.reportDescription.isEmpty {
+                    Text(viewModel.reportDescriptionPlaceholder)
                         .applyNapzakFont(.caption2Medium12)
                         .foregroundStyle(Color.napzakGrayScale(.gray200))
                         .lineLimit(5)
@@ -217,7 +177,7 @@ extension ReportView {
             
             HStack(spacing: 0) {
                 Spacer()
-                Text(reportDescription.count.description)
+                Text(viewModel.reportDescription.count.description)
                     .applyNapzakFont(.caption4SemiBold10)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
                 
@@ -240,7 +200,7 @@ extension ReportView {
                 .frame(height: 18)
                 .padding(.bottom, 16)
             
-            TextField("신고 검토결과를 받아볼 이메일 또는 전화번호를 알려주세요", text: $contactAddress)
+            TextField("신고 검토결과를 받아볼 이메일 또는 전화번호를 알려주세요", text: $viewModel.contactAddress)
                 .applyNapzakFont(.caption2Medium12)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
                 .padding(.horizontal, 16)
@@ -253,15 +213,16 @@ extension ReportView {
         }
         .padding(.horizontal, 28)
         .padding(.bottom, 30)
-
     }
     
     private var submitReportButton: some View {
         Button {
-            showToast = true
+            //TODO: - API 연결
+            
+            viewModel.showToast = true
             Task {
                 try? await Task.sleep(nanoseconds: 2_500_000_000)
-                showToast = false
+                viewModel.showToast = false
             }
         } label: {
             Text("제출하기")
