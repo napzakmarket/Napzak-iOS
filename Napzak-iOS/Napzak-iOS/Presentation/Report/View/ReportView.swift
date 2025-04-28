@@ -73,7 +73,7 @@ extension ReportView {
             
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: .center) {
-                    Text(viewModel.selectedReason)
+                    Text(viewModel.reportModel.selectedReason)
                         .applyNapzakFont(.caption1SemiBold12)
                         .foregroundStyle(Color.napzakGrayScale(.gray300))
                         .frame(height: 15)
@@ -99,7 +99,7 @@ extension ReportView {
                     }
                 }
                 .onAppear {
-                    viewModel.selectedReason = reportType.reportReasons.first ?? ""
+                    viewModel.reportModel.selectedReason = reportType.reportReasons.first ?? ""
                 }
                 
                 if viewModel.reasonExpanded {
@@ -109,13 +109,13 @@ extension ReportView {
                             id: \.self
                         ) { reason in
                             Button(action: {
-                                viewModel.selectedReason = reason
+                                viewModel.reportModel.selectedReason = reason
                                 viewModel.reasonExpanded = false
                             }) {
                                 Text(reason)
                                     .applyNapzakFont(
-                                        reason == viewModel.selectedReason ? .caption1SemiBold12 : .caption2Medium12)
-                                    .foregroundColor(reason == viewModel.selectedReason ? Color
+                                        reason == viewModel.reportModel.selectedReason ? .caption1SemiBold12 : .caption2Medium12)
+                                    .foregroundColor(reason == viewModel.reportModel.selectedReason ? Color
                                         .napzakPrimary(.purple500) : Color
                                         .napzakGrayScale(.gray300))
                                     .frame(height: 15)
@@ -153,14 +153,14 @@ extension ReportView {
                 .padding(.bottom, 16)
             
             ZStack(alignment: .topLeading){
-                TextEditor(text: $viewModel.reportDescription)
-                    .maxLength(200, text: $viewModel.reportDescription)
+                TextEditor(text: $viewModel.reportModel.reportDescription)
+                    .maxLength(200, text: $viewModel.reportModel.reportDescription)
                     .applyNapzakFont(.caption2Medium12)
                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                     .padding(.horizontal, 9)
                     .padding(.vertical, 7)
                 
-                if viewModel.reportDescription.isEmpty {
+                if viewModel.reportModel.reportDescription.isEmpty {
                     Text(viewModel.reportDescriptionPlaceholder)
                         .applyNapzakFont(.caption2Medium12)
                         .foregroundStyle(Color.napzakGrayScale(.gray200))
@@ -177,7 +177,7 @@ extension ReportView {
             
             HStack(spacing: 0) {
                 Spacer()
-                Text(viewModel.reportDescription.count.description)
+                Text(viewModel.reportModel.reportDescription.count.description)
                     .applyNapzakFont(.caption4SemiBold10)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
                 
@@ -200,7 +200,7 @@ extension ReportView {
                 .frame(height: 18)
                 .padding(.bottom, 16)
             
-            TextField("신고 검토결과를 받아볼 이메일 또는 전화번호를 알려주세요", text: $viewModel.contactAddress)
+            TextField("신고 검토결과를 받아볼 이메일 또는 전화번호를 알려주세요", text: $viewModel.reportModel.contactAddress)
                 .applyNapzakFont(.caption2Medium12)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
                 .padding(.horizontal, 16)
