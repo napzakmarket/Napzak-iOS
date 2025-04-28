@@ -22,8 +22,8 @@ struct RegisterModel {
     var productCondition: String = ""
     var deliveryType: DeliveryType?
     var standardDeliveryFee: String = ""
-    var halfDeliveryCharge: String = ""
+    var halfDeliveryFee: String = ""
     
     // Buy
-    var suggestPrice: Bool = false
+    var isPriceNegotiable: Bool = false
 }

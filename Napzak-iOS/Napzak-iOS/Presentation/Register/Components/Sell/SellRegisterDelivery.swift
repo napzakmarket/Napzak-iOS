@@ -78,17 +78,17 @@ struct SellRegisterDelivery: View {
                             Spacer()
                             
                             HStack(spacing: 0){
-                                TextField("0~5,000", text: $viewModel.model.halfDeliveryCharge)
+                                TextField("0~5,000", text: $viewModel.model.halfDeliveryFee)
                                     .multilineTextAlignment(.trailing)
-                                    .onChange(of: viewModel.model.halfDeliveryCharge) { newValue in
-                                        viewModel.model.halfDeliveryCharge = newValue
+                                    .onChange(of: viewModel.model.halfDeliveryFee) { newValue in
+                                        viewModel.model.halfDeliveryFee = newValue
                                             .convertPrice(maxPrice: viewModel.halfMaxDeliveryCharge)
                                     }
                                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                                 
                                 Text(" 원")
                                     .foregroundStyle(
-                                        viewModel.model.halfDeliveryCharge.isEmpty ? Color
+                                        viewModel.model.halfDeliveryFee.isEmpty ? Color
                                             .napzakGrayScale(.gray100) : Color
                                             .napzakGrayScale(.gray400)
                                     )

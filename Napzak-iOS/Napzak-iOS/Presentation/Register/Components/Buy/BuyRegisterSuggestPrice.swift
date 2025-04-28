@@ -26,12 +26,12 @@ struct BuyRegisterSuggestPrice: View {
                 .padding(.bottom, 23)
             
             HStack(alignment: .center, spacing: 0) {
-                Image(viewModel.model.suggestPrice ? .buttonCheckboxFill : .buttonCheckbox)
+                Image(viewModel.model.isPriceNegotiable ? .buttonCheckboxFill : .buttonCheckbox)
                     .resizable()
                     .frame(width: 24, height: 24)
                     .padding(.trailing, 11)
                     .onTapGesture {
-                        viewModel.model.suggestPrice.toggle()
+                        viewModel.model.isPriceNegotiable.toggle()
                     }
                 
                 Text("받기")
