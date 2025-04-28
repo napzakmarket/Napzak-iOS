@@ -12,8 +12,10 @@ final class GenreSelectModalViewModel: ObservableObject {
     
     //MARK: - Property Wrappers
 
-    @Published var allGenres: [GenreNameModel] = []
+    @Published var genres: [GenreNameModel] = []
     @Published var selectedGenres: [GenreNameModel] = []
+    @Published var inputGenreText = ""
+    @Published var isSearchCompleted: Bool = false
     @Published var showToast : Bool = false
     
     //MARK: - Init
@@ -22,25 +24,6 @@ final class GenreSelectModalViewModel: ObservableObject {
         self.selectedGenres = selectedGenres
         
         fetchAllGenres()
-    }
-}
-
-private extension GenreSelectModalViewModel {
-    
-    //MARK: - Private Func
-    
-    func fetchAllGenres() {        
-        NetworkService.shared.genreService.getAllGenreName { result in
-            switch result {
-            case .success(let response):
-                guard let response else { return }
-                guard let receivedData = response.data else { return }
-                
-                self.allGenres = receivedData.genreList.map { GenreNameModel(dto: $0) }
-            default:
-                break
-            }
-        }
     }
 }
 
@@ -61,6 +44,36 @@ extension GenreSelectModalViewModel {
                 await MainActor.run {
                     self.showToast = false
                 }
+            }
+        }
+    }
+    
+    //MARK: - Network Func
+    
+    func fetchAllGenres() {
+        NetworkService.shared.genreService.getAllGenreName { result in
+            switch result {
+            case .success(let response):
+                guard let response else { return }
+                guard let receivedData = response.data else { return }
+                
+                self.genres = receivedData.genreList.map { GenreNameModel(dto: $0) }
+            default:
+                break
+            }
+        }
+    }
+    
+    func fetchSearchGenres(searchWord: String) {
+        NetworkService.shared.genreService.getSearchGenreName(searchWord: searchWord) { result in
+            switch result {
+            case .success(let response):
+                guard let response else { return }
+                guard let receivedData = response.data else { return }
+                
+                self.genres = receivedData.genreList.map { GenreNameModel(dto: $0) }
+            default:
+                break
             }
         }
     }
