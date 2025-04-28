@@ -11,5 +11,8 @@ final class NetworkService {
     
     static let shared = NetworkService()
     
-    private init() {}
+    private init() { }
+    
+    let genreService: GenreServiceProtocol = GenreService()
+
 }
