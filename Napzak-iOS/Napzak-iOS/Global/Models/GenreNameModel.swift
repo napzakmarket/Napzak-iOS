@@ -9,6 +9,20 @@ struct GenreNameModel: Identifiable, Hashable {
     let id: Int
     let name: String
     
+    //MARK: - Init
+    
+    ///default init
+    init(id: Int, name: String) {
+        self.id = id
+        self.name = name
+    }
+    
+    ///init for decoding
+    init(dto: GenreDTO) {
+        self.id = dto.genreId
+        self.name = dto.genreName
+    }
+    
     static var sample: GenreNameModel {
         GenreNameModel(id: 1, name: "나루토")
     }
