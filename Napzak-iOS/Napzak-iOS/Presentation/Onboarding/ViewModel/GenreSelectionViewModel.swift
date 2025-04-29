@@ -7,7 +7,7 @@
 
 import Foundation
 
-class GenreSelectionViewModel: ObservableObject {
+final class GenreSelectionViewModel: ObservableObject {
     @Published var searchText: String = ""
     @Published var genres: [PreferGenre] = []
     @Published var selectedGenres: [PreferGenre] = []
