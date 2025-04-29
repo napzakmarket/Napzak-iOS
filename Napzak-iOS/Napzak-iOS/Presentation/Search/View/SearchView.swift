@@ -10,9 +10,14 @@ import SwiftUI
 struct SearchView: View {
     
     //MARK: - Property Wrappers
+    
+    @EnvironmentObject private var navigationRouter: NavigationRouter
 
     @StateObject private var viewModel = SearchViewModel()
-        
+    
+    @Binding var isGenreSelectModalPresented: Bool
+    @Binding var isSortModalPresented: Bool
+
     //MARK: - Properties
     
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
@@ -21,12 +26,54 @@ struct SearchView: View {
     //MARK: - Body
     
     var body: some View {
-        VStack(spacing: 0) {
-            searchHeader
-                .padding(.top, 75)
-            productScrollView
-            Spacer()
+        ZStack(alignment: .bottom) {
+            VStack(spacing: 0) {
+                searchHeader
+                    .padding(.top, 75)
+                productScrollView
+                Spacer()
+            }
+            
+            if isGenreSelectModalPresented {
+                Color.napzakTransparency(.transBlack)
+                    .onTapGesture {
+                        withAnimation {
+                            isGenreSelectModalPresented = false
+                        }
+                    }
+                    .transition(.opacity)
+                    .zIndex(1)
+                
+                GenreSelectModalView(
+                    viewModel: GenreSelectModalViewModel(
+                        selectedGenres: viewModel.productFetchOption.genres
+                    ),
+                    isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                    adaptedGenres: $viewModel.productFetchOption.genres
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(2)
+            }
+            
+            if isSortModalPresented {
+                Color.napzakTransparency(.transBlack)
+                    .onTapGesture {
+                        withAnimation {
+                            isSortModalPresented = false
+                        }
+                    }
+                    .transition(.opacity)
+                    .zIndex(1)
+                
+                SortModalView(
+                    isSortModalPresented: $isSortModalPresented,
+                    selectedOption: $viewModel.productFetchOption.sortOption
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(2)
+            }
         }
+        .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .ignoresSafeArea()
     }
 }
@@ -47,8 +94,14 @@ extension SearchView {
                 VStack(alignment: .leading, spacing: 0) {
                     NZSegmentedControl(selectedTabIndex: $viewModel.selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
                     
-                    FilterContainerView(selectedTabIndex: $viewModel.selectedTabIndex, selectedGenres: $viewModel.productFetchOption.genres, isUnopened: $viewModel.productFetchOption.isUnopened, isOnSale: $viewModel.productFetchOption.isOnSale)
-                        .frame(height: 54)
+                    FilterContainerView(
+                        isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                        selectedTabIndex: $viewModel.selectedTabIndex,
+                        selectedGenres: $viewModel.productFetchOption.genres,
+                        isUnopened: $viewModel.productFetchOption.isUnopened,
+                        isOnSale: $viewModel.productFetchOption.isOnSale
+                    )
+                    .frame(height: 54)
                 }
                 .padding(.horizontal, 28)
             }
@@ -57,7 +110,7 @@ extension SearchView {
     
     private var searchButton: some View {
         Button {
-            // TODO: - 검색 화면 전환
+            navigationRouter.push(next: .searchInputView)
         } label: {
             ZStack {
                 RoundedRectangle(cornerRadius: 14)
@@ -95,7 +148,7 @@ extension SearchView {
                 Button {
                     //TODO: - 장르 페이지로 이동
                 } label: {
-                    GenreItemView(genreName: viewModel.productFetchOption.genres[i])
+                    GenreItemView(genreName: viewModel.productFetchOption.genres[i].name)
                         .frame(height: 64)
                 }
                 Color.napzakGrayScale(.gray10)
@@ -119,10 +172,12 @@ extension SearchView {
                         .applyNapzakFont(.body5SemiBold14)
                     Spacer()
                     Button {
-                    //TODO: - 상품 정렬
+                        withAnimation {
+                            isSortModalPresented = true
+                        }
                     } label: {
                         HStack(alignment: .center, spacing: 4) {
-                            Text("최신순")
+                            Text("\(viewModel.productFetchOption.sortOption.title)")
                                 .foregroundStyle(Color.napzakGrayScale(.gray200))
                                 .applyNapzakFont(.caption1SemiBold12)
                             Image(.iconArrowDown)
@@ -158,5 +213,14 @@ extension SearchView {
 }
 
 #Preview {
-    SearchView()
+    struct PreviewContainer: View {
+        @State private var isGenreSelectModalPresented = false
+        @State private var isSortModalPresented = false
+
+        var body: some View {
+            SearchView(isGenreSelectModalPresented: $isGenreSelectModalPresented, isSortModalPresented: $isSortModalPresented)
+        }
+    }
+    
+    return PreviewContainer()
 }

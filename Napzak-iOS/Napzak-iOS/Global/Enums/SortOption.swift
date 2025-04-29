@@ -5,7 +5,7 @@
 //  Created by 조혜린 on 4/16/25.
 //
 
-enum SortOption: String {
+enum SortOption: String, CaseIterable {
     ///상품의 정렬 기준을 구분하는 enum
 
     case recent = "RECENT"
