@@ -88,7 +88,7 @@ extension SearchInputView {
     private var defaultContentView: some View {
         VStack(spacing: 46) {
             searchRecommendationView
-            genreRacommandationView
+            genreRecommendationView
         }
         .padding(.horizontal, 20)
     }
