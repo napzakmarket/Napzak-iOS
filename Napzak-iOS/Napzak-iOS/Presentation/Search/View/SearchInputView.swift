@@ -142,7 +142,7 @@ extension SearchInputView {
         .padding(.top, 150)
     }
     
-    private var genreRacommandationView: some View {
+    private var genreRecommendationView: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("추천 장르")
                 .applyNapzakFont(.body4Bold14)
