@@ -131,8 +131,11 @@ extension GenreSelectionView {
     private var bottomButtonView: some View {
         VStack(spacing: 16) {
             if viewModel.showToast {
-                ToastMessageView(message: "관심 장르는 최대 7개까지만 고를 수 있어요")
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                ToastMessageView(
+                    message: "관심 장르는 최대 7개까지만 고를 수 있어요",
+                    style: .warning
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
             
             Button {
