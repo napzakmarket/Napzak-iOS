@@ -36,7 +36,7 @@ extension MarketView {
             Button {
                 //TODO: - 뒤로가기
             } label: {
-                Image(systemName: "chevron.left")
+                Image(.iconBack)
                     .foregroundColor(Color.napzakGrayScale(.gray200))
                     .frame(width: 24, height: 24)
             }
