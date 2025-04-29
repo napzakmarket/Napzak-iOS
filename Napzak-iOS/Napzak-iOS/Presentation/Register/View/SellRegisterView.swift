@@ -11,21 +11,23 @@ struct SellRegisterView: View {
     @StateObject private var viewModel = RegisterViewModel()
     
     var body: some View {
-        VStack(spacing: 0){
-            SellRegisterHeader()
-            
-            ScrollView {
-                VStack(spacing: 0) {
-                    SellRegisterContent
+        NavigationStack{
+            VStack(spacing: 0){
+                SellRegisterHeader()
+                
+                ScrollView {
+                    VStack(spacing: 0) {
+                        SellRegisterContent
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                registerButton
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            
-            registerButton
+            .ignoresSafeArea()
+            .frame(maxWidth: .infinity)
+            .scrollIndicators(.hidden)
         }
-        .ignoresSafeArea()
-        .frame(maxWidth: .infinity)
-        .scrollIndicators(.hidden)
     }
 }
 
@@ -42,6 +44,12 @@ extension SellRegisterView {
                 .padding(.horizontal, 18)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 21)
+                .onTapGesture {
+                    viewModel.searchGenreToggle = true
+                }
+                .navigationDestination(isPresented: $viewModel.searchGenreToggle) {
+                    RegisterSearchGenre(viewModel: viewModel)
+                }
             
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))

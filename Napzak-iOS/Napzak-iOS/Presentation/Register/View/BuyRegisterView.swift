@@ -11,22 +11,24 @@ struct BuyRegisterView: View {
     @StateObject private var viewModel = RegisterViewModel()
     
     var body: some View {
-        VStack(spacing: 0){
-            BuyRegisterHeader()
-
-            ScrollView {
-                VStack(spacing: 0) {
-                    BuyRegisterContent
+        NavigationStack{
+            VStack(spacing: 0){
+                BuyRegisterHeader()
+                
+                ScrollView {
+                    VStack(spacing: 0) {
+                        BuyRegisterContent
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                registerButton
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            
-            registerButton
+            .ignoresSafeArea()
+            .frame(maxWidth: .infinity)
+            .scrollIndicators(.hidden)
+            .background(Color.napzakGrayScale(.gray10))
         }
-        .ignoresSafeArea()
-        .frame(maxWidth: .infinity)
-        .scrollIndicators(.hidden)
-        .background(Color.napzakGrayScale(.gray10))
     }
 }
 
@@ -45,34 +47,40 @@ extension BuyRegisterView {
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 21)
                 .background(.white)
+                .onTapGesture {
+                    viewModel.searchGenreToggle = true
+                }
+                .navigationDestination(isPresented: $viewModel.searchGenreToggle) {
+                    RegisterSearchGenre(viewModel: viewModel)
+                }
             
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))
                 .frame(height: 4)
                 .padding(.bottom, 29)
                 .background(.white)
-
+            
             RegisterTitle(viewModel: viewModel)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 10)
                 .background(.white)
-
+            
             RegisterDescription(viewModel: viewModel)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 23)
                 .background(.white)
-
+            
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))
                 .frame(height: 4)
                 .padding(.bottom, 23)
                 .background(.white)
-
+            
             BuyRegisterPrice(viewModel: viewModel)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 32)
                 .background(.white)
-
+            
             BuyRegisterSuggestPrice(viewModel: viewModel)
                 .padding(.horizontal, 28)
         }

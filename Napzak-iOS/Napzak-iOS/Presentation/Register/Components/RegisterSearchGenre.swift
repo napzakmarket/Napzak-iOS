@@ -8,16 +8,7 @@
 import SwiftUI
 
 struct RegisterSearchGenre: View {
-    //    @ObservedObject var viewModel: RegisterViewModel
-    
-    @State var genreSearchText = ""
-    @State private var isCompleted: Bool = false
-    @State private var genreList: [GenreName] = [GenreName(id: 1, name: "나루토"),
-                                                 GenreName(id: 2, name: "원피스"),
-                                                 GenreName(id: 3, name: "드래곤볼"),
-                                                 GenreName(id: 4, name: "명탐정 코난"),
-                                                 GenreName(id: 5, name: "진격의 거인"),
-                                                 GenreName(id: 6, name: "슬램덩크")]
+    @ObservedObject var viewModel: RegisterViewModel
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -26,6 +17,7 @@ struct RegisterSearchGenre: View {
         }
         .ignoresSafeArea()
         .background(Color.napzakGrayScale(.gray10))
+        .navigationBarBackButtonHidden()
     }
 }
 
@@ -33,7 +25,7 @@ extension RegisterSearchGenre {
     private var headerView: some View {
         VStack(alignment: .leading, spacing: 0){
             Button {
-                //TODO: - 뒤로가기
+                viewModel.searchGenreToggle = false
             } label: {
                 Image(.iconBack)
             }
@@ -53,8 +45,8 @@ extension RegisterSearchGenre {
             
             SearchBar(placeholder: "어떤 장르의 굿즈인가요? 검색해보세요!",
                       cornerRadius: 14,
-                      text: $genreSearchText,
-                      isCompleted: $isCompleted)
+                      text: $viewModel.genreSearchText,
+                      isCompleted: $viewModel.isCompleted)
             .padding(.horizontal, 27)
             .padding(.bottom, 24)
         }
@@ -67,7 +59,7 @@ extension RegisterSearchGenre {
     private var genreListScrollView: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(alignment: .leading) {
-                ForEach(genreList, id: \.self){ genre in
+                ForEach(viewModel.genreList, id: \.self){ genre in
                     Button {
                         
                     } label: {
@@ -85,12 +77,7 @@ extension RegisterSearchGenre {
         }
         .padding(.top, 260)
     }
-
-
+    
+    
 }
-
-#Preview {
-    RegisterSearchGenre()
-}
-
 
