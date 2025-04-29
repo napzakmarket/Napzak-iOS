@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+enum RegisterType {
+    case sell
+    case buy
+}
+
 struct NZTabBarView: View {
     
     //MARK: - Enum
@@ -25,6 +30,7 @@ struct NZTabBarView: View {
     @State private var selectedTab: NZTab = .home
     @State private var isRegisterTabSelected = false
     @State private var isRegisterViewPresented = false
+    @State var registerType: RegisterType
     @State private var isGenreSelectModalPresented = false
     @State private var isSortModalPresented = false
         
@@ -64,7 +70,7 @@ struct NZTabBarView: View {
                 
                 VStack(spacing: 10) {
                     if  isRegisterTabSelected {
-                        RegisterFloatingView(isRegisterViewPresented: $isRegisterViewPresented)
+                        RegisterFloatingView(isRegisterViewPresented: $isRegisterViewPresented, registerType: $registerType)
                     }
                     if !(isGenreSelectModalPresented || isSortModalPresented){
                         tabBar
@@ -73,7 +79,12 @@ struct NZTabBarView: View {
             }
             .edgesIgnoringSafeArea(.bottom)
             .fullScreenCover(isPresented: $isRegisterViewPresented) {
-                RView(isRegisterTabSelected: $isRegisterTabSelected, isRegisterViewPresented: $isRegisterViewPresented)
+                switch registerType {
+                case .sell:
+                    SellRegisterView(isRegisterTabSelected: $isRegisterTabSelected)
+                case .buy:
+                    BuyRegisterView(isRegisterTabSelected: $isRegisterTabSelected)
+                }
             }
             .navigationDestination(for: Route.self) { route in
                 switch route {
@@ -284,6 +295,6 @@ struct MView: View {
 }
 
 #Preview {
-    NZTabBarView()
+    NZTabBarView(registerType: .buy)
         .environmentObject(NavigationRouter())
 }

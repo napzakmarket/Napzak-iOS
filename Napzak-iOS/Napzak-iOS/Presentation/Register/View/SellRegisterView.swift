@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SellRegisterView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @Binding var isRegisterTabSelected: Bool
 
     @StateObject private var viewModel = RegisterViewModel()
     
@@ -35,6 +36,9 @@ struct SellRegisterView: View {
                     RegisterSearchGenre(viewModel: viewModel)
                 }
             }
+        }
+        .onAppear {
+            isRegisterTabSelected = false
         }
     }
 }
@@ -109,9 +113,5 @@ extension SellRegisterView {
             .padding(.bottom, 40)
         }
     }
-}
-
-#Preview {
-    SellRegisterView()
 }
 
