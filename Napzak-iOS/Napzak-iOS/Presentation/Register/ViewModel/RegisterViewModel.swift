@@ -22,4 +22,29 @@ final class RegisterViewModel: ObservableObject {
     let halfMaxDeliveryCharge: Int = 5_000              // 반 값 배달 최대 금액 5000원
     let addPrices = ["+1,000원", "+5,000원", "+10,000원", "+100,000원"]
 
+
+    //MARK: - Property Wrappers
+
+    @Published var selectedTabIndex = 0
+    @Published var productFetchOption = ProductFetchOption(sortOption: .recent, genres: [GenreName](), isOnSale: false, isUnopened: false)
+    @Published var dummyProducts: [ProductItemModel] = []
+    
+    //MARK: - Init
+    
+    init() {
+        fetchProducts()
+    }
+
+    //MARK: - Func
+    
+    func fetchProducts() {
+        dummyProducts = ProductItemModel.dummyProducts
+    }
+    
+    func canToggleInterestState(productID: Int) -> Bool {
+        //TODO: - 좋아요 서버 통신 후 성공 여부 반환
+        //통신 여부 뿐만 아니라 애초에 네트워크에 연결되어있는지 등도 함께 고려하면 좋을 듯
+        return true
+    }
+    
 }

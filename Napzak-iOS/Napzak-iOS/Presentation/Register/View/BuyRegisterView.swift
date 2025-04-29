@@ -40,7 +40,7 @@ extension BuyRegisterView {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(.white)
             
-            RegisterGenre()
+            RegisterGenre(viewModel: viewModel)
                 .padding(.horizontal, 18)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 21)

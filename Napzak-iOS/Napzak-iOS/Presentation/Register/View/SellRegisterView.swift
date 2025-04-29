@@ -38,7 +38,7 @@ extension SellRegisterView {
                 .padding(.bottom, 27)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            RegisterGenre()
+            RegisterGenre(viewModel: viewModel)
                 .padding(.horizontal, 18)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 21)

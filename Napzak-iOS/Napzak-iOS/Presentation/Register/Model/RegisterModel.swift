@@ -17,6 +17,8 @@ struct RegisterModel {
     var title: String = ""
     var description: String = ""
     var price: String = ""
+    var genre: String = ""
+    var genreId: Int?
     
     // Sell
     var productCondition: String = ""
