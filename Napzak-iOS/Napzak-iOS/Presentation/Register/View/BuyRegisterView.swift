@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct BuyRegisterView: View {
+    @EnvironmentObject private var navigationRouter: NavigationRouter
+
     @StateObject private var viewModel = RegisterViewModel()
     
     var body: some View {
-        NavigationStack{
+        NavigationStack(path: $navigationRouter.path) {
             VStack(spacing: 0){
                 BuyRegisterHeader()
                 
@@ -28,6 +30,12 @@ struct BuyRegisterView: View {
             .frame(maxWidth: .infinity)
             .scrollIndicators(.hidden)
             .background(Color.napzakGrayScale(.gray10))
+            .navigationDestination(for: RegisterRoute.self) { route in
+                switch route {
+                case .registerSearchGenre:
+                    RegisterSearchGenre(viewModel: viewModel)
+                }
+            }
         }
     }
 }
@@ -48,10 +56,7 @@ extension BuyRegisterView {
                 .padding(.bottom, 21)
                 .background(.white)
                 .onTapGesture {
-                    viewModel.searchGenreToggle = true
-                }
-                .navigationDestination(isPresented: $viewModel.searchGenreToggle) {
-                    RegisterSearchGenre(viewModel: viewModel)
+                    navigationRouter.push(next: .registerSearchGenre)
                 }
             
             Rectangle()

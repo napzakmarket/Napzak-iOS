@@ -15,6 +15,10 @@ enum Route: String, Hashable {
     case searchInputView
 }
 
+enum RegisterRoute: Hashable {
+    case registerSearchGenre
+}
+
 final class NavigationRouter: ObservableObject {
     
     //MARK: - Property Wrappers
@@ -25,6 +29,10 @@ final class NavigationRouter: ObservableObject {
     
     //다음에 보여질 view를 navigationStack에 push
     func push(next route: Route) {
+        path.append(route)
+    }
+    
+    func push(next route: RegisterRoute) {
         path.append(route)
     }
     

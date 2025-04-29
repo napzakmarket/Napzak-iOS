@@ -8,6 +8,7 @@
 import SwiftUI
 
 final class RegisterViewModel: ObservableObject {
+    @Published var path: [RegisterRoute] = []
     
     // MARK: - Property Wrappers
     
@@ -25,7 +26,6 @@ final class RegisterViewModel: ObservableObject {
                                                  GenreName(id: 5, name: "진격의 거인"),
                                                  GenreName(id: 6, name: "슬램덩크")]
     
-    @Published var searchGenreToggle: Bool = false
     
 
     let options = ["미개봉", "아주 좋은 상태", "약간의 사용감", "사용감 있음"]

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct RegisterSearchGenre: View {
+    @EnvironmentObject private var navigationRouter: NavigationRouter
+
     @ObservedObject var viewModel: RegisterViewModel
     
     var body: some View {
@@ -25,7 +27,7 @@ extension RegisterSearchGenre {
     private var headerView: some View {
         VStack(alignment: .leading, spacing: 0){
             Button {
-                viewModel.searchGenreToggle = false
+                navigationRouter.pop()
             } label: {
                 Image(.iconBack)
             }
