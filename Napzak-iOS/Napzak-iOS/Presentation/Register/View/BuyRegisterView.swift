@@ -102,7 +102,7 @@ extension BuyRegisterView {
                 .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 1)
             
             Button {
-                print("버튼 눌림")
+                print(viewModel.model)
             } label: {
                 Text("등록하기")
                     .applyNapzakFont(.body4Bold14)

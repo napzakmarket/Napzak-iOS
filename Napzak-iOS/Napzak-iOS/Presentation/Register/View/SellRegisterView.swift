@@ -99,7 +99,7 @@ extension SellRegisterView {
             
             Button {
                 //MARK: - 팔아요 등록
-                print("버튼 눌림")
+                print(viewModel.model)
             } label: {
                 Text("등록하기")
                     .applyNapzakFont(.body4Bold14)

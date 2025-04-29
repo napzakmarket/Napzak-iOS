@@ -63,7 +63,9 @@ extension RegisterSearchGenre {
             LazyVStack(alignment: .leading) {
                 ForEach(viewModel.genreList, id: \.self){ genre in
                     Button {
-                        
+                        viewModel.model.genre = genre.name
+                        viewModel.model.genreId = genre.id
+                        navigationRouter.pop()
                     } label: {
                         Text("\(genre.name)")
                             .applyNapzakFont(.body6Regular14)
