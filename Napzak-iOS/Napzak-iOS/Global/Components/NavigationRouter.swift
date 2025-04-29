@@ -11,6 +11,8 @@ enum Route: String, Hashable {
     //임시 뷰
     case sView
     case mView
+    
+    case searchInputView
 }
 
 final class NavigationRouter: ObservableObject {
