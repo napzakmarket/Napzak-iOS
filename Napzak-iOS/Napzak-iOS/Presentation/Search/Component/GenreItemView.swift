@@ -18,7 +18,7 @@ struct GenreItemView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 6) {
             Text(genreName)
-                .applyNapzakFont(.caption1SemiBold12)
+                .applyNapzakFont(.body5SemiBold14)
                 .foregroundColor(Color.napzakGrayScale(.gray500))
                 .padding(.leading, 28)
             Image(.imgGenreTag)
@@ -26,8 +26,8 @@ struct GenreItemView: View {
             Image(.iconArrowRight)
                 .padding(.trailing, 28)
         }
-        .background(Color.napzakGrayScale(.white))
         .frame(height: 60)
+        .background(Color.napzakGrayScale(.white))
     }
 }
 

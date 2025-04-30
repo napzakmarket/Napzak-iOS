@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GenreChip: View {
     
-    let genre: GenreName
+    let genre: GenreNameModel
     let onDelete: () -> Void
     
     var body: some View {
@@ -41,5 +41,5 @@ struct GenreChip: View {
 }
 
 #Preview {
-    GenreChip(genre: GenreName.sample  , onDelete: {})
+    GenreChip(genre: GenreNameModel.sample  , onDelete: {})
 }

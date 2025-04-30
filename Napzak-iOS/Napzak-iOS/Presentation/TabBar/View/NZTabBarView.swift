@@ -25,6 +25,8 @@ struct NZTabBarView: View {
     @State private var selectedTab: NZTab = .home
     @State private var isRegisterTabSelected = false
     @State private var isRegisterViewPresented = false
+    @State private var isGenreSelectModalPresented = false
+    @State private var isSortModalPresented = false
         
     //MARK: - Body
         
@@ -35,10 +37,16 @@ struct NZTabBarView: View {
                     Group {
                         HView()
                             .tag(NZTab.home)
-                        SearchView()
-                            .tag(NZTab.search)
+                        
+                        SearchView(
+                            isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                            isSortModalPresented: $isSortModalPresented
+                        )
+                        .tag(NZTab.search)
+                        
                         CView()
                             .tag(NZTab.chat)
+                        
                         MView()
                             .tag(NZTab.my)
                     }
@@ -58,7 +66,9 @@ struct NZTabBarView: View {
                     if  isRegisterTabSelected {
                         RegisterFloatingView(isRegisterViewPresented: $isRegisterViewPresented)
                     }
-                    tabBar
+                    if !(isGenreSelectModalPresented || isSortModalPresented){
+                        tabBar
+                    }
                 }
             }
             .edgesIgnoringSafeArea(.bottom)
@@ -71,6 +81,9 @@ struct NZTabBarView: View {
                     SView()
                 case .mView:
                     MView()
+                    
+                case .searchInputView:
+                    SearchInputView()
                 }
             }
         }

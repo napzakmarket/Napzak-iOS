@@ -12,7 +12,7 @@ final class SearchViewModel: ObservableObject {
     //MARK: - Property Wrappers
 
     @Published var selectedTabIndex = 0
-    @Published var productFetchOption = ProductFetchOption(sortOption: .recent, genres: [String](), isOnSale: false, isUnopened: false)
+    @Published var productFetchOption = ProductFetchOption(sortOption: .recent, genres: [GenreNameModel](), isOnSale: false, isUnopened: false)
     @Published var dummyProducts: [ProductItemModel] = []
     
     //MARK: - Init

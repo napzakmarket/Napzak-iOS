@@ -48,6 +48,7 @@ struct SearchBar: View {
                         isFocused = true
                     } else {
                         print("돋보기 Tapped: \(text)")
+                        isFocused = false
                         isCompleted = true
                     }
                 } label: {

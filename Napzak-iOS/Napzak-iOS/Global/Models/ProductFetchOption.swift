@@ -9,7 +9,7 @@ struct ProductFetchOption: Equatable {
     ///상품의 필터링 상태를 관리하는 구조체
 
     var sortOption: SortOption
-    var genres: [String]
+    var genres: [GenreNameModel]
     var isOnSale: Bool
     var isUnopened: Bool
     
