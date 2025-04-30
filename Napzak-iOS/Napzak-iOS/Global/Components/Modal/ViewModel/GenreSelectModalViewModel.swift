@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import os
 
 @MainActor
 final class GenreSelectModalViewModel: ObservableObject {
@@ -19,11 +20,14 @@ final class GenreSelectModalViewModel: ObservableObject {
     @Published var showToast : Bool = false
     
     //MARK: - Init
-    
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "GenreSelection")
+
     init(selectedGenres: [GenreNameModel] = []) {
         self.selectedGenres = selectedGenres
         
-        fetchAllGenres()
+        Task {
+            await fetchAllGenres()
+        }
     }
 }
 
@@ -50,31 +54,36 @@ extension GenreSelectModalViewModel {
     
     //MARK: - Network Func
     
-    func fetchAllGenres() {
-        NetworkService.shared.genreService.getAllGenreName { result in
-            switch result {
-            case .success(let response):
-                guard let response else { return }
-                guard let receivedData = response.data else { return }
-                
-                self.genres = receivedData.genreList.map { GenreNameModel(dto: $0) }
-            default:
-                break
+    func fetchAllGenres() async {
+        let result = await NetworkService.shared.genreService.getAllGenreName()
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getAllGenreName: No data received")
+                return
             }
+            self.genres = data.genreList.map { GenreNameModel(dto: $0) }
+            
+        case .failure(let error):
+            logger.error("getAllGenreName failed: \(error.localizedDescription)")
         }
     }
     
-    func fetchSearchGenres(searchWord: String) {
-        NetworkService.shared.genreService.getSearchGenreName(searchWord: searchWord) { result in
-            switch result {
-            case .success(let response):
-                guard let response else { return }
-                guard let receivedData = response.data else { return }
-                
-                self.genres = receivedData.genreList.map { GenreNameModel(dto: $0) }
-            default:
-                break
+    
+    func fetchSearchGenres(searchWord: String) async {
+        let result = await NetworkService.shared.genreService.getSearchGenreName(searchWord: searchWord)
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getSearchGenreName: No data received")
+                return
             }
+            self.genres = data.genreList.map { GenreNameModel(dto: $0) }
+            
+        case .failure(let error):
+            logger.error("getSearchGenreName failed: \(error.localizedDescription)")
         }
     }
 }
