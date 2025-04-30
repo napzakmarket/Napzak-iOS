@@ -32,7 +32,7 @@ struct ProfileEditView: View {
 struct HeaderView: View {
     var body: some View {
         HStack {
-            Image(systemName: "chevron.left")
+            Image(.iconBack)
                 .foregroundColor(Color.napzakGrayScale(.gray200))
                 .padding(.vertical, 4)
                 .padding(.horizontal, 7)
