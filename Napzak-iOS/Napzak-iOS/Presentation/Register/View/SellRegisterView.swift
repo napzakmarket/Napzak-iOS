@@ -33,7 +33,13 @@ struct SellRegisterView: View {
             .navigationDestination(for: RegisterRoute.self) { route in
                 switch route {
                 case .registerSearchGenre:
-                    RegisterSearchGenre(viewModel: viewModel)
+                    RegisterSearchGenre(
+                        genreSearchText: $viewModel.genreSearchText,
+                        isCompleted: $viewModel.isCompleted,
+                        genreList: $viewModel.genreList,
+                        genre: $viewModel.model.genre,
+                        genreId: $viewModel.model.genreId
+                    )
                 }
             }
         }
@@ -52,7 +58,7 @@ extension SellRegisterView {
                 .padding(.bottom, 27)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            RegisterGenre(viewModel: viewModel)
+            RegisterGenre(genre: $viewModel.model.genre)
                 .padding(.horizontal, 18)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 21)

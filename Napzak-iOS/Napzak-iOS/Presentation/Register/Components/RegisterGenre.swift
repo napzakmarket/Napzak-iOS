@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RegisterGenre: View {
-    @ObservedObject var viewModel: RegisterViewModel
+    @Binding var genre: String
     
     var body: some View {
         HStack(alignment: .center, spacing: 0) {
@@ -21,7 +21,7 @@ struct RegisterGenre: View {
             
             Spacer()
             
-            Text(viewModel.model.genre)
+            Text(genre)
                 .applyNapzakFont(.body5SemiBold14)
                 .foregroundStyle(Color.napzakPrimary(.purple500))
                 .frame(height: 18)

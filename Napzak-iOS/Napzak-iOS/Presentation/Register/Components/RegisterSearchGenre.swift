@@ -10,7 +10,11 @@ import SwiftUI
 struct RegisterSearchGenre: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
 
-    @ObservedObject var viewModel: RegisterViewModel
+    @Binding var genreSearchText: String
+    @Binding var isCompleted: Bool
+    @Binding var genreList: [GenreNameModel]
+    @Binding var genre: String
+    @Binding var genreId: Int?
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -47,8 +51,8 @@ extension RegisterSearchGenre {
             
             SearchBar(placeholder: "어떤 장르의 굿즈인가요? 검색해보세요!",
                       cornerRadius: 14,
-                      text: $viewModel.genreSearchText,
-                      isCompleted: $viewModel.isCompleted)
+                      text: $genreSearchText,
+                      isCompleted: $isCompleted)
             .padding(.horizontal, 27)
             .padding(.bottom, 24)
         }
@@ -61,13 +65,13 @@ extension RegisterSearchGenre {
     private var genreListScrollView: some View {
         ScrollView(showsIndicators: false) {
             LazyVStack(alignment: .leading) {
-                ForEach(viewModel.genreList, id: \.self){ genre in
+                ForEach(genreList, id: \.self){ selectedGenre in
                     Button {
-                        viewModel.model.genre = genre.name
-                        viewModel.model.genreId = genre.id
+                        genre = selectedGenre.name
+                        genreId = selectedGenre.id
                         navigationRouter.pop()
                     } label: {
-                        Text("\(genre.name)")
+                        Text("\(selectedGenre.name)")
                             .applyNapzakFont(.body6Regular14)
                             .foregroundStyle(Color.napzakGrayScale(.gray400))
                             .padding(10)
