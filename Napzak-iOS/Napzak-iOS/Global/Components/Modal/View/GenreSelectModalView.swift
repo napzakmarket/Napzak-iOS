@@ -82,10 +82,12 @@ extension GenreSelectModalView {
                     isFocused: _isSearchBarFocused
                 )
                 .onChange(of: viewModel.inputGenreText) { value in
-                    if value.isEmpty {
-                        viewModel.fetchAllGenres()
-                    } else {
-                        viewModel.fetchSearchGenres(searchWord: value)
+                    Task {
+                        if value.isEmpty {
+                            await viewModel.fetchAllGenres()
+                        } else {
+                            await viewModel.fetchSearchGenres(searchWord: value)
+                        }
                     }
                 }
                 
