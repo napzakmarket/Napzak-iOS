@@ -175,7 +175,7 @@ extension ReportView {
             
             HStack(spacing: 0) {
                 Spacer()
-                Text(viewModel.reportModel.reportDescription.count.description)
+                Text(viewModel.reportDescriptionCountText)
                     .applyNapzakFont(.caption4SemiBold10)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
                 
