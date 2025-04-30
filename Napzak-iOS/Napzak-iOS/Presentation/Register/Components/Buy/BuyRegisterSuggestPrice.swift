@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct BuyRegisterSuggestPrice: View {
-    @ObservedObject var viewModel: RegisterViewModel
+    @Binding var isPriceNegotiable: Bool
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -26,12 +26,12 @@ struct BuyRegisterSuggestPrice: View {
                 .padding(.bottom, 23)
             
             HStack(alignment: .center, spacing: 0) {
-                Image(viewModel.model.isPriceNegotiable ? .buttonCheckboxFill : .buttonCheckbox)
+                Image(isPriceNegotiable ? .buttonCheckboxFill : .buttonCheckbox)
                     .resizable()
                     .frame(width: 24, height: 24)
                     .padding(.trailing, 11)
                     .onTapGesture {
-                        viewModel.model.isPriceNegotiable.toggle()
+                        isPriceNegotiable.toggle()
                     }
                 
                 Text("받기")

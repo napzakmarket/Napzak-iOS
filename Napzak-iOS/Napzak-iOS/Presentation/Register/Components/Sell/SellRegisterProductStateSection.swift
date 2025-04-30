@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct SellRegisterProductState: View {
-    @ObservedObject var viewModel: RegisterViewModel
+    @Binding var productCondition: String
+    
+    let options = ["미개봉", "아주 좋은 상태", "약간의 사용감", "사용감 있음"]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -25,15 +27,15 @@ struct SellRegisterProductState: View {
                 ],
                 spacing: 12
             ) {
-                ForEach(viewModel.options, id: \.self) { option in
+                ForEach(options, id: \.self) { option in
                     Button {
-                        viewModel.model.productCondition = option
+                        productCondition = option
                     } label: {
                         Text(option)
                             .applyNapzakFont(.body5SemiBold14)
                             .frame(height: 42)
                             .frame(maxWidth: .infinity)
-                            .foregroundColor(viewModel.model.productCondition == option ?
+                            .foregroundColor(productCondition == option ?
                                              Color.napzakPrimary(.purple500) :
                                                 Color.napzakGrayScale(.gray200)
                             )
@@ -41,7 +43,7 @@ struct SellRegisterProductState: View {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(
-                                        option == viewModel.model.productCondition ?
+                                        option == productCondition ?
                                         Color.napzakPrimary(.purple500) :
                                             Color.napzakGrayScale(.gray100),
                                         lineWidth: 1
