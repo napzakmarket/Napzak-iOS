@@ -88,7 +88,7 @@ extension GenreSelectionView {
                 ChipsContainerView(selectedGenres: Binding(
                     get: {
                         return viewModel.selectedGenres.map { preferGenre in
-                            return GenreName(id: preferGenre.id, name: preferGenre.name)
+                            return GenreNameModel(id: preferGenre.id, name: preferGenre.name)
                         }
                     },
                     set: { newGenreNames in

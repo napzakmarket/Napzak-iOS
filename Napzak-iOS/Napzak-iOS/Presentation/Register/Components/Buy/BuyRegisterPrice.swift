@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct BuyRegisterPrice: View {
-    @ObservedObject var viewModel: RegisterViewModel
+    @Binding var price: String
+    @Binding var addPrices: [String]
+    @Binding var maxPrice: Int
+    @Binding var priceError: Bool
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -25,34 +28,34 @@ struct BuyRegisterPrice: View {
                 .padding(.bottom, 24)
             
             HStack(alignment: .center, spacing: 0){
-                TextField("", text: $viewModel.model.price)
+                TextField("", text: $price)
                     .keyboardType(.decimalPad)
                     .applyNapzakFont(.body4Bold14)
                     .multilineTextAlignment(.trailing)
-                    .foregroundStyle(viewModel.priceError ? .red : Color.napzakGrayScale(.gray400))
-                    .onChange(of: viewModel.model.price) { newValue in
-                        viewModel.model.price = newValue.convertPrice(maxPrice: viewModel.maxPrice)
-                        if viewModel.model.price.convertInt() % 1000 != 0 {
-                            viewModel.priceError = true
+                    .foregroundStyle(priceError ? .red : Color.napzakGrayScale(.gray400))
+                    .onChange(of: price) { newValue in
+                        price = newValue.convertPrice(maxPrice: maxPrice)
+                        if price.convertInt() % 1000 != 0 {
+                            priceError = true
                         } else {
-                            viewModel.priceError = false
+                            priceError = false
                         }
                     }
                 
                 Text(" 원대")
                     .applyNapzakFont(.body5SemiBold14)
                     .foregroundStyle(
-                        viewModel.model.price == "" ? Color.napzakGrayScale(.gray200) : viewModel.priceError ? .red : Color.napzakGrayScale(.gray400))
+                        price == "" ? Color.napzakGrayScale(.gray200) : priceError ? .red : Color.napzakGrayScale(.gray400))
                     .padding(.trailing, 12)
             }
             .frame(height: 50)
             .overlay {
                 RoundedRectangle(cornerRadius: 14)
-                    .stroke(viewModel.priceError ? .red : Color.napzakGrayScale(.gray100), lineWidth: 1)
+                    .stroke(priceError ? .red : Color.napzakGrayScale(.gray100), lineWidth: 1)
             }
-            .padding(.bottom, viewModel.priceError ? 8 : 14)
+            .padding(.bottom, priceError ? 8 : 14)
             
-            if viewModel.priceError {
+            if priceError {
                 HStack(alignment: .center, spacing: 0){
                     Spacer()
                     
@@ -72,10 +75,10 @@ struct BuyRegisterPrice: View {
             }
             
             HStack(spacing: 8) { // 버튼 사이 간격 설정
-                ForEach(viewModel.addPrices, id: \.self) { addPrice in
+                ForEach(addPrices, id: \.self) { addPrice in
                     Button {
-                        viewModel.model.price = (viewModel.model.price.convertInt() + addPrice.convertInt()).description
-                            .convertPrice(maxPrice: viewModel.maxPrice)
+                        price = (price.convertInt() + addPrice.convertInt()).description
+                            .convertPrice(maxPrice: maxPrice)
                     } label: {
                         Text(addPrice)
                             .applyNapzakFont(.caption2Medium12)

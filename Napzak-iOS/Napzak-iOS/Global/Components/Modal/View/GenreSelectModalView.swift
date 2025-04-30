@@ -13,12 +13,10 @@ struct GenreSelectModalView: View {
     
     @StateObject var viewModel: GenreSelectModalViewModel
 
-    @State private var inputGenreText = ""
-    @State private var isSearchCompleted: Bool = false
     @FocusState private var isSearchBarFocused: Bool
     
     @Binding var isGenreSelectModalPresented: Bool
-    @Binding var adaptedGenres: [GenreName]
+    @Binding var adaptedGenres: [GenreNameModel]
     
     //MARK: - Main Body
     
@@ -79,10 +77,19 @@ extension GenreSelectModalView {
             Group {
                 SearchBar(
                     placeholder: "어떤 장르의 굿즈인가요? 검색해보세요!",
-                    text: $inputGenreText,
-                    isCompleted: $isSearchCompleted,
+                    text: $viewModel.inputGenreText,
+                    isCompleted: $viewModel.isSearchCompleted,
                     isFocused: _isSearchBarFocused
                 )
+                .onChange(of: viewModel.inputGenreText) { value in
+                    Task {
+                        if value.isEmpty {
+                            await viewModel.fetchAllGenres()
+                        } else {
+                            await viewModel.fetchSearchGenres(searchWord: value)
+                        }
+                    }
+                }
                 
                 if !viewModel.selectedGenres.isEmpty {
                     ChipsContainerView(selectedGenres: $viewModel.selectedGenres)
@@ -106,7 +113,7 @@ extension GenreSelectModalView {
             
             ScrollView(showsIndicators: false) {
                 LazyVStack(alignment: .leading) {
-                    ForEach(viewModel.allGenres, id: \.self){ genre in
+                    ForEach(viewModel.genres, id: \.self){ genre in
                         Button {
                             viewModel.selectGenre(genre)
                         } label: {
@@ -169,7 +176,7 @@ extension GenreSelectModalView {
 
 #Preview {
     struct PreviewContainer: View {
-        @State private var adaptedGenres: [GenreName] = []
+        @State private var adaptedGenres: [GenreNameModel] = []
         @State private var isGenreSelectModalPresented = true
         
         var body: some View {

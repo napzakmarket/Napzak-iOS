@@ -8,8 +8,15 @@
 import SwiftUI
 
 struct SellRegisterDelivery: View {
-    @ObservedObject var viewModel: RegisterViewModel
+    @Binding var deliveryType: DeliveryType?
+    @Binding var standardDeliveryFee: String
+    @Binding var halfDeliveryFee: String
+    @Binding var normalDelivery: Bool
+    @Binding var halfDelivery: Bool
 
+    let normalMaxDeliveryCharge: Int = 30_000           // 일반 배달 최대 금액 3만원
+    let halfMaxDeliveryCharge: Int = 5_000              // 반 값 배달 최대 금액 5000원
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("배송 방법")
@@ -18,23 +25,23 @@ struct SellRegisterDelivery: View {
                 .frame(height: 18)
                 .padding(.bottom, 24)
             
-            deliveryRow(title: "배송비 포함", isSelected: viewModel.model.deliveryType == .included) {
-                viewModel.model.deliveryType = .included
+            deliveryRow(title: "배송비 포함", isSelected: deliveryType == .included) {
+                deliveryType = .included
             }
             .padding(.bottom, 10)
             
             VStack(spacing: 0) {
-                deliveryRow(title: "배송비 별도", isSelected: viewModel.model.deliveryType == .separate) {
-                    viewModel.model.deliveryType = .separate
+                deliveryRow(title: "배송비 별도", isSelected: deliveryType == .separate) {
+                    deliveryType = .separate
                 }
                 
-                if viewModel.model.deliveryType == .separate {
+                if deliveryType == .separate {
                     VStack(spacing: 12) {
                         HStack {
-                            Image(viewModel.normalDelivery ? .buttonCheckboxFill : .buttonCheckbox)
+                            Image(normalDelivery ? .buttonCheckboxFill : .buttonCheckbox)
                                 .frame(width: 24, height: 24)
                                 .onTapGesture {
-                                    viewModel.normalDelivery.toggle()
+                                    normalDelivery.toggle()
                                 }
                             
                             Text("일반 택배")
@@ -45,16 +52,16 @@ struct SellRegisterDelivery: View {
                             Spacer()
                             
                             HStack(spacing: 0){
-                                TextField("100~30,000", text: $viewModel.model.standardDeliveryFee)
+                                TextField("100~30,000", text: $standardDeliveryFee)
                                     .multilineTextAlignment(.trailing)
-                                    .onChange(of: viewModel.model.standardDeliveryFee) { newValue in
-                                        viewModel.model.standardDeliveryFee = newValue.convertPrice(maxPrice: viewModel.normalMaxDeliveryCharge)
+                                    .onChange(of: standardDeliveryFee) { newValue in
+                                        standardDeliveryFee = newValue.convertPrice(maxPrice: normalMaxDeliveryCharge)
                                     }
                                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                                 
                                 Text(" 원")
                                     .foregroundStyle(
-                                        viewModel.model.standardDeliveryFee.isEmpty ? Color
+                                        standardDeliveryFee.isEmpty ? Color
                                             .napzakGrayScale(.gray100) : Color
                                             .napzakGrayScale(.gray400)
                                     )
@@ -64,10 +71,10 @@ struct SellRegisterDelivery: View {
                         }
                         
                         HStack {
-                            Image(viewModel.halfDelivery ? .buttonCheckboxFill : .buttonCheckbox)
+                            Image(halfDelivery ? .buttonCheckboxFill : .buttonCheckbox)
                                 .frame(width: 24, height: 24)
                                 .onTapGesture {
-                                    viewModel.halfDelivery.toggle()
+                                    halfDelivery.toggle()
                                 }
                             
                             Text("반값/알뜰 택배")
@@ -78,17 +85,17 @@ struct SellRegisterDelivery: View {
                             Spacer()
                             
                             HStack(spacing: 0){
-                                TextField("0~5,000", text: $viewModel.model.halfDeliveryFee)
+                                TextField("0~5,000", text: $halfDeliveryFee)
                                     .multilineTextAlignment(.trailing)
-                                    .onChange(of: viewModel.model.halfDeliveryFee) { newValue in
-                                        viewModel.model.halfDeliveryFee = newValue
-                                            .convertPrice(maxPrice: viewModel.halfMaxDeliveryCharge)
+                                    .onChange(of: halfDeliveryFee) { newValue in
+                                        halfDeliveryFee = newValue
+                                            .convertPrice(maxPrice: halfMaxDeliveryCharge)
                                     }
                                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                                 
                                 Text(" 원")
                                     .foregroundStyle(
-                                        viewModel.model.halfDeliveryFee.isEmpty ? Color
+                                        halfDeliveryFee.isEmpty ? Color
                                             .napzakGrayScale(.gray100) : Color
                                             .napzakGrayScale(.gray400)
                                     )

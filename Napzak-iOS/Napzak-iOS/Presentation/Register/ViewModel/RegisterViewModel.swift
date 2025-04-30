@@ -26,6 +26,8 @@ final class RegisterViewModel: ObservableObject {
     let normalMaxDeliveryCharge: Int = 30_000           // 일반 배달 최대 금액 3만원
     let halfMaxDeliveryCharge: Int = 5_000              // 반 값 배달 최대 금액 5000원
     let addPrices = ["+1,000원", "+5,000원", "+10,000원", "+100,000원"]
+    @Published var maxPrice: Int = 1_000_000       // 최대 금액 100만원
+    @Published var addPrices = ["+1,000원", "+5,000원", "+10,000원", "+100,000원"]
 
     init() {
         fetchGenre(genreSearchText: genreSearchText)

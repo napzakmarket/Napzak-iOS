@@ -65,11 +65,11 @@ extension SellRegisterView {
                 .frame(height: 4)
                 .padding(.bottom, 29)
             
-            RegisterTitle(viewModel: viewModel)
+            RegisterTitle(title: $viewModel.model.title)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 10)
             
-            RegisterDescription(viewModel: viewModel)
+            RegisterDescription(description: $viewModel.model.description)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 23)
             
@@ -78,15 +78,25 @@ extension SellRegisterView {
                 .frame(height: 4)
                 .padding(.bottom, 23)
             
-            SellRegisterProductState(viewModel: viewModel)
+            SellRegisterProductState(productCondition: $viewModel.model.productCondition)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 30)
             
-            SellRegisterPrice(viewModel: viewModel)
+            SellRegisterPrice(
+                price: $viewModel.model.price,
+                addPrices: $viewModel.addPrices,
+                maxPrice: $viewModel.maxPrice
+            )
                 .padding(.horizontal, 28)
                 .padding(.bottom, 30)
             
-            SellRegisterDelivery(viewModel: viewModel)
+            SellRegisterDelivery(
+                deliveryType: $viewModel.model.deliveryType,
+                standardDeliveryFee: $viewModel.model.standardDeliveryFee,
+                halfDeliveryFee: $viewModel.model.halfDeliveryFee,
+                normalDelivery: $viewModel.normalDelivery,
+                halfDelivery: $viewModel.halfDelivery
+            )
                 .padding(.horizontal, 28)
         }
     }

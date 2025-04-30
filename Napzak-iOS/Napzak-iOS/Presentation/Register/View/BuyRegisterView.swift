@@ -68,29 +68,34 @@ extension BuyRegisterView {
                 .frame(height: 4)
                 .padding(.bottom, 29)
                 .background(.white)
-            
-            RegisterTitle(viewModel: viewModel)
+
+            RegisterTitle(title: $viewModel.model.title)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 10)
                 .background(.white)
-            
-            RegisterDescription(viewModel: viewModel)
+
+            RegisterDescription(description: $viewModel.model.description)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 23)
                 .background(.white)
-            
+
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))
                 .frame(height: 4)
                 .padding(.bottom, 23)
                 .background(.white)
-            
-            BuyRegisterPrice(viewModel: viewModel)
+
+            BuyRegisterPrice(
+                price: $viewModel.model.price,
+                addPrices: $viewModel.addPrices,
+                maxPrice: $viewModel.maxPrice,
+                priceError: $viewModel.priceError
+            )
                 .padding(.horizontal, 28)
                 .padding(.bottom, 32)
                 .background(.white)
-            
-            BuyRegisterSuggestPrice(viewModel: viewModel)
+
+            BuyRegisterSuggestPrice(isPriceNegotiable: $viewModel.model.isPriceNegotiable)
                 .padding(.horizontal, 28)
         }
     }
