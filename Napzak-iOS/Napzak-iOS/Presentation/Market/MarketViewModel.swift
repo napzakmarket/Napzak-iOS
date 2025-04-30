@@ -10,7 +10,12 @@ import SwiftUI
 final class MarketViewModel: ObservableObject {
     
     @Published var selectedTabIndex = 0
-    @Published var productFetchOption = ProductFetchOption(sortOption: .recent, genres: [GenreName](), isOnSale: false, isUnopened: false)
+    @Published var productFetchOption = ProductFetchOption(
+        sortOption: .recent,
+        genres: [],
+        isOnSale: false,
+        isUnopened: false
+    )
     @Published var dummyProducts: [ProductItemModel] = []
     
     private let tabs = ["팔아요", "구해요", "리뷰"]
