@@ -56,7 +56,7 @@ final class MoyaPlugin: PluginType {
         if let json = try? JSONSerialization.jsonObject(with: response.data, options: .mutableContainers),
            let prettyJsonData = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted),
            let prettyString = String(data: prettyJsonData, encoding: .utf8) {
-            Self.logger.warning("Response: \(prettyString)") 
+            Self.logger.debug("Response: \(prettyString)")
         } else if let plainString = String(bytes: response.data, encoding: .utf8) {
             Self.logger.debug("Response: \(plainString)")
         }
