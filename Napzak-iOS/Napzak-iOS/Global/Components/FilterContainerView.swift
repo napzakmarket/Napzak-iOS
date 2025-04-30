@@ -13,7 +13,7 @@ struct FilterContainerView: View {
     
     @Binding var isGenreSelectModalPresented: Bool
     @Binding var selectedTabIndex: Int
-    @Binding var selectedGenres: [GenreName]
+    @Binding var selectedGenres: [GenreNameModel]
     @Binding var isUnopened: Bool
     @Binding var isOnSale: Bool
     
@@ -85,7 +85,7 @@ struct FilterContainerView: View {
     struct PreviewContainer: View {
         @State var isGenreSelectModalPresented = true
         @State var selectedTabIndex = 0
-        @State var selectedGenres = [GenreName]()
+        @State var selectedGenres = [GenreNameModel]()
         @State var isUnopened = false
         @State var isOnSale = false
 
