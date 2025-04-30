@@ -4,33 +4,33 @@
 //
 //  Created by 조혜린 on 4/28/25.
 //
-
+import Foundation
 import Moya
 
 protocol GenreServiceProtocol {
-    func getAllPreferGenre(completion: @escaping (NetworkResult<PreferGenreResponseDTO>) -> ())
-    func getSearchPreferGenre(searchWord: String, completion: @escaping(NetworkResult<PreferGenreResponseDTO>) -> ())
-    func getAllGenreName(completion: @escaping (NetworkResult<GenreNameResponseDTO>) -> ())
-    func getSearchGenreName(searchWord: String, completion: @escaping (NetworkResult<GenreNameResponseDTO>) -> ())
+    func getAllPreferGenre() async -> Result<PreferGenreResponseDTO, NetworkError>
+    func getSearchPreferGenre(searchWord: String) async -> Result<PreferGenreResponseDTO, NetworkError>
+    func getAllGenreName() async -> Result<GenreNameResponseDTO, NetworkError>
+    func getSearchGenreName(searchWord: String) async -> Result<GenreNameResponseDTO, NetworkError>
 }
 
 final class GenreService: BaseService, GenreServiceProtocol {
     
     private let provider = MoyaProvider<GenreAPI>.init(plugins: [MoyaPlugin()])
     
-    func getAllPreferGenre(completion: @escaping (NetworkResult<PreferGenreResponseDTO>) -> ()) {
-        request(provider, .getAllPreferGenre, completion: completion)
+    func getAllPreferGenre() async -> Result<PreferGenreResponseDTO, NetworkError> {
+        return await request<PreferGenreResponseDTO, GenreAPI>(provider, .getAllPreferGenre)
     }
     
-    func getSearchPreferGenre(searchWord: String, completion: @escaping (NetworkResult<PreferGenreResponseDTO>) -> ()) {
-        request(provider, .getSearchPreferGenre(searchWord: searchWord), completion: completion)
+    func getSearchPreferGenre(searchWord: String) async -> Result<PreferGenreResponseDTO, NetworkError> {
+        return await request<PreferGenreResponseDTO, GenreAPI>(provider, .getSearchPreferGenre(searchWord: searchWord))
     }
     
-    func getAllGenreName(completion: @escaping (NetworkResult<GenreNameResponseDTO>) -> ()) {
-        request(provider, .getAllGenreName, completion: completion)
+    func getAllGenreName() async -> Result<GenreNameResponseDTO, NetworkError> {
+        return await request<GenreNameResponseDTO, GenreAPI>(provider, .getAllGenreName)
     }
     
-    func getSearchGenreName(searchWord: String, completion: @escaping (NetworkResult<GenreNameResponseDTO>) -> ()) {
-        request(provider, .getSearchGenreName(searchWord: searchWord), completion: completion)
+    func getSearchGenreName(searchWord: String) async -> Result<GenreNameResponseDTO, NetworkError> {
+        return await request<GenreNameResponseDTO, GenreAPI>(provider, .getSearchGenreName(searchWord: searchWord))
     }
 }

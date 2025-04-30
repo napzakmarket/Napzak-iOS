@@ -6,83 +6,92 @@
 //
 
 import Foundation
-
 import Moya
+import os
 
 class BaseService {
-    
-    /// 200 받았을 때 decoding 할 데이터가 있는 경우 (대부분의 GET)
-    func fetchNetworkResult<T: Decodable>(statusCode: Int, data: Data) -> NetworkResult<T> {
-        switch statusCode {
-        case 200, 201, 204:
-            if let decodedData = fetchDecodeData(data: data, responseType: T.self) {
-                return .success(decodedData)
-            } else { return .decodeErr }
-        case 400: return .badRequest
-        case 401: return .unAuthorized
-        case 404: return .notFound
-        case 500: return .internalServerErr
-        default: return .networkFail
-        }
+    private static var logger: Logger {
+        Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Network.Service")
     }
     
-    /// 200 받았을 때 decoding 할 데이터가 없는 경우 (대부분의 PATCH, PUT, DELETE)
-    func fetchNetworkResult(statusCode: Int, data: Data) -> NetworkResult<Any> {
-        switch statusCode {
-        case 200, 201, 204: return .success(nil)
-        case 400: return .badRequest
-        case 401: return .unAuthorized
-        case 404: return .notFound
-        case 500: return .internalServerErr
-        default: return .networkFail
-        }
-    }
-    
-    func fetchDecodeData<T: Decodable>(data: Data, responseType: T.Type) -> T? {
-        let decoder = JSONDecoder()
-        if let decodedData = try? decoder.decode(responseType, from: data){
-            return decodedData
-        } else {
-            print("decoding error🤮🤮🤮🤮")
-            return nil
-        }
-    }
-    
-    
-    //디코딩할 데이터가 있는 경우에서의 request 함수
-    func request<T: Decodable, Target: BaseTargetType>(_ provider: MoyaProvider<Target>, _ apiTarget: Target, completion: @escaping (NetworkResult<T>) -> ()) {
-        provider.request(apiTarget) { [weak self] result in
-            guard let self = self else { return }
+    /// 네트워크 요청을 수행하고 제네릭 타입으로 응답 데이터를 디코딩합니다.
+    /// - Parameters:
+    ///   - provider: MoyaProvider 인스턴스
+    ///   - target: Moya TargetType (API 정보)
+    /// - Returns: 성공 시 디코딩된 타입을 `.success`, 실패 시 `NetworkError`를 `.failure`로 반환합니다.
+    func request<T: Decodable, Target: BaseTargetType>(_ provider: MoyaProvider<Target>,
+                                                      _ target: Target) async -> Result<T, NetworkError> {
+        await withCheckedContinuation { continuation in
+            Self.logger.debug("Requesting: \(target.path)")
             
-            switch result {
-            case .success(let response):
-                let networkResult: NetworkResult<T> = self.fetchNetworkResult(
-                    statusCode: response.statusCode,
-                    data: response.data
-                )
-                completion(networkResult)
-                
-            case .failure(let err):
-                print(err)
+            provider.request(target) { result in
+                switch result {
+                case .success(let response):
+                    Self.logger.debug("Response received: \(response.statusCode)")
+                    
+                    switch response.statusCode {
+                    case 200...299:
+                        do {
+                            let decodedData = try JSONDecoder().decode(T.self, from: response.data)
+                            continuation.resume(returning: .success(decodedData))
+                        } catch {
+                            Self.logger.error("Decoding error: \(error.localizedDescription)")
+                            continuation.resume(returning: .failure(.decodingError))
+                        }
+                    case 400:
+                        continuation.resume(returning: .failure(.badRequest))
+                    case 401:
+                        continuation.resume(returning: .failure(.unauthorized))
+                    case 404:
+                        continuation.resume(returning: .failure(.notFound))
+                    case 500...599:
+                        continuation.resume(returning: .failure(.internalServerError))
+                    default:
+                        continuation.resume(returning: .failure(.networkFail))
+                    }
+                    
+                case .failure(let error):
+                    Self.logger.error("Network error: \(error.localizedDescription)")
+                    continuation.resume(returning: .failure(.networkFail))
+                }
             }
         }
     }
     
-    //디코딩할 데이터가 없는 경우에서의 request 함수
-    func request<Target: BaseTargetType>(_ provider: MoyaProvider<Target>, _ apiTarget: Target, completion: @escaping (NetworkResult<Any>) -> ()) {
-        provider.request(apiTarget) { [weak self] result in
-            guard let self = self else { return }
+    /// 네트워크 요청을 수행하고 별도의 응답 데이터 없이 성공 여부만 판단합니다.
+    /// - Parameters:
+    ///   - provider: MoyaProvider 인스턴스
+    ///   - target: Moya TargetType (API 정보)
+    /// - Returns: 성공 시 `.success(())`, 실패 시 `NetworkError`를 `.failure`로 반환합니다.
+    func request<Target: BaseTargetType>(_ provider: MoyaProvider<Target>,
+                                        _ target: Target) async -> Result<Void, NetworkError> {
+        await withCheckedContinuation { continuation in
+            Self.logger.debug("Requesting: \(target.path)")
             
-            switch result {
-            case .success(let response):
-                let networkResult: NetworkResult<Any> = self.fetchNetworkResult(
-                    statusCode: response.statusCode,
-                    data: response.data
-                )
-                completion(networkResult)
-                
-            case .failure(let err):
-                print(err)
+            provider.request(target) { result in
+                switch result {
+                case .success(let response):
+                    Self.logger.debug("Response received: \(response.statusCode)")
+                    
+                    switch response.statusCode {
+                    case 200...299:
+                        continuation.resume(returning: .success(()))
+                    case 400:
+                        continuation.resume(returning: .failure(.badRequest))
+                    case 401:
+                        continuation.resume(returning: .failure(.unauthorized))
+                    case 404:
+                        continuation.resume(returning: .failure(.notFound))
+                    case 500...599:
+                        continuation.resume(returning: .failure(.internalServerError))
+                    default:
+                        continuation.resume(returning: .failure(.networkFail))
+                    }
+                    
+                case .failure(let error):
+                    Self.logger.error("Network error: \(error.localizedDescription)")
+                    continuation.resume(returning: .failure(.networkFail))
+                }
             }
         }
     }
