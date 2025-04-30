@@ -10,7 +10,7 @@ import Kingfisher
 
 struct GenreCell: View {
     
-    let genre: PreferGenre
+    let genre: PreferGenreModel
     var isSelected: Bool
     
     var body: some View {
@@ -61,7 +61,7 @@ extension GenreCell {
         var isSelected: Bool = false
         
         var body: some View {
-            GenreCell(genre: PreferGenre.sample, isSelected: isSelected)
+            GenreCell(genre: PreferGenreModel.sample, isSelected: isSelected)
         }
     }
     
