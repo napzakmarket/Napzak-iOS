@@ -15,13 +15,11 @@ struct GenreDetailView: View {
 
     @EnvironmentObject private var navigationRouter: NavigationRouter
 
-    @StateObject private var viewModel = GenreDetailViewModel()
+    @StateObject var viewModel: GenreDetailViewModel
     
     @Binding var isSortModalPresented: Bool
     
     //MARK: - Properties
-    
-    let genreInfo: GenreInfoModel
     
     private let screenWidth = UIScreen.main.bounds.width
     private let columns = [GridItem(.flexible(), spacing: 20), GridItem(.flexible())]
@@ -110,7 +108,7 @@ private extension GenreDetailView {
                     Image(.imgHotTag)
                 }
                 
-                Text(genreInfo.genreName)
+                Text(viewModel.genreInfo.genreName)
                     .applyNapzakFont(.title2Bold20)
                     .foregroundStyle(Color.napzakGrayScale(.gray500))
                     .frame(height: 26)
@@ -122,7 +120,7 @@ private extension GenreDetailView {
     
     var genreCoverView: some View {
         ZStack(alignment: .bottom) {
-            if let url = URL(string: genreInfo.coverImageUrl) {
+            if let url = URL(string: viewModel.genreInfo.coverImageUrl) {
                 KFImage(url)
                     .placeholder {
                         Rectangle()
@@ -263,13 +261,8 @@ private extension GenreDetailView {
         
         var body: some View {
             GenreDetailView(
-                isSortModalPresented: $isSortModalPresented,
-                genreInfo: GenreInfoModel(
-                    genreId: 1,
-                    genreName: "사카모토 데이즈",
-                    tag: "지금핫한",
-                    coverImageUrl: "https://kream-phinf.pstatic.net/MjAyNDEyMTFfMjAw/MDAxNzMzODkzNTExNDUz.7bZDbRzaJ-jhBHficneUKET4CyE_kfaaOxLvoODV2gg.PNG/a_61618fd382884ad3b37ce139cf1a4147.png?type=m_webp"
-                )
+                viewModel: GenreDetailViewModel(genreId: 1, genreName: "사카모토 데이즈"),
+                isSortModalPresented: $isSortModalPresented
             )
         }
     }
