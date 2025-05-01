@@ -22,18 +22,28 @@ struct RegisterImage: View {
                 .frame(height: 15)
                 .padding(.bottom, 16)
             
-            VStack {
-                Image(.iconPhotoPicker)
-                    .frame(width: 24, height: 24)
-                
-                Text("사진 0/10")
-                    .applyNapzakFont(.caption3Regular12)
-                    .foregroundStyle(Color.napzakPrimary(.purple500))
-                    .frame(height: 13)
+            ScrollView(.horizontal, showsIndicators: false) {
+                LazyHStack(spacing: 10) {
+                    VStack {
+                        Image(.iconPhotoPicker)
+                            .frame(width: 24, height: 24)
+                        
+                        Text("사진 0/10")
+                            .applyNapzakFont(.caption3Regular12)
+                            .foregroundStyle(Color.napzakPrimary(.purple500))
+                            .frame(height: 13)
+                    }
+                    .frame(width: 88, height: 88)
+                    .background(Color.napzakPrimary(.purple100))
+                    .clipShape(.rect(cornerRadius: 5))
+                    
+//                    ForEach(0..<selectedImages.count, id: \.self) { index in
+//                        imageItemView(for: index)
+//                    }
+                }
             }
-            .frame(width: 88, height: 88)
-            .background(Color.napzakPrimary(.purple100))
-            .clipShape(.rect(cornerRadius: 5))
+            
+
             
         }
     }

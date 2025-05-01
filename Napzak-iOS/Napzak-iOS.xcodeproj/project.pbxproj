@@ -17,7 +17,7 @@
 		6CB2EC012DBFE80B003BF298 /* ReportModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB2EBFF2DBFE80B003BF298 /* ReportModel.swift */; };
 		6CB2EC072DBFED96003BF298 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB2EC062DBFED96003BF298 /* RegisterViewModel.swift */; };
 		6CB2EC092DBFFD00003BF298 /* RegisterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB2EC082DBFFD00003BF298 /* RegisterModel.swift */; };
-		6CB813F22DC38B87001A5B26 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 6CB813F12DC38B87001A5B26 /* Config.xcconfig */; };
+		6CB813F22DC38B87001A5B26 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D0B1FA492DC385360090681E /* Config.xcconfig */; };
 		6CB945542DA55E230020A17D /* SellRegisterProductStateSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB945532DA55E230020A17D /* SellRegisterProductStateSection.swift */; };
 		6CB945562DA5680B0020A17D /* SellRegisterPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB945552DA5680B0020A17D /* SellRegisterPrice.swift */; };
 		6CC472312DA431A10086E345 /* SellRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472302DA431A10086E345 /* SellRegisterView.swift */; };
@@ -125,7 +125,7 @@
 		6CB2EBFF2DBFE80B003BF298 /* ReportModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportModel.swift; sourceTree = "<group>"; };
 		6CB2EC062DBFED96003BF298 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		6CB2EC082DBFFD00003BF298 /* RegisterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterModel.swift; sourceTree = "<group>"; };
-		6CB813F12DC38B87001A5B26 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+        D0B1FA492DC385360090681E /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		6CB945532DA55E230020A17D /* SellRegisterProductStateSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterProductStateSection.swift; sourceTree = "<group>"; };
 		6CB945552DA5680B0020A17D /* SellRegisterPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterPrice.swift; sourceTree = "<group>"; };
 		6CC472302DA431A10086E345 /* SellRegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterView.swift; sourceTree = "<group>"; };
