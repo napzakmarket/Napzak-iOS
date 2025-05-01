@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct SellRegisterProductState: View {
-    @State var productState: String = ""
+    @Binding var productCondition: String
     
-    private let options = ["미개봉", "아주 좋은 상태", "약간의 사용감", "사용감 있음"]
-    
+    let options = ["미개봉", "아주 좋은 상태", "약간의 사용감", "사용감 있음"]
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("상품 상태")
@@ -29,13 +29,13 @@ struct SellRegisterProductState: View {
             ) {
                 ForEach(options, id: \.self) { option in
                     Button {
-                        productState = option
+                        productCondition = option
                     } label: {
                         Text(option)
                             .applyNapzakFont(.body5SemiBold14)
                             .frame(height: 42)
                             .frame(maxWidth: .infinity)
-                            .foregroundColor(productState == option ?
+                            .foregroundColor(productCondition == option ?
                                              Color.napzakPrimary(.purple500) :
                                                 Color.napzakGrayScale(.gray200)
                             )
@@ -43,7 +43,7 @@ struct SellRegisterProductState: View {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 8)
                                     .stroke(
-                                        option == productState ?
+                                        option == productCondition ?
                                         Color.napzakPrimary(.purple500) :
                                             Color.napzakGrayScale(.gray100),
                                         lineWidth: 1
