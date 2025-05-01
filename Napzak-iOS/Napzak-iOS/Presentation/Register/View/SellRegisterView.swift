@@ -52,7 +52,9 @@ struct SellRegisterView: View {
 extension SellRegisterView {
     private var SellRegisterContent: some View {
         VStack(spacing: 0) {
-            RegisterImage()
+            RegisterImage(selectedImages: $viewModel.model.images,
+                          imageNameList: $viewModel.imageNameList,
+                          presignedUrls: $viewModel.presignedUrlList)
                 .padding(.top, 30)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 27)

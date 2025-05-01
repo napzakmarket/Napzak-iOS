@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RegisterModel {
     // Shared
+    var images: [UIImage] = []
     var title: String = ""
     var description: String = ""
     var price: String = ""
