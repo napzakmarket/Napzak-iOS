@@ -64,6 +64,7 @@
 		D07837B22DB6C156009122F6 /* SortModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07837B12DB6C156009122F6 /* SortModalView.swift */; };
 		D07837B42DB7B906009122F6 /* SearchInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07837B32DB7B900009122F6 /* SearchInputView.swift */; };
 		D07BF2762D9D16A3000E4FD5 /* NZTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07BF2752D9D169F000E4FD5 /* NZTabBarView.swift */; };
+		D0B1FA482DC384E50090681E /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D0B1FA472DC384E50090681E /* Config.xcconfig */; };
 		D0CBB6FF2DB8110300BE20C3 /* PlainChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBB6FE2DB810F300BE20C3 /* PlainChip.swift */; };
 		D0CBB7012DB87CBC00BE20C3 /* PlainChipContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBB7002DB87CB500BE20C3 /* PlainChipContainerView.swift */; };
 		D0CBB7032DB893F600BE20C3 /* SearchInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0CBB7022DB893F000BE20C3 /* SearchInputViewModel.swift */; };
@@ -160,6 +161,7 @@
 		D07837B12DB6C156009122F6 /* SortModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortModalView.swift; sourceTree = "<group>"; };
 		D07837B32DB7B900009122F6 /* SearchInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInputView.swift; sourceTree = "<group>"; };
 		D07BF2752D9D169F000E4FD5 /* NZTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NZTabBarView.swift; sourceTree = "<group>"; };
+		D0B1FA472DC384E50090681E /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		D0CBB6FE2DB810F300BE20C3 /* PlainChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainChip.swift; sourceTree = "<group>"; };
 		D0CBB7002DB87CB500BE20C3 /* PlainChipContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainChipContainerView.swift; sourceTree = "<group>"; };
 		D0CBB7022DB893F000BE20C3 /* SearchInputViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInputViewModel.swift; sourceTree = "<group>"; };
@@ -199,7 +201,6 @@
 		D67C177A2D9AEEDD00CFCDFA /* UsernameInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameInputView.swift; sourceTree = "<group>"; };
 		D67C177C2D9B07E300CFCDFA /* UsernameInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameInputField.swift; sourceTree = "<group>"; };
 		D67C177F2D9B085600CFCDFA /* UsernameValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameValidation.swift; sourceTree = "<group>"; };
-		D6BB9DD82DC14D04009D9E01 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		D6BB9E1E2DC16A1D009D9E01 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -299,7 +300,7 @@
 		D045DE922D836F0500EB1EB6 = {
 			isa = PBXGroup;
 			children = (
-				D6BB9DD82DC14D04009D9E01 /* Config.xcconfig */,
+				D0B1FA472DC384E50090681E /* Config.xcconfig */,
 				D045DEBA2D83723A00EB1EB6 /* Napzak-iOS */,
 				D045DE9C2D836F0500EB1EB6 /* Products */,
 			);
@@ -870,6 +871,7 @@
 				D045DEE22D83759500EB1EB6 /* Pretendard-Regular.otf in Resources */,
 				D045DEDD2D83750400EB1EB6 /* Pretendard-SemiBold.otf in Resources */,
 				D045DEDE2D83750400EB1EB6 /* Pretendard-Bold.otf in Resources */,
+				D0B1FA482DC384E50090681E /* Config.xcconfig in Resources */,
 				D045DEEC2D837D7D00EB1EB6 /* Pretendard-Medium.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -979,7 +981,6 @@
 /* Begin XCBuildConfiguration section */
 		D045DEA72D836F0700EB1EB6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D6BB9DD82DC14D04009D9E01 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -1099,7 +1100,6 @@
 		};
 		D045DEAA2D836F0700EB1EB6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D6BB9DD82DC14D04009D9E01 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
