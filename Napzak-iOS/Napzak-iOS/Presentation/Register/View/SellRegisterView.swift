@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SellRegisterView: View {
+    @StateObject private var viewModel = RegisterViewModel()
+    
     var body: some View {
         VStack(spacing: 0){
             SellRegisterHeader()
@@ -29,7 +31,7 @@ struct SellRegisterView: View {
 
 extension SellRegisterView {
     private var SellRegisterContent: some View {
-        Group {
+        VStack(spacing: 0) {
             RegisterImage()
                 .padding(.top, 30)
                 .padding(.horizontal, 28)
@@ -46,11 +48,11 @@ extension SellRegisterView {
                 .frame(height: 4)
                 .padding(.bottom, 29)
             
-            RegisterTitle()
+            RegisterTitle(title: $viewModel.model.title)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 10)
             
-            RegisterDescription()
+            RegisterDescription(description: $viewModel.model.description)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 23)
             
@@ -59,15 +61,25 @@ extension SellRegisterView {
                 .frame(height: 4)
                 .padding(.bottom, 23)
             
-            SellRegisterProductState()
+            SellRegisterProductState(productCondition: $viewModel.model.productCondition)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 30)
             
-            SellRegisterPrice()
+            SellRegisterPrice(
+                price: $viewModel.model.price,
+                addPrices: $viewModel.addPrices,
+                maxPrice: $viewModel.maxPrice
+            )
                 .padding(.horizontal, 28)
                 .padding(.bottom, 30)
             
-            SellRegisterDelivery()
+            SellRegisterDelivery(
+                deliveryType: $viewModel.model.deliveryType,
+                standardDeliveryFee: $viewModel.model.standardDeliveryFee,
+                halfDeliveryFee: $viewModel.model.halfDeliveryFee,
+                normalDelivery: $viewModel.normalDelivery,
+                halfDelivery: $viewModel.halfDelivery
+            )
                 .padding(.horizontal, 28)
         }
     }
@@ -79,6 +91,7 @@ extension SellRegisterView {
                 .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 1)
             
             Button {
+                //MARK: - 팔아요 등록
                 print("버튼 눌림")
             } label: {
                 Text("등록하기")

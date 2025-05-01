@@ -88,7 +88,7 @@ extension SearchInputView {
     private var defaultContentView: some View {
         VStack(spacing: 46) {
             searchRecommendationView
-            genreRacommandationView
+            genreRecommendationView
         }
         .padding(.horizontal, 20)
     }
@@ -132,7 +132,7 @@ extension SearchInputView {
                 .frame(height: 18)
             
             PlainChipContainerView(
-                titles: viewModel.searchRecommandations,
+                titles: viewModel.searchRecommendations,
                 action: { title in
                     //TODO: - 데이터 넘기며 화면 전환
                     print(title)
@@ -150,7 +150,7 @@ extension SearchInputView {
                 .frame(height: 18)
             
             LazyVGrid(columns: columns, spacing: 13) {
-                ForEach(viewModel.genreRecommandations) { genre in
+                ForEach(viewModel.genreRecommendations) { genre in
                     Button {
                         //TODO: - 데이터 넘기며 화면 전환
                         print("\(genre.name)")

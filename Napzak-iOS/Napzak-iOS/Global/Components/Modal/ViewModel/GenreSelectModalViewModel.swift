@@ -6,49 +6,28 @@
 //
 
 import SwiftUI
+import os
 
+@MainActor
 final class GenreSelectModalViewModel: ObservableObject {
     
     //MARK: - Property Wrappers
 
-    @Published var allGenres: [GenreName] = []
-    @Published var selectedGenres: [GenreName] = []
+    @Published var genres: [GenreNameModel] = []
+    @Published var selectedGenres: [GenreNameModel] = []
+    @Published var inputGenreText = ""
+    @Published var isSearchCompleted: Bool = false
     @Published var showToast : Bool = false
-
     
     //MARK: - Init
-    
-    init(selectedGenres: [GenreName] = []) {
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "GenreSelection")
+
+    init(selectedGenres: [GenreNameModel] = []) {
         self.selectedGenres = selectedGenres
         
-        fetchAllGenres()
-    }
-}
-
-private extension GenreSelectModalViewModel {
-    
-    //MARK: - Private Func
-    
-    func fetchAllGenres() {
-        allGenres = [
-            GenreName(id: 1, name: "산리오"),
-            GenreName(id: 2, name: "은혼"),
-            GenreName(id: 3, name: "주술회전"),
-            GenreName(id: 4, name: "디즈니/픽사"),
-            GenreName(id: 5, name: "원피스"),
-            GenreName(id: 6, name: "레고/블럭"),
-            GenreName(id: 7, name: "건담"),
-            GenreName(id: 8, name: "귀멸의 칼날"),
-            GenreName(id: 9, name: "나루토"),
-            GenreName(id: 10, name: "나의 히어로 아카데미아"),
-            GenreName(id: 11, name: "도쿄 리벤저스"),
-            GenreName(id: 12, name: "드래곤볼"),
-            GenreName(id: 13, name: "리락쿠마"),
-            GenreName(id: 14, name: "마블"),
-            GenreName(id: 15, name: "명탐정 코난"),
-            GenreName(id: 16, name: "버추얼"),
-            GenreName(id: 17, name: "보컬로이드")
-        ]
+        Task {
+            await fetchAllGenres()
+        }
     }
 }
 
@@ -56,7 +35,7 @@ extension GenreSelectModalViewModel {
     
     //MARK: - Func
     
-    func selectGenre(_ genre: GenreName) {
+    func selectGenre(_ genre: GenreNameModel) {
         if selectedGenres.contains(genre) {
             selectedGenres.removeAll(where: { $0 == genre })
         } else if !selectedGenres.contains(genre) && selectedGenres.count < 7 {
@@ -70,6 +49,41 @@ extension GenreSelectModalViewModel {
                     self.showToast = false
                 }
             }
+        }
+    }
+    
+    //MARK: - Network Func
+    
+    func fetchAllGenres() async {
+        let result = await NetworkService.shared.genreService.getAllGenreName()
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getAllGenreName: No data received")
+                return
+            }
+            self.genres = data.genreList.map { GenreNameModel(dto: $0) }
+            
+        case .failure(let error):
+            logger.error("getAllGenreName failed: \(error.localizedDescription)")
+        }
+    }
+    
+    
+    func fetchSearchGenres(searchWord: String) async {
+        let result = await NetworkService.shared.genreService.getSearchGenreName(searchWord: searchWord)
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getSearchGenreName: No data received")
+                return
+            }
+            self.genres = data.genreList.map { GenreNameModel(dto: $0) }
+            
+        case .failure(let error):
+            logger.error("getSearchGenreName failed: \(error.localizedDescription)")
         }
     }
 }

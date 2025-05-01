@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct GenreGridView: View {
-    @Binding var genres: [PreferGenre]
-    @Binding var selectedGenres: [PreferGenre]
-    let onGenreSelected: (PreferGenre) -> Void
+    @Binding var genres: [PreferGenreModel]
+    @Binding var selectedGenres: [PreferGenreModel]
+    let onGenreSelected: (PreferGenreModel) -> Void
     
     private let columns = [
         GridItem(.flexible()),
@@ -37,11 +37,11 @@ struct GenreGridView: View {
 }
 
 extension GenreGridView {
-    private func isGenreSelected(_ genre: PreferGenre) -> Bool {
+    private func isGenreSelected(_ genre: PreferGenreModel) -> Bool {
         return selectedGenres.contains { $0.id == genre.id }
     }
 }
 
 #Preview {
-    GenreGridView(genres: .constant(PreferGenreData.sample.genreList), selectedGenres: .constant(Array(PreferGenreData.sample.genreList.prefix(3))), onGenreSelected: {_ in })
+    GenreGridView(genres: .constant(PreferGenreModel.sampleGenreList), selectedGenres: .constant(Array(PreferGenreModel.sampleGenreList.prefix(3))), onGenreSelected: {_ in })
 }
