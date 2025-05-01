@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SellRegisterDelivery: View {
-    @Binding var isDeliveryIncluded: Bool
+    @Binding var isDeliveryIncluded: Bool?
     @Binding var standardDeliveryFee: String
     @Binding var halfDeliveryFee: String
     @Binding var normalDelivery: Bool
@@ -33,6 +33,10 @@ struct SellRegisterDelivery: View {
             VStack(spacing: 0) {
                 deliveryRow(title: "배송비 별도", isSelected: isDeliveryIncluded == false) {
                     isDeliveryIncluded = false
+                    halfDelivery = false
+                    normalDelivery = false
+                    standardDeliveryFee = ""
+                    halfDeliveryFee = ""
                 }
                 
                 if isDeliveryIncluded == false {

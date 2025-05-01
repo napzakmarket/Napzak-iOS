@@ -17,7 +17,7 @@ struct RegisterModel {
     
     // Sell
     var productCondition: String = ""
-    var isDeliveryIncluded: Bool = false
+    var isDeliveryIncluded: Bool?
     var standardDeliveryFee: String = ""
     var halfDeliveryFee: String = ""
     
