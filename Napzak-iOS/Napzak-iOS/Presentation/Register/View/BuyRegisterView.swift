@@ -53,12 +53,14 @@ struct BuyRegisterView: View {
 extension BuyRegisterView {
     private var BuyRegisterContent: some View {
         VStack(spacing: 0) {
-//            RegisterImage()
-//                .padding(.top, 30)
-//                .padding(.horizontal, 28)
-//                .padding(.bottom, 27)
-//                .frame(maxWidth: .infinity, alignment: .leading)
-//                .background(.white)
+            RegisterImage(selectedImages: $viewModel.model.images,
+                          imageNameList: $viewModel.imageNameList,
+                          presignedUrls: $viewModel.presignedUrlList)
+                .padding(.top, 30)
+                .padding(.leading, 28)
+                .padding(.bottom, 27)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(.white)
             
             RegisterGenre(genre: $viewModel.model.genre)
                 .padding(.horizontal, 18)

@@ -17,7 +17,6 @@ final class RegisterViewModel: ObservableObject {
     @Published var imageNameList: [String] = []
     @Published var presignedUrlList: [String] = []
     @Published var productId: Int?
-
     @Published var normalDelivery: Bool = false                     // 일반 배달비 선택 여부
     @Published var halfDelivery: Bool = false                       // 알뜰,반값 배달비 선택 여부
     @Published var priceError: Bool = false

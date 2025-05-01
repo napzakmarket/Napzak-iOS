@@ -56,7 +56,7 @@ extension SellRegisterView {
                           imageNameList: $viewModel.imageNameList,
                           presignedUrls: $viewModel.presignedUrlList)
                 .padding(.top, 30)
-                .padding(.horizontal, 28)
+                .padding(.leading, 28)
                 .padding(.bottom, 27)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
