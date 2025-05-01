@@ -97,7 +97,7 @@ extension SellRegisterView {
                 .padding(.bottom, 30)
             
             SellRegisterDelivery(
-                deliveryType: $viewModel.model.deliveryType,
+                isDeliveryIncluded: $viewModel.model.isDeliveryIncluded,
                 standardDeliveryFee: $viewModel.model.standardDeliveryFee,
                 halfDeliveryFee: $viewModel.model.halfDeliveryFee,
                 normalDelivery: $viewModel.normalDelivery,

@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-enum DeliveryType {
-    case included
-    case separate
-}
-
 struct RegisterModel {
     // Shared
     var title: String = ""
@@ -22,7 +17,7 @@ struct RegisterModel {
     
     // Sell
     var productCondition: String = ""
-    var deliveryType: DeliveryType?
+    var isDeliveryIncluded: Bool = false
     var standardDeliveryFee: String = ""
     var halfDeliveryFee: String = ""
     

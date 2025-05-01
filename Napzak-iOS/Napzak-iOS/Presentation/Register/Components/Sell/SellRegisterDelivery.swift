@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SellRegisterDelivery: View {
-    @Binding var deliveryType: DeliveryType?
+    @Binding var isDeliveryIncluded: Bool
     @Binding var standardDeliveryFee: String
     @Binding var halfDeliveryFee: String
     @Binding var normalDelivery: Bool
@@ -25,17 +25,17 @@ struct SellRegisterDelivery: View {
                 .frame(height: 18)
                 .padding(.bottom, 24)
             
-            deliveryRow(title: "배송비 포함", isSelected: deliveryType == .included) {
-                deliveryType = .included
+            deliveryRow(title: "배송비 포함", isSelected: isDeliveryIncluded == true) {
+                isDeliveryIncluded = true
             }
             .padding(.bottom, 10)
             
             VStack(spacing: 0) {
-                deliveryRow(title: "배송비 별도", isSelected: deliveryType == .separate) {
-                    deliveryType = .separate
+                deliveryRow(title: "배송비 별도", isSelected: isDeliveryIncluded == false) {
+                    isDeliveryIncluded = false
                 }
                 
-                if deliveryType == .separate {
+                if isDeliveryIncluded == false {
                     VStack(spacing: 12) {
                         HStack {
                             Image(normalDelivery ? .buttonCheckboxFill : .buttonCheckbox)
