@@ -17,7 +17,7 @@ struct GenreDetailView: View {
 
     @StateObject var viewModel: GenreDetailViewModel
     
-    @Binding var isSortModalPresented: Bool
+    @State private var isSortModalPresented = false
     
     //MARK: - Properties
     
@@ -54,6 +54,7 @@ struct GenreDetailView: View {
         }
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .ignoresSafeArea()
+        .toolbar(.hidden, for: .navigationBar)
     }
     
 }
@@ -65,14 +66,14 @@ private extension GenreDetailView {
     var navigationHeader: some View {
         HStack(spacing: 4) {
             Button {
-                
+                navigationRouter.pop()
             } label: {
                 Image(.iconBack)
                     .frame(width: 24, height: 24)
             }
             
             Button {
-                
+                navigationRouter.reset()
             } label: {
                 Image(.iconHome)
                     .frame(width: 24, height: 24)
@@ -261,8 +262,7 @@ private extension GenreDetailView {
         
         var body: some View {
             GenreDetailView(
-                viewModel: GenreDetailViewModel(genreId: 1, genreName: "사카모토 데이즈"),
-                isSortModalPresented: $isSortModalPresented
+                viewModel: GenreDetailViewModel(genreId: 1, genreName: "사카모토 데이즈")
             )
         }
     }

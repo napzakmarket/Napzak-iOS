@@ -7,12 +7,13 @@
 
 import SwiftUI
 
-enum Route: String, Hashable {
+enum Route: Hashable {
     //임시 뷰
     case sView
     case mView
     
     case searchInputView
+    case genreDetailView(genreId: Int, genreName: String)
 }
 
 final class NavigationRouter: ObservableObject {

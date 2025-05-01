@@ -84,6 +84,13 @@ struct NZTabBarView: View {
                     
                 case .searchInputView:
                     SearchInputView()
+                case .genreDetailView(genreId: let genreId, genreName: let genreName):
+                    GenreDetailView(
+                        viewModel: GenreDetailViewModel(
+                            genreId: genreId,
+                            genreName: genreName
+                        )
+                    )
                 }
             }
         }

@@ -36,7 +36,7 @@ final class GenreDetailViewModel: ObservableObject {
             isUnopened: false
         )
 
-        fetchGenreInfo(genreId: genreId)
+        fetchGenreInfo(genreId: genreId, genreName: genreName)
         fetchProducts()
     }
 }
@@ -45,10 +45,10 @@ extension GenreDetailViewModel {
     
     //MARK: - Func
     
-    func fetchGenreInfo(genreId: Int) {
+    func fetchGenreInfo(genreId: Int, genreName: String) {
         genreInfo = GenreInfoModel(
             genreId: genreId,
-            genreName: "사카모토 데이즈",
+            genreName: genreName,
             tag: "지금핫한",
             coverImageUrl: "https://kream-phinf.pstatic.net/MjAyNDEyMTFfMjAw/MDAxNzMzODkzNTExNDUz.7bZDbRzaJ-jhBHficneUKET4CyE_kfaaOxLvoODV2gg.PNG/a_61618fd382884ad3b37ce139cf1a4147.png?type=m_webp"
         )
