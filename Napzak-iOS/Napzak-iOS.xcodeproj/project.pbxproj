@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6C4886BB2DC0BBB5009352ED /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 6C4886BA2DC0BBB5009352ED /* Config.xcconfig */; };
 		6C4886BD2DC0CA07009352ED /* RegisterSearchGenre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4886BC2DC0CA07009352ED /* RegisterSearchGenre.swift */; };
 		6C6CBDF92DA574A300763CBA /* SellRegisterDelivery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6CBDF82DA574A300763CBA /* SellRegisterDelivery.swift */; };
 		6C6CBDFB2DA589DD00763CBA /* BuyRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6CBDFA2DA589DD00763CBA /* BuyRegisterView.swift */; };
@@ -18,6 +17,7 @@
 		6CB2EC012DBFE80B003BF298 /* ReportModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB2EBFF2DBFE80B003BF298 /* ReportModel.swift */; };
 		6CB2EC072DBFED96003BF298 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB2EC062DBFED96003BF298 /* RegisterViewModel.swift */; };
 		6CB2EC092DBFFD00003BF298 /* RegisterModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB2EC082DBFFD00003BF298 /* RegisterModel.swift */; };
+		6CB813F22DC38B87001A5B26 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 6CB813F12DC38B87001A5B26 /* Config.xcconfig */; };
 		6CB945542DA55E230020A17D /* SellRegisterProductStateSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB945532DA55E230020A17D /* SellRegisterProductStateSection.swift */; };
 		6CB945562DA5680B0020A17D /* SellRegisterPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CB945552DA5680B0020A17D /* SellRegisterPrice.swift */; };
 		6CC472312DA431A10086E345 /* SellRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472302DA431A10086E345 /* SellRegisterView.swift */; };
@@ -32,7 +32,6 @@
 		870C84332DB941D300E70F09 /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870C84322DB941D000E70F09 /* ProfileEditView.swift */; };
 		8740EB562DA8D65C008C035E /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8740EB552DA8D656008C035E /* MyPageView.swift */; };
 		875E35FE2DC1265100660071 /* MarketViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875E35FD2DC1264F00660071 /* MarketViewModel.swift */; };
-		875E36032DC2722C00660071 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 875E36022DC2722C00660071 /* Config.xcconfig */; };
 		D0180D602D9F001E006A748F /* RegisterFloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0180D5F2D9F0013006A748F /* RegisterFloatingView.swift */; };
 		D02905FD2DAE3171008515FD /* FilterContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02905FC2DAE3167008515FD /* FilterContainerView.swift */; };
 		D02906002DAF485C008515FD /* SortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02905FF2DAF4851008515FD /* SortOption.swift */; };
@@ -115,7 +114,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		6C4886BA2DC0BBB5009352ED /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		6C4886BC2DC0CA07009352ED /* RegisterSearchGenre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterSearchGenre.swift; sourceTree = "<group>"; };
 		6C6CBDF82DA574A300763CBA /* SellRegisterDelivery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterDelivery.swift; sourceTree = "<group>"; };
 		6C6CBDFA2DA589DD00763CBA /* BuyRegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyRegisterView.swift; sourceTree = "<group>"; };
@@ -126,6 +124,7 @@
 		6CB2EBFF2DBFE80B003BF298 /* ReportModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportModel.swift; sourceTree = "<group>"; };
 		6CB2EC062DBFED96003BF298 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		6CB2EC082DBFFD00003BF298 /* RegisterModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterModel.swift; sourceTree = "<group>"; };
+		6CB813F12DC38B87001A5B26 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		6CB945532DA55E230020A17D /* SellRegisterProductStateSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterProductStateSection.swift; sourceTree = "<group>"; };
 		6CB945552DA5680B0020A17D /* SellRegisterPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterPrice.swift; sourceTree = "<group>"; };
 		6CC472302DA431A10086E345 /* SellRegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterView.swift; sourceTree = "<group>"; };
@@ -140,7 +139,6 @@
 		870C84322DB941D000E70F09 /* ProfileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditView.swift; sourceTree = "<group>"; };
 		8740EB552DA8D656008C035E /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		875E35FD2DC1264F00660071 /* MarketViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketViewModel.swift; sourceTree = "<group>"; };
-		875E36022DC2722C00660071 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		D0180D5F2D9F0013006A748F /* RegisterFloatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFloatingView.swift; sourceTree = "<group>"; };
 		D02905FC2DAE3167008515FD /* FilterContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterContainerView.swift; sourceTree = "<group>"; };
 		D02905FF2DAF4851008515FD /* SortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOption.swift; sourceTree = "<group>"; };
@@ -215,7 +213,6 @@
 		D67C177A2D9AEEDD00CFCDFA /* UsernameInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameInputView.swift; sourceTree = "<group>"; };
 		D67C177C2D9B07E300CFCDFA /* UsernameInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameInputField.swift; sourceTree = "<group>"; };
 		D67C177F2D9B085600CFCDFA /* UsernameValidation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameValidation.swift; sourceTree = "<group>"; };
-		D6BB9DD82DC14D04009D9E01 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		D6BB9E1E2DC16A1D009D9E01 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -358,7 +355,7 @@
 		D045DE922D836F0500EB1EB6 = {
 			isa = PBXGroup;
 			children = (
-				875E36022DC2722C00660071 /* Config.xcconfig */,
+				6CB813F12DC38B87001A5B26 /* Config.xcconfig */,
 				D045DEBA2D83723A00EB1EB6 /* Napzak-iOS */,
 				D045DE9C2D836F0500EB1EB6 /* Products */,
 			);
@@ -932,7 +929,7 @@
 				D045DEE22D83759500EB1EB6 /* Pretendard-Regular.otf in Resources */,
 				D045DEDD2D83750400EB1EB6 /* Pretendard-SemiBold.otf in Resources */,
 				D045DEDE2D83750400EB1EB6 /* Pretendard-Bold.otf in Resources */,
-				875E36032DC2722C00660071 /* Config.xcconfig in Resources */,
+				6CB813F22DC38B87001A5B26 /* Config.xcconfig in Resources */,
 				D045DEEC2D837D7D00EB1EB6 /* Pretendard-Medium.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1048,7 +1045,6 @@
 /* Begin XCBuildConfiguration section */
 		D045DEA72D836F0700EB1EB6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 875E36022DC2722C00660071 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -1112,7 +1108,6 @@
 		};
 		D045DEA82D836F0700EB1EB6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 875E36022DC2722C00660071 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -1169,7 +1164,6 @@
 		};
 		D045DEAA2D836F0700EB1EB6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D6BB9DD82DC14D04009D9E01 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1205,7 +1199,6 @@
 		};
 		D045DEAB2D836F0700EB1EB6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6C4886BA2DC0BBB5009352ED /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
