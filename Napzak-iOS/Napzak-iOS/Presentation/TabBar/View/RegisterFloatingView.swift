@@ -12,7 +12,7 @@ struct RegisterFloatingView: View {
     //MARK: - Property Wrappers
     
     @Binding var isRegisterViewPresented: Bool
-    @Binding var registerType: RegisterType
+    @Binding var registerType: TradeType
     
     @State private var isHighlightedSellArea = false
     @State private var isHighlightedBuyArea = false

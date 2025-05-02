@@ -7,11 +7,6 @@
 
 import SwiftUI
 
-enum RegisterType {
-    case sell
-    case buy
-}
-
 struct NZTabBarView: View {
     
     //MARK: - Enum
@@ -30,7 +25,7 @@ struct NZTabBarView: View {
     @State private var selectedTab: NZTab = .home
     @State private var isRegisterTabSelected = false
     @State private var isRegisterViewPresented = false
-    @State var registerType: RegisterType
+    @State private var registerType: TradeType = .sell
     @State private var isGenreSelectModalPresented = false
     @State private var isSortModalPresented = false
         
@@ -295,6 +290,6 @@ struct MView: View {
 }
 
 #Preview {
-    NZTabBarView(registerType: .buy)
+    NZTabBarView()
         .environmentObject(NavigationRouter())
 }
