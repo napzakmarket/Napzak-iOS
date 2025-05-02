@@ -46,6 +46,7 @@ struct SellRegisterDelivery: View {
                                 .frame(width: 24, height: 24)
                                 .onTapGesture {
                                     normalDelivery.toggle()
+                                    standardDeliveryFee = ""
                                 }
                             
                             Text("일반 택배")
@@ -62,6 +63,7 @@ struct SellRegisterDelivery: View {
                                         standardDeliveryFee = newValue.convertPrice(maxPrice: normalMaxDeliveryCharge)
                                     }
                                     .foregroundStyle(Color.napzakGrayScale(.gray400))
+                                    .disabled(!normalDelivery)
                                 
                                 Text(" 원")
                                     .foregroundStyle(
@@ -79,6 +81,7 @@ struct SellRegisterDelivery: View {
                                 .frame(width: 24, height: 24)
                                 .onTapGesture {
                                     halfDelivery.toggle()
+                                    halfDeliveryFee = ""
                                 }
                             
                             Text("반값/알뜰 택배")
@@ -96,6 +99,7 @@ struct SellRegisterDelivery: View {
                                             .convertPrice(maxPrice: halfMaxDeliveryCharge)
                                     }
                                     .foregroundStyle(Color.napzakGrayScale(.gray400))
+                                    .disabled(!halfDelivery)
                                 
                                 Text(" 원")
                                     .foregroundStyle(

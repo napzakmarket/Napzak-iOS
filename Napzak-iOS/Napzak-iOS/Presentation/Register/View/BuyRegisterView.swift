@@ -124,11 +124,16 @@ extension BuyRegisterView {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity, minHeight: 50)
             }
-            .background(Color.napzakGrayScale(.gray100))
+            .background(
+                viewModel.sharedValidate ? Color.napzakPrimary(.purple500) :
+                    Color.napzakGrayScale(.gray100)
+            )
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .padding(.horizontal, 28)
             .padding(.top, 18)
             .padding(.bottom, 40)
+            .disabled(!viewModel.sharedValidate)
+
         }
     }
     

@@ -65,6 +65,24 @@ extension RegisterSearchGenre {
     private var genreListScrollView: some View {
         ScrollView(showsIndicators: false) {
             if genreSearchText.isEmpty {
+                LazyVStack(alignment: .leading) {
+                    ForEach(genreList, id: \.self){ selectedGenre in
+                        Button {
+                            genre = selectedGenre.name
+                            genreId = selectedGenre.id
+                            navigationRouter.pop()
+                        } label: {
+                            Text("\(selectedGenre.name)")
+                                .applyNapzakFont(.body6Regular14)
+                                .foregroundStyle(Color.napzakGrayScale(.gray400))
+                                .padding(10)
+                        }
+                    }
+                }
+                .padding(.top, 15)
+                .padding(.bottom, 128)
+                .padding(.leading, 18)
+            } else {
                 VStack(alignment: .center, spacing: 0){
                     Text("죄송해요, 찾으시는 장르가 아직 없네요\n원하시는 장르를 알려주시면 빠르게 추가할게요!")
                         .applyNapzakFont(.body6Regular14)
@@ -90,27 +108,7 @@ extension RegisterSearchGenre {
                             .stroke(Color.napzakPrimary(.purple500), lineWidth: 1)
                     }
                     .padding(.top, 34)
-
-
                 }
-            } else {
-                LazyVStack(alignment: .leading) {
-                    ForEach(genreList, id: \.self){ selectedGenre in
-                        Button {
-                            genre = selectedGenre.name
-                            genreId = selectedGenre.id
-                            navigationRouter.pop()
-                        } label: {
-                            Text("\(selectedGenre.name)")
-                                .applyNapzakFont(.body6Regular14)
-                                .foregroundStyle(Color.napzakGrayScale(.gray400))
-                                .padding(10)
-                        }
-                    }
-                }
-                .padding(.top, 15)
-                .padding(.bottom, 128)
-                .padding(.leading, 18)
             }
         }
         .padding(.top, 260)
