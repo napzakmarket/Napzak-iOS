@@ -30,7 +30,7 @@ struct SellRegisterView: View {
             .ignoresSafeArea()
             .frame(maxWidth: .infinity)
             .scrollIndicators(.hidden)
-            .navigationDestination(for: RegisterRoute.self) { route in
+            .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .registerSearchGenre:
                     RegisterSearchGenre(
@@ -40,6 +40,8 @@ struct SellRegisterView: View {
                         genre: $viewModel.model.genre,
                         genreId: $viewModel.model.genreId
                     )
+                default:
+                    EmptyView()
                 }
             }
         }

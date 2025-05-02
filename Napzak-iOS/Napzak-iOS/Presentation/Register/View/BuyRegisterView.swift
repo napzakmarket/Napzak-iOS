@@ -31,7 +31,7 @@ struct BuyRegisterView: View {
             .frame(maxWidth: .infinity)
             .scrollIndicators(.hidden)
             .background(Color.napzakGrayScale(.gray10))
-            .navigationDestination(for: RegisterRoute.self) { route in
+            .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .registerSearchGenre:
                     RegisterSearchGenre(
@@ -41,6 +41,8 @@ struct BuyRegisterView: View {
                         genre: $viewModel.model.genre,
                         genreId: $viewModel.model.genreId
                     )
+                default:
+                    EmptyView()
                 }
             }
         }

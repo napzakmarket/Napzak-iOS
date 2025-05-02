@@ -87,9 +87,10 @@ struct NZTabBarView: View {
                     SView()
                 case .mView:
                     MView()
-                    
                 case .searchInputView:
                     SearchInputView()
+                case .registerSearchGenre:
+                    EmptyView()
                 }
             }
         }

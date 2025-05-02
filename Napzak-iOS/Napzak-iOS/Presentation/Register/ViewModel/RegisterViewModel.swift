@@ -8,7 +8,6 @@
 import SwiftUI
 
 final class RegisterViewModel: ObservableObject {
-    @Published var path: [RegisterRoute] = []
     
     // MARK: - Property Wrappers
     

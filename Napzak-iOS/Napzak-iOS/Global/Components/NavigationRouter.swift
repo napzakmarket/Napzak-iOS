@@ -13,9 +13,8 @@ enum Route: String, Hashable {
     case mView
     
     case searchInputView
-}
-
-enum RegisterRoute: Hashable {
+    
+    // 등록 뷰 내부 사용
     case registerSearchGenre
 }
 
@@ -29,10 +28,6 @@ final class NavigationRouter: ObservableObject {
     
     //다음에 보여질 view를 navigationStack에 push
     func push(next route: Route) {
-        path.append(route)
-    }
-    
-    func push(next route: RegisterRoute) {
         path.append(route)
     }
     
