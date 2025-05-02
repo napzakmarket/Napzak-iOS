@@ -58,7 +58,7 @@ extension RegisterImage {
                             .foregroundStyle(Color.napzakPrimary(.purple500))
                             .applyNapzakFont(.caption3Regular12)
                             .frame(height: 13)
-
+                        
                     }
                     .frame(width: 88, height: 88)
                     .background(Color.napzakPrimary(.purple100))
@@ -130,10 +130,10 @@ extension RegisterImage {
                     }
             }
             Spacer()
-            Rectangle()
-                .fill(.gray.opacity(0.000000000000000000001))
+            Color.clear
                 .frame(width: 88)
                 .frame(maxHeight: .infinity)
+                .contentShape(Rectangle())
                 .onLongPressGesture(perform: {
                     print("picture long pressed")
                     moveImageToFront(at: index)
