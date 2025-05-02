@@ -11,6 +11,10 @@ import PhotosUI
 
 @MainActor
 final class ImagePickerManager: ObservableObject {
+    
+    // model의 이미지와의 동기화를 위한 클로저
+    var onImageSelectionCompleted: (([UIImage]) -> Void)?
+    
     @Published var selectedImages: [UIImage] = []
     @Published var imageNameList: [String] = []
     @Published var presignedUrlList: [String] = []
@@ -22,8 +26,7 @@ final class ImagePickerManager: ObservableObject {
         }
     }
     
-    @State private var isProcessing = false
-    
+    private var isProcessing = false
     private let defaultMaxSelectedCount: Int = 10
     private var overrideMaxCount: Int?
     
@@ -66,7 +69,8 @@ final class ImagePickerManager: ObservableObject {
         Task {
             defer { isProcessing = false }
             
-            let items = Array(photosPickerItem.prefix(maxSelectedCount - selectedImages.count))
+            let limit = max(0, maxSelectedCount - selectedImages.count)
+            let items = Array(photosPickerItem.prefix(limit))
             let indexedItems = items.enumerated().map { (index, item) in (index, item) }
             var tempResults: [(index: Int, image: UIImage, name: String)] = []
             
@@ -98,6 +102,8 @@ final class ImagePickerManager: ObservableObject {
             }
             
             photosPickerItem.removeAll()
+            
+            onImageSelectionCompleted?(selectedImages)
         }
     }
 }

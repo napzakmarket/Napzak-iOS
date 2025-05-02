@@ -15,7 +15,6 @@ final class RegisterViewModel: ObservableObject {
     @Published var model: RegisterModel = RegisterModel()
     @Published var imagePickerManager = ImagePickerManager()
     
-    
     // MARK: - Property Wrappers
     
     @Published var productId: Int?
@@ -29,8 +28,17 @@ final class RegisterViewModel: ObservableObject {
     @Published var genreList: [GenreNameModel] = []
     
     init() {
+        imagePickerManager.onImageSelectionCompleted = { [weak self] images in
+            self?.model.images = images
+        }
         fetchGenre(genreSearchText: genreSearchText)
     }
+    
+}
+
+//MARK: - Functions
+
+extension RegisterViewModel {
     
 }
 
