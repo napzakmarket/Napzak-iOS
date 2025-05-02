@@ -6,15 +6,9 @@
 //
 
 import SwiftUI
-import PhotosUI
 
 struct RegisterImage: View {
-    @Binding var selectedImages: [UIImage]
-    @Binding var imageNameList: [String]
-    @Binding var presignedUrls: [String]
-    @State private var photosPickerItem: [PhotosPickerItem] = []    // 얘도 뷰모델에서 관리해야 하나...?
-    
-    private let maxSelectedCount = 10
+    @ObservedObject var imagePickerManager : ImagePickerManager
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -32,78 +26,40 @@ struct RegisterImage: View {
             
             selectImageSection
         }
-        .onChange(of: photosPickerItem) { _ in
-            handlePhotoPickerChange()
-        }
     }
-}
-
-// MARK: - subView
-
-extension RegisterImage {
+    
     private var selectImageSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(alignment: .bottom, spacing: 0) {
-                PhotosPicker(
-                    selection: $photosPickerItem,
-                    maxSelectionCount: availableSelectedCount,
-                    selectionBehavior: .ordered,
-                    matching: .images
-                ) {
-                    VStack{
+                imagePickerManager.photoPickerView {
+                    VStack {
                         Image(.iconPhotoPicker)
                             .frame(width: 24, height: 24)
-                        
-                        Text("사진 \(selectedImages.count.description)/10")
+                        Text("사진 \(imagePickerManager.selectedImageCount())/10")
                             .foregroundStyle(Color.napzakPrimary(.purple500))
                             .applyNapzakFont(.caption3Regular12)
                             .frame(height: 13)
-                        
                     }
                     .frame(width: 88, height: 88)
                     .background(Color.napzakPrimary(.purple100))
                     .clipShape(.rect(cornerRadius: 5))
                     .padding(.trailing, 14)
                 }
-                .disabled(disabled)
+                .disabled(imagePickerManager.isDisabled)
                 
-                ForEach(0..<selectedImages.count, id: \.self) { index in
+                ForEach(0..<imagePickerManager.selectedImages.count, id: \.self) { index in
                     imageItemView(for: index)
                         .padding(.trailing, 8)
                 }
             }
-            
         }
         .frame(height: 96)
     }
     
-    private var representativeBadge: some View {
-        VStack(alignment: .center) {
-            Text("대표")
-                .applyNapzakFont(.caption5Regular10)
-                .foregroundStyle(.white)
-                .frame(height: 13)
-        }
-        .frame(width: 46, height: 23)
-        .background(Color.napzakTransparency(.transBlack))
-        .clipShape(
-            .rect(
-                topLeadingRadius: 5,
-                bottomTrailingRadius: 5
-            )
-        )
-    }
-}
-
-
-// MARK: - Functions
-
-extension RegisterImage {
-    
     @ViewBuilder
     private func imageItemView(for index: Int) -> some View {
         ZStack(alignment: .bottomLeading) {
-            Image(uiImage: selectedImages[index])
+            Image(uiImage: imagePickerManager.selectedImages[index])
                 .resizable()
                 .scaledToFill()
                 .frame(width: 88, height: 88)
@@ -117,18 +73,15 @@ extension RegisterImage {
         }
         .frame(width: 95, height: 96)
     }
-
-    @ViewBuilder
+    
     private func deleteButton(at index: Int) -> some View {
-        VStack{
-            HStack{
+        VStack {
+            HStack {
                 Spacer()
                 Image(.iconImageCancle)
                     .frame(width: 16, height: 16)
                     .onTapGesture {
-                        print("xbutton tapped")
-                        selectedImages.remove(at: index)
-                        imageNameList.remove(at: index)
+                        imagePickerManager.deleteImage(at: index)
                     }
             }
             Spacer()
@@ -136,42 +89,23 @@ extension RegisterImage {
                 .frame(width: 88)
                 .frame(maxHeight: .infinity)
                 .contentShape(Rectangle())
-                .onLongPressGesture(perform: {
-                    print("picture long pressed")
-                    moveImageToFront(at: index)
-                })
-        }
-    }
-    
-    private var disabled: Bool {
-        selectedImages.count >= maxSelectedCount
-    }
-    
-    private var availableSelectedCount: Int {
-        maxSelectedCount - selectedImages.count
-    }
-    
-    private func handlePhotoPickerChange() {
-        Task {
-            for item in photosPickerItem {
-                if let data = try? await item.loadTransferable(type: Data.self) {
-                    if let image = UIImage(data: data) {
-                        selectedImages.append(image)
-                        imageNameList.append(UUID().uuidString)
-                    }
+                .onLongPressGesture {
+                    imagePickerManager.moveImageToFront(at: index)
                 }
-            }
-            photosPickerItem.removeAll()
         }
     }
     
-    private func moveImageToFront(at index: Int) {
-        let movedImage = selectedImages.remove(at: index)
-        imageNameList.remove(at: index)
-        selectedImages.insert(movedImage, at: 0)
-        imageNameList.insert(UUID().uuidString, at: 0)
+    private var representativeBadge: some View {
+        VStack {
+            Text("대표")
+                .applyNapzakFont(.caption5Regular10)
+                .foregroundStyle(.white)
+                .frame(height: 13)
+        }
+        .frame(width: 46, height: 23)
+        .background(Color.napzakTransparency(.transBlack))
+        .clipShape(
+            .rect(topLeadingRadius: 5, bottomTrailingRadius: 5)
+        )
     }
-    
 }
-
-

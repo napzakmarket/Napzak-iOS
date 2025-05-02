@@ -7,30 +7,33 @@
 
 import SwiftUI
 
+@MainActor
 final class RegisterViewModel: ObservableObject {
+    
+    // MARK: - Instance
+    
+    @Published var model: RegisterModel = RegisterModel()
+    @Published var imagePickerManager = ImagePickerManager()
+    
     
     // MARK: - Property Wrappers
     
-    @Published var model: RegisterModel = RegisterModel()
-    
-    @Published var imageNameList: [String] = []
-    @Published var presignedUrlList: [String] = []
     @Published var productId: Int?
-    @Published var normalDelivery: Bool = false                     // 일반 배달비 선택 여부
-    @Published var halfDelivery: Bool = false                       // 알뜰,반값 배달비 선택 여부
+    @Published var normalDelivery: Bool = false
+    @Published var halfDelivery: Bool = false
     @Published var priceError: Bool = false
-    @Published var maxPrice: Int = 1_000_000       // 최대 금액 100만원
+    @Published var maxPrice: Int = 1_000_000
     @Published var addPrices = ["+1,000원", "+5,000원", "+10,000원", "+100,000원"]
     @Published var genreSearchText = ""
     @Published var isCompleted: Bool = false
     @Published var genreList: [GenreNameModel] = []
-    
     
     init() {
         fetchGenre(genreSearchText: genreSearchText)
     }
     
 }
+
 
 //MARK: - Network
 
@@ -60,7 +63,7 @@ extension RegisterViewModel {
         let priceValid = model.price.trimmingCharacters(in: .whitespaces).convertInt() > 0
         let imageValid = !model.images.isEmpty
         let genreSelected = model.genreId != nil
-
+        
         return titleValid && descriptionValid && priceValid && imageValid && genreSelected
     }
     
@@ -72,7 +75,7 @@ extension RegisterViewModel {
     var buyRegisterValidate: Bool {
         return true
     }
-
+    
     var deliveryValidate: Bool {
         let isDeliveryIncluded = model.isDeliveryIncluded == true
         let trimmedStandardFee = model.standardDeliveryFee.trimmingCharacters(in: .whitespaces)
@@ -85,9 +88,9 @@ extension RegisterViewModel {
             (!halfDelivery || isHalfValid)
         )
         let isSeparateDeliveryValid = model.isDeliveryIncluded == false &&
-                                       isAtLeastOneChecked &&
-                                       allCheckedConditionsValid
-
+        isAtLeastOneChecked &&
+        allCheckedConditionsValid
+        
         return isDeliveryIncluded || isSeparateDeliveryValid
     }
 }
