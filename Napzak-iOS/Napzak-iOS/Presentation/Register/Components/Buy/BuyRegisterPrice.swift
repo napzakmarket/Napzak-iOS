@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct BuyRegisterPrice: View {
-    @State var price: String = ""
-    @State var priceError: Bool = false
-    private let maxPrice: Int = 1_000_000       // 최대 금액 100만원
-    let addPrices = ["+1,000원", "+5,000원", "+10,000원", "+100,000원"]
+    @Binding var price: String
+    @Binding var addPrices: [String]
+    @Binding var maxPrice: Int
+    @Binding var priceError: Bool
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {

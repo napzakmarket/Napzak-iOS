@@ -9,8 +9,8 @@ import Foundation
 
 final class GenreSelectionViewModel: ObservableObject {
     @Published var searchText: String = ""
-    @Published var genres: [PreferGenre] = []
-    @Published var selectedGenres: [PreferGenre] = []
+    @Published var genres: [PreferGenreModel] = []
+    @Published var selectedGenres: [PreferGenreModel] = []
     @Published var showToast: Bool = false
     @Published var isButtonEnabled: Bool = false
     
@@ -20,7 +20,7 @@ final class GenreSelectionViewModel: ObservableObject {
         loadDefaultGenres()
     }
     
-    func toggleGenreSelection(_ genre: PreferGenre) {
+    func toggleGenreSelection(_ genre: PreferGenreModel) {
         if let index = selectedGenres.firstIndex(where: { $0.id == genre.id }) {
             selectedGenres.remove(at: index)
         } else {
@@ -47,7 +47,7 @@ final class GenreSelectionViewModel: ObservableObject {
 extension GenreSelectionViewModel {
     private func loadDefaultGenres() {
         // TODO: - 39개 데이터 가져오기
-        genres = PreferGenreData.sample.genreList
+        genres = PreferGenreModel.sampleGenreList
     }
     
     private func updateButtonState() {
