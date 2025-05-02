@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RegisterDescription: View {
-    @State var description: String = ""
+    @Binding var description: String
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -53,9 +53,4 @@ struct RegisterDescription: View {
             .frame(height: 13)
         }
     }
-}
-
-
-#Preview {
-    RegisterDescription()
 }

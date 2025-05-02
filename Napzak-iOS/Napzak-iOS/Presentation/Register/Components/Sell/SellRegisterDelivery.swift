@@ -8,18 +8,14 @@
 import SwiftUI
 
 struct SellRegisterDelivery: View {
-    enum DeliveryType {
-        case included, separate
-    }
-    
-    @State private var deliveryType: DeliveryType? = nil  // 배달 타입
-    @State var normalDelivery: Bool = false                     // 일반 배달비 선택 여부
-    @State var normalDeliveryCharge: String = ""                // 일반 배달비 금액
-    @State var halfDelivery: Bool = false                       // 알뜰,반값 배달비 선택 여부
-    @State var halfDeliveryCharge: String = ""                  // 알뜰,반값 배달비 금액
-    
-    private let normalMaxDeliveryCharge: Int = 30_000           // 최대 금액 3만원
-    private let halfMaxDeliveryCharge: Int = 5_000              // 최대 금액 5000원
+    @Binding var deliveryType: DeliveryType?
+    @Binding var standardDeliveryFee: String
+    @Binding var halfDeliveryFee: String
+    @Binding var normalDelivery: Bool
+    @Binding var halfDelivery: Bool
+
+    let normalMaxDeliveryCharge: Int = 30_000           // 일반 배달 최대 금액 3만원
+    let halfMaxDeliveryCharge: Int = 5_000              // 반 값 배달 최대 금액 5000원
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -56,16 +52,16 @@ struct SellRegisterDelivery: View {
                             Spacer()
                             
                             HStack(spacing: 0){
-                                TextField("100~30,000", text: $normalDeliveryCharge)
+                                TextField("100~30,000", text: $standardDeliveryFee)
                                     .multilineTextAlignment(.trailing)
-                                    .onChange(of: normalDeliveryCharge) { newValue in
-                                        normalDeliveryCharge = newValue.convertPrice(maxPrice: normalMaxDeliveryCharge)
+                                    .onChange(of: standardDeliveryFee) { newValue in
+                                        standardDeliveryFee = newValue.convertPrice(maxPrice: normalMaxDeliveryCharge)
                                     }
                                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                                 
                                 Text(" 원")
                                     .foregroundStyle(
-                                        normalDeliveryCharge.isEmpty ? Color
+                                        standardDeliveryFee.isEmpty ? Color
                                             .napzakGrayScale(.gray100) : Color
                                             .napzakGrayScale(.gray400)
                                     )
@@ -89,17 +85,17 @@ struct SellRegisterDelivery: View {
                             Spacer()
                             
                             HStack(spacing: 0){
-                                TextField("0~5,000", text: $halfDeliveryCharge)
+                                TextField("0~5,000", text: $halfDeliveryFee)
                                     .multilineTextAlignment(.trailing)
-                                    .onChange(of: halfDeliveryCharge) { newValue in
-                                        halfDeliveryCharge = newValue
+                                    .onChange(of: halfDeliveryFee) { newValue in
+                                        halfDeliveryFee = newValue
                                             .convertPrice(maxPrice: halfMaxDeliveryCharge)
                                     }
                                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                                 
                                 Text(" 원")
                                     .foregroundStyle(
-                                        halfDeliveryCharge.isEmpty ? Color
+                                        halfDeliveryFee.isEmpty ? Color
                                             .napzakGrayScale(.gray100) : Color
                                             .napzakGrayScale(.gray400)
                                     )
