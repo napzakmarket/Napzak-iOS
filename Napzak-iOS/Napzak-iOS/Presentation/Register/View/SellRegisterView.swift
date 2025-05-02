@@ -66,6 +66,7 @@ extension SellRegisterView {
                 .padding(.horizontal, 18)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 21)
+                .background(.white)
                 .onTapGesture {
                     navigationRouter.push(next: .registerSearchGenre)
                 }
