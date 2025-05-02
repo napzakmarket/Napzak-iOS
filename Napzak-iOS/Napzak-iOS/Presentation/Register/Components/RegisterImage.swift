@@ -100,6 +100,7 @@ extension RegisterImage {
 
 extension RegisterImage {
     
+    @ViewBuilder
     private func imageItemView(for index: Int) -> some View {
         ZStack(alignment: .bottomLeading) {
             Image(uiImage: selectedImages[index])
@@ -116,7 +117,8 @@ extension RegisterImage {
         }
         .frame(width: 95, height: 96)
     }
-    
+
+    @ViewBuilder
     private func deleteButton(at index: Int) -> some View {
         VStack{
             HStack{
