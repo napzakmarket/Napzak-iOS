@@ -40,7 +40,7 @@ extension ReportView {
     private var reportHeader: some View {
         VStack(alignment: .leading) {
             Button {
-                //Todo: - 뒤로가기
+                //Todo: - 네비게이션 pop
                 print("backButton tapped")
             } label: {
                 Image(.iconBack)
@@ -179,7 +179,7 @@ extension ReportView {
                     .applyNapzakFont(.caption4SemiBold10)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
                 
-                Text("/430")
+                Text("/200")
                     .applyNapzakFont(.caption4SemiBold10)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
             }
@@ -228,11 +228,14 @@ extension ReportView {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity, minHeight: 50)
         }
-        .background(Color.napzakGrayScale(.gray100))
+        .background(
+            viewModel.reportValidate ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray100)
+        )
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .padding(.horizontal, 28)
         .padding(.top, 18)
         .padding(.bottom, 68)
+        .disabled(!viewModel.reportValidate)
     }
     
     private var toastView: some View {

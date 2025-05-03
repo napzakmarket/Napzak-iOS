@@ -8,8 +8,8 @@
 import Moya
 
 enum ReportAPI {
-    case postProductReport(productId: String)
-    case postStoreReport(storeId: String)
+    case postProductReport(productId: Int)
+    case postStoreReport(storeId: Int)
 }
 
 extension ReportAPI: BaseTargetType {
@@ -21,10 +21,10 @@ extension ReportAPI: BaseTargetType {
 
     var path: String {
         switch self {
-        case .postProductReport:
-            return "api/v1/products/report"
-        case .postStoreReport:
-            return "/api/v1/stores/report"
+        case .postProductReport(let productId):
+            return "products/report/\(productId)"
+        case .postStoreReport(let storeId):
+            return "stores/report/\(storeId)"
         }
     }
 
@@ -40,15 +40,9 @@ extension ReportAPI: BaseTargetType {
     var task: Moya.Task {
         switch self {
         case .postProductReport(let productId):
-            return .requestParameters(
-                parameters: ["productId" : productId],
-                encoding: URLEncoding.queryString
-            )
+            return .requestPlain
         case .postStoreReport(let storeId):
-            return .requestParameters(
-                parameters: ["storeId" : storeId],
-                encoding: URLEncoding.queryString
-            )
+            return .requestPlain
         }
     }
 
