@@ -2,17 +2,30 @@
 //  StoreService.swift
 //  Napzak-iOS
 //
-//  Created by 조혜린 on 4/28/25.
+//  Created by 어진 on 5/3/25.
 //
 
 import Moya
 
 protocol StoreServiceProtocol {
-    
+    func getMyPageInfo() async -> Result<StoreResponseDTO, NetworkError>
+    func getStoreDetail(storeId: Int) async -> Result<StoreDetailResponseDTO, NetworkError>
+    func modifyProfile(request: StoreModifyProfileRequestDTO) async -> Result<StoreModifyProfileResponseDTO, NetworkError>
 }
 
 final class StoreService: BaseService, StoreServiceProtocol {
     
-//    private let provider = MoyaProvider<StoreAPI>.init(plugins: [MoyaPlugin()])
+    private let provider = MoyaProvider<StoreAPI>.init(plugins: [MoyaPlugin()])
     
+    func getMyPageInfo() async -> Result<StoreResponseDTO, NetworkError> {
+        return await request(provider, .getMyPageInfo)
+    }
+
+    func getStoreDetail(storeId: Int) async -> Result<StoreDetailResponseDTO, NetworkError> {
+        return await request(provider, .getStoreDetail(storeId: storeId))
+    }
+
+    func modifyProfile(request: StoreModifyProfileRequestDTO) async -> Result<StoreModifyProfileResponseDTO, NetworkError> {
+        return await self.request(provider, .modifyProfile(request: request))
+    }
 }
