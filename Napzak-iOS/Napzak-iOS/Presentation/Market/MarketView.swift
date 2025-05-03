@@ -13,6 +13,7 @@ struct MarketView: View {
     @State private var isGenreSelectModalPresented = false
     @State private var isSortModalPresented = false
     @State private var selectedSortOption: SortOption = .recent
+    @EnvironmentObject private var navigationRouter: NavigationRouter
     
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
     private let columns = [GridItem(.flexible(), spacing: 20), GridItem(.flexible())]
@@ -79,11 +80,11 @@ struct MarketView: View {
             viewModel.fetchData()
         }
     }
-    
+
     private var navigationBarView: some View {
         HStack {
-            Button {
-                //TODO: - 뒤로가기
+            Button{
+                navigationRouter.pop()
             } label: {
                 Image(.iconBack)
                     .foregroundColor(Color.napzakGrayScale(.gray200))
@@ -91,6 +92,7 @@ struct MarketView: View {
             }
             Spacer()
         }
+        .ignoresSafeArea()
         .padding(.horizontal, 20)
         .padding(.vertical, 18)
         .background(Color.napzakGrayScale(.white))
@@ -100,7 +102,7 @@ struct MarketView: View {
         VStack(spacing: 0) {
             ZStack {
                 Rectangle()
-                    .fill(Color.napzakGrayScale(.gray50))
+                    .fill(Color.napzakGrayScale(.gray100))
                     .frame(height: 160)
                 
                 Image("profile_market")
@@ -114,7 +116,7 @@ struct MarketView: View {
                     HStack {
                         Spacer()
                         Button {
-                            // TODO: 프로필 편집
+                            navigationRouter.push(next: .ProfileEditView)
                         } label: {
                             Text("프로필 편집")
                                 .foregroundColor(Color.napzakGrayScale(.white))
@@ -130,7 +132,6 @@ struct MarketView: View {
                     }
                     .padding(.bottom, 8)
                 }
-                .frame(height: 160)
             }
 
             VStack(spacing: 0) {
