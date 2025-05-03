@@ -34,6 +34,7 @@ struct ReportView: View {
         )
         .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
         .ignoresSafeArea()
+        .scrollDismissesKeyboard(.immediately)
     }
 }
 
@@ -166,6 +167,7 @@ extension ReportView {
                         .lineLimit(5)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 16)
+                        .allowsHitTesting(false)
                 }
             }
             .frame(height: 180)
