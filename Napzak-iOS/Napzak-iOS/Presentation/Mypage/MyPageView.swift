@@ -9,17 +9,29 @@ import SwiftUI
 
 struct MyPageView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
-
-    private let storeNickName = "납작한 자기"
-    private let sellingText = "팔아요"
-    private let sellingCount = "31개"
-    private let buyingText = "구해요"
-    private let buyingCount = "15개"
+    @State private var storeInfo: StoreDTO?
+    @State private var isLoading = true
+    @State private var errorMessage: String?
+        
+    // StoreService 주입
+    private let storeService: StoreServiceProtocol
+    
+    init(storeService: StoreServiceProtocol = StoreService()) {
+        self.storeService = storeService
+    }
     
     var body: some View {
         VStack(spacing: 0) {
             logoView
-            profileCard
+            
+            if let storeInfo = storeInfo {
+                // API 프로필 정보
+                profileCardWithData(storeInfo: storeInfo)
+            } else {
+                // 스켈레톤
+                profileCardPlaceholder
+            }
+            
             marketButton
             menuGrid
 
@@ -30,6 +42,28 @@ struct MyPageView: View {
                 .edgesIgnoringSafeArea(.bottom)
         }
         .background(Color.napzakGrayScale(.white))
+        .onAppear {
+            fetchMyPageInfo()
+        }
+    }
+    
+    private func fetchMyPageInfo() {
+        isLoading = true
+        
+        Task {
+            let result = await storeService.getMyPageInfo()
+            
+            await MainActor.run {
+                isLoading = false
+                
+                switch result {
+                case .success(let response):
+                    storeInfo = response.data
+                case .failure:
+                    storeInfo = nil
+                }
+            }
+        }
     }
     
     private var logoView: some View {
@@ -45,6 +79,93 @@ struct MyPageView: View {
         .padding(.horizontal, 27)
     }
     
+    // 스켈레톤
+    private var profileCardPlaceholder: some View {
+        HStack(spacing: 14) {
+            Circle()
+                .frame(width: 60, height: 60)
+                .foregroundColor(Color.napzakGrayScale(.gray100))
+            
+            VStack(alignment: .leading, spacing:7) {
+                Rectangle()
+                    .frame(width: 80, height: 14)
+                    .foregroundColor(Color.napzakGrayScale(.gray100))
+                
+                HStack(spacing: 14) {
+                    Rectangle()
+                        .frame(width: 50, height: 12)
+                        .foregroundColor(Color.napzakGrayScale(.gray100))
+                    
+                    Rectangle()
+                        .frame(width: 50, height: 12)
+                        .foregroundColor(Color.napzakGrayScale(.gray100))
+                }
+            }
+            
+            Spacer()
+        }
+        .padding(20)
+        .background(Color.napzakGrayScale(.gray10))
+        .clipShape(RoundedRectangle(cornerRadius: 25))
+        .padding(.horizontal, 27)
+        .padding(.top, 30)
+    }
+    
+    // API 프로필 정보
+    private func profileCardWithData(storeInfo: StoreDTO) -> some View {
+        HStack(spacing: 14) {
+            Circle()
+                .frame(width: 60, height: 60)
+                .overlay(
+                    AsyncImage(url: URL(string: storeInfo.storePhoto)) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                    } placeholder: {
+                        Image("profile_img")
+                            .resizable()
+                            .scaledToFit()
+                    }
+                )
+            
+            VStack(alignment: .leading, spacing:7) {
+                Text(storeInfo.storeNickname)
+                    .applyNapzakFont(.body4Bold14)
+                    .foregroundColor(Color.napzakPrimary(.purple500))
+                
+                HStack(spacing: 14) {
+                    HStack(spacing: 2) {
+                        Text("팔아요")
+                            .applyNapzakFont(.caption2Medium12)
+                            .foregroundColor(Color.napzakGrayScale(.gray500))
+                        
+                        Text("\(storeInfo.totalSellCount)개")
+                            .applyNapzakFont(.caption1SemiBold12)
+                            .foregroundColor(Color.napzakGrayScale(.gray500))
+                    }
+                    
+                    HStack(spacing: 2) {
+                        Text("구해요")
+                            .applyNapzakFont(.caption2Medium12)
+                            .foregroundColor(Color.napzakGrayScale(.gray500))
+                        
+                        Text("\(storeInfo.totalBuyCount)개")
+                            .applyNapzakFont(.caption1SemiBold12)
+                            .foregroundColor(Color.napzakGrayScale(.gray500))
+                    }
+                }
+            }
+            
+            Spacer()
+        }
+        .padding(20)
+        .background(Color.napzakGrayScale(.gray10))
+        .clipShape(RoundedRectangle(cornerRadius: 25))
+        .padding(.horizontal, 27)
+        .padding(.top, 30)
+    }
+    
+    // 하드코딩된 프로필: 추후에 삭제 예정임다
     private var profileCard: some View {
         HStack(spacing: 14) {
             Circle()
@@ -56,27 +177,27 @@ struct MyPageView: View {
                 )
             
             VStack(alignment: .leading, spacing:7) {
-                Text(storeNickName)
+                Text("납작한 자기")
                     .applyNapzakFont(.body4Bold14)
                     .foregroundColor(Color.napzakPrimary(.purple500))
                 
                 HStack(spacing: 14) {
                     HStack(spacing: 2) {
-                        Text(sellingText)
+                        Text("팔아요")
                             .applyNapzakFont(.caption2Medium12)
                             .foregroundColor(Color.napzakGrayScale(.gray500))
                         
-                        Text(sellingCount)
+                        Text("00개")
                             .applyNapzakFont(.caption1SemiBold12)
                             .foregroundColor(Color.napzakGrayScale(.gray500))
                     }
                     
                     HStack(spacing: 2) {
-                        Text(buyingText)
+                        Text("구해요")
                             .applyNapzakFont(.caption2Medium12)
                             .foregroundColor(Color.napzakGrayScale(.gray500))
                         
-                        Text(buyingCount)
+                        Text("00개")
                             .applyNapzakFont(.caption1SemiBold12)
                             .foregroundColor(Color.napzakGrayScale(.gray500))
                     }
@@ -163,4 +284,5 @@ struct MyPageView: View {
 
 #Preview {
     MyPageView()
+        .environmentObject(NavigationRouter())
 }
