@@ -13,6 +13,7 @@ enum Route: String, Hashable {
     case mView
     
     case searchInputView
+    case MarketView
 }
 
 final class NavigationRouter: ObservableObject {

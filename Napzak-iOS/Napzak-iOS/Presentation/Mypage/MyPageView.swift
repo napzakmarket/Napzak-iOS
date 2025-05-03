@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MyPageView: View {
+    @EnvironmentObject private var navigationRouter: NavigationRouter
+
     private let storeNickName = "납작한 자기"
     private let sellingText = "팔아요"
     private let sellingCount = "31개"
@@ -93,7 +95,7 @@ struct MyPageView: View {
     private var marketButton: some View {
         VStack(spacing: 0) {
             Button {
-                // 내 마켓 보기
+                navigationRouter.push(next: .MarketView)
             } label: {
                 HStack {
                     Spacer()

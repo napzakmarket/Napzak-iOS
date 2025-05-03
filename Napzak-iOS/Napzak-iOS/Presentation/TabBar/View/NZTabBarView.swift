@@ -84,6 +84,9 @@ struct NZTabBarView: View {
                     
                 case .searchInputView:
                     SearchInputView()
+                    
+                case .MarketView:
+                       MarketView()
                 }
             }
         }
