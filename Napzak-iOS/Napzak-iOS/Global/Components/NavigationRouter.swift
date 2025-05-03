@@ -14,6 +14,7 @@ enum Route: String, Hashable {
     
     case searchInputView
     case MarketView
+    case ProfileEditView
 }
 
 final class NavigationRouter: ObservableObject {

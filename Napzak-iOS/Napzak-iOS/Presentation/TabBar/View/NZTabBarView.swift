@@ -87,6 +87,9 @@ struct NZTabBarView: View {
                     
                 case .MarketView:
                        MarketView()
+                    
+                case .ProfileEditView:
+                    ProfileEditView()
                 }
             }
         }
