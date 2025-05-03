@@ -16,6 +16,7 @@ struct MyPageView: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            logoView
             profileCard
             marketButton
             menuGrid
@@ -28,7 +29,19 @@ struct MyPageView: View {
         }
         .background(Color.napzakGrayScale(.white))
     }
-
+    
+    private var logoView: some View {
+        HStack {
+            Image("logo")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 101, height: 33)
+            
+            Spacer()
+        }
+        .padding(.top, 60)
+        .padding(.horizontal, 27)
+    }
     
     private var profileCard: some View {
         HStack(spacing: 14) {
@@ -74,7 +87,7 @@ struct MyPageView: View {
         .background(Color.napzakGrayScale(.gray10))
         .clipShape(RoundedRectangle(cornerRadius: 25))
         .padding(.horizontal, 27)
-        .padding(.top, 123)
+        .padding(.top, 30)
     }
     
     private var marketButton: some View {
