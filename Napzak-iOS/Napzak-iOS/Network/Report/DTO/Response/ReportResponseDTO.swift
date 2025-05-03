@@ -5,8 +5,6 @@
 //  Created by OneTen on 5/4/25.
 //
 
-import SwiftUI
-
 struct ReportResponseDTO: Decodable {
     let status: Int
     let message: String

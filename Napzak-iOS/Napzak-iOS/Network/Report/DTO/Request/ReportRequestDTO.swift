@@ -5,8 +5,6 @@
 //  Created by OneTen on 5/4/25.
 //
 
-import SwiftUI
-
 struct ReportRequestDTO: Encodable {
     let reportTitle: String
     let reportDescription: String
