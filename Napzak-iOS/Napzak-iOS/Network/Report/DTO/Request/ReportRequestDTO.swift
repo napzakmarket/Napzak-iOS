@@ -5,7 +5,7 @@
 //  Created by OneTen on 5/4/25.
 //
 
-struct ReportRequestDTO: Encodable {
+struct ReportRequestDTO: Codable {
     let reportTitle: String
     let reportDescription: String
     let reportContact: String

@@ -10,6 +10,7 @@ import SwiftUI
 struct ReportView: View {
     @StateObject private var viewModel = ReportViewModel()
     @Binding var reportType: ReportType
+    @Binding var id: Int    // report타입에 따른 id (productId, storeId)
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0){
@@ -215,10 +216,10 @@ extension ReportView {
     
     private var submitReportButton: some View {
         Button {
-            //TODO: - API 연결
-            
+            //TODO: - 신고 성공 시 마켓 보기 페이지로 이동
             viewModel.showToast = true
             Task {
+                await viewModel.report(type: reportType, id: id)
                 try? await Task.sleep(nanoseconds: 2_500_000_000)
                 viewModel.showToast = false
             }
@@ -260,10 +261,11 @@ extension ReportView {
 
 #Preview {
     struct PreviewContainer: View {
-        @State var reportType: ReportType = .market
+        @State var reportType: ReportType = .store
+        @State var id: Int = 0
         
         var body: some View {
-            ReportView(reportType: $reportType)
+            ReportView(reportType: $reportType, id: $id)
         }
     }
     
