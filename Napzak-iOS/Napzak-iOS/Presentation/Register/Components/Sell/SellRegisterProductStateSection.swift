@@ -29,24 +29,35 @@ struct SellRegisterProductState: View {
                     Button {
                         productCondition = condition
                     } label: {
-                        Text(condition.label)
-                            .applyNapzakFont(.body5SemiBold14)
-                            .frame(height: 42)
-                            .frame(maxWidth: .infinity)
-                            .foregroundColor(productCondition == condition ?
-                                             Color.napzakPrimary(.purple500) :
-                                                Color.napzakGrayScale(.gray200)
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(
-                                        condition == productCondition ?
-                                        Color.napzakPrimary(.purple500) :
-                                            Color.napzakGrayScale(.gray100),
-                                        lineWidth: 1
-                                    )
-                            )
+                        HStack(alignment: .center, spacing: 0) {
+                            Text(condition.label)
+                                .applyNapzakFont(.body5SemiBold14)
+                                .frame(height: 42)
+                                .padding(.leading, 20)
+                            
+                            Spacer()
+                            
+                            if condition == productCondition {
+                                Image(.iconCheckSort)
+                                    .padding(.trailing, 20)
+                            }
+                            
+                        }
+                        .frame(maxWidth: .infinity)
+                        .foregroundColor(productCondition == condition ?
+                                         Color.napzakPrimary(.purple500) :
+                                            Color.napzakGrayScale(.gray200)
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(
+                                    condition == productCondition ?
+                                    Color.napzakPrimary(.purple500) :
+                                        Color.napzakGrayScale(.gray100),
+                                    lineWidth: 1
+                                )
+                        )
                     }
                 }
             }
