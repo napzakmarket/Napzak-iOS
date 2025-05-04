@@ -20,7 +20,8 @@ struct BuyRegisterResponseData: Codable {
     let title, description: String
     let price: Int
     let isPriceNegotiable: Bool
-    let createdAt, updatedAt: String
+    let createdAt: String
+    let updatedAt: String?
 }
 
 struct BuyRegisterResponsePhotoList: Codable {

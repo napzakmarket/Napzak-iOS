@@ -115,7 +115,9 @@ extension BuyRegisterView {
                 .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 1)
             
             Button {
-                print(viewModel.model)
+                Task {
+                    await viewModel.postBuyRegister()
+                }
             } label: {
                 Text("등록하기")
                     .applyNapzakFont(.body4Bold14)

@@ -118,7 +118,9 @@ extension SellRegisterView {
             
             Button {
                 //MARK: - 팔아요 등록
-                print(viewModel.model)
+                Task {
+                    await viewModel.postSellRegister()
+                }
             } label: {
                 Text("등록하기")
                     .applyNapzakFont(.body4Bold14)

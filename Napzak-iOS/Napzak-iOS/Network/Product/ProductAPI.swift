@@ -42,10 +42,10 @@ extension ProductAPI: BaseTargetType {
 
     var task: Moya.Task {
         switch self {
-        case .sellRegister:
-            return .requestPlain
-        case .buyRegister:
-            return .requestPlain
+        case .sellRegister(let registerItem):
+            return .requestJSONEncodable(registerItem)
+        case .buyRegister(let registerItem):
+            return .requestJSONEncodable(registerItem)
         }
     }
 }

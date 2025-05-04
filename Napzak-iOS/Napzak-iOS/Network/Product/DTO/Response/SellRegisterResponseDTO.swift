@@ -21,7 +21,8 @@ struct SellRegisterResponseData: Codable {
     let price: Int
     let isDeliveryIncluded: Bool
     let standardDeliveryFee, halfDeliveryFee: Int
-    let createdAt, updatedAt: String
+    let createdAt: String
+    let updatedAt: String?
 }
 
 struct SellRegisterResponsePhotoList: Codable {
