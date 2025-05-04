@@ -22,6 +22,7 @@ final class KakaoLoginAdapter: SocialLoginService {
         }
     }
     
+    @MainActor
     private func loginWithKakaoTalk() async -> Result<String, AuthError> {
         return await withCheckedContinuation { continuation in
             UserApi.shared.loginWithKakaoTalk { oauthToken, error in
@@ -43,6 +44,7 @@ final class KakaoLoginAdapter: SocialLoginService {
         }
     }
     
+    @MainActor
     private func loginWithKakaoAccount() async -> Result<String, AuthError> {
         return await withCheckedContinuation { continuation in
             UserApi.shared.loginWithKakaoAccount { oauthToken, error in
