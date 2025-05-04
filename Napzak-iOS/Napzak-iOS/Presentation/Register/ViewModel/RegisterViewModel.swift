@@ -41,7 +41,6 @@ final class RegisterViewModel: ObservableObject {
             await getAllGenre()
         }
     }
-    
 }
 
 
@@ -51,7 +50,7 @@ extension RegisterViewModel {
     
     
     //MARK: - Get all genre
-
+    
     func getAllGenre() async {
         let result = await NetworkService.shared.genreService.getAllGenreName()
         
@@ -69,7 +68,7 @@ extension RegisterViewModel {
     }
     
     //MARK: - Get search genre
-
+    
     func getSearchGenre(searchWord: String) async {
         let result = await NetworkService.shared.genreService.getSearchGenreName(searchWord: searchWord)
         
@@ -95,20 +94,12 @@ extension RegisterViewModel {
         switch result {
         case .success(let response):
             let imageNames = imagePickerManager.imageNameList
-            let statusCode = response.status
-            let message = response.message
             let uploadURL = response.data.productPresignedUrls
             
-            var simplifiedUrlDict: [String: String] = [:]
-            for (key, fullUrl) in uploadURL {
-                if imageNames.contains(key), let simplified = simplifyUrl(url: fullUrl) {
-                    simplifiedUrlDict[key] = simplified
-                } else {
-                    logger.warning("⚠️ URL 간략화 실패 또는 key 미포함: \(key)")
-                }
+            self.presignedUrlList = uploadURL.filter { key, _ in
+                imageNames.contains(key)
             }
             
-            self.presignedUrlList = simplifiedUrlDict
             return true
             
         case .failure(let error):
@@ -186,12 +177,10 @@ extension RegisterViewModel {
             }
         }
         
-        //        guard let genreId = model.genreId else {
-        //            logger.error("❌ 장르 ID 없음")
-        //            return
-        //        }
-        
-        let genreId = 2 // TODO: 테스트용 하드코딩 제거 예정
+        guard let genreId = model.genreId else {
+            logger.error("❌ 장르 ID 없음")
+            return
+        }
         
         let dto = SellRegisterRequestDTO(
             productPhotoList: photoList,
@@ -237,12 +226,10 @@ extension RegisterViewModel {
             }
         }
         
-        //        guard let genreId = model.genreId else {
-        //            logger.error("❌ 장르 ID 없음")
-        //            return
-        //        }
-        
-        let genreId = 2 // TODO: 테스트용 하드코딩 제거 예정
+        guard let genreId = model.genreId else {
+            logger.error("❌ 장르 ID 없음")
+            return
+        }
         
         let dto = BuyRegisterRequestDTO(
             productPhotoList: photoList,
@@ -266,26 +253,6 @@ extension RegisterViewModel {
             logger.error("❌ 구매 등록 실패: \(error.localizedDescription)")
         }
     }
-}
-
-
-// MARK: - url 필요한 부분만 추출하는 로직
-
-func simplifyUrl(url: String) -> String? {
-    // URL에서 ? 이전의 도메인과 경로만 추출
-    guard let urlComponents = URLComponents(string: url) else {
-        return nil
-    }
-    
-    // URL의 도메인과 경로 구성
-    var simplifiedUrl = "\(urlComponents.scheme ?? "https")://\(urlComponents.host ?? "")\(urlComponents.path)"
-    
-    // ? 이후의 쿼리 문자열 제거
-    if let queryIndex = simplifiedUrl.firstIndex(of: "?") {
-        simplifiedUrl = String(simplifiedUrl[..<queryIndex])
-    }
-    
-    return simplifiedUrl
 }
 
 

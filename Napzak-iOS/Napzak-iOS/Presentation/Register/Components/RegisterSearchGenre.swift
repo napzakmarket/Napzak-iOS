@@ -74,8 +74,14 @@ extension RegisterSearchGenre {
                             navigationRouter.pop()
                         } label: {
                             Text("\(selectedGenre.name)")
-                                .applyNapzakFont(.body6Regular14)
-                                .foregroundStyle(Color.napzakGrayScale(.gray400))
+                                .applyNapzakFont(
+                                    genre == selectedGenre.name ? .body5SemiBold14 : .body6Regular14
+                                )
+                                .foregroundStyle(
+                                    genre == selectedGenre.name ? Color
+                                        .napzakPrimary(.purple500) : Color
+                                        .napzakGrayScale(.gray400)
+                                )
                                 .padding(10)
                         }
                     }
