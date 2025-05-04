@@ -54,7 +54,7 @@ class BaseService {
                     case 400:
                         continuation.resume(returning: .failure(.badRequest))
                     case 401 where retry:
-                        RefreshTask {
+                        RefreshTask.detached {
                             let refreshResult = await TokenRefresher.shared.refresh()
                             
                             switch refreshResult {
