@@ -8,64 +8,100 @@
 import Foundation
 import os
 
-final class AuthManager {
+final class AuthManager: ObservableObject {
     static let shared = AuthManager()
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Auth")
     private let keychain = KeychainManager.shared
-    private let authService: AuthService
+    private let onboardingManager = OnboardingManager.shared
+    private let authService: AuthServiceProtocol
     
-    private init(authService: AuthService = AuthService()) {
-        self.authService = authService
+    var isAuthenticated: Bool {
+        (try? keychain.getAccessToken().get()) != nil
     }
     
-    func login(with type: SocialLoginType) async -> Result<User, AuthError> {
+    var needsOnboarding: Bool {
+        onboardingManager.getLastCheckpoint() != .completed
+    }
+    
+    private init(authService: AuthServiceProtocol = AuthService()) {
+        self.authService = authService
+        #if DEBUG
+        keychain.clearTokens()
+        OnboardingManager.shared.clearProgress()
+        logger.info("[DEBUG] Keychain cleared for login testing")
+        #endif
+        
+        if let checkpoint = onboardingManager.getLastCheckpoint() {
+            logger.info("Current onboarding checkpoint: \(checkpoint.rawValue)")
+        } else {
+            logger.info("No onboarding checkpoint found")
+        }
+        
+        switch keychain.getAccessToken() {
+        case .success(let token):
+            logger.info("Existing accessToken in Keychain: \(token, privacy: .private)")
+        case .failure:
+            logger.info("No accessToken found in Keychain at startup")
+        }
+    }
+    
+    func login(with type: SocialLoginType) async -> Result<OnboardingStep, AuthError> {
         logger.debug("Starting login with \(type.serviceName)")
         
         let adapter = await type.getAdapter()
         let authResult = await adapter.login()
         
         switch authResult {
-        case .success(let authCode):
-            logger.debug("Authorization code received: \(authCode, privacy: .sensitive)")
-            
-            let serviceResult = await authService.login(type: type, authorizationCode: authCode)
+        case .success(let code):
+            logger.debug("Received authorization code from \(type.serviceName)")
+            let serviceResult = await authService.login(type: type, authorizationCode: code)
             
             switch serviceResult {
             case .success(let response):
                 guard response.status == 200 else {
+                    logger.error("Invalid response status: \(response.status)")
                     return .failure(.invalidResponse)
                 }
                 
                 guard let data = response.data else {
+                    logger.error("Missing response data")
                     return .failure(.invalidResponse)
                 }
                 
                 logger.debug("Server response valid - saving tokens")
-                let accessToken = data.accessToken
-                let refreshToken = data.refreshToken
                 
-                switch keychain.saveTokens(access: accessToken, refresh: refreshToken) {
-                case .success:
-                    logger.debug("Tokens saved successfully to Keychain")
-                    let user = User(from: data)
-                    return .success(user)
-                    
-                case .failure(let error):
+                let onboardingStep: OnboardingStep
+                if data.role == .onboarding {
+                    logger.info("New user - starting onboarding")
+                    onboardingStep = .terms
+                    onboardingManager.saveCheckpoint(.terms)
+                } else {
+                    logger.info("Existing user - onboarding completed")
+                    onboardingStep = .completed
+                    onboardingManager.saveCheckpoint(.completed)
+                }
+                
+                if case .failure(let error) = keychain.saveTokens(access: data.accessToken, refresh: data.refreshToken) {
                     return .failure(error)
                 }
                 
-            case .failure:
+                return .success(onboardingStep)
+                
+            case .failure(let error):
+                logger.error("Server login failed: \(error)")
                 return .failure(.networkError)
             }
             
         case .failure(let error):
+            logger.error("Social login failed: \(error)")
             return .failure(error)
         }
     }
     
     func logout() async -> Result<Void, AuthError> {
         logger.debug("로그아웃 실행")
+        onboardingManager.clearProgress()
         return keychain.clearTokens()
     }
     
@@ -75,5 +111,10 @@ final class AuthManager {
     
     func getRefreshToken() -> Result<String, AuthError> {
         return keychain.getRefreshToken()
+    }
+    
+    @MainActor
+    func completeOnboarding() {
+        onboardingManager.saveCheckpoint(.completed)
     }
 }

@@ -49,6 +49,7 @@ final class KeychainManager {
         return load(key: refreshTokenKey)
     }
     
+    @discardableResult
     func clearTokens() -> Result<Void, AuthError> {
         switch delete(key: accessTokenKey) {
         case .success:
