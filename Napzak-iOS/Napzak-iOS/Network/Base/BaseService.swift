@@ -30,7 +30,7 @@ class BaseService {
     ///   - retry: 401 발생 시 토큰 재발급 후 재시도할지 여부 (기본값 `true`)
     /// - Returns: 성공 시 디코딩된 타입을 `.success`, 실패 시 `NetworkError`를 `.failure`로 반환합니다.
     ///
-    func request<T: Decodable, Target: BaseTargetType>(
+    func requestDecodable<T: Decodable, Target: BaseTargetType>(
         _ provider: MoyaProvider<Target>,
         _ target: Target,
         retry: Bool = true) async -> Result<T, NetworkError> {
@@ -60,7 +60,7 @@ class BaseService {
                             switch refreshResult {
                             case .success:
                                 Self.logger.info("Token refreshed, retrying request")
-                                let retryResult: Result<T, NetworkError> = await self.request(provider, target, retry: false)
+                                let retryResult: Result<T, NetworkError> = await self.requestDecodable(provider, target, retry: false)
                                 continuation.resume(returning: retryResult)
                                 
                             case .failure:
@@ -101,7 +101,7 @@ class BaseService {
     ///   - retry: 401 발생 시 토큰 재발급 후 재시도할지 여부 (기본값 `true`)
     /// - Returns: 성공 시 `.success(())`, 실패 시 `NetworkError`를 `.failure`로 반환합니다.
     ///
-    func request<Target: BaseTargetType>(
+    func requestVoid<Target: BaseTargetType>(
         _ provider: MoyaProvider<Target>,
         _ target: Target,
         retry: Bool = true
@@ -124,7 +124,7 @@ class BaseService {
                             switch refreshResult {
                             case .success:
                                 Self.logger.info("Token refreshed, retrying request")
-                                let retryResult: Result<Void, NetworkError> = await self.request(provider, target, retry: false)
+                                let retryResult: Result<Void, NetworkError> = await self.requestVoid(provider, target, retry: false)
                                 continuation.resume(returning: retryResult)
                                 
                             case .failure:
