@@ -55,6 +55,7 @@ extension RegisterSearchGenre {
                       isCompleted: $isCompleted)
             .padding(.horizontal, 27)
             .padding(.bottom, 24)
+
         }
         .background(
             Color.napzakGrayScale(.white)
@@ -64,7 +65,7 @@ extension RegisterSearchGenre {
     
     private var genreListScrollView: some View {
         ScrollView(showsIndicators: false) {
-            if genreSearchText.isEmpty {
+            if !genreList.isEmpty {
                 LazyVStack(alignment: .leading) {
                     ForEach(genreList, id: \.self){ selectedGenre in
                         Button {

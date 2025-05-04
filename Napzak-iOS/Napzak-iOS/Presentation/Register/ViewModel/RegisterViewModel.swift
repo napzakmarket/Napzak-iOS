@@ -32,11 +32,14 @@ final class RegisterViewModel: ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Register")
     
-    init() {
+    init()  {
         imagePickerManager.onImageSelectionCompleted = { [weak self] images in
             self?.model.images = images
         }
-        fetchGenre(genreSearchText: genreSearchText)
+        
+        Task {
+            await getAllGenre()
+        }
     }
     
 }
@@ -46,6 +49,42 @@ final class RegisterViewModel: ObservableObject {
 
 extension RegisterViewModel {
     
+    
+    //MARK: - Get all genre
+
+    func getAllGenre() async {
+        let result = await NetworkService.shared.genreService.getAllGenreName()
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("❌ getAllGenreName: No data received")
+                return
+            }
+            self.genreList = data.genreList.map { GenreNameModel(dto: $0) }
+            
+        case .failure(let error):
+            logger.error("❌ GET All Genre failed: \(error.localizedDescription)")
+        }
+    }
+    
+    //MARK: - Get search genre
+
+    func getSearchGenre(searchWord: String) async {
+        let result = await NetworkService.shared.genreService.getSearchGenreName(searchWord: searchWord)
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getSearchGenreName: No data received")
+                return
+            }
+            self.genreList = data.genreList.map { GenreNameModel(dto: $0) }
+            
+        case .failure(let error):
+            logger.error("getSearchGenreName failed: \(error.localizedDescription)")
+        }
+    }
     
     // MARK: - GET presigned url
     
@@ -225,27 +264,6 @@ extension RegisterViewModel {
             self.productId = response.data.productId
         case .failure(let error):
             logger.error("❌ 구매 등록 실패: \(error.localizedDescription)")
-        }
-    }
-}
-
-
-
-
-//MARK: - fetchGenre
-
-extension RegisterViewModel {
-    func fetchGenre(genreSearchText: String) {
-        if genreSearchText.isEmpty {
-            //TODO: - 전체 목록 API
-            genreList = [GenreNameModel(id: 1, name: "나루토"),
-                         GenreNameModel(id: 2, name: "원피스"),
-                         GenreNameModel(id: 3, name: "드래곤볼"),
-                         GenreNameModel(id: 4, name: "명탐정 코난"),
-                         GenreNameModel(id: 5, name: "진격의 거인"),
-                         GenreNameModel(id: 6, name: "슬램덩크")]
-        } else {
-            //TODO: - 검색 목록 API
         }
     }
 }

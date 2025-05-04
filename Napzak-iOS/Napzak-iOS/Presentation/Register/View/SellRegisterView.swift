@@ -40,6 +40,15 @@ struct SellRegisterView: View {
                         genre: $viewModel.model.genre,
                         genreId: $viewModel.model.genreId
                     )
+                    .onChange(of: viewModel.genreSearchText) { word in
+                        Task {
+                            if word.isEmpty {
+                                await viewModel.getAllGenre()
+                            } else {
+                                await viewModel.getSearchGenre(searchWord: word)
+                            }
+                        }
+                    }
                 default:
                     EmptyView()
                 }
