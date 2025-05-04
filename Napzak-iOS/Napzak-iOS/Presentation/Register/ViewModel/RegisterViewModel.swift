@@ -36,14 +36,15 @@ final class RegisterViewModel: ObservableObject {
     
 }
 
-//MARK: - Functions
+
+// MARK: - GET presigned url
 
 extension RegisterViewModel {
     
 }
 
 
-//MARK: - Network
+//MARK: - fetchGenre
 
 extension RegisterViewModel {
     func fetchGenre(genreSearchText: String) {
