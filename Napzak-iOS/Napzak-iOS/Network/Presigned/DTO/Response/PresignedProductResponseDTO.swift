@@ -12,5 +12,5 @@ struct PresignedProductResponseDTO: Codable {
 }
 
 struct PresignedProductUrlsData: Codable {
-    let product: [String: String]
+    let productPresignedUrls: [String: String]
 }

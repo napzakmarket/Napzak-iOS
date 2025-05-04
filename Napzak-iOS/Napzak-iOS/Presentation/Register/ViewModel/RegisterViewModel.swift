@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import os
+
 @MainActor
 final class RegisterViewModel: ObservableObject {
     
@@ -27,6 +29,8 @@ final class RegisterViewModel: ObservableObject {
     @Published var isCompleted: Bool = false
     @Published var genreList: [GenreNameModel] = []
     
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Register")
+    
     init() {
         imagePickerManager.onImageSelectionCompleted = { [weak self] images in
             self?.model.images = images
@@ -40,6 +44,33 @@ final class RegisterViewModel: ObservableObject {
 // MARK: - GET presigned url
 
 extension RegisterViewModel {
+    func getPresignedUrl() async {
+        let result = await NetworkService.shared.presignedService
+            .getPresignedURL(imageNameList: imagePickerManager.imageNameList)
+        
+        switch result {
+        case .success(let response):
+            let statusCode = response.status
+            let message = response.message
+            let uploadURL = response.data.productPresignedUrls
+            
+            let convertedUrls = uploadURL.map { key, value in
+                PresignedProductUrlsData(productPresignedUrls: [key : value])
+            }
+            
+            logger.info("✅ Status Code: \(statusCode)")
+            logger.info("✅ Message: \(message)")
+            logger.info("✅ \(uploadURL)")
+            
+            imagePickerManager.presignedUrlList.append(contentsOf: convertedUrls)
+            
+            //TODO: - put 요청 보내기
+            
+        case .failure(let error):
+            logger.error("❌ GET Presigned URL failed: \(error.localizedDescription)")
+        }
+    }
+    
     
 }
 
