@@ -17,7 +17,6 @@ final class ImagePickerManager: ObservableObject {
     
     @Published var selectedImages: [UIImage] = []
     @Published var imageNameList: [String] = []
-    @Published var presignedUrlList: [PresignedProductUrlsData] = []
     @Published var photosPickerItem: [PhotosPickerItem] = [] {
         didSet {
             Task {

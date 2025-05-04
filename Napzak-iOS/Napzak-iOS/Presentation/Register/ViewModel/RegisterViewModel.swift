@@ -19,6 +19,7 @@ final class RegisterViewModel: ObservableObject {
     
     // MARK: - Property Wrappers
     
+    @Published var presignedUrlList: [String:String] = [:]
     @Published var productId: Int?
     @Published var normalDelivery: Bool = false
     @Published var halfDelivery: Bool = false
@@ -41,38 +42,106 @@ final class RegisterViewModel: ObservableObject {
 }
 
 
-// MARK: - GET presigned url
+// MARK: - Network
 
 extension RegisterViewModel {
-    func getPresignedUrl() async {
+    
+    
+    // MARK: - GET presigned url
+
+    func getPresignedUrl() async -> Bool {
         let result = await NetworkService.shared.presignedService
             .getPresignedURL(imageNameList: imagePickerManager.imageNameList)
         
         switch result {
         case .success(let response):
+            let imageNames = imagePickerManager.imageNameList
             let statusCode = response.status
             let message = response.message
             let uploadURL = response.data.productPresignedUrls
-            
-            let convertedUrls = uploadURL.map { key, value in
-                PresignedProductUrlsData(productPresignedUrls: [key : value])
-            }
             
             logger.info("✅ Status Code: \(statusCode)")
             logger.info("✅ Message: \(message)")
             logger.info("✅ \(uploadURL)")
             
-            imagePickerManager.presignedUrlList.append(contentsOf: convertedUrls)
+            self.presignedUrlList = uploadURL.filter { key, _ in
+                imageNames.contains(key)
+            }
             
-            //TODO: - put 요청 보내기
+            return true
             
         case .failure(let error):
             logger.error("❌ GET Presigned URL failed: \(error.localizedDescription)")
+            return false
         }
     }
     
     
+    // MARK: - PUT presigned url
+
+    func putPresignedUrl() async -> Bool {
+        guard presignedUrlList.count == imagePickerManager.selectedImages.count else {
+            logger.error("❌ presignedUrlList와 이미지 수 불일치")
+            return false
+        }
+
+        let imageNames = imagePickerManager.imageNameList
+        let urls = presignedUrlList
+        var uploadResults = Array(repeating: false, count: imageNames.count)
+
+        await withTaskGroup(of: (Int, Bool).self) { group in
+            for (index, name) in imageNames.enumerated() {
+                guard let url = urls[name],
+                      index < imagePickerManager.selectedImages.count,
+                      let imageData = imagePickerManager.selectedImages[index].jpegData(compressionQuality: 0.8) else {
+                    logger.error("❌ 이미지 또는 URL 매칭 실패: \(index+1)번 이미지")
+                    continue
+                }
+
+                group.addTask {
+                    let result = await NetworkService.shared.presignedService.putPresignedURL(url: url, imageData: imageData)
+                    switch result {
+                    case .success:
+                        return (index, true)
+                    case .failure(let error):
+                        self.logger.error("❌ PUT Presigned URL 실패: \(error.localizedDescription) - \(index+1)번 이미지")
+                        return (index, false)
+                    }
+                }
+            }
+
+            for await (index, success) in group {
+                uploadResults[index] = success
+            }
+        }
+
+        if uploadResults.allSatisfy({ $0 }) {
+            logger.info("✅ 모든 이미지 업로드 성공")
+            return true
+        } else {
+            logger.error("❌ 일부 이미지 업로드 실패")
+            return false
+        }
+    }
+    
+    
+    // MARK: - POST Register
+
+    func postSellRegister() async {
+        guard await getPresignedUrl() else {return}
+        guard await putPresignedUrl() else {return}
+        
+        // post 요청 보내는 로직
+        
+    }
+    
+    func postBuyRegister() {
+        
+    }
+    
 }
+
+
 
 
 //MARK: - fetchGenre
