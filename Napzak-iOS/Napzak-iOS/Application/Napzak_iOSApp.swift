@@ -19,8 +19,7 @@ struct Napzak_iOSApp: App {
     
     var body: some Scene {
         WindowGroup {
-            NZTabBarView()
-                .environmentObject(NavigationRouter())
+            RootView()
                 .onOpenURL { url in
                     if AuthApi.isKakaoTalkLoginUrl(url) {
                         _ = AuthController.handleOpenUrl(url: url)

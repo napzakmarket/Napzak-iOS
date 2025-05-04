@@ -8,13 +8,16 @@
 import SwiftUI
 
 struct GenreSelectionView: View {
+    @EnvironmentObject private var authRouter: AuthNavigationRouter
     @StateObject private var viewModel = GenreSelectionViewModel()
     @FocusState private var isSearchFocused: Bool
     @State private var isSearchCompleted: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            OnboardingNavigationBar(step: 3)
+            OnboardingNavigationBar(step: 3) {
+                authRouter.pop()
+            }
             
             headerView
                 .zIndex(2)
@@ -43,6 +46,7 @@ struct GenreSelectionView: View {
             .ignoresSafeArea(.keyboard)
             
         }
+        .toolbar(.hidden, for: .navigationBar)
         .contentShape(Rectangle())
         .onTapGesture {
             if isSearchFocused {
@@ -137,6 +141,7 @@ extension GenreSelectionView {
             
             Button {
                 // TODO: 유저 장르 등록
+                authRouter.push(next: .completed)
                 print("납작마켓 시작하기")
             } label: {
                 Text("납작마켓 시작하기")
@@ -150,6 +155,7 @@ extension GenreSelectionView {
             .disabled(viewModel.selectedGenres.isEmpty)
             
             Button {
+                authRouter.push(next: .completed)
                 print("건너뛰기")
             } label: {
                 Text("건너뛰기")

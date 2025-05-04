@@ -53,7 +53,7 @@ struct NZTabBarView: View {
                     .toolbar(.hidden, for: .tabBar)
                 }
                 
-                if  isRegisterTabSelected {
+                if isRegisterTabSelected {
                     Color.clear
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .contentShape(Rectangle())
@@ -81,9 +81,9 @@ struct NZTabBarView: View {
                     SView()
                 case .mView:
                     MView()
-                    
                 case .searchInputView:
                     SearchInputView()
+                
                 }
             }
         }
