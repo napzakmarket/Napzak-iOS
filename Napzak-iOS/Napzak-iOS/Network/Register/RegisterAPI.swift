@@ -11,12 +11,15 @@ import Moya
 
 enum RegisterAPI {
     case sellRegister(registerItem: SellRegisterRequestDTO)
+    case buyRegister(registerItem: BuyRegisterRequestDTO)
 }
 
 extension RegisterAPI: BaseTargetType {
     var headerType: HeaderType {
         switch self {
-        case .sellRegister(let registerItem):
+        case .sellRegister:
+            return .accessTokenHeader
+        case .buyRegister:
             return .accessTokenHeader
         }
     }
@@ -25,12 +28,16 @@ extension RegisterAPI: BaseTargetType {
         switch self {
         case .sellRegister:
             return "products/sell"
+        case .buyRegister:
+            return "products/buy"
         }
     }
 
     var method: Moya.Method {
         switch self {
-        case .sellRegister(let registerItem):
+        case .sellRegister:
+            return .post
+        case .buyRegister:
             return .post
         }
     }
@@ -38,6 +45,8 @@ extension RegisterAPI: BaseTargetType {
     var task: Moya.Task {
         switch self {
         case .sellRegister:
+            return .requestPlain
+        case .buyRegister:
             return .requestPlain
         }
     }
