@@ -12,6 +12,6 @@ typealias AuthResponseDTO = BaseResponseDTO<AuthData>
 struct AuthData: Decodable {
     let accessToken: String
     let refreshToken: String
-    let nickname: String
+    let nickname: String?
     let role: UserRole
 }
