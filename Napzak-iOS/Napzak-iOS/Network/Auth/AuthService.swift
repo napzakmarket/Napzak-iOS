@@ -9,7 +9,7 @@ import Foundation
 import Moya
 
 protocol AuthServiceProtocol {
-    func login(type: SocialLoginType, authorizationCode: String) async throws -> Result<AuthResponseDTO, NetworkError>
+    func login(type: SocialLoginType, authorizationCode: String) async -> Result<AuthResponseDTO, NetworkError>
 }
 
 final class AuthService: BaseService, AuthServiceProtocol {
@@ -17,7 +17,6 @@ final class AuthService: BaseService, AuthServiceProtocol {
     private let provider = MoyaProvider<AuthAPI>.init(plugins: [MoyaPlugin()])
     
     func login(type: SocialLoginType, authorizationCode: String) async -> Result<AuthResponseDTO, NetworkError> {
-        return await request<AuthResponseDTO, AuthAPI>(provider, .login(type: type, code: authorizationCode)
-        )
+        return await requestDecodable(provider, .login(type: type, code: authorizationCode))
     }
 }

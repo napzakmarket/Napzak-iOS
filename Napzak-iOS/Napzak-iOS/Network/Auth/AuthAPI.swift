@@ -25,8 +25,8 @@ extension AuthAPI: BaseTargetType {
     
     var path: String {
         switch self {
-        case .login:
-            return "stores/login"
+        case let .login(type, _):
+            return type.loginPath
         case .refresh:
             return "stores/refresh-token"
         }
@@ -39,23 +39,20 @@ extension AuthAPI: BaseTargetType {
     var task: Moya.Task {
         switch self {
         case let .login(type, code):
-            let bodyParameters = [
-                "socialType": type.rawValue
+            let bodyParameters: [String: Any] = [
+                "socialType": type.rawValue,
+                "platform": type.platform
             ]
             
-            let queryParameters = [
-                "authorizationCode": code
+            let queryParameters: [String: Any] = [
+                type.authorizationQueryKey: code
             ]
             
-            do {
-                let data = try JSONSerialization.data(withJSONObject: bodyParameters)
-                return .requestCompositeData(
-                    bodyData: data,
-                    urlParameters: queryParameters
-                )
-            } catch {
-                return .requestPlain
-            }
+            return .requestCompositeParameters(
+                bodyParameters: bodyParameters,
+                bodyEncoding: JSONEncoding.default,
+                urlParameters: queryParameters
+            )
             
         case .refresh:
             return .requestPlain
