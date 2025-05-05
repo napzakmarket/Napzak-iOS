@@ -8,9 +8,9 @@
 import Foundation
 
 struct StoreModifyProfileRequestDTO: Encodable {
-    let storeCover: String?
-    let storePhoto: String?
-    let storeNickName: String?
-    let storeDescription: String?
+    let storeCover: String
+    let storePhoto: String
+    let storeNickName: String
+    let storeDescription: String
     let preferredGenreList: [Int]?
 }
