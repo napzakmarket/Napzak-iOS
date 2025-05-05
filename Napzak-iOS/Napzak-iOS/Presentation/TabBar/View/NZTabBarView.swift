@@ -36,7 +36,7 @@ struct NZTabBarView: View {
             ZStack(alignment: .bottom) {
                 TabView(selection: $selectedTab) {
                     Group {
-                        HView()
+                        HomeView()
                             .tag(NZTab.home)
                         
                         SearchView(
