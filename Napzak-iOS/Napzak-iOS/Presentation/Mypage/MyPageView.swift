@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MyPageView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
-    @State private var storeInfo: StoreDTO?
+    @State private var storeInfo: StoreProfileDTO?
     @State private var isLoading = true
     @State private var errorMessage: String?
         
@@ -112,7 +112,7 @@ struct MyPageView: View {
     }
     
     // API 프로필 정보
-    private func profileCardWithData(storeInfo: StoreDTO) -> some View {
+    private func profileCardWithData(storeInfo: StoreProfileDTO) -> some View {
         HStack(spacing: 14) {
             Circle()
                 .frame(width: 60, height: 60)
