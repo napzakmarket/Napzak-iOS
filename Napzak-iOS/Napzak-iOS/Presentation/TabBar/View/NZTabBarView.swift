@@ -25,6 +25,7 @@ struct NZTabBarView: View {
     @State private var selectedTab: NZTab = .home
     @State private var isRegisterTabSelected = false
     @State private var isRegisterViewPresented = false
+    @State private var registerType: TradeType = .sell
     @State private var isGenreSelectModalPresented = false
     @State private var isSortModalPresented = false
         
@@ -64,7 +65,7 @@ struct NZTabBarView: View {
                 
                 VStack(spacing: 10) {
                     if  isRegisterTabSelected {
-                        RegisterFloatingView(isRegisterViewPresented: $isRegisterViewPresented)
+                        RegisterFloatingView(isRegisterViewPresented: $isRegisterViewPresented, registerType: $registerType)
                     }
                     if !(isGenreSelectModalPresented || isSortModalPresented){
                         tabBar
@@ -73,7 +74,12 @@ struct NZTabBarView: View {
             }
             .edgesIgnoringSafeArea(.bottom)
             .fullScreenCover(isPresented: $isRegisterViewPresented) {
-                RView(isRegisterTabSelected: $isRegisterTabSelected, isRegisterViewPresented: $isRegisterViewPresented)
+                switch registerType {
+                case .sell:
+                    SellRegisterView(isRegisterTabSelected: $isRegisterTabSelected)
+                case .buy:
+                    BuyRegisterView(isRegisterTabSelected: $isRegisterTabSelected)
+                }
             }
             .navigationDestination(for: Route.self) { route in
                 switch route {
@@ -81,7 +87,6 @@ struct NZTabBarView: View {
                     SView()
                 case .mView:
                     MView()
-                    
                 case .searchInputView:
                     SearchInputView()
                 case .genreDetailView(genreId: let genreId, genreName: let genreName):
@@ -91,6 +96,8 @@ struct NZTabBarView: View {
                             genreName: genreName
                         )
                     )
+                case .registerSearchGenre:
+                    EmptyView()
                 }
             }
         }
