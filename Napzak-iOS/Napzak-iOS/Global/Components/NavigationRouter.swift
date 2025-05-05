@@ -13,6 +13,9 @@ enum Route: String, Hashable {
     case mView
     
     case searchInputView
+    
+    // 등록 뷰 내부 사용
+    case registerSearchGenre
 }
 
 final class NavigationRouter: ObservableObject {
