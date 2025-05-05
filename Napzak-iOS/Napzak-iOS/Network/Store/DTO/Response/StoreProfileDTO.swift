@@ -5,6 +5,8 @@
 //  Created by 어진 on 5/3/25.
 //
 
+import Foundation
+
 struct StoreProfileDTO: Decodable {
     let storeId: Int
     let storeNickname: String
@@ -13,3 +15,6 @@ struct StoreProfileDTO: Decodable {
     let totalBuyCount: Int
     let serviceLink: String
 }
+
+typealias StoreResponseDTO = BaseResponseDTO<StoreProfileDTO>
+
