@@ -8,40 +8,66 @@
 import SwiftUI
 
 struct SellRegisterView: View {
+    @EnvironmentObject private var navigationRouter: NavigationRouter
+    @Binding var isRegisterTabSelected: Bool
+
     @StateObject private var viewModel = RegisterViewModel()
     
     var body: some View {
-        VStack(spacing: 0){
-            SellRegisterHeader()
-            
-            ScrollView {
-                VStack(spacing: 0) {
-                    SellRegisterContent
+        NavigationStack(path: $navigationRouter.path) {
+            VStack(spacing: 0){
+                SellRegisterHeader()
+                
+                ScrollView {
+                    VStack(spacing: 0) {
+                        SellRegisterContent
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                registerButton
+            }
+            .ignoresSafeArea()
+            .frame(maxWidth: .infinity)
+            .scrollIndicators(.hidden)
+            .navigationDestination(for: Route.self) { route in
+                switch route {
+                case .registerSearchGenre:
+                    RegisterSearchGenre(
+                        genreSearchText: $viewModel.genreSearchText,
+                        isCompleted: $viewModel.isCompleted,
+                        genreList: $viewModel.genreList,
+                        genre: $viewModel.model.genre,
+                        genreId: $viewModel.model.genreId
+                    )
+                default:
+                    EmptyView()
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            
-            registerButton
         }
-        .ignoresSafeArea()
-        .frame(maxWidth: .infinity)
-        .scrollIndicators(.hidden)
+        .onAppear {
+            isRegisterTabSelected = false
+        }
     }
 }
 
 extension SellRegisterView {
     private var SellRegisterContent: some View {
         VStack(spacing: 0) {
-            RegisterImage()
+            RegisterImage(imagePickerManager: viewModel.imagePickerManager)
                 .padding(.top, 30)
-                .padding(.horizontal, 28)
+                .padding(.leading, 28)
                 .padding(.bottom, 27)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            RegisterGenre()
+            RegisterGenre(genre: $viewModel.model.genre)
                 .padding(.horizontal, 18)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 21)
+                .background(.white)
+                .onTapGesture {
+                    navigationRouter.push(next: .registerSearchGenre)
+                }
             
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))
@@ -74,7 +100,7 @@ extension SellRegisterView {
                 .padding(.bottom, 30)
             
             SellRegisterDelivery(
-                deliveryType: $viewModel.model.deliveryType,
+                isDeliveryIncluded: $viewModel.model.isDeliveryIncluded,
                 standardDeliveryFee: $viewModel.model.standardDeliveryFee,
                 halfDeliveryFee: $viewModel.model.halfDeliveryFee,
                 normalDelivery: $viewModel.normalDelivery,
@@ -92,23 +118,23 @@ extension SellRegisterView {
             
             Button {
                 //MARK: - 팔아요 등록
-                print("버튼 눌림")
+                print(viewModel.model)
             } label: {
                 Text("등록하기")
                     .applyNapzakFont(.body4Bold14)
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity, minHeight: 50)
             }
-            .background(Color.napzakGrayScale(.gray100))
+            .background(
+                viewModel.sharedValidate && viewModel.sellRegisterValidate ? Color
+                    .napzakPrimary(.purple500) : Color
+                    .napzakGrayScale(.gray100)
+            )
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .padding(.horizontal, 28)
             .padding(.top, 18)
             .padding(.bottom, 40)
+            .disabled(!(viewModel.sharedValidate && viewModel.sellRegisterValidate))
         }
     }
 }
-
-#Preview {
-    SellRegisterView()
-}
-
