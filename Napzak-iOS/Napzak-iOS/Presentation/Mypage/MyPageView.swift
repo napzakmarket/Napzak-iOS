@@ -117,14 +117,27 @@ struct MyPageView: View {
             Circle()
                 .frame(width: 60, height: 60)
                 .overlay(
-                    AsyncImage(url: URL(string: storeInfo.storePhoto)) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                    } placeholder: {
-                        Image("profile_img")
-                            .resizable()
-                            .scaledToFit()
+                    AsyncImage(url: URL(string: storeInfo.storePhoto)) { phase in
+                        switch phase {
+                        case .empty:
+                            // 로딩 중일 때 기본 이미지 표시
+                            Image("profile_img")
+                                .resizable()
+                                .scaledToFit()
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFit()
+                        case .failure:
+                            // 로드 실패 시 기본 이미지 표시
+                            Image("profile_img")
+                                .resizable()
+                                .scaledToFit()
+                        @unknown default:
+                            Image("profile_img")
+                                .resizable()
+                                .scaledToFit()
+                        }
                     }
                 )
             
@@ -150,54 +163,6 @@ struct MyPageView: View {
                             .foregroundColor(Color.napzakGrayScale(.gray500))
                         
                         Text("\(storeInfo.totalBuyCount)개")
-                            .applyNapzakFont(.caption1SemiBold12)
-                            .foregroundColor(Color.napzakGrayScale(.gray500))
-                    }
-                }
-            }
-            
-            Spacer()
-        }
-        .padding(20)
-        .background(Color.napzakGrayScale(.gray10))
-        .clipShape(RoundedRectangle(cornerRadius: 25))
-        .padding(.horizontal, 27)
-        .padding(.top, 30)
-    }
-    
-    // 하드코딩된 프로필: 추후에 삭제 예정임다
-    private var profileCard: some View {
-        HStack(spacing: 14) {
-            Circle()
-                .frame(width: 60, height: 60)
-                .overlay(
-                    Image("profile_img")
-                        .resizable()
-                        .scaledToFit()
-                )
-            
-            VStack(alignment: .leading, spacing:7) {
-                Text("납작한 자기")
-                    .applyNapzakFont(.body4Bold14)
-                    .foregroundColor(Color.napzakPrimary(.purple500))
-                
-                HStack(spacing: 14) {
-                    HStack(spacing: 2) {
-                        Text("팔아요")
-                            .applyNapzakFont(.caption2Medium12)
-                            .foregroundColor(Color.napzakGrayScale(.gray500))
-                        
-                        Text("00개")
-                            .applyNapzakFont(.caption1SemiBold12)
-                            .foregroundColor(Color.napzakGrayScale(.gray500))
-                    }
-                    
-                    HStack(spacing: 2) {
-                        Text("구해요")
-                            .applyNapzakFont(.caption2Medium12)
-                            .foregroundColor(Color.napzakGrayScale(.gray500))
-                        
-                        Text("00개")
                             .applyNapzakFont(.caption1SemiBold12)
                             .foregroundColor(Color.napzakGrayScale(.gray500))
                     }
