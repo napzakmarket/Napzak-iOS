@@ -45,6 +45,7 @@ struct LoginView: View {
                         .onAppear {
                             OnboardingManager.shared.saveCheckpoint(.completed)
                             AuthManager.shared.completeOnboarding()
+                            authRouter.reset()
                         }
                 }
             }
