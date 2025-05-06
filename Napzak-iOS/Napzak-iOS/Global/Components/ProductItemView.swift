@@ -135,6 +135,7 @@ extension ProductItemView {
     private var likeButton: some View {
         Button {
             if shouldToggleInterestState() {
+                print("likeButton toggle")
                 product.isInterested.toggle()
             }
         } label: {
