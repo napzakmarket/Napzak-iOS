@@ -42,26 +42,24 @@ struct MyPageView: View {
                 .edgesIgnoringSafeArea(.bottom)
         }
         .background(Color.napzakGrayScale(.white))
-        .onAppear {
-            fetchMyPageInfo()
+        .task {
+            await fetchMyPageInfo()
         }
     }
     
-    private func fetchMyPageInfo() {
+    private func fetchMyPageInfo() async {
         isLoading = true
         
-        Task {
-            let result = await storeService.getMyPageInfo()
+        let result = await storeService.getMyPageInfo()
+        
+        await MainActor.run {
+            isLoading = false
             
-            await MainActor.run {
-                isLoading = false
-                
-                switch result {
-                case .success(let response):
-                    storeInfo = response.data
-                case .failure:
-                    storeInfo = nil
-                }
+            switch result {
+            case .success(let response):
+                storeInfo = response.data
+            case .failure:
+                storeInfo = nil
             }
         }
     }
