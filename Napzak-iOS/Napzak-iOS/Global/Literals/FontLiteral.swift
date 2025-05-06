@@ -20,7 +20,10 @@ enum NapzakFontStyle {
     case title1Bold22
     case title2Bold20
     case title3Bold18
-    
+    case title4SemiBold20
+    case title5SemiBold18
+    case title6Medium18
+
     //body
     case body1Bold16
     case body2SemiBold16
@@ -50,7 +53,10 @@ extension Font {
         case .title1Bold22: return pretendardFont(weight: .bold, size: 22)
         case .title2Bold20: return pretendardFont(weight: .bold, size: 20)
         case .title3Bold18: return pretendardFont(weight: .bold, size: 18)
-            
+        case .title4SemiBold20: return pretendardFont(weight: .semiBold, size: 20)
+        case .title5SemiBold18: return pretendardFont(weight: .semiBold, size: 18)
+        case .title6Medium18: return pretendardFont(weight: .medium, size: 18)
+
         //body
         case .body1Bold16: return pretendardFont(weight: .bold, size: 16)
         case .body2SemiBold16: return pretendardFont(weight: .semiBold, size: 16)
@@ -75,6 +81,9 @@ extension Font {
         case .title1Bold22: return UIFont(name: FontWeight.bold.rawValue, size: 22)!
         case .title2Bold20: return UIFont(name: FontWeight.bold.rawValue, size: 20)!
         case .title3Bold18: return UIFont(name: FontWeight.bold.rawValue, size: 18)!
+        case .title4SemiBold20: return UIFont(name: FontWeight.semiBold.rawValue, size: 20)!
+        case .title5SemiBold18: return UIFont(name: FontWeight.semiBold.rawValue, size: 18)!
+        case .title6Medium18: return UIFont(name: FontWeight.medium.rawValue, size: 18)!
             
         //body
         case .body1Bold16: return UIFont(name: FontWeight.bold.rawValue, size: 16)!
