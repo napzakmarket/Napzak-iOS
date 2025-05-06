@@ -42,6 +42,7 @@
 		D029060D2DAF98A5008515FD /* TradeStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D029060C2DAF989F008515FD /* TradeStatus.swift */; };
 		D029060F2DAF9978008515FD /* TradeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D029060E2DAF9978008515FD /* TradeType.swift */; };
 		D029061C2DB16532008515FD /* GenreItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D029061B2DB16524008515FD /* GenreItemView.swift */; };
+		D0310AEE2DCA592E00C265EC /* ProductCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0310AED2DCA592200C265EC /* ProductCondition.swift */; };
 		D045DEBB2D83723A00EB1EB6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */; };
 		D045DEBC2D83723A00EB1EB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB72D83723A00EB1EB6 /* Assets.xcassets */; };
 		D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEB82D83723A00EB1EB6 /* ContentView.swift */; };
@@ -150,6 +151,7 @@
 		D029060C2DAF989F008515FD /* TradeStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeStatus.swift; sourceTree = "<group>"; };
 		D029060E2DAF9978008515FD /* TradeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradeType.swift; sourceTree = "<group>"; };
 		D029061B2DB16524008515FD /* GenreItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreItemView.swift; sourceTree = "<group>"; };
+		D0310AED2DCA592200C265EC /* ProductCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCondition.swift; sourceTree = "<group>"; };
 		D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Napzak-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D045DEB72D83723A00EB1EB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -617,6 +619,7 @@
 		D07837A22DB2F11C009122F6 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
+				D0310AED2DCA592200C265EC /* ProductCondition.swift */,
 				D02905FF2DAF4851008515FD /* SortOption.swift */,
 				D029060C2DAF989F008515FD /* TradeStatus.swift */,
 				D029060E2DAF9978008515FD /* TradeType.swift */,
@@ -1039,6 +1042,7 @@
 				D0F035822DBF6654003D0CBF /* PresignedAPI.swift in Sources */,
 				D0180D602D9F001E006A748F /* RegisterFloatingView.swift in Sources */,
 				6CB2EC072DBFED96003BF298 /* RegisterViewModel.swift in Sources */,
+				D0310AEE2DCA592E00C265EC /* ProductCondition.swift in Sources */,
 				D0F0356F2DBF441E003D0CBF /* PreferGenreResponseDTO.swift in Sources */,
 				D0F035702DBF441E003D0CBF /* GenreNameResponseDTO.swift in Sources */,
 			);
