@@ -48,7 +48,7 @@ struct NZTabBarView: View {
                         CView()
                             .tag(NZTab.chat)
                         
-                        MView()
+                        MyPageView()
                             .tag(NZTab.my)
                     }
                     .toolbar(.hidden, for: .tabBar)
@@ -89,6 +89,13 @@ struct NZTabBarView: View {
                     MView()
                 case .searchInputView:
                     SearchInputView()
+                    
+                case .MarketView:
+                       MarketView()
+                    
+                case .ProfileEditView:
+                    ProfileEditView()
+
                 case .registerSearchGenre:
                     EmptyView()
                 }
