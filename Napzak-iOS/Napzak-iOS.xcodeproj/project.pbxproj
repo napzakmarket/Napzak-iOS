@@ -444,7 +444,6 @@
 		D0310AE52DC9294100C265EC /* View */ = {
 			isa = PBXGroup;
 			children = (
-				D0310AEF2DCB2E3700C265EC /* Modal */,
 				D0310AE72DC9294F00C265EC /* ProductDetailView.swift */,
 			);
 			path = View;
@@ -464,6 +463,14 @@
 				D0310AF02DCB2E4400C265EC /* ProductOwnerOptionsModalView.swift */,
 			);
 			path = Modal;
+			sourceTree = "<group>";
+		};
+		D0310AF42DCBAC0400C265EC /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				D0310AEF2DCB2E3700C265EC /* Modal */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		D045DE922D836F0500EB1EB6 = {
@@ -692,6 +699,7 @@
 		D045DF382D83856F00EB1EB6 /* ProductDetail */ = {
 			isa = PBXGroup;
 			children = (
+				D0310AF42DCBAC0400C265EC /* Components */,
 				D0310AE62DC9294400C265EC /* Model */,
 				D0310AE52DC9294100C265EC /* View */,
 				D0310AE42DC9293900C265EC /* ViewModel */,
