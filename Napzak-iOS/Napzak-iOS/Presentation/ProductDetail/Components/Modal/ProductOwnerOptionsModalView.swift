@@ -12,7 +12,10 @@ struct ProductOwnerOptionsModalView: View {
     //MARK: - Property Wrappers
     
     @State private var isChangeStatusButtonSelected = false
-    
+    @State private var currentStatusString = ""
+    @State private var currentToastStyle: ProductDetailToastStyle = .statusChanged
+    @State private var showToast = false
+
     @Binding var isOwnerOptionsModalPresented: Bool
     @Binding var currentStatus: TradeStatus
     
@@ -24,22 +27,34 @@ struct ProductOwnerOptionsModalView: View {
     //MARK: - Main Body
     
     var body: some View {
-        VStack(alignment: .center, spacing: 0) {
-            Capsule()
-                .fill(Color.napzakGrayScale(.gray100))
-                .frame(width: 42, height: 2)
-            
-            editButton
-            changeStatusButton
-            if isChangeStatusButtonSelected {
-                tradeStatusDetailButtons
+        ZStack(alignment: .bottom) {
+            VStack(alignment: .center, spacing: 0) {
+                Capsule()
+                    .fill(Color.napzakGrayScale(.gray100))
+                    .frame(width: 42, height: 2)
+                
+                editButton
+                changeStatusButton
+                if isChangeStatusButtonSelected {
+                    tradeStatusDetailButtons
+                }
+                deleteButton
+                Spacer()
             }
-            deleteButton
-            Spacer()
+            .padding(.top, 17)
+            .padding(.horizontal, 28)
+            
+            if showToast {
+                ProductDetailToastView(
+                    style: currentToastStyle,
+                    tradeStatus: currentStatusString
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(1)
+                .padding(.bottom, 44)
+            }
         }
         .frame(height: 380)
-        .padding(.top, 17)
-        .padding(.horizontal, 28)
         .background(Color.napzakGrayScale(.white))
         .clipShape(.rect(topLeadingRadius: 31, topTrailingRadius: 31))
         .gesture(
@@ -52,6 +67,7 @@ struct ProductOwnerOptionsModalView: View {
                     }
                 }
         )
+        .animation(.easeInOut(duration: 0.3), value: showToast)
     }
 }
 
@@ -61,9 +77,6 @@ private extension ProductOwnerOptionsModalView {
     
     var editButton: some View {
         Button {
-            withAnimation {
-                isOwnerOptionsModalPresented = false
-            }
             isChangeStatusButtonSelected = false
         } label: {
             HStack(spacing: 6) {
@@ -102,12 +115,16 @@ private extension ProductOwnerOptionsModalView {
                 HStack(alignment: .center, spacing: 4) {
                     Button {
                         currentStatus = status
-                        withAnimation {
-                            isOwnerOptionsModalPresented = false
+                        currentStatusString = statusString(status: status)
+                        currentToastStyle = .statusChanged
+                        Task {
+                            showToast = true
+                            try? await Task.sleep(for: .seconds(2))
+                            showToast = false
                         }
                     } label: {
                         Image(currentStatus == status ? .imgRadioSelected : .imgRadioDefault)
-                        Text(statusText(status: status))
+                        Text(statusString(status: status))
                             .frame(height: 18)
                             .applyNapzakFont(.body4Bold14)
                             .foregroundStyle(currentStatus == status ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray500))
@@ -122,10 +139,13 @@ private extension ProductOwnerOptionsModalView {
     
     var deleteButton: some View {
         Button {
-            withAnimation {
-                isOwnerOptionsModalPresented = false
+            Task {
+                showToast = true
+                try? await Task.sleep(for: .seconds(2))
+                showToast = false
             }
             isChangeStatusButtonSelected = false
+            currentToastStyle = .deleteProduct
         } label: {
             HStack(spacing: 6) {
                 Image(.imgDeleteModal)
@@ -143,7 +163,7 @@ private extension ProductOwnerOptionsModalView {
     
     //MARK: - Private func
     
-    func statusText(status: TradeStatus) -> String {
+    func statusString(status: TradeStatus) -> String {
         switch status {
         case .beforeTrade:
             return "\(tradeType.title)중"
