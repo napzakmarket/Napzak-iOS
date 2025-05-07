@@ -60,7 +60,7 @@ extension ProductDetailViewModel {
                 halfDeliveryFee: 3000,
                 isDeliveryIncluded: false,
                 isPriceNegotiable: true,
-                tradeStatus: .beforeTrade,
+                tradeStatus: .completed,
                 isOwnedByCurrentUser: true,
                 chatCount: 34
             ),

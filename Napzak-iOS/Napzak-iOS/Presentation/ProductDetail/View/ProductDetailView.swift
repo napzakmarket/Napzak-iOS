@@ -133,12 +133,37 @@ extension ProductDetailView {
                 .padding(.trailing, 29)
                 .padding(.bottom, 42)
             
+            if viewModel.product.productDetail.tradeStatus != .beforeTrade {
+                tradeStatusOverlay
+                    .frame(width: screenWidth, height: screenWidth * 16 / 15)
+                    .padding(.bottom, 22)
+            }
+            
             shadowView
                 .frame(height: 22)
         }
         .frame(width: screenWidth, height: screenWidth * 16 / 15 + 22)
         .clipped()
         .padding(.top, 100)
+    }
+    
+    private var tradeStatusOverlay: some View {
+        ZStack {
+            Color.napzakTransparency(.transBlack)
+            VStack(spacing: 6) {
+                if viewModel.product.productDetail.tradeStatus == .completed {
+                    Image(viewModel.product.productDetail.tradeType == .sell ? .imgTradeSellBig : .imgTradeBuyBig)
+                    Text(viewModel.product.productDetail.tradeType == .sell ? "판매 완료" : "구매 완료")
+                        .applyNapzakFont(.title4SemiBold20)
+                        .foregroundStyle(Color.napzakGrayScale(.white))
+                } else if viewModel.product.productDetail.tradeStatus == .reserved {
+                    Image(.imgTradeReservedBig)
+                    Text("예약중")
+                        .applyNapzakFont(.title4SemiBold20)
+                        .foregroundStyle(Color.napzakGrayScale(.white))
+                }
+            }
+        }
     }
     
     private var shadowView: some View {
