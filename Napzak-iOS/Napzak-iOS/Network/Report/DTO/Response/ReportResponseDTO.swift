@@ -5,17 +5,8 @@
 //  Created by OneTen on 5/4/25.
 //
 
-struct ReportProductResponseDTO: Codable {
-    let status: Int
-    let message: String
-    let data: ReportProductResponseData
-}
-
-struct ReportStoreResponseDTO: Codable {
-    let status: Int
-    let message: String
-    let data: ReportStoreResponseData
-}
+typealias ReportProductResponseDTO = BaseResponseDTO<ReportProductResponseData>
+typealias ReportStoreResponseDTO = BaseResponseDTO<ReportStoreResponseData>
 
 struct ReportProductResponseData: Codable {
     let reporterId: Int

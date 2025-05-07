@@ -58,11 +58,6 @@ extension ReportViewModel {
             switch result {
             case .success(let response):
                 logger.info("📦 [Product Report] message: \(response.message)")
-                logger.info("📦 [Product Report] title: \(response.data.reportTitle)")
-                logger.info("📦 [Product Report] description: \(response.data.reportDescription)")
-                logger.info("📦 [Product Report] contact: \(response.data.reportContact)")
-                logger.info("📦 [Product Report] reportedProductID: \(response.data.reportedProductID)")
-                logger.info("📦 [Product Report] reporterId: \(response.data.reporterId)")
             case .failure(let error):
                 logger.error("❌ Product report failed: \(error.localizedDescription)")
             }
@@ -74,11 +69,6 @@ extension ReportViewModel {
             switch result {
             case .success(let response):
                 logger.info("🏬 [Store Report] message: \(response.message)")
-                logger.info("🏬 [Store Report] title: \(response.data.reportTitle)")
-                logger.info("🏬 [Store Report] description: \(response.data.reportDescription)")
-                logger.info("🏬 [Store Report] contact: \(response.data.reportContact)")
-                logger.info("🏬 [Store Report] reportedStoreId: \(response.data.reportedStoreId)")
-                logger.info("🏬 [Store Report] reporterId: \(response.data.reporterId)")
             case .failure(let error):
                 logger.error("❌ Store report failed: \(error.localizedDescription)")
             }
