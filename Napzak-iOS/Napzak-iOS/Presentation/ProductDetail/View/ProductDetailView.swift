@@ -32,18 +32,29 @@ struct ProductDetailView: View {
                 navigationBar
                 Spacer()
                 if !(viewModel.product.productDetail.isOwnedByCurrentUser) {
-                    bottomView
+                    VStack(spacing: 52) {
+                        if viewModel.showToast {
+                            ToastMessageView(
+                                message: "찜한 상품에 추가되었어요!",
+                                style: .success
+                            )
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
+                            .zIndex(1)
+                        }
+                        bottomView
+                    }
                 }
             }
         }
         .navigationBarHidden(true)
         .ignoresSafeArea()
+        .animation(.spring(), value: viewModel.showToast)
     }
 }
 
 extension ProductDetailView {
     
-    //MARK: - UIProperties
+    //MARK: - UI Properties
     
     private var navigationBar: some View {
         VStack {
@@ -380,11 +391,7 @@ extension ProductDetailView {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 16) {
                 Button {
-                    print("좋아요 버튼 선택")
-//                    isChangedInterest?.toggle()
-                    if viewModel.product.isInterested == false {
-//                        showToastMessage()
-                    }
+                    viewModel.toggleInterestState()
                 } label: {
                     viewModel.product.isInterested ? Image(.btnHeartSelectedBig) : Image(.btnHeartDefaultBig)
                 }

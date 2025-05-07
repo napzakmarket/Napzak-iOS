@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+@MainActor
 final class ProductDetailViewModel: ObservableObject {
     
     //MARK: - Property Wrappers
@@ -34,7 +35,8 @@ final class ProductDetailViewModel: ObservableObject {
         productPhotoList: [ProductPhotoInfo(id: 0, photoUrl: "", photoSequence: 0)],
         storeInfo: StoreInfo(id: 0, storePhoto: "", nickname: "", totalSellCount: 0, totalBuyCount: 0)
     )
-    
+    @Published var showToast: Bool = false
+
     //MARK: - Init
     
     init() {
@@ -45,7 +47,7 @@ final class ProductDetailViewModel: ObservableObject {
 extension ProductDetailViewModel {
     func fetchProduct() {
         product = ProductDetailModel(
-            isInterested: false,
+            isInterested: true,
             productDetail: ProductDetailInfo(
                 id: 1,
                 tradeType: .buy,
@@ -61,7 +63,7 @@ extension ProductDetailViewModel {
                 isDeliveryIncluded: false,
                 isPriceNegotiable: true,
                 tradeStatus: .completed,
-                isOwnedByCurrentUser: true,
+                isOwnedByCurrentUser: false,
                 chatCount: 34
             ),
             productPhotoList: [
@@ -99,5 +101,19 @@ extension ProductDetailViewModel {
                 totalBuyCount: 10
             )
         )
+    }
+    
+    func toggleInterestState() {
+        //TODO: - 좋아요 API 연결
+
+        Task {
+            product.isInterested.toggle()
+
+            if product.isInterested {
+                showToast = true
+                try? await Task.sleep(for: .seconds(2))
+                showToast = false
+            }
+        }
     }
 }
