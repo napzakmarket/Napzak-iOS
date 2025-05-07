@@ -9,13 +9,13 @@ import SwiftUI
 
 enum ReportType {
     case product
-    case market
+    case store
     
     var title: String {
         switch self {
         case .product:
             return "상품"
-        case .market:
+        case .store:
             return "마켓"
         }
     }
@@ -31,7 +31,7 @@ enum ReportType {
                 ReportReasonMessage.dispute,
                 ReportReasonMessage.other
             ]
-        case .market:
+        case .store:
             return [
                 ReportReasonMessage.badManners,
                 ReportReasonMessage.suspectedFraud,
