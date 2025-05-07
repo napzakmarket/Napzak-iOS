@@ -79,6 +79,10 @@ struct MarketView: View {
         .onChange(of: viewModel.selectedTabIndex) { _ in
             viewModel.fetchData()
         }
+        .onChange(of: selectedSortOption) { newValue in
+            viewModel.productFetchOption.sortOption = newValue
+            viewModel.fetchProducts()
+        }
     }
 
     private var navigationBarView: some View {
@@ -101,7 +105,6 @@ struct MarketView: View {
     private var profileSectionView: some View {
         VStack(spacing: 0) {
             ZStack {
-                // 배경 이미지
                 if let storeCover = viewModel.storeDetail?.storeCover, !storeCover.isEmpty {
                     AsyncImage(url: URL(string: storeCover)) { phase in
                         switch phase {
@@ -127,7 +130,6 @@ struct MarketView: View {
                         .frame(height: 160)
                 }
                 
-                // 프로필 이미지
                 if let storePhoto = viewModel.storeDetail?.storePhoto, !storePhoto.isEmpty {
                     AsyncImage(url: URL(string: storePhoto)) { phase in
                         switch phase {
@@ -248,6 +250,15 @@ struct MarketView: View {
                         isOnSale: $viewModel.productFetchOption.isOnSale
                     )
                     .frame(height: 54)
+                    .onChange(of: viewModel.productFetchOption.isOnSale) { _ in
+                        viewModel.fetchProducts()
+                    }
+                    .onChange(of: viewModel.productFetchOption.isUnopened) { _ in
+                        viewModel.fetchProducts()
+                    }
+                    .onChange(of: viewModel.productFetchOption.genres) { _ in
+                        viewModel.fetchProducts()
+                    }
                 }
             }
             .padding(.horizontal, 28)
@@ -305,23 +316,38 @@ struct MarketView: View {
             .padding(.horizontal, 28)
             .frame(height: 58)
 
-            LazyVGrid(columns: columns, spacing: 20) {
-                ForEach(viewModel.dummyProducts.indices, id: \.self) { i in
-                    ProductItemView(
-                        product: $viewModel.dummyProducts[i],
-                        width: productCellWidth,
-                        shouldToggleInterestState: {
-                            return viewModel.canToggleInterestState(
-                                productID: viewModel.dummyProducts[i].id
-                            )
-                        })
-                        .onTapGesture {
-                            //TODO: - 화면 전환
-                            print("\(viewModel.dummyProducts[i].id)번 상품")
-                        }
+            if viewModel.isLoadingProducts {
+                ProgressView()
+                    .padding(.top, 40)
+            } else if viewModel.products.isEmpty {
+                VStack {
+                    Spacer()
+                        .frame(height: 40)
+                    Text("상품이 없습니다")
+                        .foregroundColor(Color.napzakGrayScale(.gray300))
+                        .applyNapzakFont(.body1Bold16)
+                    Spacer()
                 }
+                .frame(height: 200)
+            } else {
+                LazyVGrid(columns: columns, spacing: 20) {
+                    ForEach(viewModel.products.indices, id: \.self) { i in
+                        ProductItemView(
+                            product: $viewModel.products[i],
+                            width: productCellWidth,
+                            shouldToggleInterestState: {
+                                return viewModel.canToggleInterestState(
+                                    productID: viewModel.products[i].id
+                                )
+                            })
+                            .onTapGesture {
+                                //TODO: - 화면 전환
+                                print("\(viewModel.products[i].id)번 상품")
+                            }
+                    }
+                }
+                .padding(.horizontal, 28)
             }
-            .padding(.horizontal, 28)
         }
     }
     
