@@ -16,7 +16,9 @@ struct ProductDetailView: View {
     @StateObject private var viewModel = ProductDetailViewModel()
 
     @State private var currentPage = 1
-    
+    @State private var isReportModalPresented = false
+    @State private var isOwnerOptionsModalPresented = false
+
     //MARK: - Properties
     
     let screenWidth = UIScreen.main.bounds.width
@@ -45,10 +47,49 @@ struct ProductDetailView: View {
                     }
                 }
             }
+            
+            if isReportModalPresented {
+                Color.napzakTransparency(.transBlack)
+                    .onTapGesture {
+                        withAnimation {
+                            isReportModalPresented = false
+                        }
+                    }
+                    .transition(.opacity)
+                    .zIndex(1)
+                
+                ReportModalView(
+                    isReportModalPresented: $isReportModalPresented,
+                    reportType: .product
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(2)
+            }
+            
+            if isOwnerOptionsModalPresented {
+                Color.napzakTransparency(.transBlack)
+                    .onTapGesture {
+                        withAnimation {
+                            isOwnerOptionsModalPresented = false
+                        }
+                    }
+                    .transition(.opacity)
+                    .zIndex(1)
+                
+                ProductOwnerOptionsModalView(
+                    isOwnerOptionsModalPresented: $isOwnerOptionsModalPresented,
+                    currentStatus: $viewModel.product.productDetail.tradeStatus,
+                    tradeType: viewModel.product.productDetail.tradeType
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(2)
+            }
         }
         .navigationBarHidden(true)
         .ignoresSafeArea()
         .animation(.spring(), value: viewModel.showToast)
+        .animation(.easeInOut(duration: 0.3), value: isReportModalPresented)
+        .animation(.easeInOut(duration: 0.3), value: isOwnerOptionsModalPresented)
     }
 }
 
@@ -68,7 +109,11 @@ extension ProductDetailView {
                 }
                 Spacer()
                 Button {
-                    
+                    if viewModel.product.productDetail.isOwnedByCurrentUser {
+                            isOwnerOptionsModalPresented  = true
+                    } else {
+                        isReportModalPresented = true
+                    }
                 } label: {
                     Image(.iconMoreOptions)
                         .frame(width: 48, height: 48)

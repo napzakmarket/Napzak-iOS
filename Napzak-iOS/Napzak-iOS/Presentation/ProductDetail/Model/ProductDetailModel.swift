@@ -7,7 +7,7 @@
 
 struct ProductDetailModel {
     var isInterested: Bool
-    let productDetail: ProductDetailInfo
+    var productDetail: ProductDetailInfo
     let productPhotoList: [ProductPhotoInfo]
     let storeInfo: StoreInfo
 }
@@ -26,7 +26,7 @@ struct ProductDetailInfo: Identifiable {
     let halfDeliveryFee: Int
     let isDeliveryIncluded: Bool
     let isPriceNegotiable: Bool
-    let tradeStatus: TradeStatus
+    var tradeStatus: TradeStatus
     let isOwnedByCurrentUser: Bool
     let chatCount: Int
 }

@@ -63,7 +63,7 @@ extension ProductDetailViewModel {
                 isDeliveryIncluded: false,
                 isPriceNegotiable: true,
                 tradeStatus: .completed,
-                isOwnedByCurrentUser: false,
+                isOwnedByCurrentUser: true,
                 chatCount: 34
             ),
             productPhotoList: [

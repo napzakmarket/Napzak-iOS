@@ -10,4 +10,13 @@ enum TradeType: String {
 
     case sell = "SELL"
     case buy = "BUY"
+    
+    var title: String {
+        switch self {
+            case .sell:
+            return "판매"
+        case .buy:
+            return "구매"
+        }
+    }
 }
