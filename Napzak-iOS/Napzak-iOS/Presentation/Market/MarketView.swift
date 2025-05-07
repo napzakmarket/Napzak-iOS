@@ -101,57 +101,126 @@ struct MarketView: View {
     private var profileSectionView: some View {
         VStack(spacing: 0) {
             ZStack {
-                Rectangle()
-                    .fill(Color.napzakGrayScale(.gray100))
+                // 배경 이미지
+                if let storeCover = viewModel.storeDetail?.storeCover, !storeCover.isEmpty {
+                    AsyncImage(url: URL(string: storeCover)) { phase in
+                        switch phase {
+                        case .empty:
+                            Rectangle()
+                                .fill(Color.napzakGrayScale(.gray100))
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        case .failure:
+                            Rectangle()
+                                .fill(Color.napzakGrayScale(.gray100))
+                        @unknown default:
+                            Rectangle()
+                                .fill(Color.napzakGrayScale(.gray100))
+                        }
+                    }
                     .frame(height: 160)
+                } else {
+                    Rectangle()
+                        .fill(Color.napzakGrayScale(.gray100))
+                        .frame(height: 160)
+                }
                 
-                Image("profile_market")
-                    .resizable()
-                    .frame(width: 60, height: 60)
-                    .foregroundColor(Color.napzakGrayScale(.gray200))
+                // 프로필 이미지
+                if let storePhoto = viewModel.storeDetail?.storePhoto, !storePhoto.isEmpty {
+                    AsyncImage(url: URL(string: storePhoto)) { phase in
+                        switch phase {
+                        case .empty:
+                            Image("profile_market")
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                                .clipShape(Circle())
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                                .clipShape(Circle())
+                        case .failure:
+                            Image("profile_market")
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                                .clipShape(Circle())
+                        @unknown default:
+                            Image("profile_market")
+                                .resizable()
+                                .frame(width: 60, height: 60)
+                                .clipShape(Circle())
+                        }
+                    }
                     .offset(y: 80)
+                } else {
+                    Image("profile_market")
+                        .resizable()
+                        .frame(width: 60, height: 60)
+                        .foregroundColor(Color.napzakGrayScale(.gray200))
+                        .offset(y: 80)
+                }
                 
                 VStack {
                     Spacer()
                     HStack {
                         Spacer()
-                        Button {
-                            navigationRouter.push(next: .ProfileEditView)
-                        } label: {
-                            Text("프로필 편집")
-                                .foregroundColor(Color.napzakGrayScale(.white))
-                                .applyNapzakFont(.caption4SemiBold10)
-                                .frame(width: 48, height: 12)
-                                .padding(6)
-                                .background(
-                                    Capsule()
-                                        .fill(Color.napzakGrayScale(.gray400))
-                                )
+                        // 본인 상점일 경우에만 프로필 편집 버튼 표시
+                        if viewModel.storeDetail?.isStoreOwner == true {
+                            Button {
+                                navigationRouter.push(next: .ProfileEditView)
+                            } label: {
+                                Text("프로필 편집")
+                                    .foregroundColor(Color.napzakGrayScale(.white))
+                                    .applyNapzakFont(.caption4SemiBold10)
+                                    .frame(width: 48, height: 12)
+                                    .padding(6)
+                                    .background(
+                                        Capsule()
+                                            .fill(Color.napzakGrayScale(.gray400))
+                                    )
+                            }
+                            .padding(.trailing, 28)
                         }
-                        .padding(.trailing, 28)
                     }
                     .padding(.bottom, 8)
                 }
             }
 
             VStack(spacing: 0) {
-                Text("납작한 자기")
-                    .foregroundColor(Color.napzakGrayScale(.gray500))
-                    .applyNapzakFont(.body2SemiBold16)
-                    .padding(.top, 42)
+                if viewModel.isLoadingProfile {
+                    ProgressView()
+                        .padding(.top, 42)
+                } else {
+                    Text(viewModel.storeDetail?.storeNickName ?? "납작한 자기")
+                        .foregroundColor(Color.napzakGrayScale(.gray500))
+                        .applyNapzakFont(.body2SemiBold16)
+                        .padding(.top, 42)
 
-                Text("잡덕입니다. 최애는 짱구, 철수, 흰둥이, 긴토키, 히지카타 관련 상품 판매 및 구매 제시 채팅 언제든 환영합니다 :)")
-                    .foregroundColor(Color.napzakGrayScale(.black))
-                    .applyNapzakFont(.caption2Medium12)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .padding(.top, 6)
-                    .padding(.horizontal, 37)
+                    Text(viewModel.storeDetail?.storeDescription ?? "마켓 소개글이 없습니다.")
+                        .foregroundColor(Color.napzakGrayScale(.black))
+                        .applyNapzakFont(.caption2Medium12)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                        .padding(.top, 6)
+                        .padding(.horizontal, 37)
+                }
 
-            ScrollView(.horizontal, showsIndicators: false) {
+                ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 5) {
-                        ForEach(["산리오", "은혼", "주술회전", "원피스", "귀멸의 칼날", "시카모머시기"], id: \.self) { tag in
-                            PlainChip(title: tag)
+                        if let genres = viewModel.storeDetail?.genrePreferenceList, !genres.isEmpty {
+                            ForEach(genres, id: \.genreId) { genre in
+                                PlainChip(title: genre.genreName)
+                            }
+                        } else if viewModel.isLoadingProfile {
+                            ForEach(["로딩 중..."], id: \.self) { tag in
+                                PlainChip(title: tag)
+                            }
+                        } else {
+                            ForEach(["선택된 장르 없음"], id: \.self) { tag in
+                                PlainChip(title: tag)
+                            }
                         }
                     }
                     .padding(.horizontal, 25)
