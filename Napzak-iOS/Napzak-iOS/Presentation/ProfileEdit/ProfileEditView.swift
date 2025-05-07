@@ -8,12 +8,9 @@
 import SwiftUI
 
 struct ProfileEditView: View {
-    @State private var nickname: String = ""
-    @State private var profileDescription: String = ""
-    @State private var selectedTags: [String] = []
-    @State private var isPrimaryButtonEnabled: Bool = false
+    @StateObject private var viewModel = ProfileEditViewModel()
     @State private var isGenreSelectModalPresented: Bool = false
-    @State private var adaptedGenres: [GenreNameModel] = []
+    @State private var displayGenres: [GenreNameModel] = []
     @EnvironmentObject private var navigationRouter: NavigationRouter
 
     var body: some View {
@@ -40,16 +37,30 @@ struct ProfileEditView: View {
                 
                 GenreSelectModalView(
                     viewModel: GenreSelectModalViewModel(
-                        selectedGenres: adaptedGenres
+                        selectedGenres: displayGenres
                     ),
                     isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                    adaptedGenres: $adaptedGenres
+                    adaptedGenres: $displayGenres
                 )
+                .onAppear {
+                    displayGenres = viewModel.selectedGenres
+                }
+                .onDisappear {
+                    viewModel.selectedGenres = displayGenres
+                }
             }
         }
         .animation(.easeInOut, value: isGenreSelectModalPresented)
         .edgesIgnoringSafeArea(.bottom)
         .navigationBarHidden(true)
+        .onChange(of: viewModel.isSuccess) { success in
+            // 잠시 후 이전 화면으로 이동
+            if success {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    navigationRouter.pop()
+                }
+            }
+        }
     }
 }
 
@@ -75,19 +86,71 @@ extension ProfileEditView {
     private var profileImageSection: some View {
         VStack(spacing: 0) {
             ZStack {
-                Rectangle()
-                    .fill(Color.napzakGrayScale(.gray100))
+                // 배경 이미지
+                if !viewModel.coverImageURL.isEmpty {
+                    AsyncImage(url: URL(string: viewModel.coverImageURL)) { phase in
+                        switch phase {
+                        case .empty:
+                            Rectangle()
+                                .fill(Color.napzakGrayScale(.gray100))
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        case .failure:
+                            Rectangle()
+                                .fill(Color.napzakGrayScale(.gray100))
+                        @unknown default:
+                            Rectangle()
+                                .fill(Color.napzakGrayScale(.gray100))
+                        }
+                    }
                     .frame(height: 160)
+                } else {
+                    Rectangle()
+                        .fill(Color.napzakGrayScale(.gray100))
+                        .frame(height: 160)
+                }
                 
-                Image("profile_edit")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 110, height: 110)
-                    .foregroundColor(.gray)
+                // 프로필 이미지
+                if !viewModel.profileImageURL.isEmpty {
+                    AsyncImage(url: URL(string: viewModel.profileImageURL)) { phase in
+                        switch phase {
+                        case .empty:
+                            Image("profile_edit")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 110, height: 110)
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 110, height: 110)
+                                .clipShape(Circle())
+                        case .failure:
+                            Image("profile_edit")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 110, height: 110)
+                        @unknown default:
+                            Image("profile_edit")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 110, height: 110)
+                        }
+                    }
                     .offset(y: 57)
+                } else {
+                    Image("profile_edit")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 110, height: 110)
+                        .foregroundColor(.gray)
+                        .offset(y: 57)
+                }
                 
                 Button {
-                    // 사진 편집 기능
+                    viewModel.uploadProfileImage()
                 } label: {
                     Image("edit")
                         .resizable()
@@ -111,9 +174,9 @@ extension ProfileEditView {
                 .foregroundColor(Color.napzakGrayScale(.gray300))
                 .padding(.bottom,16)
 
-            UsernameInputField(isPrimaryButtonEnabled: $isPrimaryButtonEnabled)
+            UsernameInputField(isPrimaryButtonEnabled: $viewModel.isPrimaryButtonEnabled)
                 .padding(.top, 10)
-                .padding(.bottom,20)
+                .padding(.bottom, 20)
         }
         .padding(.horizontal, 20)
         
@@ -140,7 +203,7 @@ extension ProfileEditView {
                
             descriptionEditor
                
-            Text("\(profileDescription.count)/200")
+            Text("\(viewModel.profileDescription.count)/200")
                 .applyNapzakFont(.caption4SemiBold10)
                 .foregroundColor(Color.napzakGrayScale(.gray300))
                 .frame(maxWidth: .infinity, alignment: .trailing)
@@ -161,20 +224,20 @@ extension ProfileEditView {
     
     private var descriptionEditor: some View {
         ZStack(alignment: .topLeading) {
-            TextEditor(text: $profileDescription)
+            TextEditor(text: $viewModel.profileDescription)
                 .applyNapzakFont(.caption2Medium12)
                 .padding(10)
                 .scrollContentBackground(.hidden)
                 .background(Color.napzakGrayScale(.gray50))
                 .clipShape(RoundedRectangle(cornerRadius: 14))
                 .frame(height: 150)
-                .onChange(of: profileDescription) { newValue in
+                .onChange(of: viewModel.profileDescription) { newValue in
                     if newValue.count > 200 {
-                        profileDescription = String(newValue.prefix(200))
+                        viewModel.profileDescription = String(newValue.prefix(200))
                     }
                 }
 
-            if profileDescription.isEmpty {
+            if viewModel.profileDescription.isEmpty {
                 Text("어떤 장르를 좋아하고, 판매하는지!\n덕후력을 뽐내는 소개를 작성해주세요")
                     .applyNapzakFont(.caption2Medium12)
                     .foregroundColor(Color.napzakGrayScale(.gray200))
@@ -196,19 +259,19 @@ extension ProfileEditView {
                 .foregroundColor(Color.napzakGrayScale(.gray300))
                 .padding(.bottom,16)
             
-            PlainChipContainerView(
-                titles: ["산리오", "은혼", "주술회전", "귀멸의 칼날", "사카모토데이즈", "디즈니/픽사"],
-                action: { title in
-                    if selectedTags.contains(title) {
-                        selectedTags.removeAll { $0 == title }
-                    } else {
-                        if selectedTags.count < 7 {
-                            selectedTags.append(title)
-                        }
+            if !viewModel.selectedGenres.isEmpty {
+                PlainChipContainerView(
+                    titles: viewModel.selectedGenres.map { $0.name },
+                    action: { _ in
                     }
-                }
-            )
-            .padding(.bottom,25)
+                )
+                .padding(.bottom, 25)
+            } else {
+                Text("선택된 장르가 없습니다")
+                    .applyNapzakFont(.caption2Medium12)
+                    .foregroundColor(Color.napzakGrayScale(.gray300))
+                    .padding(.bottom, 25)
+            }
 
             Button {
                 withAnimation {
@@ -229,17 +292,17 @@ extension ProfileEditView {
     
     private var confirmButton: some View {
         Button {
-            // 확인 버튼
+            viewModel.saveProfile()
         } label: {
             Text("확인")
                 .frame(maxWidth: .infinity)
                 .padding()
-                .background(isPrimaryButtonEnabled ? Color.napzakPrimary(.purple500) : Color.napzakPrimary(.purple500).opacity(0.5))
+                .background(viewModel.isPrimaryButtonEnabled ? Color.napzakPrimary(.purple500) : Color.napzakPrimary(.purple500).opacity(0.5))
                 .applyNapzakFont(.body4Bold14)
                 .foregroundColor(Color.napzakGrayScale(.white))
                 .cornerRadius(14)
         }
-        .disabled(!isPrimaryButtonEnabled)
+        .disabled(!viewModel.isPrimaryButtonEnabled)
         .padding(.bottom, 63)
         .padding(.horizontal, 27)
         .padding(.top, 5)
@@ -247,7 +310,6 @@ extension ProfileEditView {
 }
 
 // MARK: - Preview
-
 struct ProfileEditView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileEditView()
