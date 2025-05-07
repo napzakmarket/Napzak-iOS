@@ -60,6 +60,7 @@ struct SellRegisterPrice: View {
                             .foregroundColor(.napzakGrayScale(.gray100))
                             .frame(height: 23)
                             .frame(minWidth: 72)
+                            .frame(maxWidth: .infinity)
                             .background(Color.napzakGrayScale(.gray10))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 5)

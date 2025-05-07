@@ -71,10 +71,9 @@ struct BuyRegisterPrice: View {
                         .frame(height: 13)
                 }
                 .padding(.bottom, 8)
-                
             }
             
-            HStack(spacing: 8) { // 버튼 사이 간격 설정
+            HStack(spacing: 8) {
                 ForEach(addPrices, id: \.self) { addPrice in
                     Button {
                         price = (price.convertInt() + addPrice.convertInt()).description
@@ -85,6 +84,7 @@ struct BuyRegisterPrice: View {
                             .foregroundColor(.napzakGrayScale(.gray100))
                             .frame(height: 24)
                             .frame(minWidth: 72)
+                            .frame(maxWidth: .infinity)
                             .background(Color.napzakGrayScale(.gray10))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 5)

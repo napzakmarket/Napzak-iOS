@@ -7,20 +7,18 @@
 
 import SwiftUI
 
-enum DeliveryType {
-    case included
-    case separate
-}
-
 struct RegisterModel {
     // Shared
+    var images: [UIImage] = []
     var title: String = ""
     var description: String = ""
     var price: String = ""
+    var genre: String = ""
+    var genreId: Int?
     
     // Sell
     var productCondition: String = ""
-    var deliveryType: DeliveryType?
+    var isDeliveryIncluded: Bool?
     var standardDeliveryFee: String = ""
     var halfDeliveryFee: String = ""
     
