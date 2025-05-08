@@ -118,6 +118,27 @@
 		D63270342DA3AC10002414DA /* GenreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63270312DA3AC10002414DA /* GenreCell.swift */; };
 		D63270352DA3AC10002414DA /* GenreGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63270322DA3AC10002414DA /* GenreGridView.swift */; };
 		D63270372DA3AC55002414DA /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63270362DA3AC55002414DA /* ToastMessageView.swift */; };
+		D632C52C2DC736A3005CD429 /* AppleLoginAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D632C52B2DC736A3005CD429 /* AppleLoginAdapter.swift */; };
+		D64560F22DC33514003D2E2B /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64560F12DC33514003D2E2B /* LoginView.swift */; };
+		D64560F52DC33A37003D2E2B /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64560F42DC33A37003D2E2B /* AuthManager.swift */; };
+		D64560FA2DC33F2E003D2E2B /* UserRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64560F92DC33F2E003D2E2B /* UserRole.swift */; };
+		D64561012DC3411C003D2E2B /* AuthResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561002DC3411C003D2E2B /* AuthResponseDTO.swift */; };
+		D64561042DC342E4003D2E2B /* SocialLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561032DC342E4003D2E2B /* SocialLoginService.swift */; };
+		D64561062DC3463A003D2E2B /* SocialLoginType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561052DC3463A003D2E2B /* SocialLoginType.swift */; };
+		D645610D2DC36514003D2E2B /* KakaoLoginAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D645610C2DC36514003D2E2B /* KakaoLoginAdapter.swift */; };
+		D64561102DC36546003D2E2B /* AuthError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D645610F2DC36546003D2E2B /* AuthError.swift */; };
+		D64561122DC368E7003D2E2B /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561112DC368E7003D2E2B /* KeychainManager.swift */; };
+		D64561142DC36B4D003D2E2B /* AuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561132DC36B4D003D2E2B /* AuthAPI.swift */; };
+		D64561162DC3751D003D2E2B /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561152DC3751D003D2E2B /* AuthService.swift */; };
+		D645611A2DC375E2003D2E2B /* LoginRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561192DC375E2003D2E2B /* LoginRequestDTO.swift */; };
+		D645611F2DC39AE0003D2E2B /* TokenResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D645611E2DC39AE0003D2E2B /* TokenResponseDTO.swift */; };
+		D64561212DC3BECC003D2E2B /* TokenRefreshService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561202DC3BECC003D2E2B /* TokenRefreshService.swift */; };
+		D64561232DC3C05C003D2E2B /* TokenRefresher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561222DC3C05C003D2E2B /* TokenRefresher.swift */; };
+		D64561262DC48028003D2E2B /* OnboardingStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561252DC48028003D2E2B /* OnboardingStep.swift */; };
+		D64561282DC48101003D2E2B /* OnboardingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561272DC48101003D2E2B /* OnboardingManager.swift */; };
+		D645612C2DC4B35F003D2E2B /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D645612B2DC4B35F003D2E2B /* LoginViewModel.swift */; };
+		D64561342DC5C875003D2E2B /* AuthNavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561332DC5C875003D2E2B /* AuthNavigationRouter.swift */; };
+		D64561362DC5E15C003D2E2B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561352DC5E15C003D2E2B /* RootView.swift */; };
 		D64922D12D9EF5CB00716740 /* RowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64922D02D9EF5CB00716740 /* RowType.swift */; };
 		D67C17762D9AEDC000CFCDFA /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */; };
 		D67C17772D9AEDC000CFCDFA /* CheckRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17732D9AEDC000CFCDFA /* CheckRow.swift */; };
@@ -238,6 +259,28 @@
 		D63270312DA3AC10002414DA /* GenreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreCell.swift; sourceTree = "<group>"; };
 		D63270322DA3AC10002414DA /* GenreGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreGridView.swift; sourceTree = "<group>"; };
 		D63270362DA3AC55002414DA /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
+		D632C52B2DC736A3005CD429 /* AppleLoginAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginAdapter.swift; sourceTree = "<group>"; };
+		D632C52D2DC748CD005CD429 /* Napzak-iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Napzak-iOS.entitlements"; sourceTree = "<group>"; };
+		D64560F12DC33514003D2E2B /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		D64560F42DC33A37003D2E2B /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		D64560F92DC33F2E003D2E2B /* UserRole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRole.swift; sourceTree = "<group>"; };
+		D64561002DC3411C003D2E2B /* AuthResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponseDTO.swift; sourceTree = "<group>"; };
+		D64561032DC342E4003D2E2B /* SocialLoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLoginService.swift; sourceTree = "<group>"; };
+		D64561052DC3463A003D2E2B /* SocialLoginType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLoginType.swift; sourceTree = "<group>"; };
+		D645610C2DC36514003D2E2B /* KakaoLoginAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KakaoLoginAdapter.swift; sourceTree = "<group>"; };
+		D645610F2DC36546003D2E2B /* AuthError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthError.swift; sourceTree = "<group>"; };
+		D64561112DC368E7003D2E2B /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		D64561132DC36B4D003D2E2B /* AuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthAPI.swift; sourceTree = "<group>"; };
+		D64561152DC3751D003D2E2B /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		D64561192DC375E2003D2E2B /* LoginRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequestDTO.swift; sourceTree = "<group>"; };
+		D645611E2DC39AE0003D2E2B /* TokenResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenResponseDTO.swift; sourceTree = "<group>"; };
+		D64561202DC3BECC003D2E2B /* TokenRefreshService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefreshService.swift; sourceTree = "<group>"; };
+		D64561222DC3C05C003D2E2B /* TokenRefresher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefresher.swift; sourceTree = "<group>"; };
+		D64561252DC48028003D2E2B /* OnboardingStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingStep.swift; sourceTree = "<group>"; };
+		D64561272DC48101003D2E2B /* OnboardingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingManager.swift; sourceTree = "<group>"; };
+		D645612B2DC4B35F003D2E2B /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		D64561332DC5C875003D2E2B /* AuthNavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthNavigationRouter.swift; sourceTree = "<group>"; };
+		D64561352DC5E15C003D2E2B /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		D64922D02D9EF5CB00716740 /* RowType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowType.swift; sourceTree = "<group>"; };
 		D67C17712D9AEDC000CFCDFA /* OnboardingNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNavigationBar.swift; sourceTree = "<group>"; };
 		D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
@@ -449,6 +492,7 @@
 		D045DEBA2D83723A00EB1EB6 /* Napzak-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				D632C52D2DC748CD005CD429 /* Napzak-iOS.entitlements */,
 				D045DED42D83747300EB1EB6 /* Application */,
 				D045DED52D8374BF00EB1EB6 /* Global */,
 				D045DEFF2D83852600EB1EB6 /* Network */,
@@ -461,6 +505,7 @@
 			isa = PBXGroup;
 			children = (
 				D045DEB92D83723A00EB1EB6 /* Napzak_iOSApp.swift */,
+				D64561352DC5E15C003D2E2B /* RootView.swift */,
 				D045DEB62D83723A00EB1EB6 /* Preview Content */,
 			);
 			path = Application;
@@ -573,6 +618,8 @@
 		D045DEF02D837E5300EB1EB6 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				D64560F32DC33A29003D2E2B /* Auth */,
+				D64561242DC48013003D2E2B /* Onboarding */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -581,6 +628,7 @@
 			isa = PBXGroup;
 			children = (
 				D0F035252DBF121B003D0CBF /* Base */,
+				D64560FC2DC34059003D2E2B /* Auth */,
 				D0F0353F2DBF27F1003D0CBF /* Genre */,
 				D0F035422DBF27F1003D0CBF /* Interest */,
 				D0F0354E2DBF27F1003D0CBF /* Product */,
@@ -594,6 +642,8 @@
 		D045DF002D83855B00EB1EB6 /* Splash */ = {
 			isa = PBXGroup;
 			children = (
+				D645612A2DC4B355003D2E2B /* ViewModel */,
+				D64561292DC4B34F003D2E2B /* View */,
 			);
 			path = Splash;
 			sourceTree = "<group>";
@@ -945,6 +995,109 @@
 			path = Genre;
 			sourceTree = "<group>";
 		};
+		D64560F32DC33A29003D2E2B /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				D64560F42DC33A37003D2E2B /* AuthManager.swift */,
+				D64561112DC368E7003D2E2B /* KeychainManager.swift */,
+				D64561222DC3C05C003D2E2B /* TokenRefresher.swift */,
+				D64561022DC342C3003D2E2B /* SocialLogin */,
+				D645610E2DC36538003D2E2B /* Error */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		D64560FC2DC34059003D2E2B /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				D64560FD2DC3406D003D2E2B /* DTO */,
+				D64561132DC36B4D003D2E2B /* AuthAPI.swift */,
+				D64561152DC3751D003D2E2B /* AuthService.swift */,
+				D64561202DC3BECC003D2E2B /* TokenRefreshService.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		D64560FD2DC3406D003D2E2B /* DTO */ = {
+			isa = PBXGroup;
+			children = (
+				D64561182DC375D5003D2E2B /* Request */,
+				D64561172DC375CA003D2E2B /* Response */,
+			);
+			path = DTO;
+			sourceTree = "<group>";
+		};
+		D64561022DC342C3003D2E2B /* SocialLogin */ = {
+			isa = PBXGroup;
+			children = (
+				D64561032DC342E4003D2E2B /* SocialLoginService.swift */,
+				D64561052DC3463A003D2E2B /* SocialLoginType.swift */,
+				D64561072DC3470C003D2E2B /* Adapters */,
+			);
+			path = SocialLogin;
+			sourceTree = "<group>";
+		};
+		D64561072DC3470C003D2E2B /* Adapters */ = {
+			isa = PBXGroup;
+			children = (
+				D645610C2DC36514003D2E2B /* KakaoLoginAdapter.swift */,
+				D632C52B2DC736A3005CD429 /* AppleLoginAdapter.swift */,
+			);
+			path = Adapters;
+			sourceTree = "<group>";
+		};
+		D645610E2DC36538003D2E2B /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				D645610F2DC36546003D2E2B /* AuthError.swift */,
+			);
+			path = Error;
+			sourceTree = "<group>";
+		};
+		D64561172DC375CA003D2E2B /* Response */ = {
+			isa = PBXGroup;
+			children = (
+				D64560F92DC33F2E003D2E2B /* UserRole.swift */,
+				D64561002DC3411C003D2E2B /* AuthResponseDTO.swift */,
+				D645611E2DC39AE0003D2E2B /* TokenResponseDTO.swift */,
+			);
+			path = Response;
+			sourceTree = "<group>";
+		};
+		D64561182DC375D5003D2E2B /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				D64561192DC375E2003D2E2B /* LoginRequestDTO.swift */,
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
+		D64561242DC48013003D2E2B /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				D64561252DC48028003D2E2B /* OnboardingStep.swift */,
+				D64561272DC48101003D2E2B /* OnboardingManager.swift */,
+				D64561332DC5C875003D2E2B /* AuthNavigationRouter.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		D64561292DC4B34F003D2E2B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D64560F12DC33514003D2E2B /* LoginView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		D645612A2DC4B355003D2E2B /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				D645612B2DC4B35F003D2E2B /* LoginViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		D67C17742D9AEDC000CFCDFA /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -1068,6 +1221,7 @@
 				D63270292DA30609002414DA /* GenreSelectionView.swift in Sources */,
 				D045DEFA2D8383CC00EB1EB6 /* TextEditor+.swift in Sources */,
 				D02906002DAF485C008515FD /* SortOption.swift in Sources */,
+				D64561122DC368E7003D2E2B /* KeychainManager.swift in Sources */,
 				D0F035342DBF1AB7003D0CBF /* NetworkService.swift in Sources */,
 				D64922D12D9EF5CB00716740 /* RowType.swift in Sources */,
 				D6055AF02DBF3AC1005D32A3 /* BannerAction.swift in Sources */,
@@ -1076,6 +1230,9 @@
 				D02906022DAF4891008515FD /* ProductFetchOption.swift in Sources */,
 				6CF689452DC67CAC00BC63AD /* ReportService.swift in Sources */,
 				D0F035762DBF4F09003D0CBF /* GenreNameModel.swift in Sources */,
+				D645610D2DC36514003D2E2B /* KakaoLoginAdapter.swift in Sources */,
+				D64560FA2DC33F2E003D2E2B /* UserRole.swift in Sources */,
+				D64561342DC5C875003D2E2B /* AuthNavigationRouter.swift in Sources */,
 				6CA3DF6B2DB7D7B400FB00E2 /* StringLiterals.swift in Sources */,
 				D029060D2DAF98A5008515FD /* TradeStatus.swift in Sources */,
 				D63270252DA2C879002414DA /* GenreChip.swift in Sources */,
@@ -1087,6 +1244,7 @@
 				D02905FD2DAE3171008515FD /* FilterContainerView.swift in Sources */,
 				D6055AF82DBFE7C4005D32A3 /* CarouselView.swift in Sources */,
 				D045DEE82D83786800EB1EB6 /* ColorLiteral.swift in Sources */,
+				D64561232DC3C05C003D2E2B /* TokenRefresher.swift in Sources */,
 				870C84262DB923B900E70F09 /* MarketView.swift in Sources */,
 				6CB945562DA5680B0020A17D /* SellRegisterPrice.swift in Sources */,
 				6C6CBE032DA5906600763CBA /* BuyRegisterPrice.swift in Sources */,
@@ -1097,6 +1255,7 @@
 				D6BB9E1F2DC16A1D009D9E01 /* NetworkError.swift in Sources */,
 				6CC472312DA431A10086E345 /* SellRegisterView.swift in Sources */,
 				D0F035382DBF241A003D0CBF /* BaseResponseDTO.swift in Sources */,
+				D64561102DC36546003D2E2B /* AuthError.swift in Sources */,
 				D045DEFA2D8383CC00EB1EB6 /* TextEditor+.swift in Sources */,
 				6CE0D3E72DB29C200090612B /* ReportView.swift in Sources */,
 				D64922D12D9EF5CB00716740 /* RowType.swift in Sources */,
@@ -1107,6 +1266,7 @@
 				D029061C2DB16532008515FD /* GenreItemView.swift in Sources */,
 				D6055AF62DBFADF3005D32A3 /* BannerItemView.swift in Sources */,
 				D045DEFC2D8383CC00EB1EB6 /* TextField+.swift in Sources */,
+				D645611F2DC39AE0003D2E2B /* TokenResponseDTO.swift in Sources */,
 				D0CBB7012DB87CBC00BE20C3 /* PlainChipContainerView.swift in Sources */,
 				D63270342DA3AC10002414DA /* GenreCell.swift in Sources */,
 				D63270372DA3AC55002414DA /* ToastMessageView.swift in Sources */,
@@ -1121,11 +1281,15 @@
 				D06E5B382DAE2121002E68A1 /* NZSegmentedControl.swift in Sources */,
 				6CF689432DC67AF500BC63AD /* ReportResponseDTO.swift in Sources */,
 				D07837B42DB7B906009122F6 /* SearchInputView.swift in Sources */,
+				D64560F22DC33514003D2E2B /* LoginView.swift in Sources */,
 				6CC472332DA432370086E345 /* SellRegisterHeader.swift in Sources */,
 				6CC472372DA4474A0086E345 /* RegisterGenre.swift in Sources */,
 				D67C177D2D9B07E300CFCDFA /* UsernameInputField.swift in Sources */,
+				D64561362DC5E15C003D2E2B /* RootView.swift in Sources */,
+				D64561162DC3751D003D2E2B /* AuthService.swift in Sources */,
 				D67C177B2D9AEEDD00CFCDFA /* UsernameInputView.swift in Sources */,
 				6CB2EC092DBFFD00003BF298 /* RegisterModel.swift in Sources */,
+				D632C52C2DC736A3005CD429 /* AppleLoginAdapter.swift in Sources */,
 				D02906092DAF7D5F008515FD /* SearchViewModel.swift in Sources */,
 				6C6CBDFB2DA589DD00763CBA /* BuyRegisterView.swift in Sources */,
 				6CF689472DC67CB700BC63AD /* ReportAPI.swift in Sources */,
@@ -1133,20 +1297,27 @@
 				D05A03922D91B67200659C74 /* View+.swift in Sources */,
 				6CF689412DC67AE800BC63AD /* ReportRequestDTO.swift in Sources */,
 				D0F0355A2DBF27F1003D0CBF /* StoreService.swift in Sources */,
+				D645612C2DC4B35F003D2E2B /* LoginViewModel.swift in Sources */,
 				D0F0355D2DBF27F1003D0CBF /* ProductService.swift in Sources */,
 				D0F0355F2DBF27F1003D0CBF /* GenreAPI.swift in Sources */,
+				D64561262DC48028003D2E2B /* OnboardingStep.swift in Sources */,
 				D0F035612DBF27F1003D0CBF /* StoreAPI.swift in Sources */,
 				D0F035622DBF27F1003D0CBF /* ProductAPI.swift in Sources */,
 				D0F035662DBF27F1003D0CBF /* InterestService.swift in Sources */,
 				D0F035682DBF27F1003D0CBF /* GenreService.swift in Sources */,
 				D0F035692DBF27F1003D0CBF /* InterestAPI.swift in Sources */,
 				D07BF2762D9D16A3000E4FD5 /* NZTabBarView.swift in Sources */,
+				D64561282DC48101003D2E2B /* OnboardingManager.swift in Sources */,
 				D06F13962DA300CB0029698C /* NavigationRouter.swift in Sources */,
 				D07837B22DB6C156009122F6 /* SortModalView.swift in Sources */,
+				D64561212DC3BECC003D2E2B /* TokenRefreshService.swift in Sources */,
 				D07837A92DB57203009122F6 /* GenreSelectModalView.swift in Sources */,
 				6CB945542DA55E230020A17D /* SellRegisterProductStateSection.swift in Sources */,
+				D64561062DC3463A003D2E2B /* SocialLoginType.swift in Sources */,
 				6CD0249D2DC522B1005004DB /* ImagePickerManager.swift in Sources */,
 				D67C17762D9AEDC000CFCDFA /* PrimaryButton.swift in Sources */,
+				D64560F52DC33A37003D2E2B /* AuthManager.swift in Sources */,
+				D64561042DC342E4003D2E2B /* SocialLoginService.swift in Sources */,
 				6C6CBE012DA58A5600763CBA /* BuyRegisterHeader.swift in Sources */,
 				D632702D2DA37E93002414DA /* GenreSelectionViewModel.swift in Sources */,
 				D67C17772D9AEDC000CFCDFA /* CheckRow.swift in Sources */,
@@ -1154,14 +1325,17 @@
 				D0F035302DBF1A96003D0CBF /* BaseService.swift in Sources */,
 				D67C17782D9AEDC000CFCDFA /* OnboardingNavigationBar.swift in Sources */,
 				D0F035292DBF17B3003D0CBF /* BaseTargetType.swift in Sources */,
+				D64561142DC36B4D003D2E2B /* AuthAPI.swift in Sources */,
 				D67C17792D9AEDC000CFCDFA /* OnboardingTermsView.swift in Sources */,
 				87E920682DC63C41003C42D5 /* StoreModifyProfileRequestDTO.swift in Sources */,
 				6CC472392DA44C5F0086E345 /* RegisterTitle.swift in Sources */,
 				D6920A262DC0C96A00A400CF /* ProductSection.swift in Sources */,
 				875E35FE2DC1265100660071 /* MarketViewModel.swift in Sources */,
 				D67C17802D9B085600CFCDFA /* UsernameValidation.swift in Sources */,
+				D64561012DC3411C003D2E2B /* AuthResponseDTO.swift in Sources */,
 				6C6CBDF92DA574A300763CBA /* SellRegisterDelivery.swift in Sources */,
 				D0CBB7032DB893F600BE20C3 /* SearchInputViewModel.swift in Sources */,
+				D645611A2DC375E2003D2E2B /* LoginRequestDTO.swift in Sources */,
 				6C4886BD2DC0CA07009352ED /* RegisterSearchGenre.swift in Sources */,
 				D045DEBE2D83723A00EB1EB6 /* Napzak_iOSApp.swift in Sources */,
 				D0F035802DBF6654003D0CBF /* PresignedService.swift in Sources */,
@@ -1303,12 +1477,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_ENTITLEMENTS = "Napzak-iOS/Napzak-iOS.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Napzak-iOS/Application/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2G7ZY93ALK;
+				DEVELOPMENT_TEAM = 2G7ZY93ALK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Napzak-iOS/Global/Resources/Info.plist";
@@ -1326,7 +1500,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.napzakmarket.napzak;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = NapzakMarketAppProfile;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1339,12 +1512,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_ENTITLEMENTS = "Napzak-iOS/Napzak-iOS.entitlements";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Napzak-iOS/Application/Preview Content\"";
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 2G7ZY93ALK;
+				DEVELOPMENT_TEAM = 2G7ZY93ALK;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Napzak-iOS/Global/Resources/Info.plist";
@@ -1362,7 +1535,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.napzakmarket.napzak;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = NapzakMarketAppProfile;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -12,6 +12,7 @@ import Moya
 enum HeaderType {
     case noneHeader
     case accessTokenHeader
+    case refreshTokenHeader
 }
 
 protocol BaseTargetType: TargetType {
@@ -29,20 +30,27 @@ extension BaseTargetType {
     }
     
     var headers: [String: String]? {
+        var headers: [String: String] = [
+            "Content-Type": "application/json"
+        ]
         
         switch headerType {
         case .noneHeader:
-            return .none
+            return nil
+            
         case .accessTokenHeader:
-            guard let accessToken = Bundle.main.infoDictionary?["TEMPORARY_ACCESS_TOKEN"] as? String
-            else {
-                fatalError("🚨accessToken을 찾을 수 없습니다🚨")
+            if case .success(let token) = KeychainManager.shared.getAccessToken() {
+                headers["Authorization"] = "Bearer \(token)"
             }
+            return headers
             
-            let header = ["Content-Type": "application/json",
-                          "Authorization": "Bearer \(accessToken)"]
-            
-            return header
+        case .refreshTokenHeader:
+            if case .success(let token) = KeychainManager.shared.getRefreshToken() {
+                headers["Cookie"] = "refreshToken=\(token)"
+            }
+            return headers
         }
     }
+    
 }
+

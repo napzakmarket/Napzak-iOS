@@ -54,7 +54,7 @@ struct NZTabBarView: View {
                     .toolbar(.hidden, for: .tabBar)
                 }
                 
-                if  isRegisterTabSelected {
+                if isRegisterTabSelected {
                     Color.clear
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .contentShape(Rectangle())
