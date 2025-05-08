@@ -11,13 +11,14 @@ enum StoreAPI {
     case getMyPageInfo
     case getStoreDetail(storeId: Int)
     case modifyProfile(request: StoreModifyProfileRequestDTO)
+    case getTerms
 }
 
 extension StoreAPI: BaseTargetType {
     
     var headerType: HeaderType {
         switch self {
-        case .getMyPageInfo, .getStoreDetail, .modifyProfile:
+        case .getMyPageInfo, .getStoreDetail, .modifyProfile, .getTerms:
             return .accessTokenHeader
         }
     }
@@ -30,12 +31,14 @@ extension StoreAPI: BaseTargetType {
             return "stores/\(storeId)"
         case .modifyProfile:
             return "stores/modify/profile"
+        case .getTerms:
+            return "stores/terms"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .getMyPageInfo, .getStoreDetail:
+        case .getMyPageInfo, .getStoreDetail, .getTerms:
             return .get
         case .modifyProfile:
             return .put
@@ -44,7 +47,7 @@ extension StoreAPI: BaseTargetType {
     
     var task: Moya.Task {
         switch self {
-        case .getMyPageInfo, .getStoreDetail:
+        case .getMyPageInfo, .getStoreDetail, .getTerms:
             return .requestPlain
         case .modifyProfile(let request):
             return .requestJSONEncodable(request)

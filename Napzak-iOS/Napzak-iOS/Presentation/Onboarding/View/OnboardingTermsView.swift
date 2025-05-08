@@ -9,6 +9,7 @@ import SwiftUI
 
 struct OnboardingTermsView: View {
     @EnvironmentObject private var authRouter: AuthNavigationRouter
+    @StateObject private var viewModel = OnboardingTermsViewModel()
     @State private var isAllAgreed: Bool = false
     @State private var isTermsAgreed: Bool = false
     @State private var isPrivacyAgreed: Bool = false
@@ -39,7 +40,7 @@ struct OnboardingTermsView: View {
                     rowType: .arrow
                 ) {
                     // TODO: 이용약관 외부 링크로 이동 처리
-                    
+                    viewModel.openUrl(viewModel.termsUrl)
                     print("이용약관 외부 링크 이동")
                 }
                 .padding(.top, 10)
@@ -50,7 +51,7 @@ struct OnboardingTermsView: View {
                     rowType: .arrow
                 ) {
                     // TODO: 개인정보처리방침 외부 링크로 이동 처리
-                    
+                    viewModel.openUrl(viewModel.privacyUrl)
                     print("개인정보처리방침 외부 링크 이동")
                 }
                 
@@ -77,6 +78,9 @@ struct OnboardingTermsView: View {
         }
         .onChange(of: isPrivacyAgreed) { _ in
             updateAllAgreeState()
+        }
+        .task {
+            await viewModel.fetchTermsUrls()
         }
     }
 }
