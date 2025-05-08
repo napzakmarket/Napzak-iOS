@@ -8,43 +8,68 @@
 import SwiftUI
 
 struct BuyRegisterView: View {
+    @EnvironmentObject private var navigationRouter: NavigationRouter
+    @Binding var isRegisterTabSelected: Bool
+
     @StateObject private var viewModel = RegisterViewModel()
     
     var body: some View {
-        VStack(spacing: 0){
-            BuyRegisterHeader()
-
-            ScrollView {
-                VStack(spacing: 0) {
-                    BuyRegisterContent
+        NavigationStack(path: $navigationRouter.path) {
+            VStack(spacing: 0){
+                BuyRegisterHeader()
+                
+                ScrollView {
+                    VStack(spacing: 0) {
+                        BuyRegisterContent
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                registerButton
+            }
+            .ignoresSafeArea()
+            .frame(maxWidth: .infinity)
+            .scrollIndicators(.hidden)
+            .background(Color.napzakGrayScale(.gray10))
+            .navigationDestination(for: Route.self) { route in
+                switch route {
+                case .registerSearchGenre:
+                    RegisterSearchGenre(
+                        genreSearchText: $viewModel.genreSearchText,
+                        isCompleted: $viewModel.isCompleted,
+                        genreList: $viewModel.genreList,
+                        genre: $viewModel.model.genre,
+                        genreId: $viewModel.model.genreId
+                    )
+                default:
+                    EmptyView()
                 }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            
-            registerButton
         }
-        .ignoresSafeArea()
-        .frame(maxWidth: .infinity)
-        .scrollIndicators(.hidden)
-        .background(Color.napzakGrayScale(.gray10))
+        .onAppear {
+            isRegisterTabSelected = false
+        }
     }
 }
 
 extension BuyRegisterView {
     private var BuyRegisterContent: some View {
         VStack(spacing: 0) {
-            RegisterImage()
+            RegisterImage(imagePickerManager: viewModel.imagePickerManager)
                 .padding(.top, 30)
-                .padding(.horizontal, 28)
+                .padding(.leading, 28)
                 .padding(.bottom, 27)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(.white)
             
-            RegisterGenre()
+            RegisterGenre(genre: $viewModel.model.genre)
                 .padding(.horizontal, 18)
                 .frame(maxWidth: .infinity)
                 .padding(.bottom, 21)
                 .background(.white)
+                .onTapGesture {
+                    navigationRouter.push(next: .registerSearchGenre)
+                }
             
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))
@@ -90,25 +115,24 @@ extension BuyRegisterView {
                 .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 1)
             
             Button {
-                print("버튼 눌림")
+                print(viewModel.model)
             } label: {
                 Text("등록하기")
                     .applyNapzakFont(.body4Bold14)
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity, minHeight: 50)
             }
-            .background(Color.napzakGrayScale(.gray100))
+            .background(
+                viewModel.sharedValidate ? Color.napzakPrimary(.purple500) :
+                    Color.napzakGrayScale(.gray100)
+            )
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .padding(.horizontal, 28)
             .padding(.top, 18)
             .padding(.bottom, 40)
+            .disabled(!viewModel.sharedValidate)
+
         }
     }
     
 }
-
-
-#Preview {
-    BuyRegisterView()
-}
-

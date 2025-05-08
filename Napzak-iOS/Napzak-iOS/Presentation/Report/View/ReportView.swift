@@ -10,6 +10,7 @@ import SwiftUI
 struct ReportView: View {
     @StateObject private var viewModel = ReportViewModel()
     @Binding var reportType: ReportType
+    @Binding var id: Int    // report타입에 따른 id (productId, storeId)
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0){
@@ -33,6 +34,7 @@ struct ReportView: View {
         )
         .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
         .ignoresSafeArea()
+        .scrollDismissesKeyboard(.immediately)
     }
 }
 
@@ -40,7 +42,7 @@ extension ReportView {
     private var reportHeader: some View {
         VStack(alignment: .leading) {
             Button {
-                //Todo: - 뒤로가기
+                //Todo: - 네비게이션 pop
                 print("backButton tapped")
             } label: {
                 Image(.iconBack)
@@ -165,6 +167,7 @@ extension ReportView {
                         .lineLimit(5)
                         .padding(.horizontal, 16)
                         .padding(.vertical, 16)
+                        .allowsHitTesting(false)
                 }
             }
             .frame(height: 180)
@@ -179,7 +182,7 @@ extension ReportView {
                     .applyNapzakFont(.caption4SemiBold10)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
                 
-                Text("/430")
+                Text("/200")
                     .applyNapzakFont(.caption4SemiBold10)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
             }
@@ -215,10 +218,10 @@ extension ReportView {
     
     private var submitReportButton: some View {
         Button {
-            //TODO: - API 연결
-            
+            //TODO: - 신고 성공 시 마켓 보기 페이지로 이동
             viewModel.showToast = true
             Task {
+                await viewModel.report(type: reportType, id: id)
                 try? await Task.sleep(nanoseconds: 2_500_000_000)
                 viewModel.showToast = false
             }
@@ -228,11 +231,14 @@ extension ReportView {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity, minHeight: 50)
         }
-        .background(Color.napzakGrayScale(.gray100))
+        .background(
+            viewModel.reportValidate ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray100)
+        )
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .padding(.horizontal, 28)
         .padding(.top, 18)
         .padding(.bottom, 68)
+        .disabled(!viewModel.reportValidate)
     }
     
     private var toastView: some View {
@@ -257,10 +263,11 @@ extension ReportView {
 
 #Preview {
     struct PreviewContainer: View {
-        @State var reportType: ReportType = .market
+        @State var reportType: ReportType = .store
+        @State var id: Int = 0
         
         var body: some View {
-            ReportView(reportType: $reportType)
+            ReportView(reportType: $reportType, id: $id)
         }
     }
     

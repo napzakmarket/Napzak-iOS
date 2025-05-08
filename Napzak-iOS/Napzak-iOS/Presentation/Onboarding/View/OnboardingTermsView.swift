@@ -70,15 +70,7 @@ struct OnboardingTermsView: View {
         }
         .toolbar(.hidden, for: .navigationBar)
         .onChange(of: isAllAgreed) { newValue in
-            if newValue {
-                isTermsAgreed = true
-                isPrivacyAgreed = true
-            } else {
-                if isTermsAgreed && isPrivacyAgreed {
-                    isTermsAgreed = false
-                    isPrivacyAgreed = false
-                }
-            }
+            updateAllAgreeState(newValue)
         }
         .onChange(of: isTermsAgreed) { _ in
             updateAllAgreeState()
@@ -93,6 +85,18 @@ extension OnboardingTermsView {
     
     private func updateAllAgreeState() {
         isAllAgreed = isTermsAgreed && isPrivacyAgreed
+    }
+    
+    private func updateAllAgreeState(_ isChecked: Bool) {
+        if isChecked {
+            isTermsAgreed = true
+            isPrivacyAgreed = true
+        } else {
+            if isTermsAgreed && isPrivacyAgreed {
+                isTermsAgreed = false
+                isPrivacyAgreed = false
+            }
+        }
     }
     
 }

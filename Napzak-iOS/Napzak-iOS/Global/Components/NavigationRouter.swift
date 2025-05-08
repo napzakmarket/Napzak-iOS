@@ -13,6 +13,12 @@ enum Route: String, Hashable {
     case mView
     
     case searchInputView
+    case MarketView
+    case ProfileEditView
+
+    
+    // 등록 뷰 내부 사용
+    case registerSearchGenre
 }
 
 final class NavigationRouter: ObservableObject {

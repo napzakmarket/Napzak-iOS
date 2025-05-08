@@ -20,5 +20,6 @@ final class NetworkService {
     let presignedService: PresignedServiceProtocol = PresignedService()
     let productService: ProductServiceProtocol = ProductService()
     let interestService: InterestServiceProtocol = InterestService()
+    let reportService: ReportServiceProtocol = ReportService()
 
 }
