@@ -13,7 +13,7 @@ actor TokenRefresher {
 
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Auth.Refresh")
     
-    private let service: TokenRefreshServiceProtocol = TokenRefreshService()
+    private let tokenRefreshService = NetworkService.shared.tokenRefreshService
     private var refreshTask: Task<Result<String, NetworkError>, Never>?
 
     /// 액세스 토큰을 재발급하고 Keychain에 저장합니다.
@@ -32,7 +32,7 @@ actor TokenRefresher {
         }
 
         let task = Task<Result<String, NetworkError>, Never> {
-            let result = await service.refresh()
+            let result = await tokenRefreshService.refresh()
             switch result {
             case .success(let dto):
                 guard let accessToken = dto.data?.accessToken else {

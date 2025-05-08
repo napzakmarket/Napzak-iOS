@@ -14,7 +14,7 @@ final class AuthManager: ObservableObject {
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Auth")
     private let keychain = KeychainManager.shared
     private let onboardingManager = OnboardingManager.shared
-    private let authService: AuthServiceProtocol
+    private let authService = NetworkService.shared.authService
     
     var isAuthenticated: Bool {
         (try? keychain.getAccessToken().get()) != nil
@@ -24,8 +24,7 @@ final class AuthManager: ObservableObject {
         onboardingManager.getLastCheckpoint() != .completed
     }
     
-    private init(authService: AuthServiceProtocol = AuthService()) {
-        self.authService = authService
+    private init() {
         #if DEBUG
         keychain.clearTokens()
         OnboardingManager.shared.clearProgress()

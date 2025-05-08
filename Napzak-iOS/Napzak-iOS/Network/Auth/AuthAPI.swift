@@ -6,7 +6,6 @@
 //
 
 import Moya
-import Foundation
 
 enum AuthAPI {
     case login(type: SocialLoginType, code: String)

@@ -5,7 +5,6 @@
 //  Created by 조호근 on 5/1/25.
 //
 
-import Foundation
 import Moya
 
 protocol AuthServiceProtocol {
