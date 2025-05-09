@@ -14,11 +14,12 @@ struct ProfileEditView: View {
     @State private var isPrimaryButtonEnabled: Bool = false
     @State private var isGenreSelectModalPresented: Bool = false
     @State private var adaptedGenres: [GenreNameModel] = []
+    @EnvironmentObject private var navigationRouter: NavigationRouter
 
     var body: some View {
         ZStack(alignment: .bottom) {
             ScrollView {
-                VStack {
+                VStack(spacing: 0) {
                     headerView
                     profileImageSection
                     marketNameView
@@ -48,53 +49,54 @@ struct ProfileEditView: View {
         }
         .animation(.easeInOut, value: isGenreSelectModalPresented)
         .edgesIgnoringSafeArea(.bottom)
+        .navigationBarHidden(true)
     }
 }
 
 extension ProfileEditView {
     private var headerView: some View {
-        HStack {
-            Image(.iconBack)
-                .foregroundColor(Color.napzakGrayScale(.gray200))
-                .padding(.vertical, 4)
-                .padding(.horizontal, 7)
+        HStack(spacing: 3) {
+            Button{
+                navigationRouter.pop()
+            } label: {
+                Image(.iconBack)
+                    .foregroundColor(Color.napzakGrayScale(.gray200))
+                    .frame(width: 24, height: 24)
+            }
             Text("프로필 편집")
                 .applyNapzakFont(.body1Bold16)
                 .foregroundColor(Color.napzakGrayScale(.gray400))
             Spacer()
         }
-        .padding(.horizontal)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 18)
     }
     
     private var profileImageSection: some View {
-        VStack {
+        VStack(spacing: 0) {
             ZStack {
                 Rectangle()
-                    .foregroundColor(Color.napzakGrayScale(.gray100))
-                    .padding(.top, 20)
-                    .padding(.bottom, 70)
+                    .fill(Color.napzakGrayScale(.gray100))
+                    .frame(height: 160)
                 
                 Image("profile_edit")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 110, height: 110)
                     .foregroundColor(.gray)
-                    .padding(.top, 180)
-                    .offset(x: 5, y: -35)
+                    .offset(y: 57)
                 
                 Button {
-                    // 사진 편집 기능이 들어갈 예정
+                    // 사진 편집 기능
                 } label: {
                     Image("edit")
                         .resizable()
                         .scaledToFit()
                         .frame(width: 28, height: 28)
                 }
-                .padding(.top, 180)
-                .offset(x: 55, y: -15)
+                .offset(x: 50, y: 80)
             }
         }
-        .frame(maxWidth: .infinity)
     }
     
     private var marketNameView: some View {
@@ -102,14 +104,16 @@ extension ProfileEditView {
             Text("마켓 이름")
                 .applyNapzakFont(.body5SemiBold14)
                 .foregroundColor(Color.napzakGrayScale(.gray400))
+                .padding(.top, 42)
+            
             Text("띄어쓰기 없이 한글, 영문, 숫자만 사용할 수 있어요 (최대 20자)")
-                           .applyNapzakFont(.caption5Regular10)
-                           .foregroundColor(Color.napzakGrayScale(.gray300))
-                           .padding(.bottom,16)
+                .applyNapzakFont(.caption5Regular10)
+                .foregroundColor(Color.napzakGrayScale(.gray300))
+                .padding(.bottom,16)
 
             UsernameInputField(isPrimaryButtonEnabled: $isPrimaryButtonEnabled)
-                           .padding(.top, 10)
-                           .padding(.bottom,20)
+                .padding(.top, 10)
+                .padding(.bottom,20)
         }
         .padding(.horizontal, 20)
         
@@ -125,35 +129,35 @@ extension ProfileEditView {
     }
     
     private var marketDescriptionSection: some View {
-            VStack(alignment: .leading, spacing: 4) {
-               Text("마켓 소개")
-                   .applyNapzakFont(.body5SemiBold14)
-                   .foregroundColor(Color.napzakGrayScale(.gray400))
+        VStack(alignment: .leading, spacing: 4) {
+            Text("마켓 소개")
+                .applyNapzakFont(.body5SemiBold14)
+                .foregroundColor(Color.napzakGrayScale(.gray400))
                
-               Text("어떤 장르를 좋아하고, 판매하는지! 덕후력을 뽐내는 소개를 작성해주세요")
-                   .applyNapzakFont(.caption5Regular10)
-                   .foregroundColor(Color.napzakGrayScale(.gray300))
+            Text("어떤 장르를 좋아하고, 판매하는지! 덕후력을 뽐내는 소개를 작성해주세요")
+                .applyNapzakFont(.caption5Regular10)
+                .foregroundColor(Color.napzakGrayScale(.gray300))
                
-               descriptionEditor
+            descriptionEditor
                
-               Text("\(profileDescription.count)/200")
-                    .applyNapzakFont(.caption4SemiBold10)
-                   .foregroundColor(Color.napzakGrayScale(.gray300))
-                   .frame(maxWidth: .infinity, alignment: .trailing)
-                   .padding(.top, 14)
-                   .padding(.bottom, 30)
-           }
-           .padding(.horizontal, 20)
+            Text("\(profileDescription.count)/200")
+                .applyNapzakFont(.caption4SemiBold10)
+                .foregroundColor(Color.napzakGrayScale(.gray300))
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.top, 14)
+                .padding(.bottom, 30)
+        }
+        .padding(.horizontal, 20)
            
-           .background(
-               VStack {
-                   Spacer()
-                   Rectangle()
-                       .fill(Color.napzakGrayScale(.gray10))
-                       .frame(height: 4)
-               }
-           )
-       }
+        .background(
+            VStack {
+                Spacer()
+                Rectangle()
+                    .fill(Color.napzakGrayScale(.gray10))
+                    .frame(height: 4)
+            }
+        )
+    }
     
     private var descriptionEditor: some View {
         ZStack(alignment: .topLeading) {

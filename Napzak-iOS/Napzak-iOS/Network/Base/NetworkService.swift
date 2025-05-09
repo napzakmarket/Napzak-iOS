@@ -13,10 +13,13 @@ final class NetworkService {
     
     private init() { }
     
+    let authService: AuthServiceProtocol = AuthService()
+    let tokenRefreshService: TokenRefreshServiceProtocol = TokenRefreshService()
     let genreService: GenreServiceProtocol = GenreService()
     let storeService: StoreServiceProtocol = StoreService()
     let presignedService: PresignedServiceProtocol = PresignedService()
     let productService: ProductServiceProtocol = ProductService()
     let interestService: InterestServiceProtocol = InterestService()
+    let reportService: ReportServiceProtocol = ReportService()
 
 }
