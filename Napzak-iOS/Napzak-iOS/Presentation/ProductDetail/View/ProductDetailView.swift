@@ -13,7 +13,9 @@ struct ProductDetailView: View {
     
     //MARK: - Property Wrappers
     
-    @StateObject private var viewModel = ProductDetailViewModel()
+    @StateObject var viewModel: ProductDetailViewModel
+    
+    @EnvironmentObject private var navigationRouter: NavigationRouter
 
     @State private var currentPage = 1
     @State private var isReportModalPresented = false
@@ -102,7 +104,7 @@ extension ProductDetailView {
             Spacer()
             HStack() {
                 Button {
-    //                navigationRouter.pop()
+                    navigationRouter.pop()
                 } label: {
                     Image(.iconBack)
                         .frame(width: 48, height: 48)
@@ -480,5 +482,5 @@ private extension ProductDetailView {
 }
 
 #Preview {
-    ProductDetailView()
+    ProductDetailView(viewModel: ProductDetailViewModel(productId: 1))
 }

@@ -96,6 +96,9 @@ struct NZTabBarView: View {
                 case .ProfileEditView:
                     ProfileEditView()
 
+                case .productDetailView(productId: let productId):
+                    ProductDetailView(viewModel: ProductDetailViewModel(productId: productId))
+
                 case .registerSearchGenre:
                     EmptyView()
                 }

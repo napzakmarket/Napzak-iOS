@@ -39,13 +39,13 @@ final class ProductDetailViewModel: ObservableObject {
 
     //MARK: - Init
     
-    init() {
-        fetchProduct()
+    init(productId: Int) {
+        fetchProduct(id: productId)
     }
 }
 
 extension ProductDetailViewModel {
-    func fetchProduct() {
+    func fetchProduct(id: Int) {
         product = ProductDetailModel(
             isInterested: true,
             productDetail: ProductDetailInfo(
