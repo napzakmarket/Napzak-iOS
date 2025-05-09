@@ -19,18 +19,18 @@ final class GenreService: BaseService, GenreServiceProtocol {
     private let provider = MoyaProvider<GenreAPI>.init(plugins: [MoyaPlugin()])
     
     func getAllPreferGenre() async -> Result<PreferGenreResponseDTO, NetworkError> {
-        return await request<PreferGenreResponseDTO, GenreAPI>(provider, .getAllPreferGenre)
+        return await requestDecodable(provider, .getAllPreferGenre)
     }
     
     func getSearchPreferGenre(searchWord: String) async -> Result<PreferGenreResponseDTO, NetworkError> {
-        return await request<PreferGenreResponseDTO, GenreAPI>(provider, .getSearchPreferGenre(searchWord: searchWord))
+        return await requestDecodable(provider, .getSearchPreferGenre(searchWord: searchWord))
     }
     
     func getAllGenreName() async -> Result<GenreNameResponseDTO, NetworkError> {
-        return await request<GenreNameResponseDTO, GenreAPI>(provider, .getAllGenreName)
+        return await requestDecodable(provider, .getAllGenreName)
     }
     
     func getSearchGenreName(searchWord: String) async -> Result<GenreNameResponseDTO, NetworkError> {
-        return await request<GenreNameResponseDTO, GenreAPI>(provider, .getSearchGenreName(searchWord: searchWord))
+        return await requestDecodable(provider, .getSearchGenreName(searchWord: searchWord))
     }
 }

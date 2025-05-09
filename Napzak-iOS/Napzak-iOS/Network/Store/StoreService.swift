@@ -18,14 +18,14 @@ final class StoreService: BaseService, StoreServiceProtocol {
     private let provider = MoyaProvider<StoreAPI>.init(plugins: [MoyaPlugin()])
     
     func getMyPageInfo() async -> Result<StoreResponseDTO, NetworkError> {
-        return await request(provider, .getMyPageInfo)
+        return await requestDecodable(provider, .getMyPageInfo)
     }
 
     func getStoreDetail(storeId: Int) async -> Result<StoreDetailResponseDTO, NetworkError> {
-        return await request(provider, .getStoreDetail(storeId: storeId))
+        return await requestDecodable(provider, .getStoreDetail(storeId: storeId))
     }
 
     func modifyProfile(request: StoreModifyProfileRequestDTO) async -> Result<StoreModifyProfileResponseDTO, NetworkError> {
-        return await self.request(provider, .modifyProfile(request: request))
+        return await self.requestDecodable(provider, .modifyProfile(request: request))
     }
 }
