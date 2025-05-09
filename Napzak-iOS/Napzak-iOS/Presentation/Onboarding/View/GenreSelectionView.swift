@@ -8,13 +8,16 @@
 import SwiftUI
 
 struct GenreSelectionView: View {
+    @EnvironmentObject private var authRouter: AuthNavigationRouter
     @StateObject private var viewModel = GenreSelectionViewModel()
     @FocusState private var isSearchFocused: Bool
     @State private var isSearchCompleted: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            OnboardingNavigationBar(step: 3)
+            OnboardingNavigationBar(step: 3) {
+                authRouter.pop()
+            }
             
             headerView
                 .zIndex(2)
@@ -43,6 +46,7 @@ struct GenreSelectionView: View {
             .ignoresSafeArea(.keyboard)
             
         }
+        .toolbar(.hidden, for: .navigationBar)
         .contentShape(Rectangle())
         .onTapGesture {
             if isSearchFocused {
@@ -131,12 +135,16 @@ extension GenreSelectionView {
     private var bottomButtonView: some View {
         VStack(spacing: 16) {
             if viewModel.showToast {
-                ToastMessageView(message: "관심 장르는 최대 7개까지만 고를 수 있어요")
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                ToastMessageView(
+                    message: "관심 장르는 최대 7개까지만 고를 수 있어요",
+                    style: .warning
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
             
             Button {
                 // TODO: 유저 장르 등록
+                authRouter.push(next: .completed)
                 print("납작마켓 시작하기")
             } label: {
                 Text("납작마켓 시작하기")
@@ -144,12 +152,13 @@ extension GenreSelectionView {
                     .foregroundStyle(Color.napzakGrayScale(.white))
                     .frame(maxWidth: .infinity)
                     .frame(height: 50)
-                    .background(viewModel.selectedGenres.isEmpty ? Color.napzakGrayScale(.gray100) : Color.napzakPrimary(.purple500))
+                    .background(getStartButtonColor())
                     .clipShape(RoundedRectangle(cornerRadius: 14))
             }
             .disabled(viewModel.selectedGenres.isEmpty)
             
             Button {
+                authRouter.push(next: .completed)
                 print("건너뛰기")
             } label: {
                 Text("건너뛰기")
@@ -158,6 +167,14 @@ extension GenreSelectionView {
             }
         }
         .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
+    }
+}
+
+extension GenreSelectionView {
+    private func getStartButtonColor() -> Color {
+        return viewModel.selectedGenres.isEmpty
+        ? Color.napzakGrayScale(.gray100)
+        : Color.napzakPrimary(.purple500)
     }
 }
 

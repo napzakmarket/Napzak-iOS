@@ -36,7 +36,7 @@ struct NZTabBarView: View {
             ZStack(alignment: .bottom) {
                 TabView(selection: $selectedTab) {
                     Group {
-                        HView()
+                        HomeView()
                             .tag(NZTab.home)
                         
                         SearchView(
@@ -48,13 +48,13 @@ struct NZTabBarView: View {
                         CView()
                             .tag(NZTab.chat)
                         
-                        MView()
+                        MyPageView()
                             .tag(NZTab.my)
                     }
                     .toolbar(.hidden, for: .tabBar)
                 }
                 
-                if  isRegisterTabSelected {
+                if isRegisterTabSelected {
                     Color.clear
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .contentShape(Rectangle())
@@ -89,6 +89,13 @@ struct NZTabBarView: View {
                     MView()
                 case .searchInputView:
                     SearchInputView()
+                    
+                case .MarketView:
+                       MarketView()
+                    
+                case .ProfileEditView:
+                    ProfileEditView()
+
                 case .genreDetailView(genreId: let genreId, genreName: let genreName):
                     GenreDetailView(
                         viewModel: GenreDetailViewModel(

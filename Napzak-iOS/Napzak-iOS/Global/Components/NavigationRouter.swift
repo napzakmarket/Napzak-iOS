@@ -13,6 +13,8 @@ enum Route: Hashable {
     case mView
     
     case searchInputView
+    case MarketView
+    case ProfileEditView
     case genreDetailView(genreId: Int, genreName: String)
     
     // 등록 뷰 내부 사용

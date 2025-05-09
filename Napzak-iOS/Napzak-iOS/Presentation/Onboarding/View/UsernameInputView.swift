@@ -8,12 +8,15 @@
 import SwiftUI
 
 struct UsernameInputView: View {
+    @EnvironmentObject private var authRouter: AuthNavigationRouter
     @State private var isNextButtonEnabled: Bool = false
     @FocusState private var isKeyboardActive: Bool
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            OnboardingNavigationBar(step: 2)
+            OnboardingNavigationBar(step: 2) {
+                authRouter.pop()
+            }
             
             Group {
                 Text("납작마켓에서 사용할\n이름을 알려주세요")
@@ -38,7 +41,7 @@ struct UsernameInputView: View {
                     isEnabled: isNextButtonEnabled
                 ) {
                     // TODO: 다음 화면으로 이동 (ex. 관심 장르 선택)
-                    
+                    authRouter.push(next: .genre)
                     print("다음으로")
                 }
                 .padding(.bottom, 75)
@@ -46,6 +49,7 @@ struct UsernameInputView: View {
             }
             .padding(.horizontal, 20)
         }
+        .toolbar(.hidden, for: .navigationBar)
         .contentShape(Rectangle())
         .onTapGesture {
             isKeyboardActive = false
