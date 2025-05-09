@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SellRegisterRequestDTO: Codable {
+struct SellRegisterRequestDTO: Encodable {
     let productPhotoList: [SellRegisterRequestPhotoList]
     let genreId: Int
     let title: String
@@ -19,7 +19,7 @@ struct SellRegisterRequestDTO: Codable {
     let halfDeliveryFee: Int
 }
 
-struct SellRegisterRequestPhotoList: Codable {
+struct SellRegisterRequestPhotoList: Encodable {
     let photoUrl: String
     let sequence: Int
 }

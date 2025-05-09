@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct BuyRegisterResponseDTO: Codable {
+struct BuyRegisterResponseDTO: Decodable {
     let status: Int
     let message: String
     let data: BuyRegisterResponseData
 }
 
-struct BuyRegisterResponseData: Codable {
+struct BuyRegisterResponseData: Decodable {
     let productId: Int
     let productPhotoList: [BuyRegisterResponsePhotoList]
     let genreId: Int
@@ -24,7 +24,7 @@ struct BuyRegisterResponseData: Codable {
     let updatedAt: String?
 }
 
-struct BuyRegisterResponsePhotoList: Codable {
+struct BuyRegisterResponsePhotoList: Decodable {
     let photoId: Int
     let photoUrl: String
     let sequence: Int

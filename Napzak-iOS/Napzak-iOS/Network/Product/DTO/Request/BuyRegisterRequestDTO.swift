@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BuyRegisterRequestDTO: Codable {
+struct BuyRegisterRequestDTO: Encodable {
     let productPhotoList: [BuyRegisterRequestPhotoList]
     let genreId: Int
     let title, description: String
@@ -15,7 +15,7 @@ struct BuyRegisterRequestDTO: Codable {
     let isPriceNegotiable: Bool
 }
 
-struct BuyRegisterRequestPhotoList: Codable {
+struct BuyRegisterRequestPhotoList: Encodable {
     let photoUrl: String
     let sequence: Int
 }
