@@ -28,6 +28,7 @@ struct BuyRegisterView: View {
                 registerButton
             }
             .ignoresSafeArea()
+            .scrollDismissesKeyboard(.immediately)
             .frame(maxWidth: .infinity)
             .scrollIndicators(.hidden)
             .background(Color.napzakGrayScale(.gray10))

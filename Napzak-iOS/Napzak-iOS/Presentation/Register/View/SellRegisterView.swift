@@ -28,6 +28,7 @@ struct SellRegisterView: View {
                 registerButton
             }
             .ignoresSafeArea()
+            .scrollDismissesKeyboard(.immediately)
             .frame(maxWidth: .infinity)
             .scrollIndicators(.hidden)
             .navigationDestination(for: Route.self) { route in
