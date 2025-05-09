@@ -7,42 +7,42 @@
 
 import SwiftUI
 
-enum UsernameValidation {
-    case valid
+enum UsernameValidation: Equatable {
     case empty
-    case invalidSapce
+    case valid
+    case invalidSpace
     case invalidSpecialChar
-    case invalidProfanity
-    case invalidDuplicate
     case invalidNumberOnly
-    
-    var message: String {
-        switch self {
-        case .valid:
-            return "사용할 수 있는 이름이에요!"
-        case .invalidSapce:
-            return "띄어쓰기를 포함할 수 없어요."
-        case .invalidSpecialChar:
-            return "특수기호를 사용할 수 없어요."
-        case .invalidProfanity:
-            return "욕설이나 비속어를 사용할 수 없어요."
-        case .invalidDuplicate:
-            return "이미 사용 중인 이름이에요."
-        case .invalidNumberOnly:
-            return "숫자만으로는 이름을 만들 수 없어요."
-        case .empty:
-            return ""
-        }
-    }
+    case invalidIncompleteHangul
+    case serverError(String)
     
     var color: Color {
         switch self {
-        case .valid:
-            return Color.napzakState(.green)
-        case .invalidSapce, .invalidSpecialChar, .invalidProfanity, .invalidDuplicate, .invalidNumberOnly:
-            return Color.napzakState(.red)
         case .empty:
             return .clear
+        case .valid:
+            return Color.napzakState(.green)
+        case .invalidSpecialChar, .invalidNumberOnly, .serverError, .invalidSpace, .invalidIncompleteHangul:
+            return Color.napzakState(.red)
+        }
+    }
+    
+    var message: String {
+        switch self {
+        case .empty:
+            return ""
+        case .valid:
+            return "사용 가능한 이름이에요"
+        case .invalidSpecialChar:
+            return "특수기호를 사용할 수 없어요."
+        case .invalidNumberOnly:
+            return "숫자만으로는 이름을 만들 수 없어요."
+        case .invalidSpace:
+            return "띄어쓰기를 포함할 수 없어요."
+        case .invalidIncompleteHangul:
+            return "완성되지 않은 글자는 사용할 수 없어요"
+        case .serverError(let message):
+            return message
         }
     }
 }

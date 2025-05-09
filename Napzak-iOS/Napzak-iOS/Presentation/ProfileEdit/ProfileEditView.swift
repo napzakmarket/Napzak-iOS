@@ -110,10 +110,17 @@ extension ProfileEditView {
                 .applyNapzakFont(.caption5Regular10)
                 .foregroundColor(Color.napzakGrayScale(.gray300))
                 .padding(.bottom,16)
-
-            UsernameInputField(isPrimaryButtonEnabled: $isPrimaryButtonEnabled)
-                .padding(.top, 10)
-                .padding(.bottom,20)
+            
+            UsernameInputField(
+                validationState: .constant(.empty),
+                username: $nickname,
+                isPrimaryButtonEnabled: $isPrimaryButtonEnabled
+            ) { validatedUsername in
+                // TODO: ProfileEditViewModel에서 검증 로직 구현 필요
+                print("닉네임 검증 요청: \(validatedUsername)")
+            }
+            .padding(.top, 10)
+            .padding(.bottom,20)
         }
         .padding(.horizontal, 20)
         

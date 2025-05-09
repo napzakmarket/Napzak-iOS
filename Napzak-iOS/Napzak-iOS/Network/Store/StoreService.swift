@@ -12,6 +12,8 @@ protocol StoreServiceProtocol {
     func getStoreDetail(storeId: Int) async -> Result<StoreDetailResponseDTO, NetworkError>
     func modifyProfile(request: StoreModifyProfileRequestDTO) async -> Result<StoreModifyProfileResponseDTO, NetworkError>
     func getTerms() async -> Result<TermsResponseDTO, NetworkError>
+    func validateNickname(request: NicknameRequestDTO) async -> Result<Void, NetworkError>
+    func registerNickname(request: NicknameRequestDTO) async -> Result<Void, NetworkError>
 }
 
 final class StoreService: BaseService, StoreServiceProtocol {
@@ -32,5 +34,13 @@ final class StoreService: BaseService, StoreServiceProtocol {
     
     func getTerms() async -> Result<TermsResponseDTO, NetworkError> {
         return await requestDecodable(provider, .getTerms)
+    }
+    
+    func validateNickname(request: NicknameRequestDTO) async -> Result<Void, NetworkError> {
+        return await requestVoid(provider, .validateNickname(request: request))
+    }
+    
+    func registerNickname(request: NicknameRequestDTO) async -> Result<Void, NetworkError> {
+        return await requestVoid(provider, .registerNickname(request: request))
     }
 }
