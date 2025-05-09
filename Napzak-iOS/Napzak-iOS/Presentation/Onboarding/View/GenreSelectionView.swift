@@ -53,6 +53,14 @@ struct GenreSelectionView: View {
                 isSearchFocused = false
             }
         }
+        .task {
+            await viewModel.fetchAllGenres()
+        }
+        .onChange(of: viewModel.searchText) { newValue in
+            Task {
+                await viewModel.searchGenres()
+            }
+        }
     }
 }
 
@@ -143,8 +151,11 @@ extension GenreSelectionView {
             }
             
             Button {
-                // TODO: 유저 장르 등록
-                authRouter.push(next: .completed)
+                Task {
+                    if await viewModel.registerSelectedGenres() {
+                        authRouter.push(next: .completed)
+                    }
+                }
                 print("납작마켓 시작하기")
             } label: {
                 Text("납작마켓 시작하기")
