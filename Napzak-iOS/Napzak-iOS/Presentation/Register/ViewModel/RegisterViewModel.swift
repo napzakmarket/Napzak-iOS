@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import os
+
 @MainActor
 final class RegisterViewModel: ObservableObject {
     
@@ -17,6 +19,7 @@ final class RegisterViewModel: ObservableObject {
     
     // MARK: - Property Wrappers
     
+    @Published var presignedUrlList: [String:String] = [:]
     @Published var productId: Int?
     @Published var normalDelivery: Bool = false
     @Published var halfDelivery: Bool = false
@@ -27,36 +30,227 @@ final class RegisterViewModel: ObservableObject {
     @Published var isCompleted: Bool = false
     @Published var genreList: [GenreNameModel] = []
     
-    init() {
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Register")
+    
+    init()  {
         imagePickerManager.onImageSelectionCompleted = { [weak self] images in
             self?.model.images = images
         }
-        fetchGenre(genreSearchText: genreSearchText)
+        
+        Task {
+            await getAllGenre()
+        }
+    }
+}
+
+
+// MARK: - Network
+
+extension RegisterViewModel {
+    
+    
+    //MARK: - Get all genre
+    
+    func getAllGenre() async {
+        let result = await NetworkService.shared.genreService.getAllGenreName()
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("❌ getAllGenreName: No data received")
+                return
+            }
+            self.genreList = data.genreList.map { GenreNameModel(dto: $0) }
+            
+        case .failure(let error):
+            logger.error("❌ GET All Genre failed: \(error.localizedDescription)")
+        }
     }
     
-}
-
-//MARK: - Functions
-
-extension RegisterViewModel {
+    //MARK: - Get search genre
     
-}
-
-
-//MARK: - Network
-
-extension RegisterViewModel {
-    func fetchGenre(genreSearchText: String) {
-        if genreSearchText.isEmpty {
-            //TODO: - 전체 목록 API
-            genreList = [GenreNameModel(id: 1, name: "나루토"),
-                         GenreNameModel(id: 2, name: "원피스"),
-                         GenreNameModel(id: 3, name: "드래곤볼"),
-                         GenreNameModel(id: 4, name: "명탐정 코난"),
-                         GenreNameModel(id: 5, name: "진격의 거인"),
-                         GenreNameModel(id: 6, name: "슬램덩크")]
+    func getSearchGenre(searchWord: String) async {
+        let result = await NetworkService.shared.genreService.getSearchGenreName(searchWord: searchWord)
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getSearchGenreName: No data received")
+                return
+            }
+            self.genreList = data.genreList.map { GenreNameModel(dto: $0) }
+            
+        case .failure(let error):
+            logger.error("getSearchGenreName failed: \(error.localizedDescription)")
+        }
+    }
+    
+    // MARK: - GET presigned url
+    
+    func getPresignedUrl() async -> Bool {
+        let result = await NetworkService.shared.presignedService
+            .getPresignedURL(imageNameList: imagePickerManager.imageNameList)
+        
+        switch result {
+        case .success(let response):
+            let imageNames = imagePickerManager.imageNameList
+            let uploadURL = response.data!.productPresignedUrls
+            
+            self.presignedUrlList = uploadURL.filter { key, _ in
+                imageNames.contains(key)
+            }
+            
+            return true
+            
+        case .failure(let error):
+            logger.error("❌ GET Presigned URL failed: \(error.localizedDescription)")
+            return false
+        }
+    }
+    
+    
+    // MARK: - PUT presigned url
+    
+    func putPresignedUrl() async -> Bool {
+        guard presignedUrlList.count == imagePickerManager.selectedImages.count else {
+            logger.error("❌ presignedUrlList와 이미지 수 불일치")
+            return false
+        }
+        
+        let imageNames = imagePickerManager.imageNameList
+        let urls = presignedUrlList
+        var uploadResults = Array(repeating: false, count: imageNames.count)
+        
+        await withTaskGroup(of: (Int, Bool).self) { group in
+            for (index, name) in imageNames.enumerated() {
+                guard let url = urls[name],
+                      index < imagePickerManager.selectedImages.count,
+                      let imageData = imagePickerManager.selectedImages[index].jpegData(compressionQuality: 0.8) else {
+                    logger.error("❌ 이미지 또는 URL 매칭 실패: \(index+1)번 이미지")
+                    continue
+                }
+                
+                group.addTask {
+                    let result = await NetworkService.shared.presignedService.putPresignedURL(url: url, imageData: imageData)
+                    switch result {
+                    case .success:
+                        return (index, true)
+                    case .failure(let error):
+                        self.logger.error("❌ PUT Presigned URL 실패: \(error.localizedDescription) - \(index+1)번 이미지")
+                        return (index, false)
+                    }
+                }
+            }
+            
+            for await (index, success) in group {
+                uploadResults[index] = success
+            }
+        }
+        
+        if uploadResults.allSatisfy({ $0 }) {
+            logger.info("✅ 모든 이미지 업로드 성공")
+            return true
         } else {
-            //TODO: - 검색 목록 API
+            logger.error("❌ 일부 이미지 업로드 실패")
+            return false
+        }
+    }
+    
+    
+    // MARK: - POST Register
+    
+    func postSellRegister() async {
+        // presigned URL 요청
+        guard await getPresignedUrl() else { return }
+        
+        // presigned URL에 이미지 업로드
+        guard await putPresignedUrl() else { return }
+        
+        // 업로드된 이미지 URL → productPhotoList 생성
+        let sortedImageNames = imagePickerManager.imageNameList
+        let photoList: [SellRegisterRequestPhotoList] = sortedImageNames.enumerated().compactMap { index, name in
+            if let url = presignedUrlList[name] {
+                return SellRegisterRequestPhotoList(photoUrl: url, sequence: index+1)
+            } else {
+                logger.error("❌ presignedUrlList에 \(name) 없음")
+                return nil
+            }
+        }
+        
+        guard let genreId = model.genreId else {
+            logger.error("❌ 장르 ID 없음")
+            return
+        }
+        
+        let dto = SellRegisterRequestDTO(
+            productPhotoList: photoList,
+            genreId: genreId,
+            title: model.title,
+            description: model.description,
+            price: model.price.convertInt(),
+            productCondition: model.productCondition?.rawString ?? "",
+            isDeliveryIncluded: model.isDeliveryIncluded ?? true,
+            standardDeliveryFee: model.standardDeliveryFee.convertInt(),
+            halfDeliveryFee: model.halfDeliveryFee.convertInt()
+        )
+        
+        // POST 요청
+        let result = await NetworkService.shared.productService.postSellRegister(
+            sellRegisterProduct: dto
+        )
+        
+        switch result {
+        case .success(let response):
+            logger.info("✅ 판매 등록 성공: \(response.data!.productId)")
+            self.productId = response.data?.productId
+        case .failure(let error):
+            logger.error("❌ 판매 등록 실패: \(error.localizedDescription)")
+        }
+    }
+    
+    func postBuyRegister() async {
+        // presigned URL 요청
+        guard await getPresignedUrl() else { return }
+        
+        // presigned URL에 이미지 업로드
+        guard await putPresignedUrl() else { return }
+        
+        // 업로드된 이미지 URL → productPhotoList 생성
+        let sortedImageNames = imagePickerManager.imageNameList
+        let photoList: [BuyRegisterRequestPhotoList] = sortedImageNames.enumerated().compactMap { index, name in
+            if let url = presignedUrlList[name] {
+                return BuyRegisterRequestPhotoList(photoUrl: url, sequence: index+1)
+            } else {
+                logger.error("❌ presignedUrlList에 \(name) 없음")
+                return nil
+            }
+        }
+        
+        guard let genreId = model.genreId else {
+            logger.error("❌ 장르 ID 없음")
+            return
+        }
+        
+        let dto = BuyRegisterRequestDTO(
+            productPhotoList: photoList,
+            genreId: genreId,
+            title: model.title,
+            description: model.description,
+            price: model.price.convertInt(),
+            isPriceNegotiable: model.isPriceNegotiable
+        )
+        
+        // POST 요청
+        let result = await NetworkService.shared.productService.postBuyRegister(
+            buyRegisterProduct: dto
+        )
+        
+        switch result {
+        case .success(let response):
+            logger.info("✅ 구매 등록 성공: \(response.data!.productId)")
+            self.productId = response.data?.productId
+        case .failure(let error):
+            logger.error("❌ 구매 등록 실패: \(error.localizedDescription)")
         }
     }
 }
@@ -76,7 +270,7 @@ extension RegisterViewModel {
     }
     
     var sellRegisterValidate: Bool {
-        let conditionValid = !model.productCondition.isEmpty
+        let conditionValid = model.productCondition?.rawString.isEmpty == false
         return conditionValid && deliveryValidate
     }
     
