@@ -49,7 +49,7 @@ final class ProductService: BaseService, ProductServiceProtocol {
         cursor: String? = nil
     ) async -> Result<MarketProductListResponseDTO, NetworkError> {
         
-        let result: Result<BaseResponseDTO<MarketProductListResponseDTO>, NetworkError> = await requestDecodable(
+        let result: Result<BaseMarketProductListResponseDTO, NetworkError> = await requestDecodable(
             provider,
             ProductAPI.getSellProducts(
                 storeOwnerId: storeOwnerId,
@@ -79,7 +79,7 @@ final class ProductService: BaseService, ProductServiceProtocol {
         cursor: String? = nil
     ) async -> Result<MarketProductBuyListResponseDTO, NetworkError> {
         
-        let result: Result<BaseResponseDTO<MarketProductBuyListResponseDTO>, NetworkError> = await requestDecodable(
+        let result: Result<BaseMarketProductBuyListResponseDTO, NetworkError> = await requestDecodable(
             provider,
             ProductAPI.getBuyProducts(
                 storeOwnerId: storeOwnerId,

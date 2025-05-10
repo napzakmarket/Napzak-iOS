@@ -7,6 +7,9 @@
 
 import Foundation
 
+typealias BaseMarketProductListResponseDTO = BaseResponseDTO<MarketProductListResponseDTO>
+typealias BaseMarketProductBuyListResponseDTO = BaseResponseDTO<MarketProductBuyListResponseDTO>
+
 struct MarketProductListResponseDTO: Decodable {
     let productCount: Int
     let productSellList: [MarketProductItemDTO]
