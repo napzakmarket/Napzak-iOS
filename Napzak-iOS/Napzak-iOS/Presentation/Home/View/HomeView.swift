@@ -21,7 +21,7 @@ struct HomeView: View {
         ZStack(alignment: .bottom) {
             VStack(alignment: .leading, spacing: 0) {
                 
-                Image(.iconNapzakLogo)
+                Image(.logo)
                     .padding(.leading, 28)
                     .padding(.bottom, 17)
                     
