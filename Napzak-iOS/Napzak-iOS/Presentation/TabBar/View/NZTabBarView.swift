@@ -96,6 +96,13 @@ struct NZTabBarView: View {
                 case .ProfileEditView:
                     ProfileEditView()
 
+                case .genreDetailView(genreId: let genreId, genreName: let genreName):
+                    GenreDetailView(
+                        viewModel: GenreDetailViewModel(
+                            genreId: genreId,
+                            genreName: genreName
+                        )
+                    )
                 case .registerSearchGenre:
                     EmptyView()
                 }
