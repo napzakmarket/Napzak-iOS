@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import Kingfisher
+
 struct ProfileEditView: View {
     @StateObject private var viewModel = ProfileEditViewModel()
     @State private var isGenreSelectModalPresented: Bool = false
@@ -91,24 +93,14 @@ extension ProfileEditView {
             ZStack {
                 // 배경 이미지
                 if !viewModel.coverImageURL.isEmpty {
-                    AsyncImage(url: URL(string: viewModel.coverImageURL)) { phase in
-                        switch phase {
-                        case .empty:
-                            Rectangle()
-                                .fill(Color.napzakGrayScale(.gray100))
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        case .failure:
-                            Rectangle()
-                                .fill(Color.napzakGrayScale(.gray100))
-                        @unknown default:
+                    KFImage(URL(string: viewModel.coverImageURL))
+                        .placeholder {
                             Rectangle()
                                 .fill(Color.napzakGrayScale(.gray100))
                         }
-                    }
-                    .frame(height: 160)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(height: 160)
                 } else {
                     Rectangle()
                         .fill(Color.napzakGrayScale(.gray100))
@@ -117,32 +109,18 @@ extension ProfileEditView {
                 
                 // 프로필 이미지
                 if !viewModel.profileImageURL.isEmpty {
-                    AsyncImage(url: URL(string: viewModel.profileImageURL)) { phase in
-                        switch phase {
-                        case .empty:
-                            Image("profile_edit")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 110, height: 110)
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 110, height: 110)
-                                .clipShape(Circle())
-                        case .failure:
-                            Image("profile_edit")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 110, height: 110)
-                        @unknown default:
+                    KFImage(URL(string: viewModel.profileImageURL))
+                        .placeholder {
                             Image("profile_edit")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 110, height: 110)
                         }
-                    }
-                    .offset(y: 57)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 110, height: 110)
+                        .clipShape(Circle())
+                        .offset(y: 57)
                 } else {
                     Image("profile_edit")
                         .resizable()
