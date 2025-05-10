@@ -58,11 +58,7 @@ struct RegisterFloatingView: View {
                 }
                 .onEnded { _ in
                     isHighlightedSellArea = false
-
-                    //TODO: 팔아요 등록 뷰 present
-                    Task{
-                        registerType = .sell
-                    }
+                    registerType = .sell
                     isRegisterViewPresented = true
 
                 }
@@ -90,11 +86,7 @@ struct RegisterFloatingView: View {
                 }
                 .onEnded { _ in
                     isHighlightedBuyArea = false
-
-                    //TODO: 구해요 등록 뷰 present
-                    Task{
-                        registerType = .buy
-                    }
+                    registerType = .buy
                     isRegisterViewPresented = true
 
                 }
