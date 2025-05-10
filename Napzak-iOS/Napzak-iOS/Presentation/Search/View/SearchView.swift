@@ -146,8 +146,9 @@ extension SearchView {
         LazyVStack(spacing: 0) {
             ForEach(viewModel.productFetchOption.genres.indices, id: \.self) { i in
                 Button {
-                    let id = viewModel.productFetchOption.genres[i].id
-                    let name = viewModel.productFetchOption.genres[i].name
+                    let genre = viewModel.productFetchOption.genres[i]
+                    let id = genre.id
+                    let name = genre.name
                     
                     navigationRouter.push(next: .genreDetailView(genreId: id,
                                                                  genreName: name))
