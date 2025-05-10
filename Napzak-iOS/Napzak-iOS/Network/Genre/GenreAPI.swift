@@ -12,6 +12,7 @@ enum GenreAPI {
     case getSearchPreferGenre(searchWord: String)
     case getAllGenreName
     case getSearchGenreName(searchWord: String)
+    case registerPreferGenre(request: PreferGenreRequestDTO)
     case getGenreDetailInfo(genreId: Int)
 }
 
@@ -34,6 +35,8 @@ extension GenreAPI: BaseTargetType {
             return "genres"
         case .getSearchGenreName:
             return "genres/search"
+        case .registerPreferGenre:
+            return "stores/genres/register"
         case .getGenreDetailInfo(let genreId):
             return "genres/detail/\(genreId)"
         }
@@ -41,6 +44,8 @@ extension GenreAPI: BaseTargetType {
     
     var method: Moya.Method {
         switch self {
+        case .registerPreferGenre:
+            return .post
         default:
             return .get
         }
@@ -54,6 +59,8 @@ extension GenreAPI: BaseTargetType {
             return .requestParameters(parameters: ["searchWord" : searchWord], encoding: URLEncoding.queryString)
         case .getSearchGenreName(let searchWord):
             return .requestParameters(parameters: ["searchWord" : searchWord], encoding: URLEncoding.queryString)
+        case .registerPreferGenre(let request):
+            return .requestJSONEncodable(request)
         }
     }
 }

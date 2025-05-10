@@ -10,6 +10,18 @@ struct PreferGenreModel: Identifiable, Hashable {
     let name: String
     let image: String?
     
+    init(id: Int, name: String, image: String?) {
+        self.id = id
+        self.name = name
+        self.image = image
+    }
+    
+    init(dto: GenreDTO) {
+        self.id = dto.genreId
+        self.name = dto.genreName
+        self.image = dto.genrePhoto
+    }
+    
     static let sample = PreferGenreModel(id: 1, name: "스폰지밥", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOrPQwOTaU_L8EIFpWzLjgiUHc3CcmGEq84A&s")
     
     static let sampleGenreList = [

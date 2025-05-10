@@ -155,9 +155,19 @@ extension ProfileEditView {
                 .foregroundColor(Color.napzakGrayScale(.gray300))
                 .padding(.bottom,16)
 
-            UsernameInputField(isPrimaryButtonEnabled: $viewModel.isPrimaryButtonEnabled)
-                .padding(.top, 10)
-                .padding(.bottom, 20)
+            
+            UsernameInputField(
+                validationState: $viewModel.validationState,
+                username: $viewModel.nickname,
+                isPrimaryButtonEnabled: $viewModel.isPrimaryButtonEnabled
+            ) { validatedUsername in
+                Task {
+                    await viewModel.validateUsername(validatedUsername)
+                }
+            }
+            .padding(.top, 10)
+            .padding(.bottom,20)
+
         }
         .padding(.horizontal, 20)
         
