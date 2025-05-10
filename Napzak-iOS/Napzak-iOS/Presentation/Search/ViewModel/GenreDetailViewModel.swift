@@ -97,7 +97,7 @@ extension GenreDetailViewModel {
         switch result {
         case .success(let response):
             guard let data = response.data else {
-                logger.error("getSellProduct: No data received")
+                logger.error("getBuyProduct: No data received")
                 return
             }
             
@@ -105,7 +105,7 @@ extension GenreDetailViewModel {
             self.buyProducts = data.productBuyList.map { ProductItemModel(dto: $0) }
             
         case .failure(let error):
-            logger.error("getSellProduct failed: \(error.localizedDescription)")
+            logger.error("getBuyProduct failed: \(error.localizedDescription)")
         }
     }
 
