@@ -1353,8 +1353,10 @@
 				D64561012DC3411C003D2E2B /* AuthResponseDTO.swift in Sources */,
 				6C6CBDF92DA574A300763CBA /* SellRegisterDelivery.swift in Sources */,
 				D0CBB7032DB893F600BE20C3 /* SearchInputViewModel.swift in Sources */,
-				D645611A2DC375E2003D2E2B /* LoginRequestDTO.swift in Sources */,
+
 				877F40622DCA73F300008672 /* MarketProductBuyListResponseDTO.swift in Sources */,
+
+				D645611A2DC375E2003D2E2B /* LoginRequestDTO.swift in Sources */,
 				6C4886BD2DC0CA07009352ED /* RegisterSearchGenre.swift in Sources */,
 				D045DEBE2D83723A00EB1EB6 /* Napzak_iOSApp.swift in Sources */,
 				D0F035802DBF6654003D0CBF /* PresignedService.swift in Sources */,
