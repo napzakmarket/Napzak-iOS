@@ -9,7 +9,7 @@ import SwiftUI
 
 struct UsernameInputView: View {
     @EnvironmentObject private var authRouter: AuthNavigationRouter
-    @State private var isNextButtonEnabled: Bool = false
+    @StateObject private var viewModel = UsernameInputViewModel()
     @FocusState private var isKeyboardActive: Bool
     
     var body: some View {
@@ -18,7 +18,7 @@ struct UsernameInputView: View {
                 authRouter.pop()
             }
             
-            Group {
+            VStack(alignment: .leading ,spacing: 0) {
                 Text("납작마켓에서 사용할\n이름을 알려주세요")
                     .lineLimit(2)
                     .applyNapzakFont(.title2Bold20)
@@ -30,22 +30,32 @@ struct UsernameInputView: View {
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
                     .padding(.top, 10)
                 
-                UsernameInputField(isPrimaryButtonEnabled: $isNextButtonEnabled)
-                    .focused($isKeyboardActive)
-                    .padding(.top, 30)
+                UsernameInputField(
+                    validationState: $viewModel.validationState,
+                    username: $viewModel.username,
+                    isPrimaryButtonEnabled: $viewModel.isPrimaryButtonEnabled
+                ) { validatedUsername in
+                    Task {
+                        await viewModel.validateUsername(validatedUsername)
+                    }
+                }
+                .focused($isKeyboardActive)
+                .padding(.top, 30)
                 
                 Spacer()
                 
                 PrimaryButton(
                     title: "다음으로",
-                    isEnabled: isNextButtonEnabled
+                    isEnabled: viewModel.isPrimaryButtonEnabled
                 ) {
-                    // TODO: 다음 화면으로 이동 (ex. 관심 장르 선택)
-                    authRouter.push(next: .genre)
-                    print("다음으로")
+                    Task {
+                        if await viewModel.registerUsername() {
+                            authRouter.push(next: .genre)
+                            print("다음으로")
+                        }
+                    }
                 }
                 .padding(.bottom, 75)
-                
             }
             .padding(.horizontal, 20)
         }

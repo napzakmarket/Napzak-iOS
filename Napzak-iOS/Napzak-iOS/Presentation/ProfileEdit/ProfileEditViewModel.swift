@@ -13,6 +13,8 @@ final class ProfileEditViewModel: ObservableObject {
     @Published var profileDescription: String = ""
     @Published var selectedGenres: [GenreNameModel] = []
     @Published var isPrimaryButtonEnabled: Bool = false
+    @Published var validationState: UsernameValidation = .empty
+    private var isRequesting: Bool = false
     
     // Profile image and cover
     @Published var profileImageURL: String = ""
@@ -31,6 +33,23 @@ final class ProfileEditViewModel: ObservableObject {
             
         // Fetch the current profile data
         fetchCurrentProfile()
+    }
+    
+    func validateUsername(_ username: String) async {
+        isRequesting = true
+        let request = NicknameRequestDTO(nickname: username)
+        let result = await storeService.validateNickname(request: request)
+        isRequesting = false
+        
+        switch result {
+        case .success:
+            validationState = .valid
+            isPrimaryButtonEnabled = true
+            
+        case .failure(let error):
+            validationState = .serverError(error.errorDescription ?? "")
+            isPrimaryButtonEnabled = false
+        }
     }
     
     func fetchCurrentProfile() {
@@ -100,31 +119,22 @@ final class ProfileEditViewModel: ObservableObject {
         )
         
         Task {
-            do {
-                // 디버깅을 위해 요청 데이터 로깅
-                print("API Request: \(request)")
+            print("API Request: \(request)")
+            
+            let result = await storeService.modifyProfile(request: request)
+            
+            await MainActor.run {
+                isLoading = false
                 
-                let result = await storeService.modifyProfile(request: request)
-                
-                await MainActor.run {
-                    isLoading = false
-                    
-                    switch result {
-                    case .success:
-                        isSuccess = true
-                        // 디버깅 로그 추가
-                        print("프로필 업데이트 성공")
-                    case .failure(let error):
-                        errorMessage = error.errorDescription
-                        // 에러 디버깅을 위해 로깅
-                        print("API Error: \(error.errorDescription ?? "Unknown error")")
-                    }
-                }
-            } catch {
-                await MainActor.run {
-                    isLoading = false
-                    errorMessage = error.localizedDescription
-                    print("Exception: \(error.localizedDescription)")
+                switch result {
+                case .success:
+                    isSuccess = true
+                    // 디버깅 로그 추가
+                    print("프로필 업데이트 성공")
+                case .failure(let error):
+                    errorMessage = error.errorDescription
+                    // 에러 디버깅을 위해 로깅
+                    print("API Error: \(error.errorDescription ?? "Unknown error")")
                 }
             }
         }
