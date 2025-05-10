@@ -136,7 +136,6 @@ extension ProductItemView {
         Button {
             if shouldToggleInterestState() {
                 print("likeButton toggle")
-                product.isInterested.toggle()
             }
         } label: {
             Image(product.isInterested ? .btnHeartSelected : .btnHeartDefault)

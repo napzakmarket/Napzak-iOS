@@ -23,12 +23,10 @@ final class HomeViewModel: ObservableObject {
     @Published var popularSellProducts: [ProductItemModel] = []
     @Published var popularBuyProducts: [ProductItemModel] = []
     
-    @Published var isBannersLoading: Bool = false
-    @Published var isRecommendationsLoading: Bool = false
-    @Published var isPopularSellLoading: Bool = false
-    @Published var isPopularBuyLoading: Bool = false
+    private(set) var isProcessingLike: Bool = false
     
-    private let service = NetworkService.shared.homeService
+    private let homeService = NetworkService.shared.homeService
+    private let interestService = NetworkService.shared.interestService
     
     var recommendedTitle: String { "\(username)님을 위한 맞춤 PICK" }
     var recommendedSubtitle: String { "\(username)님의 취향에 딱 맞는 아이템들을 모아봤어요."}
@@ -70,30 +68,37 @@ final class HomeViewModel: ObservableObject {
             products = popularBuyProducts
         }
         
-        // TODO: 다른 조건들 체크 (로그인 상태 등)
         guard let product = products.first(where: { $0.id == productID }) else { return false }
         return !product.isOwnedByCurrentUser
     }
     
-    func toggleLike(for productId: Int, in section: ProductSection) {
-        Task {
-            print("toggleLike1")
-            let currentState = getCurrentProductState(productId, in: section)
-            let isAddingLike = (currentState?.isInterested ?? false)
-            
-            let success = await Task.detached(priority: .userInitiated) {
-                // TODO: API 호출 (do catch?)
-                
-                return true
-            }.value
-            
-            if success {
-                if isAddingLike {
-                    showLikeToast = true
-                    try? await Task.sleep(for: .seconds(2))
-                    showLikeToast = false
-                }
+    func toggleLike(for productId: Int, in section: ProductSection) async  {
+        guard !isProcessingLike else { return }
+        
+        isProcessingLike = true
+        defer { isProcessingLike = false }
+        
+        let currentState = getCurrentProductState(productId, in: section)
+        guard let currentProduct = currentState else {
+            logger.error("toggleLike: Product not found with id: \(productId)")
+            return
+        }
+        
+        let result = currentProduct.isInterested ?
+        await interestService.deleteInterest(productId: productId) :
+        await interestService.postInterest(productId: productId)
+        
+        
+        switch result {
+        case .success:
+            updateProductInterestState(productId: productId, section: section, isInterested: !currentProduct.isInterested)
+            if !currentProduct.isInterested {
+                showLikeToast = true
+                try? await Task.sleep(for: .seconds(2))
+                showLikeToast = false
             }
+        case .failure(let error):
+            logger.error("toggleLike failed: \(error.errorDescription ?? "Unknown error")")
         }
     }
     
@@ -120,12 +125,26 @@ extension HomeViewModel {
         }
     }
     
+    func updateProductInterestState(productId: Int, section: ProductSection, isInterested: Bool) {
+        switch section {
+        case .recommended:
+            if let index = recommendedProducts.firstIndex(where: { $0.id == productId }) {
+                recommendedProducts[index].isInterested = isInterested
+            }
+        case .popularSell:
+            if let index = popularSellProducts.firstIndex(where: { $0.id == productId }) {
+                popularSellProducts[index].isInterested = isInterested
+            }
+        case .popularBuy:
+            if let index = popularBuyProducts.firstIndex(where: { $0.id == productId }) {
+                popularBuyProducts[index].isInterested = isInterested
+            }
+        }
+    }
+    
     private func fetchBanners() {
         Task {
-            isBannersLoading = true
-            defer { isBannersLoading = false }
-            
-            let result = await service.getBannerList()
+            let result = await homeService.getBannerList()
             switch result {
             case .success(let response):
                 if let dto = response.data,
@@ -143,10 +162,7 @@ extension HomeViewModel {
     
     private func fetchRecommendations() {
         Task {
-            isRecommendationsLoading = true
-            defer { isRecommendationsLoading = false }
-            
-            let result = await service.getHomeRecommendations()
+            let result = await homeService.getHomeRecommendations()
             switch result {
             case .success(let response):
                 if let dtoList = response.data?.productRecommendList,
@@ -162,10 +178,7 @@ extension HomeViewModel {
     
     private func fetchPopularSell() {
         Task {
-            isPopularSellLoading = true
-            defer { isPopularSellLoading = false }
-            
-            let result = await service.getHomePopularSell()
+            let result = await homeService.getHomePopularSell()
             switch result {
             case .success(let response):
                 if let dtoList = response.data?.productSellList {
@@ -179,10 +192,7 @@ extension HomeViewModel {
     
     private func fetchPopularBuy() {
         Task {
-            isPopularBuyLoading = true
-            defer { isPopularBuyLoading = false }
-            
-            let result = await service.getHomePopularBuy()
+            let result = await homeService.getHomePopularBuy()
             switch result {
             case .success(let response):
                 if let dtoList = response.data?.productBuyList {

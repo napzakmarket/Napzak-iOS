@@ -75,6 +75,11 @@ struct HomeView: View {
             }
         }
         .animation(.spring(), value: viewModel.showLikeToast)
+        .onChange(of: viewModel.externalURLToOpen) { url in
+            if let url {
+                UIApplication.shared.open(url)
+            }
+        }
     }
 }
 
@@ -133,10 +138,12 @@ extension HomeView {
                                     in: .recommended
                                 )
                                 if canToggle {
-                                    viewModel.toggleLike(
-                                        for: productId,
-                                        in: .recommended
-                                    )
+                                    Task {
+                                        await viewModel.toggleLike(
+                                            for: productId,
+                                            in: .recommended
+                                        )
+                                    }
                                 }
                                 return canToggle
                             }
@@ -182,11 +189,14 @@ extension HomeView {
                         in: .popularSell
                     )
                     if canToggle {
-                        viewModel.toggleLike(
-                            for: productId,
-                            in: .popularSell
-                        )
+                        Task {
+                            await viewModel.toggleLike(
+                                for: productId,
+                                in: .popularSell
+                            )
+                        }
                     }
+                    
                     return canToggle
                 },
                 onTapProduct: { productId in
@@ -228,10 +238,12 @@ extension HomeView {
                         in: .popularBuy
                     )
                     if canToggle {
-                        viewModel.toggleLike(
-                            for: productId,
-                            in: .popularBuy
-                        )
+                        Task {
+                            await viewModel.toggleLike(
+                                for: productId,
+                                in: .popularBuy
+                            )
+                        }
                     }
                     return canToggle
                 },
