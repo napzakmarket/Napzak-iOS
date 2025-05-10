@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import Kingfisher
+
 struct MarketView: View {
     
     @StateObject private var viewModel = MarketViewModel()
@@ -106,24 +108,13 @@ struct MarketView: View {
         VStack(spacing: 0) {
             ZStack {
                 if let storeCover = viewModel.storeDetail?.storeCover, !storeCover.isEmpty {
-                    AsyncImage(url: URL(string: storeCover)) { phase in
-                        switch phase {
-                        case .empty:
-                            Rectangle()
-                                .fill(Color.napzakGrayScale(.gray100))
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        case .failure:
-                            Rectangle()
-                                .fill(Color.napzakGrayScale(.gray100))
-                        @unknown default:
+                    KFImage(URL(string: storeCover))
+                        .placeholder {
                             Rectangle()
                                 .fill(Color.napzakGrayScale(.gray100))
                         }
-                    }
-                    .frame(height: 160)
+                        .resizable()
+                        .frame(height: 160)
                 } else {
                     Rectangle()
                         .fill(Color.napzakGrayScale(.gray100))
@@ -131,31 +122,18 @@ struct MarketView: View {
                 }
                 
                 if let storePhoto = viewModel.storeDetail?.storePhoto, !storePhoto.isEmpty {
-                    AsyncImage(url: URL(string: storePhoto)) { phase in
-                        switch phase {
-                        case .empty:
-                            Image("profile_market")
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                                .clipShape(Circle())
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                                .clipShape(Circle())
-                        case .failure:
-                            Image("profile_market")
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                                .clipShape(Circle())
-                        @unknown default:
+                    KFImage(URL(string: storePhoto))
+                        .placeholder {
                             Image("profile_market")
                                 .resizable()
                                 .frame(width: 60, height: 60)
                                 .clipShape(Circle())
                         }
-                    }
-                    .offset(y: 80)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 60, height: 60)
+                        .clipShape(Circle())
+                        .offset(y: 80)
                 } else {
                     Image("profile_market")
                         .resizable()
@@ -211,7 +189,7 @@ struct MarketView: View {
 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 5) {
-                        if let genres = viewModel.storeDetail?.genrePreferenceList, !genres.isEmpty {
+                        if let genres = viewModel.storeDetail?.genrePreferences, !genres.isEmpty {
                             ForEach(genres, id: \.genreId) { genre in
                                 PlainChip(title: genre.genreName)
                             }
