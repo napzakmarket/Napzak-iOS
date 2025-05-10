@@ -106,7 +106,9 @@ private extension GenreDetailView {
             Group {
                 HStack(spacing: 4) {
                     Image(.imgGenreTag)
-                    Image(.imgHotTag)
+                    if let _ = viewModel.genreInfo.tag {
+                        Image(.imgHotTag)
+                    }
                 }
                 
                 Text(viewModel.genreInfo.genreName)

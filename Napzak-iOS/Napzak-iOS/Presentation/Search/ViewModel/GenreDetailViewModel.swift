@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+import os
+
+@MainActor
 final class GenreDetailViewModel: ObservableObject {
     
     //MARK: - Property Wrappers
@@ -26,6 +29,10 @@ final class GenreDetailViewModel: ObservableObject {
         coverImageUrl: ""
     )
     
+    //MARK: - Properties
+    
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "GenreDetail")
+    
     //MARK: - Init
 
     init(genreId: Int, genreName: String) {
@@ -36,7 +43,9 @@ final class GenreDetailViewModel: ObservableObject {
             isUnopened: false
         )
 
-        fetchGenreInfo(genreId: genreId, genreName: genreName)
+        Task {
+            await fetchGenreInfo(genreId: genreId)
+        }
         fetchProducts()
     }
 }
@@ -45,13 +54,21 @@ extension GenreDetailViewModel {
     
     //MARK: - Func
     
-    func fetchGenreInfo(genreId: Int, genreName: String) {
-        genreInfo = GenreInfoModel(
-            genreId: genreId,
-            genreName: genreName,
-            tag: "지금핫한",
-            coverImageUrl: "https://kream-phinf.pstatic.net/MjAyNDEyMTFfMjAw/MDAxNzMzODkzNTExNDUz.7bZDbRzaJ-jhBHficneUKET4CyE_kfaaOxLvoODV2gg.PNG/a_61618fd382884ad3b37ce139cf1a4147.png?type=m_webp"
-        )
+    func fetchGenreInfo(genreId: Int) async {
+        let result = await NetworkService.shared.genreService.getGenreDetailInfo(genreId: genreId)
+
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getGenreDetailInfo: No data received")
+                return
+            }
+            
+            self.genreInfo = GenreInfoModel(dto: data)
+            
+        case .failure(let error):
+            logger.error("getGenreDetailInfo failed: \(error.localizedDescription)")
+        }
     }
 
     func fetchProducts() {
