@@ -14,20 +14,22 @@ final class GenreDetailViewModel: ObservableObject {
     
     //MARK: - Property Wrappers
     
-    @Published var selectedTabIndex = 0
     @Published var productFetchOption = ProductFetchOption(
         sortOption: .recent,
         genres: [GenreNameModel](),
         isOnSale: false,
         isUnopened: false
     )
-    @Published var dummyProducts: [ProductItemModel] = []
     @Published var genreInfo: GenreInfoModel = GenreInfoModel(
         genreId: 0,
         genreName: "",
         tag: "",
         coverImageUrl: ""
     )
+    @Published var sellProductsCount: Int = 0
+    @Published var sellProducts: [ProductItemModel] = []
+    @Published var buyProductsCount: Int = 0
+    @Published var buyProducts: [ProductItemModel] = []
     
     //MARK: - Properties
     
@@ -45,8 +47,8 @@ final class GenreDetailViewModel: ObservableObject {
 
         Task {
             await fetchGenreInfo(genreId: genreId)
+            await fetchSellProducts()
         }
-        fetchProducts()
     }
 }
 
@@ -71,10 +73,42 @@ extension GenreDetailViewModel {
         }
     }
 
-    func fetchProducts() {
-        dummyProducts = ProductItemModel.dummyProducts
+    func fetchSellProducts() async {
+        let result = await NetworkService.shared.productService.getSellProduct(productFetchOption: productFetchOption)
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getSellProduct: No data received")
+                return
+            }
+            
+            self.sellProductsCount = data.productCount
+            self.sellProducts = data.productSellList.map { ProductItemModel(dto: $0) }
+            
+        case .failure(let error):
+            logger.error("getSellProduct failed: \(error.localizedDescription)")
+        }
     }
     
+    func fetchBuyProducts() async {
+        let result = await NetworkService.shared.productService.getBuyProduct(productFetchOption: productFetchOption)
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getSellProduct: No data received")
+                return
+            }
+            
+            self.buyProductsCount = data.productCount
+            self.buyProducts = data.productBuyList.map { ProductItemModel(dto: $0) }
+            
+        case .failure(let error):
+            logger.error("getSellProduct failed: \(error.localizedDescription)")
+        }
+    }
+
     func canToggleInterestState(productID: Int) -> Bool {
         //TODO: - 좋아요 서버 통신 후 성공 여부 반환
         return true
