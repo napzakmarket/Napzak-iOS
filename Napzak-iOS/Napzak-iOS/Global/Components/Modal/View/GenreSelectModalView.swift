@@ -151,8 +151,8 @@ extension GenreSelectModalView {
                     message: "관심 장르는 최대 7개까지만 고를 수 있어요",
                     style: .warning
                 )
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                    .padding(.bottom, 30)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .padding(.bottom, 30)
             }
             Button {
                 adaptedGenres = viewModel.selectedGenres
