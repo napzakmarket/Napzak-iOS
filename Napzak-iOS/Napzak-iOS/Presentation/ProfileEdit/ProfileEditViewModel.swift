@@ -81,7 +81,7 @@ final class ProfileEditViewModel: ObservableObject {
                                         self.coverImageURL = storeDetail.storeCover ?? "profile_market"
                                         
                                         // Convert GenreDTO to GenreNameModel
-                                        self.selectedGenres = storeDetail.genrePreferenceList.map { dto in
+                                        self.selectedGenres = storeDetail.genrePreferences.map { dto in
                                             GenreNameModel(id: dto.genreId, name: dto.genreName)
                                         }
                                     }

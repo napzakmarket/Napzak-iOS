@@ -12,7 +12,7 @@ struct StoreDetailDTO: Decodable {
     let storePhoto: String?
     let storeCover: String?
     let isStoreOwner: Bool
-    let genrePreferenceList: [GenreDTO]
+    let genrePreferences: [GenreDTO]
 }
 
 typealias StoreDetailResponseDTO = BaseResponseDTO<StoreDetailDTO>
