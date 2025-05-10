@@ -20,10 +20,10 @@ final class InterestService: BaseService, InterestServiceProtocol {
     
     
     func postInterest(productId: Int) async -> Result<Void, NetworkError> {
-        return await request(provider, .postInterest(productId: productId))
+        return await requestVoid(provider, .postInterest(productId: productId))
     }
     
     func deleteInterest(productId: Int) async -> Result<Void, NetworkError> {
-        return await request(provider, .deleteInterest(productId: productId))
+        return await requestVoid(provider, .deleteInterest(productId: productId))
     }
 }
