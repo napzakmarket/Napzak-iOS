@@ -8,6 +8,9 @@
 import Moya
 
 protocol ProductServiceProtocol {
+    func postSellRegister(sellRegisterProduct: SellRegisterRequestDTO) async -> Result<SellRegisterResponseDTO, NetworkError>
+    func postBuyRegister(buyRegisterProduct: BuyRegisterRequestDTO) async -> Result<BuyRegisterResponseDTO, NetworkError>
+    
     func fetchSellProducts(
         storeOwnerId: Int,
         sort: String?,
@@ -27,7 +30,15 @@ protocol ProductServiceProtocol {
 }
 
 final class ProductService: BaseService, ProductServiceProtocol {
-    private let provider = MoyaProvider<ProductAPI>()
+    private let provider = MoyaProvider<ProductAPI>(plugins: [MoyaPlugin()])
+
+    func postSellRegister(sellRegisterProduct: SellRegisterRequestDTO) async -> Result<SellRegisterResponseDTO, NetworkError> {
+        return await requestDecodable(provider, ProductAPI.sellRegister(registerItem: sellRegisterProduct))
+    }
+
+    func postBuyRegister(buyRegisterProduct: BuyRegisterRequestDTO) async -> Result<BuyRegisterResponseDTO, NetworkError> {
+        return await requestDecodable(provider, ProductAPI.buyRegister(registerItem: buyRegisterProduct))
+    }
     
     func fetchSellProducts(
         storeOwnerId: Int,
@@ -38,7 +49,7 @@ final class ProductService: BaseService, ProductServiceProtocol {
         cursor: String? = nil
     ) async -> Result<MarketProductListResponseDTO, NetworkError> {
         
-        let result: Result<BaseResponseDTO<MarketProductListResponseDTO>, NetworkError> = await request(
+        let result: Result<BaseResponseDTO<MarketProductListResponseDTO>, NetworkError> = await requestDecodable(
             provider,
             ProductAPI.getSellProducts(
                 storeOwnerId: storeOwnerId,
@@ -68,7 +79,7 @@ final class ProductService: BaseService, ProductServiceProtocol {
         cursor: String? = nil
     ) async -> Result<MarketProductBuyListResponseDTO, NetworkError> {
         
-        let result: Result<BaseResponseDTO<MarketProductBuyListResponseDTO>, NetworkError> = await request(
+        let result: Result<BaseResponseDTO<MarketProductBuyListResponseDTO>, NetworkError> = await requestDecodable(
             provider,
             ProductAPI.getBuyProducts(
                 storeOwnerId: storeOwnerId,

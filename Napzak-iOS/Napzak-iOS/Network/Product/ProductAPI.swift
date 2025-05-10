@@ -24,11 +24,21 @@ enum ProductAPI {
         genreId: Int?,
         cursor: String?
     )
+    
+    case sellRegister(registerItem: SellRegisterRequestDTO)
+    case buyRegister(registerItem: BuyRegisterRequestDTO)
 }
 
 extension ProductAPI: BaseTargetType {
     var headerType: HeaderType {
-        return .accessTokenHeader
+        switch self {
+        case .getSellProducts, .getBuyProducts:
+            return .accessTokenHeader
+        case .sellRegister:
+            return .accessTokenHeader
+        case .buyRegister:
+            return .accessTokenHeader
+        }
     }
     
     var path: String {
@@ -37,6 +47,10 @@ extension ProductAPI: BaseTargetType {
             return "/api/v1/products/sell/stores/\(storeOwnerId)"
         case .getBuyProducts(let storeOwnerId, _, _, _, _):
             return "/api/v1/products/buy/stores/\(storeOwnerId)"
+        case .sellRegister:
+            return "products/sell"
+        case .buyRegister:
+            return "products/buy"
         }
     }
     
@@ -44,6 +58,10 @@ extension ProductAPI: BaseTargetType {
         switch self {
         case .getSellProducts, .getBuyProducts:
             return .get
+        case .sellRegister:
+            return .post
+        case .buyRegister:
+            return .post
         }
     }
     
@@ -94,6 +112,11 @@ extension ProductAPI: BaseTargetType {
             }
             
             return .requestParameters(parameters: params, encoding: URLEncoding.queryString)
+            
+        case .sellRegister(let registerItem):
+            return .requestJSONEncodable(registerItem)
+        case .buyRegister(let registerItem):
+            return .requestJSONEncodable(registerItem)
         }
     }
 }
