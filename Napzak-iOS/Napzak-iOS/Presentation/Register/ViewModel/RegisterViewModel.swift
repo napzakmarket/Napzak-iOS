@@ -94,7 +94,7 @@ extension RegisterViewModel {
         switch result {
         case .success(let response):
             let imageNames = imagePickerManager.imageNameList
-            let uploadURL = response.data.productPresignedUrls
+            let uploadURL = response.data!.productPresignedUrls
             
             self.presignedUrlList = uploadURL.filter { key, _ in
                 imageNames.contains(key)
@@ -201,8 +201,8 @@ extension RegisterViewModel {
         
         switch result {
         case .success(let response):
-            logger.info("✅ 판매 등록 성공: \(response.data.productId)")
-            self.productId = response.data.productId
+            logger.info("✅ 판매 등록 성공: \(response.data!.productId)")
+            self.productId = response.data?.productId
         case .failure(let error):
             logger.error("❌ 판매 등록 실패: \(error.localizedDescription)")
         }
@@ -247,8 +247,8 @@ extension RegisterViewModel {
         
         switch result {
         case .success(let response):
-            logger.info("✅ 구매 등록 성공: \(response.data.productId)")
-            self.productId = response.data.productId
+            logger.info("✅ 구매 등록 성공: \(response.data!.productId)")
+            self.productId = response.data?.productId
         case .failure(let error):
             logger.error("❌ 구매 등록 실패: \(error.localizedDescription)")
         }

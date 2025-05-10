@@ -5,13 +5,7 @@
 //  Created by OneTen on 5/5/25.
 //
 
-import Foundation
-
-struct SellRegisterResponseDTO: Decodable {
-    let status: Int
-    let message: String
-    let data: SellRegisterResponseData
-}
+typealias SellRegisterResponseDTO = BaseResponseDTO<SellRegisterResponseData>
 
 struct SellRegisterResponseData: Decodable {
     let productId: Int
