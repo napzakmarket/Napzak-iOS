@@ -130,10 +130,9 @@ struct MyPageView: View {
                 .clipShape(Circle())
             
             VStack(alignment: .leading, spacing:7) {
-                Text(storeInfo.storeNickname)
+                Text(storeInfo.storeNickName ?? "null")
                     .applyNapzakFont(.body4Bold14)
                     .foregroundColor(Color.napzakPrimary(.purple500))
-                
                 HStack(spacing: 14) {
                     HStack(spacing: 2) {
                         Text("팔아요")

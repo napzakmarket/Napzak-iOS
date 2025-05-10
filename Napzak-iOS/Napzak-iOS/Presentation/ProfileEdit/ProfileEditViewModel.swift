@@ -56,10 +56,10 @@ final class ProfileEditViewModel: ObservableObject {
                                 case .success(let detailResponse):
                                     if let storeDetail = detailResponse.data {
                                         // Fill in the current profile data
-                                        self.nickname = storeDetail.storeNickName
+                                        self.nickname = storeDetail.storeNickName ?? "null"
                                         self.profileDescription = storeDetail.storeDescription
-                                        self.profileImageURL = storeDetail.storePhoto
-                                        self.coverImageURL = storeDetail.storeCover
+                                        self.profileImageURL = storeDetail.storePhoto ?? "profile_market"
+                                        self.coverImageURL = storeDetail.storeCover ?? "profile_market"
                                         
                                         // Convert GenreDTO to GenreNameModel
                                         self.selectedGenres = storeDetail.genrePreferenceList.map { dto in
