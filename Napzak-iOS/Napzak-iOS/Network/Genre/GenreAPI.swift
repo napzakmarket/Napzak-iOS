@@ -48,8 +48,6 @@ extension GenreAPI: BaseTargetType {
             return .post
         default:
             return .get
-        case .registerPreferGenre:
-            return .post
         }
     }
     

@@ -64,20 +64,8 @@ struct ProductItemModel: Identifiable {
         self.price = dto.price
         self.uploadTime = dto.uploadTime
         self.isInterested = dto.isInterested
-        
-        //TODO: develop 변경사항 적용 후 변경할 코드임!!!!!
-        self.tradeType = dto.tradeType == "SELL" ? .sell : .buy
-        self.tradeStatus = {
-            switch dto.tradeStatus {
-            case "BEFORE_TRADE":
-                return .beforeTrade
-            case "RESERVED":
-                return .reserved
-            default:
-                return .completed
-            }
-        }()
-        
+        self.tradeType = TradeType(rawValue: dto.tradeType) ?? TradeType.sell
+        self.tradeStatus = TradeStatus(rawValue: dto.tradeStatus) ?? TradeStatus.beforeTrade
         self.isPriceNegotiable = dto.isPriceNegotiable
         self.isOwnedByCurrentUser = dto.isOwnedByCurrentUser
         self.interestCount = dto.interestCount
