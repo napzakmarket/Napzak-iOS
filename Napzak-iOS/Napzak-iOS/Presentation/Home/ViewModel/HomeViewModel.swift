@@ -6,23 +6,29 @@
 //
 
 import Foundation
-import Combine
+import os
 
 @MainActor
 final class HomeViewModel: ObservableObject {
-    @Published var banners: HomeBannersModel
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "HomeViewModel")
+    
+    @Published var banners: HomeBannersModel = .empty
     @Published var selectedBannerIndex: Int = 1
     @Published var timerPaused: Bool = false
     @Published var showLikeToast: Bool = false
     @Published var externalURLToOpen: URL?
-   
-    private var cancellables: Set<AnyCancellable> = []
-    
     @Published var username: String = ""
     
     @Published var recommendedProducts: [ProductItemModel] = []
     @Published var popularSellProducts: [ProductItemModel] = []
     @Published var popularBuyProducts: [ProductItemModel] = []
+    
+    @Published var isBannersLoading: Bool = false
+    @Published var isRecommendationsLoading: Bool = false
+    @Published var isPopularSellLoading: Bool = false
+    @Published var isPopularBuyLoading: Bool = false
+    
+    private let service = NetworkService.shared.homeService
     
     var recommendedTitle: String { "\(username)님을 위한 맞춤 PICK" }
     var recommendedSubtitle: String { "\(username)님의 취향에 딱 맞는 아이템들을 모아봤어요."}
@@ -32,8 +38,14 @@ final class HomeViewModel: ObservableObject {
     let popularBuySubtitle = "놓치면 아쉬운 인기 아이템들을 구경해볼까요?"
     
     init() {
-        self.banners = HomeBannersModel.sample
         fetchHomeData()
+    }
+    
+    func fetchHomeData() {
+        fetchBanners()
+        fetchRecommendations()
+        fetchPopularSell()
+        fetchPopularBuy()
     }
     
     func handleBannerTap(_ action: BannerAction) {
@@ -97,13 +109,6 @@ final class HomeViewModel: ObservableObject {
 }
 
 extension HomeViewModel {
-    private func fetchHomeData() {
-        self.username = "납자기"
-        self.recommendedProducts = ProductItemModel.dummyProducts
-        self.popularSellProducts = ProductItemModel.dummyProducts
-        self.popularBuyProducts = ProductItemModel.dummyProducts
-    }
-    
     private func getCurrentProductState(_ productId: Int, in section: ProductSection) -> ProductItemModel? {
         switch section {
         case .recommended:
@@ -112,6 +117,80 @@ extension HomeViewModel {
             return popularSellProducts.first { $0.id == productId }
         case .popularBuy:
             return popularBuyProducts.first { $0.id == productId }
+        }
+    }
+    
+    private func fetchBanners() {
+        Task {
+            isBannersLoading = true
+            defer { isBannersLoading = false }
+            
+            let result = await service.getBannerList()
+            switch result {
+            case .success(let response):
+                if let dto = response.data,
+                   let bannerModel = HomeBannersModel(dto: dto) {
+                    self.banners = bannerModel
+                } else {
+                    logger.error("배너 데이터 없음 또는 변환 실패")
+                }
+                
+            case .failure(let error):
+                logger.error("fetchBanners failed: \(error.errorDescription ?? "Unknown error")")
+            }
+        }
+    }
+    
+    private func fetchRecommendations() {
+        Task {
+            isRecommendationsLoading = true
+            defer { isRecommendationsLoading = false }
+            
+            let result = await service.getHomeRecommendations()
+            switch result {
+            case .success(let response):
+                if let dtoList = response.data?.productRecommendList,
+                   let username = response.data?.nickname {
+                    self.username = username
+                    self.recommendedProducts = dtoList.map { ProductItemModel(dto: $0) }
+                }
+            case .failure(let error):
+                logger.error("fetchRecommendations failed: \(error.errorDescription ?? "Unknown error")")
+            }
+        }
+    }
+    
+    private func fetchPopularSell() {
+        Task {
+            isPopularSellLoading = true
+            defer { isPopularSellLoading = false }
+            
+            let result = await service.getHomePopularSell()
+            switch result {
+            case .success(let response):
+                if let dtoList = response.data?.productSellList {
+                    self.popularSellProducts = dtoList.map { ProductItemModel(dto: $0) }
+                }
+            case .failure(let error):
+                logger.error("fetchPopularSell failed: \(error.errorDescription ?? "Unknown error")")
+            }
+        }
+    }
+    
+    private func fetchPopularBuy() {
+        Task {
+            isPopularBuyLoading = true
+            defer { isPopularBuyLoading = false }
+            
+            let result = await service.getHomePopularBuy()
+            switch result {
+            case .success(let response):
+                if let dtoList = response.data?.productBuyList {
+                    self.popularBuyProducts = dtoList.map { ProductItemModel(dto: $0) }
+                }
+            case .failure(let error):
+                logger.error("fetchPopularBuy failed: \(error.errorDescription ?? "Unknown error")")
+            }
         }
     }
 }
