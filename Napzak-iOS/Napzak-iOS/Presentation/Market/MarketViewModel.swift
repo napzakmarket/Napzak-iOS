@@ -69,7 +69,7 @@ final class MarketViewModel: ObservableObject {
                 switch detailResult {
                 case .success(let detailResponse):
                     storeDetail = detailResponse.data
-                    if let genres = detailResponse.data?.genrePreferenceList {
+                    if let genres = detailResponse.data?.genrePreferences {
                         let genreNameModels = genres.map { GenreNameModel(id: $0.genreId, name: $0.genreName) }
                         productFetchOption.genres = genreNameModels
                     }
