@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct OnboardingTermsView: View {
+    @EnvironmentObject private var authRouter: AuthNavigationRouter
     @State private var isAllAgreed: Bool = false
     @State private var isTermsAgreed: Bool = false
     @State private var isPrivacyAgreed: Bool = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            OnboardingNavigationBar(step: 1)
-                .frame(height: 48)
+            OnboardingNavigationBar(step: 1) {
+                authRouter.pop()
+            }
+            .frame(height: 48)
             
             Text("서비스 이용약관에 동의해주세요")
                 .applyNapzakFont(.title2Bold20)
@@ -58,13 +61,14 @@ struct OnboardingTermsView: View {
                     isEnabled: isAllAgreed
                 ) {
                     // TODO: 다음 화면으로 이동 (ex. 닉네임 입력 화면)
-                    
+                    authRouter.push(next: .username)
                     print("다음으로")
                 }
                 .padding(.bottom, 75)
             }
             .padding(.horizontal, 20)
         }
+        .toolbar(.hidden, for: .navigationBar)
         .onChange(of: isAllAgreed) { newValue in
             updateAllAgreeState(newValue)
         }

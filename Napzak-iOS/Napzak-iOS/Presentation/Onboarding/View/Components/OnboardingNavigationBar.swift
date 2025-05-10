@@ -9,12 +9,12 @@ import SwiftUI
 
 struct OnboardingNavigationBar: View {
     let step: Int
+    let onBack: () -> Void
     
     var body: some View {
         HStack {
             Button {
-                // TODO: Destination 뒤로가기 동작 구현
-                
+                onBack()
                 print("뒤로가기 눌림")
             } label: {
                 Image(.iconBack)
@@ -34,5 +34,5 @@ struct OnboardingNavigationBar: View {
 }
 
 #Preview {
-    OnboardingNavigationBar(step: 1)
+    OnboardingNavigationBar(step: 1, onBack: {})
 }

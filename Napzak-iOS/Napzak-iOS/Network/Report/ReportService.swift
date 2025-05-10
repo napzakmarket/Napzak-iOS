@@ -19,11 +19,11 @@ final class ReportService: BaseService, ReportServiceProtocol {
     private let provider = MoyaProvider<ReportAPI>.init(plugins: [MoyaPlugin()])
 
     func postProductReport(productId: Int, requestData: ReportRequestDTO) async -> Result<ReportProductResponseDTO, NetworkError> {
-        return await request(provider, .postProductReport(productId: productId, requestData: requestData))
+        return await requestDecodable(provider, .postProductReport(productId: productId, requestData: requestData))
     }
 
     func postStoreReport(storeId: Int, requestData: ReportRequestDTO) async -> Result<ReportStoreResponseDTO, NetworkError> {
-        return await request(provider, .postStoreReport(storeId: storeId, requestData: requestData))
+        return await requestDecodable(provider, .postStoreReport(storeId: storeId, requestData: requestData))
     }
 
 }
