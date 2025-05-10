@@ -246,7 +246,8 @@ private extension SearchView {
                             })
                             .onTapGesture {
                                 //TODO: - 화면 전환
-                                print("\(products[i].id)번 상품")
+                                print("\(viewModel.dummyProducts[i].id)번 상품")
+                                navigationRouter.push(next: .productDetailView(productId: viewModel.dummyProducts[i].id))
                             }
                     }
                 }
