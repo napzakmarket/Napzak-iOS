@@ -15,7 +15,7 @@ protocol ProductServiceProtocol {
         isUnopened: Bool?,
         genreId: Int?,
         cursor: String?
-    ) async -> Result<(products: [MarketProductItemDTO], nextCursor: String?, count: Int), NetworkError>
+    ) async -> Result<MarketProductListResponseDTO, NetworkError>
     
     func fetchBuyProducts(
         storeOwnerId: Int,
@@ -23,7 +23,7 @@ protocol ProductServiceProtocol {
         isOnSale: Bool?,
         genreId: Int?,
         cursor: String?
-    ) async -> Result<(products: [MarketProductBuyItemDTO], nextCursor: String?, count: Int), NetworkError>
+    ) async -> Result<MarketProductBuyListResponseDTO, NetworkError>
 }
 
 final class ProductService: BaseService, ProductServiceProtocol {
@@ -36,7 +36,7 @@ final class ProductService: BaseService, ProductServiceProtocol {
         isUnopened: Bool? = false,
         genreId: Int? = nil,
         cursor: String? = nil
-    ) async -> Result<(products: [MarketProductItemDTO], nextCursor: String?, count: Int), NetworkError> {
+    ) async -> Result<MarketProductListResponseDTO, NetworkError> {
         
         let result: Result<BaseResponseDTO<MarketProductListResponseDTO>, NetworkError> = await request(
             provider,
@@ -52,14 +52,11 @@ final class ProductService: BaseService, ProductServiceProtocol {
         
         return result.map { response in
             guard let data = response.data else {
-                return (products: [], nextCursor: nil, count: 0)
+                // 빈 응답 객체 생성
+                return MarketProductListResponseDTO(productCount: 0, productSellList: [], nextCursor: nil)
             }
             
-            return (
-                products: data.productSellList,
-                nextCursor: data.nextCursor,
-                count: data.productCount
-            )
+            return data
         }
     }
     
@@ -69,7 +66,7 @@ final class ProductService: BaseService, ProductServiceProtocol {
         isOnSale: Bool? = false,
         genreId: Int? = nil,
         cursor: String? = nil
-    ) async -> Result<(products: [MarketProductBuyItemDTO], nextCursor: String?, count: Int), NetworkError> {
+    ) async -> Result<MarketProductBuyListResponseDTO, NetworkError> {
         
         let result: Result<BaseResponseDTO<MarketProductBuyListResponseDTO>, NetworkError> = await request(
             provider,
@@ -84,14 +81,11 @@ final class ProductService: BaseService, ProductServiceProtocol {
         
         return result.map { response in
             guard let data = response.data else {
-                return (products: [], nextCursor: nil, count: 0)
+                // 빈 응답 객체 생성
+                return MarketProductBuyListResponseDTO(productCount: 0, productBuyList: [], nextCursor: nil)
             }
             
-            return (
-                products: data.productBuyList,
-                nextCursor: data.nextCursor,
-                count: data.productCount
-            )
+            return data
         }
     }
 }

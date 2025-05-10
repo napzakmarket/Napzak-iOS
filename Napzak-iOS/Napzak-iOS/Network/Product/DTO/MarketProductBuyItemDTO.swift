@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct MarketProductBuyItemDTO: Codable {
+public struct MarketProductBuyItemDTO: Decodable {
     let productId: Int
     let genreName: String
     let productName: String

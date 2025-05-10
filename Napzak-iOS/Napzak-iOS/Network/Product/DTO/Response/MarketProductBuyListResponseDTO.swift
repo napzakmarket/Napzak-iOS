@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct MarketProductBuyListResponseDTO: Codable {
+public struct MarketProductBuyListResponseDTO: Decodable {
     let productCount: Int
     let productBuyList: [MarketProductBuyItemDTO]
     let nextCursor: String?

@@ -135,12 +135,12 @@ final class MarketViewModel: ObservableObject {
             )
             
             switch result {
-            case .success(let (products, cursor, count)):
-                self.nextCursor = cursor
-                self.productCount = count
+            case .success(let response):
+                self.nextCursor = response.nextCursor
+                self.productCount = response.productCount
                 
                 // MarketProductItemDTO를 ProductItemModel로 변환
-                self.products = products.map { dto in
+                self.products = response.productSellList.map { dto in
                     ProductItemModel(
                         id: dto.productId,
                         genreName: dto.genreName,
@@ -172,12 +172,12 @@ final class MarketViewModel: ObservableObject {
             )
             
             switch result {
-            case .success(let (products, cursor, count)):
-                self.nextCursor = cursor
-                self.productCount = count
+            case .success(let response):
+                self.nextCursor = response.nextCursor
+                self.productCount = response.productCount
                 
                 // MarketProductBuyItemDTO를 ProductItemModel로 변환
-                self.products = products.map { dto in
+                self.products = response.productBuyList.map { dto in
                     ProductItemModel(
                         id: dto.productId,
                         genreName: dto.genreName,
