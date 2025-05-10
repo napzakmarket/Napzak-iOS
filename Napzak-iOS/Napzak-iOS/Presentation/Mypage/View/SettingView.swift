@@ -10,6 +10,8 @@ import SwiftUI
 struct SettingView: View {
     @Environment(\.dismiss) private var dismiss
     
+    @StateObject private var viewModel = SettingViewModel()
+    
     @State var logoutButtonTapped: Bool = false
     
     var body: some View {
@@ -39,7 +41,9 @@ struct SettingView: View {
                     confirmText: "예",
                     cancelText: "아니요",
                     onConfirm: {
-                        print("로그아웃 처리")
+                        Task {
+                            await viewModel.logOut()
+                        }
                         logoutButtonTapped = false
                     },
                     onCancel: {

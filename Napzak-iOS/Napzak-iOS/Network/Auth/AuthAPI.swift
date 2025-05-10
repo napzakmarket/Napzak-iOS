@@ -9,6 +9,7 @@ import Moya
 
 enum AuthAPI {
     case login(type: SocialLoginType, code: String)
+    case logout
     case refresh
 }
 
@@ -19,6 +20,8 @@ extension AuthAPI: BaseTargetType {
             return .noneHeader
         case .refresh:
             return .refreshTokenHeader
+        case .logout:
+            return .accessTokenHeader
         }
     }
     
@@ -28,6 +31,8 @@ extension AuthAPI: BaseTargetType {
             return type.loginPath
         case .refresh:
             return "stores/refresh-token"
+        case .logout:
+            return "stores/logout"
         }
     }
     
@@ -54,6 +59,8 @@ extension AuthAPI: BaseTargetType {
             )
             
         case .refresh:
+            return .requestPlain
+        case .logout:
             return .requestPlain
         }
     }
