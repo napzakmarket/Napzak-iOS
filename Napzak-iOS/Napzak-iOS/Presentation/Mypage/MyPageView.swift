@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import Kingfisher
+
 struct MyPageView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
     @State private var storeInfo: StoreProfileDTO?
@@ -112,32 +114,16 @@ struct MyPageView: View {
     // API 프로필 정보
     private func profileCardWithData(storeInfo: StoreProfileDTO) -> some View {
         HStack(spacing: 14) {
-            Circle()
+            KFImage(URL(string: storeInfo.storePhoto))
+                .placeholder {
+                    Image("profile_img")
+                        .resizable()
+                        .scaledToFit()
+                }
+                .resizable()
+                .scaledToFit()
                 .frame(width: 60, height: 60)
-                .overlay(
-                    AsyncImage(url: URL(string: storeInfo.storePhoto)) { phase in
-                        switch phase {
-                        case .empty:
-                            // 로딩 중일 때 기본 이미지 표시
-                            Image("profile_img")
-                                .resizable()
-                                .scaledToFit()
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .scaledToFit()
-                        case .failure:
-                            // 로드 실패 시 기본 이미지 표시
-                            Image("profile_img")
-                                .resizable()
-                                .scaledToFit()
-                        @unknown default:
-                            Image("profile_img")
-                                .resizable()
-                                .scaledToFit()
-                        }
-                    }
-                )
+                .clipShape(Circle())
             
             VStack(alignment: .leading, spacing:7) {
                 Text(storeInfo.storeNickname)
@@ -175,6 +161,7 @@ struct MyPageView: View {
         .padding(.horizontal, 27)
         .padding(.top, 30)
     }
+
     
     private var marketButton: some View {
         VStack(spacing: 0) {
