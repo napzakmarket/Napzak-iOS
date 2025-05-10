@@ -78,6 +78,7 @@ struct HomeView: View {
         .onChange(of: viewModel.externalURLToOpen) { url in
             if let url {
                 UIApplication.shared.open(url)
+                viewModel.externalURLToOpen = nil
             }
         }
     }
