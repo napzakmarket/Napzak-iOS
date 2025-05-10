@@ -7,28 +7,53 @@
 
 import SwiftUI
 
+import Lottie
+
 struct LoginView: View {
     @EnvironmentObject private var authRouter: AuthNavigationRouter
     @StateObject private var viewModel = LoginViewModel()
+    @State private var showButton: Bool = false
     
     var body: some View {
         NavigationStack(path: $authRouter.path) {
-            VStack(spacing: 10) {
-                Button {
-                    Task {
-                        await viewModel.handleKakaoLogin(router: authRouter)
+            ZStack {
+                LottieView(animation: .named("ios"))
+                    .configure({ lottieAnimationView in
+                        lottieAnimationView.contentMode = .scaleAspectFill
+                        lottieAnimationView.shouldRasterizeWhenIdle = false
+                    })
+                    .playbackMode(.playing(.toProgress(1, loopMode: .playOnce)))
+                    .animationDidFinish { _ in
+                        withAnimation(.easeIn(duration: 0.3)) {
+                            showButton = true
+                        }
                     }
-                } label: {
-                    Image(.buttonLoginKakao)
-                }
-                .disabled(viewModel.isLoading)
+                    .ignoresSafeArea(.all)
                 
-                Button {
-                    Task {
-                        await viewModel.handleAppleAuthCode(router: authRouter)
+                if showButton {
+                    VStack {
+                        Spacer()
+                        
+                        VStack(spacing: 15) {
+                            Button {
+                                Task {
+                                    await viewModel.handleKakaoLogin(router: authRouter)
+                                }
+                            } label: {
+                                Image(.buttonLoginKakao)
+                            }
+                            .disabled(viewModel.isLoading)
+                            
+                            Button {
+                                Task {
+                                    await viewModel.handleAppleAuthCode(router: authRouter)
+                                }
+                            } label: {
+                                Image(.buttonLoginApple)
+                            }
+                        }
                     }
-                } label: {
-                    Image(.buttonLoginApple)
+                    .padding(.bottom, 77)
                 }
             }
             .navigationDestination(for: OnboardingStep.self) { step in
@@ -53,5 +78,14 @@ struct LoginView: View {
 }
 
 #Preview {
-    LoginView()
+    struct PreviewContainer: View {
+        @StateObject var authRouter = AuthNavigationRouter()
+        
+        var body: some View {
+            LoginView()
+                .environmentObject(authRouter)
+        }
+    }
+    
+    return PreviewContainer()
 }
