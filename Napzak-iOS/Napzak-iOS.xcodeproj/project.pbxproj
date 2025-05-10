@@ -26,6 +26,11 @@
 		6CC472392DA44C5F0086E345 /* RegisterTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC472382DA44C5F0086E345 /* RegisterTitle.swift */; };
 		6CC4723B2DA453270086E345 /* RegisterDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CC4723A2DA453270086E345 /* RegisterDescription.swift */; };
 		6CD0249D2DC522B1005004DB /* ImagePickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD0249C2DC522B1005004DB /* ImagePickerManager.swift */; };
+		6CD972BF2DC789F1000AE85E /* PresignedProductResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD972BE2DC789F1000AE85E /* PresignedProductResponseDTO.swift */; };
+		6CD972CD2DC7BCB7000AE85E /* SellRegisterRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD972CC2DC7BCB7000AE85E /* SellRegisterRequestDTO.swift */; };
+		6CD972CF2DC7BD41000AE85E /* SellRegisterResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD972CE2DC7BD41000AE85E /* SellRegisterResponseDTO.swift */; };
+		6CD972D12DC7C45A000AE85E /* BuyRegisterRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD972D02DC7C45A000AE85E /* BuyRegisterRequestDTO.swift */; };
+		6CD972D32DC7C468000AE85E /* BuyRegisterResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CD972D22DC7C468000AE85E /* BuyRegisterResponseDTO.swift */; };
 		6CE0D3E72DB29C200090612B /* ReportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CE0D3E52DB29C200090612B /* ReportView.swift */; };
 		6CF689412DC67AE800BC63AD /* ReportRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF689402DC67AE800BC63AD /* ReportRequestDTO.swift */; };
 		6CF689432DC67AF500BC63AD /* ReportResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CF689422DC67AF500BC63AD /* ReportResponseDTO.swift */; };
@@ -171,6 +176,11 @@
 		6CC472382DA44C5F0086E345 /* RegisterTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterTitle.swift; sourceTree = "<group>"; };
 		6CC4723A2DA453270086E345 /* RegisterDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterDescription.swift; sourceTree = "<group>"; };
 		6CD0249C2DC522B1005004DB /* ImagePickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerManager.swift; sourceTree = "<group>"; };
+		6CD972BE2DC789F1000AE85E /* PresignedProductResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresignedProductResponseDTO.swift; sourceTree = "<group>"; };
+		6CD972CC2DC7BCB7000AE85E /* SellRegisterRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterRequestDTO.swift; sourceTree = "<group>"; };
+		6CD972CE2DC7BD41000AE85E /* SellRegisterResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterResponseDTO.swift; sourceTree = "<group>"; };
+		6CD972D02DC7C45A000AE85E /* BuyRegisterRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyRegisterRequestDTO.swift; sourceTree = "<group>"; };
+		6CD972D22DC7C468000AE85E /* BuyRegisterResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyRegisterResponseDTO.swift; sourceTree = "<group>"; };
 		6CE0D3E52DB29C200090612B /* ReportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportView.swift; sourceTree = "<group>"; };
 		6CF689402DC67AE800BC63AD /* ReportRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportRequestDTO.swift; sourceTree = "<group>"; };
 		6CF689422DC67AF500BC63AD /* ReportResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportResponseDTO.swift; sourceTree = "<group>"; };
@@ -903,6 +913,8 @@
 		D0F035852DBF6880003D0CBF /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				6CD972CE2DC7BD41000AE85E /* SellRegisterResponseDTO.swift */,
+				6CD972D22DC7C468000AE85E /* BuyRegisterResponseDTO.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -910,6 +922,8 @@
 		D0F035862DBF68A8003D0CBF /* Request */ = {
 			isa = PBXGroup;
 			children = (
+				6CD972CC2DC7BCB7000AE85E /* SellRegisterRequestDTO.swift */,
+				6CD972D02DC7C45A000AE85E /* BuyRegisterRequestDTO.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -944,6 +958,7 @@
 		D0F0358D2DBF698A003D0CBF /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				6CD972BE2DC789F1000AE85E /* PresignedProductResponseDTO.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -1217,6 +1232,7 @@
 				D029060F2DAF9978008515FD /* TradeType.swift in Sources */,
 				D045DEF82D8383CC00EB1EB6 /* Encodable+.swift in Sources */,
 				D0CBB6FF2DB8110300BE20C3 /* PlainChip.swift in Sources */,
+				6CD972BF2DC789F1000AE85E /* PresignedProductResponseDTO.swift in Sources */,
 				D045DEF92D8383CC00EB1EB6 /* String+.swift in Sources */,
 				D63270292DA30609002414DA /* GenreSelectionView.swift in Sources */,
 				D045DEFA2D8383CC00EB1EB6 /* TextEditor+.swift in Sources */,
@@ -1226,6 +1242,7 @@
 				D64922D12D9EF5CB00716740 /* RowType.swift in Sources */,
 				D6055AF02DBF3AC1005D32A3 /* BannerAction.swift in Sources */,
 				D63270162DA19639002414DA /* SearchBar.swift in Sources */,
+				6CD972D12DC7C45A000AE85E /* BuyRegisterRequestDTO.swift in Sources */,
 				6CB2EC012DBFE80B003BF298 /* ReportModel.swift in Sources */,
 				D02906022DAF4891008515FD /* ProductFetchOption.swift in Sources */,
 				6CF689452DC67CAC00BC63AD /* ReportService.swift in Sources */,
@@ -1309,6 +1326,7 @@
 				D07BF2762D9D16A3000E4FD5 /* NZTabBarView.swift in Sources */,
 				D64561282DC48101003D2E2B /* OnboardingManager.swift in Sources */,
 				D06F13962DA300CB0029698C /* NavigationRouter.swift in Sources */,
+				6CD972D32DC7C468000AE85E /* BuyRegisterResponseDTO.swift in Sources */,
 				D07837B22DB6C156009122F6 /* SortModalView.swift in Sources */,
 				D64561212DC3BECC003D2E2B /* TokenRefreshService.swift in Sources */,
 				D07837A92DB57203009122F6 /* GenreSelectModalView.swift in Sources */,
@@ -1341,8 +1359,10 @@
 				D0F035802DBF6654003D0CBF /* PresignedService.swift in Sources */,
 				D0F035822DBF6654003D0CBF /* PresignedAPI.swift in Sources */,
 				D0180D602D9F001E006A748F /* RegisterFloatingView.swift in Sources */,
+				6CD972CF2DC7BD41000AE85E /* SellRegisterResponseDTO.swift in Sources */,
 				6CB2EC072DBFED96003BF298 /* RegisterViewModel.swift in Sources */,
 				D0F0356F2DBF441E003D0CBF /* PreferGenreResponseDTO.swift in Sources */,
+				6CD972CD2DC7BCB7000AE85E /* SellRegisterRequestDTO.swift in Sources */,
 				D0F035702DBF441E003D0CBF /* GenreNameResponseDTO.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

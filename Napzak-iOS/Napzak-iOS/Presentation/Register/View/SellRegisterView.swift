@@ -28,6 +28,7 @@ struct SellRegisterView: View {
                 registerButton
             }
             .ignoresSafeArea()
+            .scrollDismissesKeyboard(.immediately)
             .frame(maxWidth: .infinity)
             .scrollIndicators(.hidden)
             .navigationDestination(for: Route.self) { route in
@@ -40,6 +41,15 @@ struct SellRegisterView: View {
                         genre: $viewModel.model.genre,
                         genreId: $viewModel.model.genreId
                     )
+                    .onChange(of: viewModel.genreSearchText) { word in
+                        Task {
+                            if word.isEmpty {
+                                await viewModel.getAllGenre()
+                            } else {
+                                await viewModel.getSearchGenre(searchWord: word)
+                            }
+                        }
+                    }
                 default:
                     EmptyView()
                 }
@@ -118,7 +128,9 @@ extension SellRegisterView {
             
             Button {
                 //MARK: - 팔아요 등록
-                print(viewModel.model)
+                Task {
+                    await viewModel.postSellRegister()
+                }
             } label: {
                 Text("등록하기")
                     .applyNapzakFont(.body4Bold14)
