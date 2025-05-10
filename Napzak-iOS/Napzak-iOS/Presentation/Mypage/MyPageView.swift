@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 import Kingfisher
 
 struct MyPageView: View {
@@ -59,9 +58,14 @@ struct MyPageView: View {
             
             switch result {
             case .success(let response):
+                // data가 nil일 경우 처리
                 storeInfo = response.data
-            case .failure:
+                if storeInfo == nil {
+                    print("응답에 data가 없습니다")
+                }
+            case .failure(let error):
                 storeInfo = nil
+                print("API 호출 오류: \(error)")
             }
         }
     }
@@ -114,7 +118,7 @@ struct MyPageView: View {
     // API 프로필 정보
     private func profileCardWithData(storeInfo: StoreProfileDTO) -> some View {
         HStack(spacing: 14) {
-            KFImage(URL(string: storeInfo.storePhoto))
+            KFImage(URL(string: storeInfo.storePhoto ?? ""))
                 .placeholder {
                     Image("profile_img")
                         .resizable()
@@ -206,7 +210,21 @@ struct MyPageView: View {
         return LazyVGrid(columns: columns, spacing: 4) {
             ForEach(menuItems.indices, id: \.self) { index in
                 ZStack {
-                    menuItem(title: menuItems[index].title, iconName: menuItems[index].icon)
+                    Button {
+                        if menuItems[index].title == "고객센터" {
+                            if let storeInfo = storeInfo,
+                               let url = URL(string: storeInfo.serviceLink),
+                               UIApplication.shared.canOpenURL(url) {
+                                UIApplication.shared.open(url)
+                            }
+                        } else {
+                            // 다른 메뉴는 추후 라우팅 로직 연결
+                        }
+                    } label: {
+                        menuItem(title: menuItems[index].title, iconName: menuItems[index].icon)
+                            .frame(maxWidth: .infinity, minHeight: 82)
+                            .background(Color.napzakGrayScale(.gray10))
+                    }
                 }
                 .frame(maxWidth: .infinity, minHeight: 82)
                 .background(Color.napzakGrayScale(.gray10))
