@@ -8,10 +8,24 @@
 import SwiftUI
 
 struct UsernameInputField: View {
-    @State private var username: String = ""
-    @State private var validationState: UsernameValidation = .empty
-    @State private var isCheckButtonEnabled: Bool = false
+    @Binding var validationState: UsernameValidation
+    @Binding var username: String
     @Binding var isPrimaryButtonEnabled: Bool
+    
+    var onCheckButtonTapped: (String) -> Void
+    
+    private var isCheckButtonEnabled: Bool {
+        !username.isEmpty && username.count >= 2
+    }
+    
+    private var textColor: Color {
+        switch validationState {
+        case .empty, .valid:
+            return Color.napzakGrayScale(.gray500)
+        case .invalidSpace, .invalidSpecialChar, .invalidNumberOnly, .serverError, .invalidIncompleteHangul:
+            return Color.napzakState(.red)
+        }
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -24,19 +38,14 @@ struct UsernameInputField: View {
                         .font(.napzakFont(.caption2Medium12))
                 )
                 .applyNapzakFont(.caption1SemiBold12)
-                .foregroundStyle(Color.napzakGrayScale(.gray500))
+                .foregroundStyle(textColor)
                 .tint(Color.napzakGrayScale(.gray500))
                 
                 Button {
-//                    활성화된 [이름 확인] 버튼 선택 시 다음 항목 검증:
-//                    욕설/비속어 포함 여부
-//                    이름 중복 여부
-                    // TODO: 닉네임 검증 API 요청, debounce
                     print("서버로 이름 확인 요청: \(username)")
                     print("글자수: \(username.count)")
                     
-                    validationState = .valid
-                    isPrimaryButtonEnabled = true
+                    validateAndSubmit()
                 } label: {
                     isCheckButtonEnabled ? Image(.namecheckDefault) : Image(.namecheckDisabled)
                 }
@@ -60,58 +69,67 @@ struct UsernameInputField: View {
                 }
                 
                 Text(validationState == .invalidNumberOnly ? " 한글이나 영문을 함께 사용해주세요." : "")
-                .applyNapzakFont(.caption1SemiBold12)
-                .foregroundStyle(validationState.color)
-                .padding(.leading, 12)  
+                    .applyNapzakFont(.caption1SemiBold12)
+                    .foregroundStyle(validationState.color)
+                    .padding(.leading, 12)
             }
         }
-        .onChange(of: username) { newValue in
-            validateUsername(newValue)
+        .onChange(of: username) { _ in
+            validationState = .empty
+            isPrimaryButtonEnabled = false
         }
     }
 }
 
 extension UsernameInputField {
-    private func validateUsername(_ name: String) {
-        if name.count > 20 {
-            username = String(name.prefix(20))
+    private func validateAndSubmit() {
+        
+        if username.contains(" ") {
+            validationState = .invalidSpace
+            isPrimaryButtonEnabled = false
+            return
         }
         
-        let specialCharPattern = "[^A-Za-z0-9가-힣ㄱ-ㅎㅏ-ㅣ]"
+        if containsIncompleteHangul(username) {
+            validationState = .invalidIncompleteHangul
+            isPrimaryButtonEnabled = false
+            return
+        }
+
+        let specialCharPattern = "[^A-Za-z0-9가-힣]"
         let numberOnlyPattern = "^[0-9]+$"
         
-        isCheckButtonEnabled = false
-        isPrimaryButtonEnabled = false
-        validationState = .empty
-        
-        if name.isEmpty {
-            validationState = .empty
-        } else if name.contains(" ") {
-            validationState = .invalidSapce
-        } else if name.range(of: specialCharPattern, options: .regularExpression) != nil {
+        if username.range(of: specialCharPattern, options: .regularExpression) != nil {
             validationState = .invalidSpecialChar
-        } else if name.range(of: numberOnlyPattern, options: .regularExpression) != nil {
-            validationState = .invalidNumberOnly
-        } else if !isValidUsername(name) {
-            validationState = .empty
-        } else {
-            isCheckButtonEnabled = true
+            isPrimaryButtonEnabled = false
+            return
         }
+        
+        if username.range(of: numberOnlyPattern, options: .regularExpression) != nil {
+            validationState = .invalidNumberOnly
+            isPrimaryButtonEnabled = false
+            return
+        }
+        
+        onCheckButtonTapped(username)
     }
     
-    private func isValidUsername(_ name: String) -> Bool {
-        let validPattern = "^(?=.*[가-힣]|[A-Za-z0-9])[가-힣A-Za-z0-9]{2,}$"
-        let consonantVowelPattern = "^[ㄱ-ㅎㅏ-ㅣ]+$"
+    private func containsIncompleteHangul(_ text: String) -> Bool {
+        let chosung = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ"
+        let jungsung = "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ"
         
-        guard name.range(of: consonantVowelPattern, options: .regularExpression) == nil else {
-            return false
+        return text.contains { char in
+            String(char).rangeOfCharacter(from: CharacterSet(charactersIn: chosung + jungsung)) != nil
         }
-        
-        return name.range(of: validPattern, options: .regularExpression) != nil
     }
 }
 
 #Preview {
-    UsernameInputField(isPrimaryButtonEnabled: .constant(true))
-        .padding(.horizontal, 20)
+    UsernameInputField(
+        validationState: .constant(.empty),
+        username: .constant(""),
+        isPrimaryButtonEnabled: .constant(false),
+        onCheckButtonTapped: { _ in }
+    )
+    .padding(.horizontal, 20)
 }

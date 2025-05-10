@@ -8,6 +8,7 @@
 import Foundation
 
 enum NetworkError: LocalizedError {
+    case apiError(message: String)
     case badRequest
     case unauthorized
     case notFound
@@ -17,6 +18,8 @@ enum NetworkError: LocalizedError {
     
     var errorDescription: String? {
         switch self {
+        case .apiError(let message):
+            return message
         case .badRequest:
             return "잘못된 요청입니다"
         case .unauthorized:

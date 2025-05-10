@@ -146,7 +146,12 @@ extension SearchView {
         LazyVStack(spacing: 0) {
             ForEach(viewModel.productFetchOption.genres.indices, id: \.self) { i in
                 Button {
-                    //TODO: - 장르 페이지로 이동
+                    let genre = viewModel.productFetchOption.genres[i]
+                    let id = genre.id
+                    let name = genre.name
+                    
+                    navigationRouter.push(next: .genreDetailView(genreId: id,
+                                                                 genreName: name))
                 } label: {
                     GenreItemView(genreName: viewModel.productFetchOption.genres[i].name)
                         .frame(height: 64)

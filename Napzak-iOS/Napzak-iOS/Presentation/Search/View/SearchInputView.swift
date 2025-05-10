@@ -152,8 +152,8 @@ extension SearchInputView {
             LazyVGrid(columns: columns, spacing: 13) {
                 ForEach(viewModel.genreRecommendations) { genre in
                     Button {
-                        //TODO: - 데이터 넘기며 화면 전환
-                        print("\(genre.name)")
+                        navigationRouter.push(next: .genreDetailView(genreId: genre.id,
+                                                                     genreName: genre.name))
                     } label: {
                         VStack(spacing: 7)  {
                             Group {
