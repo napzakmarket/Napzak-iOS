@@ -2,7 +2,7 @@
 //  MarketViewModel.swift
 //  Napzak-iOS
 //
-//  Created on 4/30/25.
+//  Created by 어진 on 4/30/25.
 //
 
 import SwiftUI
@@ -109,18 +109,8 @@ final class MarketViewModel: ObservableObject {
         // 장르 필터 설정
         let genreId = productFetchOption.genres.first?.id
         
-        // 정렬 옵션 설정
-        let sortOption: String
-        switch productFetchOption.sortOption {
-        case .recent:
-            sortOption = "RECENT"
-        case .popular:
-            sortOption = "LIKE_COUNT"
-        case .lowPrice:
-            sortOption = "PRICE_ASC"
-        case .highPrice:
-            sortOption = "PRICE_DESC"
-        }
+        // 정렬 옵션 설정 - SortOption의 rawValue 직접 사용
+        let sortOption = productFetchOption.sortOption.rawValue
         
         // 탭에 따라 다른 API 호출
         switch selectedTabIndex {
@@ -150,7 +140,7 @@ final class MarketViewModel: ObservableObject {
                         uploadTime: dto.uploadTime,
                         isInterested: dto.isInterested,
                         tradeType: .sell,
-                        tradeStatus: getTradeStatus(from: dto.tradeStatus),
+                        tradeStatus: TradeStatus(rawValue: dto.tradeStatus) ?? .beforeTrade,
                         isPriceNegotiable: nil,
                         isOwnedByCurrentUser: dto.isOwnedByCurrentUser,
                         interestCount: dto.interestCount,
@@ -187,7 +177,7 @@ final class MarketViewModel: ObservableObject {
                         uploadTime: dto.uploadTime,
                         isInterested: dto.isLiked,
                         tradeType: .buy,
-                        tradeStatus: getTradeStatus(from: dto.tradeStatus),
+                        tradeStatus: TradeStatus(rawValue: dto.tradeStatus) ?? .beforeTrade,
                         isPriceNegotiable: dto.isPriceNegotiable,
                         isOwnedByCurrentUser: dto.isOwnedByCurrentUser,
                         interestCount: dto.interestCount,
@@ -204,19 +194,5 @@ final class MarketViewModel: ObservableObject {
         }
         
         isLoadingProducts = false
-    }
-    
-    // 서버 거래 상태 문자열을 앱의 TradeStatus enum으로 변환
-    private func getTradeStatus(from statusString: String) -> TradeStatus {
-        switch statusString {
-        case "BEFORE_TRADE":
-            return .beforeTrade
-        case "RESERVED":
-            return .reserved
-        case "COMPLETED":
-            return .completed
-        default:
-            return .beforeTrade
-        }
     }
 }
