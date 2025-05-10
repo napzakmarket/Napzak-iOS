@@ -52,7 +52,18 @@ struct GenreDetailView: View {
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
             }
+            
+            if viewModel.showToast {
+                ToastMessageView(
+                    message: "찜한 상품에 추가되었어요!",
+                    style: .success
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(1)
+                .padding(.bottom, 110)
+            }
         }
+        .animation(.spring(), value: viewModel.showToast)
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .ignoresSafeArea()
         .toolbar(.hidden, for: .navigationBar)
@@ -269,9 +280,9 @@ private extension GenreDetailView {
                         product: products[i],
                         width: productCellWidth,
                         shouldToggleInterestState: {
-                            return viewModel.canToggleInterestState(
-                                productID: products[i].id
-                            )
+                            return products[i].wrappedValue.isInterested ?
+                            await viewModel.canPostInterestState(productID: products[i].id) :
+                            await viewModel.canDeleteInterestState(productID: products[i].id)
                         })
                         .onTapGesture {
                             //TODO: - 화면 전환

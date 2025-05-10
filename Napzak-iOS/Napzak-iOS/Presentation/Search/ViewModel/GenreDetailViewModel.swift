@@ -26,10 +26,13 @@ final class GenreDetailViewModel: ObservableObject {
         tag: "",
         coverImageUrl: ""
     )
+    
     @Published var sellProductsCount: Int = 0
     @Published var sellProducts: [ProductItemModel] = []
     @Published var buyProductsCount: Int = 0
     @Published var buyProducts: [ProductItemModel] = []
+    
+    @Published var showToast: Bool = false
     
     //MARK: - Properties
     
@@ -109,8 +112,39 @@ extension GenreDetailViewModel {
         }
     }
 
-    func canToggleInterestState(productID: Int) -> Bool {
-        //TODO: - 좋아요 서버 통신 후 성공 여부 반환
-        return true
+    func canPostInterestState(productID: Int) async -> Bool {
+        let result = await NetworkService.shared.interestService.postInterest(productId: productID)
+        
+        var bool = false
+        
+        switch result {
+        case .success:
+            bool = true
+        case .failure(let error):
+            logger.error("postInterest failed: \(error.localizedDescription)")
+        }
+        
+        if bool {
+            showToast = true
+            try? await Task.sleep(for: .seconds(2))
+            showToast = false
+        }
+        
+        return bool
+    }
+    
+    func canDeleteInterestState(productID: Int) async -> Bool {
+        let result = await NetworkService.shared.interestService.deleteInterest(productId: productID)
+        
+        var bool = false
+        
+        switch result {
+        case .success:
+            bool = true
+        case .failure(let error):
+            logger.error("deleteInterest failed: \(error.localizedDescription)")
+        }
+        
+        return bool
     }
 }
