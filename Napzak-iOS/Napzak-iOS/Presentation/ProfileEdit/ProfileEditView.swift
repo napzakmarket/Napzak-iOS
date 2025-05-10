@@ -14,6 +14,7 @@ struct ProfileEditView: View {
     @State private var isGenreSelectModalPresented: Bool = false
     @State private var displayGenres: [GenreNameModel] = []
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @StateObject private var imagePickerManager = ImagePickerManager()
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -99,7 +100,6 @@ extension ProfileEditView {
                                 .fill(Color.napzakGrayScale(.gray100))
                         }
                         .resizable()
-                        .aspectRatio(contentMode: .fill)
                         .frame(height: 160)
                 } else {
                     Rectangle()
@@ -138,7 +138,7 @@ extension ProfileEditView {
                         .scaledToFit()
                         .frame(width: 28, height: 28)
                 }
-                .offset(x: 50, y: 80)
+                .offset(x: 45, y: 80)
             }
         }
     }
