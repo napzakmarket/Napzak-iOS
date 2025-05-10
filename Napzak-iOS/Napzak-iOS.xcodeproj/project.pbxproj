@@ -836,10 +836,10 @@
 		D0F0353C2DBF27F1003D0CBF /* DTO */ = {
 			isa = PBXGroup;
 			children = (
-				D0310B062DCFBDA400C265EC /* GenreDetailResponseDTO.swift */,
 				D0F035712DBF4C5C003D0CBF /* GenreDTO.swift */,
 				D0F0356D2DBF441E003D0CBF /* PreferGenreResponseDTO.swift */,
 				D0F0356E2DBF441E003D0CBF /* GenreNameResponseDTO.swift */,
+				D0310B062DCFBDA400C265EC /* GenreDetailResponseDTO.swift */,
 			);
 			path = DTO;
 			sourceTree = "<group>";

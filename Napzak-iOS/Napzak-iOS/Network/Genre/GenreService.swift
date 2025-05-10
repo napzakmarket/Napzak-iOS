@@ -12,6 +12,7 @@ protocol GenreServiceProtocol {
     func getSearchPreferGenre(searchWord: String) async -> Result<PreferGenreResponseDTO, NetworkError>
     func getAllGenreName() async -> Result<GenreNameResponseDTO, NetworkError>
     func getSearchGenreName(searchWord: String) async -> Result<GenreNameResponseDTO, NetworkError>
+    func getGenreDetailInfo(genreId: Int) async -> Result<GenreDetailResponseDTO, NetworkError>
 }
 
 final class GenreService: BaseService, GenreServiceProtocol {
@@ -32,5 +33,9 @@ final class GenreService: BaseService, GenreServiceProtocol {
     
     func getSearchGenreName(searchWord: String) async -> Result<GenreNameResponseDTO, NetworkError> {
         return await requestDecodable(provider, .getSearchGenreName(searchWord: searchWord))
+    }
+    
+    func getGenreDetailInfo(genreId: Int) async -> Result<GenreDetailResponseDTO, NetworkError> {
+        return await requestDecodable(provider, .getGenreDetailInfo(genreId: genreId))
     }
 }

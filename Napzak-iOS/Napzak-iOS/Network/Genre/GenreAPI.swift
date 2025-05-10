@@ -12,13 +12,14 @@ enum GenreAPI {
     case getSearchPreferGenre(searchWord: String)
     case getAllGenreName
     case getSearchGenreName(searchWord: String)
+    case getGenreDetailInfo(genreId: Int)
 }
 
 extension GenreAPI: BaseTargetType {
 
     var headerType: HeaderType {
         switch self {
-        case .getAllPreferGenre, .getSearchPreferGenre, .getAllGenreName, .getSearchGenreName:
+        default:
             return .accessTokenHeader
         }
     }
@@ -33,19 +34,21 @@ extension GenreAPI: BaseTargetType {
             return "genres"
         case .getSearchGenreName:
             return "genres/search"
+        case .getGenreDetailInfo(let genreId):
+            return "genres/detail/\(genreId)"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .getAllPreferGenre, .getSearchPreferGenre, .getAllGenreName, .getSearchGenreName:
+        default:
             return .get
         }
     }
     
     var task: Moya.Task {
         switch self {
-        case .getAllPreferGenre, .getAllGenreName:
+        case .getAllPreferGenre, .getAllGenreName, .getGenreDetailInfo:
             return .requestPlain
         case .getSearchPreferGenre(let searchWord):
             return .requestParameters(parameters: ["searchWord" : searchWord], encoding: URLEncoding.queryString)
