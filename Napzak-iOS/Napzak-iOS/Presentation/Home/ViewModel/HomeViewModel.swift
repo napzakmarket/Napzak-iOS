@@ -17,7 +17,14 @@ final class HomeViewModel: ObservableObject {
     @Published var timerPaused: Bool = false
     @Published var showLikeToast: Bool = false
     @Published var externalURLToOpen: URL?
-    @Published var username: String = ""
+    private var originalUsername: String = ""
+    
+    private var username: String {
+        if originalUsername.count > 10 {
+            return originalUsername.prefix(10) + "..."
+        }
+        return originalUsername
+    }
     
     @Published var recommendedProducts: [ProductItemModel] = []
     @Published var popularSellProducts: [ProductItemModel] = []
@@ -167,7 +174,7 @@ extension HomeViewModel {
             case .success(let response):
                 if let dtoList = response.data?.productRecommendList,
                    let username = response.data?.nickname {
-                    self.username = username
+                    self.originalUsername = username
                     self.recommendedProducts = dtoList.map { ProductItemModel(dto: $0) }
                 }
             case .failure(let error):
