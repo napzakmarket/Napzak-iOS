@@ -15,6 +15,8 @@ struct SearchView: View {
 
     @StateObject private var viewModel = SearchViewModel()
     
+    @State private var selectedTabIndex = 0
+    
     @Binding var isGenreSelectModalPresented: Bool
     @Binding var isSortModalPresented: Bool
 
@@ -30,7 +32,10 @@ struct SearchView: View {
             VStack(spacing: 0) {
                 searchHeader
                     .padding(.top, 75)
-                productScrollView
+                productScrollView(
+                    products: selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
+                    productsCount: selectedTabIndex == 0 ? viewModel.sellProductsCount : viewModel.buyProductsCount
+                )
                 Spacer()
             }
             
@@ -75,6 +80,24 @@ struct SearchView: View {
         }
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .ignoresSafeArea()
+        .onChange(of: selectedTabIndex) { value in
+            Task {
+                if value == 0 {
+                    await viewModel.fetchSellProducts()
+                } else {
+                    await viewModel.fetchBuyProducts()
+                }
+            }
+        }
+        .onChange(of: viewModel.productFetchOption) { value in
+            Task {
+                if selectedTabIndex == 0 {
+                    await viewModel.fetchSellProducts()
+                } else {
+                    await viewModel.fetchBuyProducts()
+                }
+            }
+        }
     }
 }
 
@@ -92,11 +115,11 @@ extension SearchView {
                 shadowBackground
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    NZSegmentedControl(selectedTabIndex: $viewModel.selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
+                    NZSegmentedControl(selectedTabIndex: $selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
                     
                     FilterContainerView(
                         isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                        selectedTabIndex: $viewModel.selectedTabIndex,
+                        selectedTabIndex: $selectedTabIndex,
                         selectedGenres: $viewModel.productFetchOption.genres,
                         isUnopened: $viewModel.productFetchOption.isUnopened,
                         isOnSale: $viewModel.productFetchOption.isOnSale
@@ -161,8 +184,14 @@ extension SearchView {
             }
         }
     }
+}
+
+private extension SearchView {
     
-    private var productScrollView: some View {
+    //MARK: - ViewBuilder Func
+    
+    @ViewBuilder
+    func productScrollView(products: Binding<[ProductItemModel]>, productsCount: Int) -> some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
                 if !viewModel.productFetchOption.genres.isEmpty {
@@ -172,7 +201,7 @@ extension SearchView {
                     Text("상품")
                         .foregroundStyle(Color.napzakGrayScale(.gray500))
                         .applyNapzakFont(.body5SemiBold14)
-                    Text("\(viewModel.dummyProducts.count)개")
+                    Text("\(productsCount)개")
                         .foregroundStyle(Color.napzakPrimary(.purple500))
                         .applyNapzakFont(.body5SemiBold14)
                     Spacer()
@@ -195,18 +224,18 @@ extension SearchView {
                 .frame(height: 58)
                 
                 LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(viewModel.dummyProducts.indices, id: \.self) { i in
+                    ForEach(products.indices, id: \.self) { i in
                         ProductItemView(
-                            product: $viewModel.dummyProducts[i],
+                            product: products[i],
                             width: productCellWidth,
-                            shouldToggleInterestState: {                                
+                            shouldToggleInterestState: {
                                 return viewModel.canToggleInterestState(
-                                    productID: viewModel.dummyProducts[i].id
+                                    productID: products[i].id
                                 )
                             })
                             .onTapGesture {
                                 //TODO: - 화면 전환
-                                print("\(viewModel.dummyProducts[i].id)번 상품")
+                                print("\(products[i].id)번 상품")
                             }
                     }
                 }

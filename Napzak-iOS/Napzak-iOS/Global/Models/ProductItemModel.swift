@@ -11,7 +11,7 @@ struct ProductItemModel: Identifiable {
     let id: Int
     let genreName: String
     let productName: String
-    let photo: String
+    let photo: String?
     let price: Int
     let uploadTime: String
     var isInterested: Bool
@@ -21,6 +21,68 @@ struct ProductItemModel: Identifiable {
     let isOwnedByCurrentUser: Bool
     let interestCount: Int
     let chatCount: Int
+    
+    //MARK: - Init
+
+    ///default init
+    init(
+        id: Int,
+        genreName: String,
+        productName: String,
+        photo: String,
+        price: Int,
+        uploadTime: String,
+        isInterested: Bool,
+        tradeType: TradeType,
+        tradeStatus: TradeStatus,
+        isPriceNegotiable: Bool?,
+        isOwnedByCurrentUser: Bool,
+        interestCount: Int,
+        chatCount: Int
+    ) {
+        self.id = id
+        self.genreName = genreName
+        self.productName = productName
+        self.photo = photo
+        self.price = price
+        self.uploadTime = uploadTime
+        self.isInterested = isInterested
+        self.tradeType = tradeType
+        self.tradeStatus = tradeStatus
+        self.isPriceNegotiable = isPriceNegotiable
+        self.isOwnedByCurrentUser = isOwnedByCurrentUser
+        self.interestCount = interestCount
+        self.chatCount = chatCount
+    }
+    
+    ///init for decoding
+    init(dto: ProductDTO) {
+        self.id = dto.productId
+        self.genreName = dto.genreName
+        self.productName = dto.productName
+        self.photo = dto.photo ?? ""
+        self.price = dto.price
+        self.uploadTime = dto.uploadTime
+        self.isInterested = dto.isInterested
+        
+        //TODO: develop 변경사항 적용 후 변경할 코드임!!!!!
+        self.tradeType = dto.tradeType == "SELL" ? .sell : .buy
+        self.tradeStatus = {
+            switch dto.tradeStatus {
+            case "BEFORE_TRADE":
+                return .beforeTrade
+            case "RESERVED":
+                return .reserved
+            default:
+                return .completed
+            }
+        }()
+        
+        self.isPriceNegotiable = dto.isPriceNegotiable
+        self.isOwnedByCurrentUser = dto.isOwnedByCurrentUser
+        self.interestCount = dto.interestCount
+        self.chatCount = dto.chatCount
+    }
 }
 
 extension ProductItemModel {

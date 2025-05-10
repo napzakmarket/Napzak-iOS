@@ -10,33 +10,33 @@ import Moya
 enum ProductAPI {
     case sellRegister(registerItem: SellRegisterRequestDTO)
     case buyRegister(registerItem: BuyRegisterRequestDTO)
+    case getSellProduct(productFetchOption: ProductFetchOption)
+    case getBuyProduct(productFetchOption: ProductFetchOption)
 }
 
 extension ProductAPI: BaseTargetType {
     var headerType: HeaderType {
         switch self {
-        case .sellRegister:
-            return .accessTokenHeader
-        case .buyRegister:
+        default:
             return .accessTokenHeader
         }
     }
 
     var path: String {
         switch self {
-        case .sellRegister:
+        case .sellRegister, .getSellProduct:
             return "products/sell"
-        case .buyRegister:
+        case .buyRegister, .getBuyProduct:
             return "products/buy"
         }
     }
 
     var method: Moya.Method {
         switch self {
-        case .sellRegister:
+        case .sellRegister, .buyRegister:
             return .post
-        case .buyRegister:
-            return .post
+        case .getSellProduct, .getBuyProduct:
+            return .get
         }
     }
 
@@ -46,6 +46,21 @@ extension ProductAPI: BaseTargetType {
             return .requestJSONEncodable(registerItem)
         case .buyRegister(let registerItem):
             return .requestJSONEncodable(registerItem)
+        case .getSellProduct(let productFetchOption):
+            let genreIDs = productFetchOption.genres.map { $0.id }
+            
+            return .requestParameters(parameters: ["sortOption" : productFetchOption.sortOption,
+                                                   "genreId" : genreIDs,
+                                                   "isOnSale" : productFetchOption.isOnSale,
+                                                   "isUnopened" : productFetchOption.isUnopened],
+                                      encoding: URLEncoding.queryString)
+        case .getBuyProduct(let productFetchOption):
+            let genreIDs = productFetchOption.genres.map { $0.id }
+
+            return .requestParameters(parameters: ["sortOption" : productFetchOption.sortOption,
+                                                   "genreId" : genreIDs,
+                                                   "isOnSale" : productFetchOption.isOnSale],
+                                      encoding: URLEncoding.queryString)
         }
     }
 }

@@ -41,6 +41,7 @@ extension ProductItemView {
             productTypeInterest
         }
         .frame(width: width, height: width * 1.05)
+        .contentShape(Rectangle())
         .clipShape(RoundedRectangle(cornerRadius: 3))
     }
     
@@ -68,7 +69,7 @@ extension ProductItemView {
     
     private var productImage: some View {
         Group {
-            if let url = URL(string: product.photo) {
+            if let imageURL = product.photo, let url = URL(string: imageURL) {
                 KFImage(url)
                     .placeholder {
                         Rectangle()
@@ -79,7 +80,7 @@ extension ProductItemView {
                         print("failure: \(error.localizedDescription)")
                     }
                     .resizable()
-                    .scaledToFill()
+                    .aspectRatio(contentMode: .fill)
             } else {
                 Rectangle()
                     .fill(Color.napzakGrayScale(.gray100))

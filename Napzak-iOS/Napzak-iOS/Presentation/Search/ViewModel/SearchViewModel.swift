@@ -7,18 +7,31 @@
 
 import SwiftUI
 
+import os
+
+@MainActor
 final class SearchViewModel: ObservableObject {
     
     //MARK: - Property Wrappers
 
-    @Published var selectedTabIndex = 0
     @Published var productFetchOption = ProductFetchOption(sortOption: .recent, genres: [GenreNameModel](), isOnSale: false, isUnopened: false)
-    @Published var dummyProducts: [ProductItemModel] = []
+    
+    @Published var sellProductsCount: Int = 0
+    @Published var sellProducts: [ProductItemModel] = []
+    @Published var buyProductsCount: Int = 0
+    @Published var buyProducts: [ProductItemModel] = []
+    
+    //MARK: - Properties
+    
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Search")
     
     //MARK: - Init
     
     init() {
-        fetchProducts()
+        
+        Task {
+            await fetchSellProducts()
+        }
     }
 }
 
@@ -26,8 +39,40 @@ extension SearchViewModel {
     
     //MARK: - Func
     
-    func fetchProducts() {
-        dummyProducts = ProductItemModel.dummyProducts
+    func fetchSellProducts() async {
+        let result = await NetworkService.shared.productService.getSellProduct(productFetchOption: productFetchOption)
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getSellProduct: No data received")
+                return
+            }
+            
+            self.sellProductsCount = data.productCount
+            self.sellProducts = data.productSellList.map { ProductItemModel(dto: $0) }
+            
+        case .failure(let error):
+            logger.error("getSellProduct failed: \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchBuyProducts() async {
+        let result = await NetworkService.shared.productService.getBuyProduct(productFetchOption: productFetchOption)
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getSellProduct: No data received")
+                return
+            }
+            
+            self.buyProductsCount = data.productCount
+            self.buyProducts = data.productBuyList.map { ProductItemModel(dto: $0) }
+            
+        case .failure(let error):
+            logger.error("getSellProduct failed: \(error.localizedDescription)")
+        }
     }
     
     func canToggleInterestState(productID: Int) -> Bool {
