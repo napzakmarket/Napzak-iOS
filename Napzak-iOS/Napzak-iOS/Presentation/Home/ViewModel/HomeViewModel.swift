@@ -6,23 +6,34 @@
 //
 
 import Foundation
-import Combine
+import os
 
 @MainActor
 final class HomeViewModel: ObservableObject {
-    @Published var banners: HomeBannersModel
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "HomeViewModel")
+    
+    @Published var banners: HomeBannersModel = .empty
     @Published var selectedBannerIndex: Int = 1
     @Published var timerPaused: Bool = false
     @Published var showLikeToast: Bool = false
     @Published var externalURLToOpen: URL?
-   
-    private var cancellables: Set<AnyCancellable> = []
+    private var originalUsername: String = ""
     
-    @Published var username: String = ""
+    private var username: String {
+        if originalUsername.count > 10 {
+            return originalUsername.prefix(10) + "..."
+        }
+        return originalUsername
+    }
     
     @Published var recommendedProducts: [ProductItemModel] = []
     @Published var popularSellProducts: [ProductItemModel] = []
     @Published var popularBuyProducts: [ProductItemModel] = []
+    
+    private(set) var isProcessingLike: Bool = false
+    
+    private let homeService = NetworkService.shared.homeService
+    private let interestService = NetworkService.shared.interestService
     
     var recommendedTitle: String { "\(username)님을 위한 맞춤 PICK" }
     var recommendedSubtitle: String { "\(username)님의 취향에 딱 맞는 아이템들을 모아봤어요."}
@@ -32,8 +43,14 @@ final class HomeViewModel: ObservableObject {
     let popularBuySubtitle = "놓치면 아쉬운 인기 아이템들을 구경해볼까요?"
     
     init() {
-        self.banners = HomeBannersModel.sample
         fetchHomeData()
+    }
+    
+    func fetchHomeData() {
+        fetchBanners()
+        fetchRecommendations()
+        fetchPopularSell()
+        fetchPopularBuy()
     }
     
     func handleBannerTap(_ action: BannerAction) {
@@ -58,52 +75,42 @@ final class HomeViewModel: ObservableObject {
             products = popularBuyProducts
         }
         
-        // TODO: 다른 조건들 체크 (로그인 상태 등)
         guard let product = products.first(where: { $0.id == productID }) else { return false }
         return !product.isOwnedByCurrentUser
     }
     
-    func toggleLike(for productId: Int, in section: ProductSection) {
-        Task {
-            print("toggleLike1")
-            let currentState = getCurrentProductState(productId, in: section)
-            let isAddingLike = (currentState?.isInterested ?? false)
-            
-            let success = await Task.detached(priority: .userInitiated) {
-                // TODO: API 호출 (do catch?)
-                
-                return true
-            }.value
-            
-            if success {
-                if isAddingLike {
-                    showLikeToast = true
-                    try? await Task.sleep(for: .seconds(2))
-                    showLikeToast = false
-                }
-            }
+    func toggleLike(for productId: Int, in section: ProductSection) async  {
+        guard !isProcessingLike else { return }
+        
+        isProcessingLike = true
+        defer { isProcessingLike = false }
+        
+        let currentState = getCurrentProductState(productId, in: section)
+        guard let currentProduct = currentState else {
+            logger.error("toggleLike: Product not found with id: \(productId)")
+            return
         }
-    }
-    
-    func navigateToSellPopular() {
-        // TODO: 탐색 > 팔아요 (인기순) 화면 이동
-        print("navigateToSellPopular")
-    }
-    
-    func navigateToBuyPopular() {
-        // TODO: 탐색 > 구해요 (인기순) 화면 이동
-        print("navigateToBuyPopular")
+        
+        let result = currentProduct.isInterested ?
+        await interestService.deleteInterest(productId: productId) :
+        await interestService.postInterest(productId: productId)
+        
+        
+        switch result {
+        case .success:
+            updateProductInterestState(productId: productId, section: section, isInterested: !currentProduct.isInterested)
+            if !currentProduct.isInterested {
+                showLikeToast = true
+                try? await Task.sleep(for: .seconds(2))
+                showLikeToast = false
+            }
+        case .failure(let error):
+            logger.error("toggleLike failed: \(error.errorDescription ?? "Unknown error")")
+        }
     }
 }
 
 extension HomeViewModel {
-    private func fetchHomeData() {
-        self.username = "납자기"
-        self.recommendedProducts = ProductItemModel.dummyProducts
-        self.popularSellProducts = ProductItemModel.dummyProducts
-        self.popularBuyProducts = ProductItemModel.dummyProducts
-    }
-    
     private func getCurrentProductState(_ productId: Int, in section: ProductSection) -> ProductItemModel? {
         switch section {
         case .recommended:
@@ -112,6 +119,85 @@ extension HomeViewModel {
             return popularSellProducts.first { $0.id == productId }
         case .popularBuy:
             return popularBuyProducts.first { $0.id == productId }
+        }
+    }
+    
+    private func updateProductInterestState(productId: Int, section: ProductSection, isInterested: Bool) {
+        switch section {
+        case .recommended:
+            if let index = recommendedProducts.firstIndex(where: { $0.id == productId }) {
+                recommendedProducts[index].isInterested = isInterested
+            }
+        case .popularSell:
+            if let index = popularSellProducts.firstIndex(where: { $0.id == productId }) {
+                popularSellProducts[index].isInterested = isInterested
+            }
+        case .popularBuy:
+            if let index = popularBuyProducts.firstIndex(where: { $0.id == productId }) {
+                popularBuyProducts[index].isInterested = isInterested
+            }
+        }
+    }
+    
+    private func fetchBanners() {
+        Task {
+            let result = await homeService.getBannerList()
+            switch result {
+            case .success(let response):
+                if let dto = response.data,
+                   let bannerModel = HomeBannersModel(dto: dto) {
+                    self.banners = bannerModel
+                } else {
+                    logger.error("배너 데이터 없음 또는 변환 실패")
+                }
+                
+            case .failure(let error):
+                logger.error("fetchBanners failed: \(error.errorDescription ?? "Unknown error")")
+            }
+        }
+    }
+    
+    private func fetchRecommendations() {
+        Task {
+            let result = await homeService.getHomeRecommendations()
+            switch result {
+            case .success(let response):
+                if let dtoList = response.data?.productRecommendList,
+                   let username = response.data?.nickname {
+                    self.originalUsername = username
+                    self.recommendedProducts = dtoList.map { ProductItemModel(dto: $0) }
+                }
+            case .failure(let error):
+                logger.error("fetchRecommendations failed: \(error.errorDescription ?? "Unknown error")")
+            }
+        }
+    }
+    
+    private func fetchPopularSell() {
+        Task {
+            let result = await homeService.getHomePopularSell()
+            switch result {
+            case .success(let response):
+                if let dtoList = response.data?.productSellList {
+                    self.popularSellProducts = dtoList.map { ProductItemModel(dto: $0) }
+                }
+            case .failure(let error):
+                logger.error("fetchPopularSell failed: \(error.errorDescription ?? "Unknown error")")
+            }
+        }
+    }
+    
+    private func fetchPopularBuy() {
+        Task {
+            let result = await homeService.getHomePopularBuy()
+            switch result {
+            case .success(let response):
+                if let dtoList = response.data?.productBuyList {
+                    self.popularBuyProducts = dtoList.map { ProductItemModel(dto: $0) }
+                }
+            case .failure(let error):
+                logger.error("fetchPopularBuy failed: \(error.errorDescription ?? "Unknown error")")
+            }
         }
     }
 }

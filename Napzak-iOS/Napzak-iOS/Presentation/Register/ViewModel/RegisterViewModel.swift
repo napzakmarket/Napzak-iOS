@@ -96,7 +96,10 @@ extension RegisterViewModel {
             let imageNames = imagePickerManager.imageNameList
             let uploadURL = response.data!.productPresignedUrls
             
-            self.presignedUrlList = uploadURL.filter { key, _ in
+            // Simplify URLs before storing
+            let simplifiedUploadURL: [String: String] = uploadURL.compactMapValues { simplifyUrl(url: $0) }
+            
+            self.presignedUrlList = simplifiedUploadURL.filter { key, _ in
                 imageNames.contains(key)
             }
             
@@ -252,6 +255,26 @@ extension RegisterViewModel {
         case .failure(let error):
             logger.error("❌ 구매 등록 실패: \(error.localizedDescription)")
         }
+    }
+    
+    
+    // MARK: - url 필요한 부분만 추출하는 로직
+    
+    func simplifyUrl(url: String) -> String? {
+        // URL에서 ? 이전의 도메인과 경로만 추출
+        guard let urlComponents = URLComponents(string: url) else {
+            return nil
+        }
+        
+        // URL의 도메인과 경로 구성
+        var simplifiedUrl = "\(urlComponents.scheme ?? "https")://\(urlComponents.host ?? "")\(urlComponents.path)"
+        
+        // ? 이후의 쿼리 문자열 제거
+        if let queryIndex = simplifiedUrl.firstIndex(of: "?") {
+            simplifiedUrl = String(simplifiedUrl[..<queryIndex])
+        }
+        
+        return simplifiedUrl
     }
 }
 

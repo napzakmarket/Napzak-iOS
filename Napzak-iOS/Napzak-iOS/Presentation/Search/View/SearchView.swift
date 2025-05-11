@@ -202,57 +202,72 @@ private extension SearchView {
     //MARK: - ViewBuilder Func
     
     @ViewBuilder
-    func productScrollView(products: Binding<[ProductItemModel]>, productsCount: Int) -> some View {
+    private func productScrollView(products: Binding<[ProductItemModel]>, productsCount: Int) -> some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
                 if !viewModel.productFetchOption.genres.isEmpty {
                     genreListView
                 }
-                HStack(alignment: .center, spacing: 3) {
-                    Text("상품")
-                        .foregroundStyle(Color.napzakGrayScale(.gray500))
-                        .applyNapzakFont(.body5SemiBold14)
-                    Text("\(productsCount)개")
-                        .foregroundStyle(Color.napzakPrimary(.purple500))
-                        .applyNapzakFont(.body5SemiBold14)
-                    Spacer()
-                    Button {
-                        withAnimation {
-                            isSortModalPresented = true
-                        }
-                    } label: {
-                        HStack(alignment: .center, spacing: 4) {
-                            Text("\(viewModel.productFetchOption.sortOption.title)")
-                                .foregroundStyle(Color.napzakGrayScale(.gray200))
-                                .applyNapzakFont(.caption1SemiBold12)
-                            Image(.iconArrowDown)
-                                .renderingMode(.template)
-                                .foregroundColor(Color.napzakGrayScale(.gray200))
-                        }
-                    }
-                }
-                .padding(.horizontal, 28)
-                .frame(height: 58)
-                
-                LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(products.indices, id: \.self) { i in
-                        ProductItemView(
-                            product: products[i],
-                            width: productCellWidth,
-                            shouldToggleInterestState: {
-                                return products[i].wrappedValue.isInterested ?
-                                await viewModel.canPostInterestState(productID: products[i].id) :
-                                await viewModel.canDeleteInterestState(productID: products[i].id)
-                            })
-                            .onTapGesture {
-                                print("\(products[i].id)번 상품")
-                                navigationRouter.push(next: .productDetailView(productId: products[i].id))
-                            }
-                    }
-                }
-                .padding(.horizontal, 28)
+                productsHeader(count: productsCount)
+                productsGrid(products: products)
             }
             .padding(.bottom, 108)
+        }
+    }
+    
+    @ViewBuilder
+    private func productsHeader(count: Int) -> some View {
+        HStack(alignment: .center, spacing: 3) {
+            Text("상품")
+                .foregroundStyle(Color.napzakGrayScale(.gray500))
+                .applyNapzakFont(.body5SemiBold14)
+            Text("\(count)개")
+                .foregroundStyle(Color.napzakPrimary(.purple500))
+                .applyNapzakFont(.body5SemiBold14)
+            Spacer()
+            Button {
+                withAnimation {
+                    isSortModalPresented = true
+                }
+            } label: {
+                HStack(alignment: .center, spacing: 4) {
+                    Text("\(viewModel.productFetchOption.sortOption.title)")
+                        .foregroundStyle(Color.napzakGrayScale(.gray200))
+                        .applyNapzakFont(.caption1SemiBold12)
+                    Image(.iconArrowDown)
+                        .renderingMode(.template)
+                        .foregroundColor(Color.napzakGrayScale(.gray200))
+                }
+            }
+        }
+        .padding(.horizontal, 28)
+        .frame(height: 58)
+    }
+    
+    @ViewBuilder
+    private func productsGrid(products: Binding<[ProductItemModel]>) -> some View {
+        LazyVGrid(columns: columns, spacing: 20) {
+            ForEach(products.indices, id: \.self) { i in
+                productGridItem(product: products[i])
+            }
+        }
+        .padding(.horizontal, 28)
+    }
+    
+    @ViewBuilder
+    private func productGridItem(product: Binding<ProductItemModel>) -> some View {
+        ProductItemView(
+            product: product,
+            width: productCellWidth,
+            shouldToggleInterestState: {
+                Task {
+                    await viewModel.toggleLike(for: product.wrappedValue.id)
+                }
+            }
+        )
+        .onTapGesture {
+            print("\(product.wrappedValue.id)번 상품")
+            navigationRouter.push(next: .productDetailView(productId: product.wrappedValue.id))
         }
     }
 }

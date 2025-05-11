@@ -10,6 +10,7 @@ import Kingfisher
 
 struct HomeView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @EnvironmentObject private var tabRouter: TabRouter
     @StateObject private var viewModel = HomeViewModel()
     @State private var timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
     
@@ -21,7 +22,7 @@ struct HomeView: View {
         ZStack(alignment: .bottom) {
             VStack(alignment: .leading, spacing: 0) {
                 
-                Image(.iconNapzakLogo)
+                Image(.logo)
                     .padding(.leading, 28)
                     .padding(.bottom, 17)
                     
@@ -75,6 +76,12 @@ struct HomeView: View {
             }
         }
         .animation(.spring(), value: viewModel.showLikeToast)
+        .onChange(of: viewModel.externalURLToOpen) { url in
+            if let url {
+                UIApplication.shared.open(url)
+                viewModel.externalURLToOpen = nil
+            }
+        }
     }
 }
 
@@ -82,8 +89,7 @@ extension HomeView {
     private var headerView: some View {
         VStack(spacing: 0) {
             Button {
-                // TODO: - 검색 뷰 이동
-                print("검색 뷰 이동")
+                navigationRouter.push(next: .searchInputView)
             } label: {
                 HStack {
                     Text(placeholder)
@@ -133,16 +139,18 @@ extension HomeView {
                                     in: .recommended
                                 )
                                 if canToggle {
-                                    viewModel.toggleLike(
-                                        for: productId,
-                                        in: .recommended
-                                    )
+                                    Task {
+                                        await viewModel.toggleLike(
+                                            for: productId,
+                                            in: .recommended
+                                        )
+                                    }
                                 }
-                                return canToggle
                             }
                         )
                         .onTapGesture {
                             //TODO: - 화면 전환
+                            navigationRouter.push(next: .productDetailView(productId: viewModel.recommendedProducts[index].id))
                             print("\(viewModel.recommendedProducts[index].id)번 상품")
                         }
                     }
@@ -169,7 +177,7 @@ extension HomeView {
                 showMore: true,
                 onMoreTap: {
                     // TODO: 인기순 정렬 팔아요 화면 이동
-                    viewModel.navigateToSellPopular()
+                    tabRouter.switchToSearch()
                 }
             )
             
@@ -182,16 +190,18 @@ extension HomeView {
                         in: .popularSell
                     )
                     if canToggle {
-                        viewModel.toggleLike(
-                            for: productId,
-                            in: .popularSell
-                        )
+                        Task {
+                            await viewModel.toggleLike(
+                                for: productId,
+                                in: .popularSell
+                            )
+                        }
                     }
-                    return canToggle
                 },
                 onTapProduct: { productId in
                     // TODO: 상품 상세 화면으로 이동
                     print("\(productId)번 상품")
+                    navigationRouter.push(next: .productDetailView(productId: productId))
                 }
             )
         }
@@ -215,7 +225,7 @@ extension HomeView {
                 showMore: true,
                 onMoreTap: {
                     // TODO: 인기순 정렬 구해요 화면 이동
-                    viewModel.navigateToBuyPopular()
+                    tabRouter.switchToSearch()
                 }
             )
             
@@ -228,16 +238,18 @@ extension HomeView {
                         in: .popularBuy
                     )
                     if canToggle {
-                        viewModel.toggleLike(
-                            for: productId,
-                            in: .popularBuy
-                        )
+                        Task {
+                            await viewModel.toggleLike(
+                                for: productId,
+                                in: .popularBuy
+                            )
+                        }
                     }
-                    return canToggle
                 },
                 onTapProduct: { productId in
                     // TODO: 상품 상세 화면으로 이동
                     print("\(productId)번 상품")
+                    navigationRouter.push(next: .productDetailView(productId: productId))
                 }
             )
         }
@@ -286,7 +298,7 @@ extension HomeView {
     func productGrid(
         products: Binding<[ProductItemModel]>,
         cellWidth: CGFloat,
-        onToggleLike: @escaping (Int) -> Bool,
+        onToggleLike: @escaping (Int) -> Void,
         onTapProduct: ((Int) -> Void)? = nil
     ) -> some View {
         LazyVGrid(columns: columns, spacing: 20) {
