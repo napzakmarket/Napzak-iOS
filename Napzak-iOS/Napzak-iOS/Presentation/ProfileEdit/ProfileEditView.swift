@@ -15,6 +15,7 @@ struct ProfileEditView: View {
     @State private var displayGenres: [GenreNameModel] = []
     @EnvironmentObject private var navigationRouter: NavigationRouter
     @StateObject private var imagePickerManager = ImagePickerManager()
+    @FocusState private var isKeyboardActive: Bool
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -78,6 +79,9 @@ struct ProfileEditView: View {
         .onAppear {
             // 최대 1개의 이미지만 선택 가능하도록 설정
             imagePickerManager.setOverrideMaxCount(1)
+        }
+        .onTapGesture {
+            isKeyboardActive = false
         }
     }
     
@@ -206,6 +210,7 @@ struct ProfileEditView: View {
             }
             .padding(.top, 10)
             .padding(.bottom,20)
+            .focused($isKeyboardActive)
 
         }
         .padding(.horizontal, 20)
@@ -266,6 +271,7 @@ struct ProfileEditView: View {
                         viewModel.profileDescription = String(newValue.prefix(200))
                     }
                 }
+                .focused($isKeyboardActive)
 
             if viewModel.profileDescription.isEmpty {
                 Text("어떤 장르를 좋아하고, 판매하는지!\n덕후력을 뽐내는 소개를 작성해주세요")

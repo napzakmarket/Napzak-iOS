@@ -64,7 +64,7 @@ final class ProfileEditViewModel: ObservableObject {
                                 case .success(let detailResponse):
                                     if let storeDetail = detailResponse.data {
                                         self.nickname = storeDetail.storeNickName ?? "null"
-                                        self.profileDescription = storeDetail.storeDescription
+                                        self.profileDescription = storeDetail.storeDescription ?? "null"
                                         self.profileImageURL = storeDetail.storePhoto ?? "profile_market"
                                         self.coverImageURL = storeDetail.storeCover ?? "profile_market"
                                         self.selectedGenres = storeDetail.genrePreferences.map {
