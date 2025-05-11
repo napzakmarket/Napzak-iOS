@@ -76,22 +76,22 @@ struct ProductDetailInfo: Identifiable {
 struct ProductPhotoInfo: Identifiable {
     let id: Int
     let photoUrl: String
-    let photoSequence: Int
+    let sequence: Int
     
     //MARK: - Init
     
     ///default init
-    init(id: Int, photoUrl: String, photoSequence: Int) {
+    init(id: Int, photoUrl: String, sequence: Int) {
         self.id = id
         self.photoUrl = photoUrl
-        self.photoSequence = photoSequence
+        self.sequence = sequence
     }
     
     ///init for decoding
     init(dto: ProductPhotoInfoDTO) {
         self.id = dto.photoId
         self.photoUrl = dto.photoUrl
-        self.photoSequence = dto.photoSequence
+        self.sequence = dto.sequence
     }
 }
 

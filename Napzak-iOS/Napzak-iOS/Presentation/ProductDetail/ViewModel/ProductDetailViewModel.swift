@@ -34,7 +34,7 @@ final class ProductDetailViewModel: ObservableObject {
             isOwnedByCurrentUser: false,
             chatCount: 0
         ),
-        productPhotoList: [ProductPhotoInfo(id: 0, photoUrl: "", photoSequence: 0)],
+        productPhotoList: [ProductPhotoInfo(id: 0, photoUrl: "", sequence: 0)],
         storeInfo: StoreInfo(id: 0, storePhoto: "", nickname: "", totalSellCount: 0, totalBuyCount: 0)
     )
     

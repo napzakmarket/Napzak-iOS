@@ -17,7 +17,7 @@ struct ProductDetailView: View {
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
 
-    @State private var currentPage = 1
+    @State private var currentPage = 0
     @State private var isReportModalPresented = false
     @State private var isOwnerOptionsModalPresented = false
 
@@ -147,6 +147,7 @@ extension ProductDetailView {
                     marketInfo
                 }
                 .background(Color.napzakGrayScale(.gray50))
+                .frame(maxWidth: .infinity)
             }
         }
     }
@@ -154,7 +155,7 @@ extension ProductDetailView {
     private var productImagePageView: some View {
         ZStack(alignment: .bottomTrailing) {
             TabView(selection: $currentPage) {
-                ForEach(viewModel.product.productPhotoList) { photo in
+                ForEach(Array(viewModel.product.productPhotoList.enumerated()), id: \.1.id) { index, photo in
                     Group {
                         if let url = URL(string: photo.photoUrl) {
                             KFImage(url)
@@ -172,13 +173,14 @@ extension ProductDetailView {
                                 .fill(Color.napzakGrayScale(.gray300))
                         }
                     }
+                    .tag(index)
                 }
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             .frame(width: screenWidth, height: screenWidth * 16 / 15)
             .padding(.bottom, 22)
 
-            Text("\(currentPage)/\(viewModel.product.productPhotoList.count)")
+            Text("\(currentPage + 1)/\(viewModel.product.productPhotoList.count)")
                 .applyNapzakFont(.caption5Regular10)
                 .foregroundStyle(Color.napzakGrayScale(.white))
                 .frame(height: 14)
@@ -283,6 +285,7 @@ extension ProductDetailView {
     
     private var productDescription: some View {
         ZStack(alignment: .top) {
+            Color.napzakGrayScale(.white)
             Text("\(viewModel.product.productDetail.description)".forceCharWrapping)
                 .applyNapzakFont(.caption3Regular12)
                 .foregroundStyle(Color.napzakGrayScale(.black))
@@ -290,10 +293,7 @@ extension ProductDetailView {
                 .padding(.horizontal, 28)
                 .padding(.top, 32)
                 .padding(.bottom, 16)
-                .background(
-                    Color.napzakGrayScale(.white)
-                        .frame(maxWidth: .infinity)
-                )
+                .frame(maxWidth: .infinity, alignment: .leading)
             shadowView
                 .frame(height: 16)
         }

@@ -38,7 +38,7 @@ struct ProductDetailInfoDTO: Decodable {
 struct ProductPhotoInfoDTO: Decodable {
     let photoId: Int
     let photoUrl: String
-    let photoSequence: Int
+    let sequence: Int
 }
 
 struct StoreInfoDTO: Decodable {
