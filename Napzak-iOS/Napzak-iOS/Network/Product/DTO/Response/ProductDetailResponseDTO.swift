@@ -1,0 +1,50 @@
+//
+//  ProductDetailResponseDTO.swift
+//  Napzak-iOS
+//
+//  Created by 조혜린 on 5/11/25.
+//
+
+import Foundation
+
+typealias ProductDetailResponseDTO = BaseResponseDTO<ProductDetailDTO>
+
+struct ProductDetailDTO: Decodable {
+    var isInterested: Bool
+    var productDetail: ProductDetailInfoDTO
+    let productPhotoList: [ProductPhotoInfoDTO]
+    let storeInfo: StoreInfoDTO
+}
+
+struct ProductDetailInfoDTO: Decodable {
+    let id: Int
+    let tradeType: String
+    let genreName: String
+    let productName: String
+    let price: Int
+    let uploadTime: String
+    let interestCount: Int
+    let description: String
+    let productCondition: String?
+    let standardDeliveryFee: Int
+    let halfDeliveryFee: Int
+    let isDeliveryIncluded: Bool
+    let isPriceNegotiable: Bool
+    var tradeStatus: String
+    let isOwnedByCurrentUser: Bool
+    let chatCount: Int
+}
+
+struct ProductPhotoInfoDTO: Decodable {
+    let id: Int
+    let photoUrl: String
+    let photoSequence: Int
+}
+
+struct StoreInfoDTO: Decodable {
+    let id: Int
+    let storePhoto: String
+    let nickname: String
+    let totalSellCount: Int
+    let totalBuyCount: Int
+}
