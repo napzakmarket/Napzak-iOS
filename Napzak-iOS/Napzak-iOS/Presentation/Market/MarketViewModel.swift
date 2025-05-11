@@ -130,21 +130,7 @@ final class MarketViewModel: ObservableObject {
                 
                 // MarketProductItemDTO를 ProductItemModel로 변환
                 self.products = response.productSellList.map { dto in
-                    ProductItemModel(
-                        id: dto.productId,
-                        genreName: dto.genreName,
-                        productName: dto.productName,
-                        photo: dto.photo,
-                        price: dto.price,
-                        uploadTime: dto.uploadTime,
-                        isInterested: dto.isInterested,
-                        tradeType: .sell,
-                        tradeStatus: TradeStatus(rawValue: dto.tradeStatus) ?? .beforeTrade,
-                        isPriceNegotiable: nil,
-                        isOwnedByCurrentUser: dto.isOwnedByCurrentUser,
-                        interestCount: dto.interestCount,
-                        chatCount: dto.chatCount
-                    )
+                    ProductItemModel(dto: dto)
                 }
                 
             case .failure(let error):
@@ -166,23 +152,7 @@ final class MarketViewModel: ObservableObject {
                 self.productCount = response.productCount
                 
                 // MarketProductBuyItemDTO를 ProductItemModel로 변환
-                self.products = response.productBuyList.map { dto in
-                    ProductItemModel(
-                        id: dto.productId,
-                        genreName: dto.genreName,
-                        productName: dto.productName,
-                        photo: dto.photo,
-                        price: dto.price,
-                        uploadTime: dto.uploadTime,
-                        isInterested: dto.isLiked,
-                        tradeType: .buy,
-                        tradeStatus: TradeStatus(rawValue: dto.tradeStatus) ?? .beforeTrade,
-                        isPriceNegotiable: dto.isPriceNegotiable,
-                        isOwnedByCurrentUser: dto.isOwnedByCurrentUser,
-                        interestCount: dto.interestCount,
-                        chatCount: dto.chatCount
-                    )
-                }
+                self.products = response.productBuyList.map { ProductItemModel(dto: $0) }
                 
             case .failure(let error):
                 productsError = error.errorDescription

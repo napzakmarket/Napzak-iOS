@@ -11,7 +11,7 @@ struct StoreModifyProfileDetailDTO: Decodable {
     let storeCover: String
     let storePhoto: String
     let storeNickName: String
-    let storeDescription: String
+    let storeDescription: String?
     let preferredGenreList: [GenreDTO]
 }
 
