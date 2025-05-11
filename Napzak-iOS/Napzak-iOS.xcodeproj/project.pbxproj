@@ -68,6 +68,7 @@
 		D0310AF32DCB2F1A00C265EC /* ReportModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0310AF22DCB2F1400C265EC /* ReportModalView.swift */; };
 		D0310AF62DCBAD9200C265EC /* ProductDetailToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0310AF52DCBAD8600C265EC /* ProductDetailToastView.swift */; };
 		D0310B0E2DD079EC00C265EC /* SearchWordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0310B0D2DD079E300C265EC /* SearchWordModel.swift */; };
+		D0310B102DD07B4900C265EC /* SearchRecommendationResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0310B0F2DD07B2900C265EC /* SearchRecommendationResponseDTO.swift */; };
 		D045DEBB2D83723A00EB1EB6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */; };
 		D045DEBC2D83723A00EB1EB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB72D83723A00EB1EB6 /* Assets.xcassets */; };
 		D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEB82D83723A00EB1EB6 /* ContentView.swift */; };
@@ -240,6 +241,7 @@
 		D0310AF22DCB2F1400C265EC /* ReportModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportModalView.swift; sourceTree = "<group>"; };
 		D0310AF52DCBAD8600C265EC /* ProductDetailToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailToastView.swift; sourceTree = "<group>"; };
 		D0310B0D2DD079E300C265EC /* SearchWordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchWordModel.swift; sourceTree = "<group>"; };
+		D0310B0F2DD07B2900C265EC /* SearchRecommendationResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRecommendationResponseDTO.swift; sourceTree = "<group>"; };
 		D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Napzak-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D045DEB72D83723A00EB1EB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -977,6 +979,7 @@
 		D0F035852DBF6880003D0CBF /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				D0310B0F2DD07B2900C265EC /* SearchRecommendationResponseDTO.swift */,
 				877F405F2DCA72F900008672 /* MarketProductListResponseDTO.swift */,
 				877F40612DCA73F200008672 /* MarketProductBuyListResponseDTO.swift */,
 				6CD972CE2DC7BD41000AE85E /* SellRegisterResponseDTO.swift */,
@@ -1417,6 +1420,7 @@
 				D045DEFC2D8383CC00EB1EB6 /* TextField+.swift in Sources */,
 				D645611F2DC39AE0003D2E2B /* TokenResponseDTO.swift in Sources */,
 				D0CBB7012DB87CBC00BE20C3 /* PlainChipContainerView.swift in Sources */,
+				D0310B102DD07B4900C265EC /* SearchRecommendationResponseDTO.swift in Sources */,
 				D63270342DA3AC10002414DA /* GenreCell.swift in Sources */,
 				D63270372DA3AC55002414DA /* ToastMessageView.swift in Sources */,
 				D63270352DA3AC10002414DA /* GenreGridView.swift in Sources */,
