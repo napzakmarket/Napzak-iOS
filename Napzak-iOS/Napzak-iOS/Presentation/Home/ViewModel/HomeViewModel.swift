@@ -108,16 +108,6 @@ final class HomeViewModel: ObservableObject {
             logger.error("toggleLike failed: \(error.errorDescription ?? "Unknown error")")
         }
     }
-    
-    func navigateToSellPopular() {
-        // TODO: 탐색 > 팔아요 (인기순) 화면 이동
-        print("navigateToSellPopular")
-    }
-    
-    func navigateToBuyPopular() {
-        // TODO: 탐색 > 구해요 (인기순) 화면 이동
-        print("navigateToBuyPopular")
-    }
 }
 
 extension HomeViewModel {

@@ -10,6 +10,7 @@ import Kingfisher
 
 struct HomeView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @EnvironmentObject private var tabRouter: TabRouter
     @StateObject private var viewModel = HomeViewModel()
     @State private var timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
     
@@ -177,7 +178,7 @@ extension HomeView {
                 showMore: true,
                 onMoreTap: {
                     // TODO: 인기순 정렬 팔아요 화면 이동
-                    viewModel.navigateToSellPopular()
+                    tabRouter.switchToSearch()
                 }
             )
             
@@ -226,7 +227,7 @@ extension HomeView {
                 showMore: true,
                 onMoreTap: {
                     // TODO: 인기순 정렬 구해요 화면 이동
-                    viewModel.navigateToBuyPopular()
+                    tabRouter.switchToSearch()
                 }
             )
             
