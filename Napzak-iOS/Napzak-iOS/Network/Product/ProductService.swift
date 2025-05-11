@@ -29,6 +29,8 @@ protocol ProductServiceProtocol {
         genreId: Int?,
         cursor: String?
     ) async -> Result<MarketProductBuyListResponseDTO, NetworkError>
+    
+    func getProductDetailInfo(productId: Int) async -> Result<ProductDetailResponseDTO, NetworkError>
 }
 
 final class ProductService: BaseService, ProductServiceProtocol {
@@ -108,5 +110,9 @@ final class ProductService: BaseService, ProductServiceProtocol {
             
             return data
         }
+    }
+    
+    func getProductDetailInfo(productId: Int) async -> Result<ProductDetailResponseDTO, NetworkError> {
+        return await requestDecodable(provider, .getProductDetailInfo(productId: productId))
     }
 }

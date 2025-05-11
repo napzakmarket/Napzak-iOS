@@ -1019,13 +1019,13 @@
 		D0F035852DBF6880003D0CBF /* Response */ = {
 			isa = PBXGroup;
 			children = (
-				D0310B112DD0CCBE00C265EC /* ProductDetailResponseDTO.swift */,
 				D0310B042DCF88EC00C265EC /* ProductDTO.swift */,
 				D0310B022DCF87BF00C265EC /* ProductResponseDTO.swift */,
 				877F405F2DCA72F900008672 /* MarketProductListResponseDTO.swift */,
 				877F40612DCA73F200008672 /* MarketProductBuyListResponseDTO.swift */,
 				6CD972CE2DC7BD41000AE85E /* SellRegisterResponseDTO.swift */,
 				6CD972D22DC7C468000AE85E /* BuyRegisterResponseDTO.swift */,
+				D0310B112DD0CCBE00C265EC /* ProductDetailResponseDTO.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
