@@ -62,17 +62,25 @@ struct ProfileEditView: View {
         .onChange(of: viewModel.isSuccess) { success in
             if success {
                 Task {
-                try? await Task.sleep(for: .seconds(1.5))
-                await MainActor.run {
-                    navigationRouter.pop()
+                    try? await Task.sleep(for: .seconds(1.5))
+                    await MainActor.run {
+                        navigationRouter.pop()
+                    }
                 }
             }
+        }
+        .onChange(of: imagePickerManager.selectedImages) { images in
+            // 오류와 상관 없이 이미지가 선택되면 처리
+            if let firstImage = images.first {
+                viewModel.selectedProfileImage = firstImage
             }
         }
+        .onAppear {
+            // 최대 1개의 이미지만 선택 가능하도록 설정
+            imagePickerManager.setOverrideMaxCount(1)
+        }
     }
-}
-
-extension ProfileEditView {
+    
     private var headerView: some View {
         HStack(spacing: 3) {
             Button{
@@ -108,7 +116,7 @@ extension ProfileEditView {
                         .resizable()
                         .scaledToFill()
                         .frame(height: 160)
-                        .clipped() 
+                        .clipped()
                 } else {
                     Rectangle()
                         .fill(Color.napzakGrayScale(.gray100))
@@ -116,44 +124,58 @@ extension ProfileEditView {
                 }
                 
                 // 프로필 이미지
-                if !viewModel.profileImageURL.isEmpty {
-                    KFImage(URL(string: viewModel.profileImageURL))
-                        .placeholder {
-                            Image("profile_edit")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 110, height: 110)
-                                .clipShape(Circle())
-                                .overlay(
-                                   Circle()
-                                       .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
-                               )
-                        }
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 110, height: 110)
-                        .clipShape(Circle())
-                        .overlay(
-                            Circle()
-                                .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
-                        )
-                        .offset(y: 57)
-                } else {
-                    Image("profile_edit")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 110, height: 110)
-                        .foregroundColor(.gray)
-                        .offset(y: 57)
+                Group {
+                    if let selectedImage = viewModel.selectedProfileImage {
+                        // 새로 선택한 이미지
+                        Image(uiImage: selectedImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 110, height: 110)
+                            .clipShape(Circle())
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
+                            )
+                    } else if !viewModel.profileImageURL.isEmpty {
+                        // 기존 이미지
+                        KFImage(URL(string: viewModel.profileImageURL))
+                            .placeholder {
+                                Image("profile_edit")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 110, height: 110)
+                                    .clipShape(Circle())
+                                    .overlay(
+                                        Circle()
+                                            .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
+                                    )
+                            }
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 110, height: 110)
+                            .clipShape(Circle())
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
+                            )
+                    } else {
+                        Image("profile_edit")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 110, height: 110)
+                            .foregroundColor(.gray)
+                    }
                 }
+                .offset(y: 57)
                 
-                Button {
-                    viewModel.uploadProfileImage()
-                } label: {
-                    Image("edit")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 28, height: 28)
+                // 편집 버튼
+                ZStack {
+                    imagePickerManager.photoPickerView(maxCount: 1) {
+                        Image("edit")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
+                    }
                 }
                 .offset(x: 45, y: 80)
             }
