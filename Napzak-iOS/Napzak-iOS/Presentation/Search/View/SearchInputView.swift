@@ -132,7 +132,7 @@ extension SearchInputView {
                 .frame(height: 18)
             
             PlainChipContainerView(
-                titles: viewModel.searchRecommendations,
+                titles: viewModel.searchRecommendations.map { $0.searchWord },
                 action: { title in
                     //TODO: - 데이터 넘기며 화면 전환
                     print(title)

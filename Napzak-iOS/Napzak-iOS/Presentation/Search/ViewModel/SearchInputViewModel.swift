@@ -13,7 +13,7 @@ final class SearchInputViewModel: ObservableObject {
 
     @Published var searchInputText = ""
     @Published var isSearchCompleted: Bool = false
-    @Published var searchRecommendations = [String]()
+    @Published var searchRecommendations = [SearchWordModel]()
     @Published var genreRecommendations = [PreferGenreModel]()
     @Published var genreSearchResults = [
         GenreNameModel(id: 1, name: "산리오"),
@@ -37,7 +37,15 @@ extension SearchInputViewModel {
     //MARK: - Private Func
     
     private func fetchSearchRecommendations() {
-        searchRecommendations = ["헌터x헌터 룩업", "주술회전 고죠 사토루", "웨딩 마이멜로디", "짱구는 못말려 날아라 수제김밥", "은혼 긴토키", "하이큐 모찌모찌 마스코트", "하이큐 모찌모찌 마스코투"]
+        searchRecommendations = [
+            SearchWordModel(id: 1, searchWord: "헌터x헌터 룩업"),
+            SearchWordModel(id: 2, searchWord: "주술회전 고죠 사토루"),
+            SearchWordModel(id: 3, searchWord: "웨딩 마이멜로디"),
+            SearchWordModel(id: 4, searchWord: "짱구는 못말려 날아라 수제김밥"),
+            SearchWordModel(id: 5, searchWord: "은혼 긴토키"),
+            SearchWordModel(id: 6, searchWord: "하이큐 모찌모찌 마스코트"),
+            SearchWordModel(id: 7, searchWord: "하이큐 모찌모찌 마스코투")
+        ]
     }
     
     private func fetchGenreRecommendations() {
