@@ -34,11 +34,13 @@ struct SearchInputView: View {
             Color.napzakGrayScale(.gray10)
                 .ignoresSafeArea(edges: [.bottom])
             
-            ScrollView(showsIndicators: false) {
-                if viewModel.searchInputText.isEmpty {
-                    defaultContentView
-                } else {
-                    typingContentView
+            if viewModel.isRecommecdationDataDidLoad {
+                ScrollView(showsIndicators: false) {
+                    if viewModel.searchInputText.isEmpty {
+                        defaultContentView
+                    } else {
+                        typingContentView
+                    }
                 }
             }
             searchNavigationHeader
