@@ -22,8 +22,14 @@ final class ProfileEditViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "ProfileEdit")
     
+    private var initialNickname: String = ""
+    private var initialProfileDescription: String = ""
+    private var initialGenres: [GenreNameModel] = []
+    private var initialProfileImageURL: String = ""
+    
     init(storeService: StoreServiceProtocol = StoreService()) {
         self.storeService = storeService
+        setupSubscriptions()
         fetchCurrentProfile()
     }
 
@@ -63,13 +69,21 @@ final class ProfileEditViewModel: ObservableObject {
                                 switch detailResult {
                                 case .success(let detailResponse):
                                     if let storeDetail = detailResponse.data {
-                                        self.nickname = storeDetail.storeNickName ?? "null"
-                                        self.profileDescription = storeDetail.storeDescription ?? "null"
+                                        self.nickname = storeDetail.storeNickName ?? "납자기"
+                                        self.initialNickname = self.nickname
+                                        
+                                        self.profileDescription = storeDetail.storeDescription ?? "안녕 난 \(self.nickname)야"
+                                        self.initialProfileDescription = self.profileDescription
+                                        
                                         self.profileImageURL = storeDetail.storePhoto ?? "profile_market"
+                                        self.initialProfileImageURL = self.profileImageURL
+                                        
                                         self.coverImageURL = storeDetail.storeCover ?? "profile_market"
+                                        
                                         self.selectedGenres = storeDetail.genrePreferences.map {
                                             GenreNameModel(id: $0.genreId, name: $0.genreName)
                                         }
+                                        self.initialGenres = self.selectedGenres
                                     }
                                 case .failure(let error):
                                     self.errorMessage = error.errorDescription
@@ -158,5 +172,44 @@ final class ProfileEditViewModel: ObservableObject {
                 }
             }
         }
+    }
+}
+
+extension ProfileEditViewModel {
+    private func setupSubscriptions() {
+        Publishers.CombineLatest4($nickname, $profileDescription, $selectedGenres, $validationState)
+            .sink { [weak self] (nickname, description, genres, validation) in
+                self?.checkForChanges()
+            }
+            .store(in: &cancellables)
+    }
+    
+    
+    func checkForChanges() {
+        let hasNicknameChanged = nickname != initialNickname
+        let hasDescriptionChanged = profileDescription != initialProfileDescription
+        let hasGenresChanged = selectedGenres != initialGenres
+        let hasProfileImageChanged = selectedProfileImage != nil
+        
+        print("변경 상태: nickname=\(hasNicknameChanged), description=\(hasDescriptionChanged), genres=\(hasGenresChanged), image=\(hasProfileImageChanged)")
+        
+        let hasAnyChange = hasNicknameChanged || hasDescriptionChanged ||
+        hasGenresChanged || hasProfileImageChanged
+        
+        if hasAnyChange {
+            if hasNicknameChanged {
+                if validationState == .valid {
+                    isPrimaryButtonEnabled = true
+                } else if validationState == .empty {
+                    isPrimaryButtonEnabled = false
+                }
+            } else {
+                isPrimaryButtonEnabled = true
+            }
+        } else {
+            isPrimaryButtonEnabled = false
+        }
+        
+        print("버튼 상태: \(isPrimaryButtonEnabled)")
     }
 }

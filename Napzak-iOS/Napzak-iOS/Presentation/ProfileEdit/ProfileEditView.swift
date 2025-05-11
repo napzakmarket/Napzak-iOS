@@ -75,6 +75,7 @@ struct ProfileEditView: View {
             if let firstImage = images.first {
                 viewModel.selectedProfileImage = firstImage
             }
+            viewModel.checkForChanges()
         }
         .onAppear {
             // 최대 1개의 이미지만 선택 가능하도록 설정
@@ -270,6 +271,7 @@ struct ProfileEditView: View {
                     if newValue.count > 200 {
                         viewModel.profileDescription = String(newValue.prefix(200))
                     }
+                    viewModel.checkForChanges()
                 }
                 .focused($isKeyboardActive)
 
