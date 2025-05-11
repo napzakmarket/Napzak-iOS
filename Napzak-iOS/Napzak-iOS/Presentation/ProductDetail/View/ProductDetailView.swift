@@ -117,9 +117,7 @@ struct ProductDetailView: View {
                         onConfirm: {
                             isDeleteAlertPresented = false
                             Task {
-                                viewModel.showStatusToast = true
-                                try? await Task.sleep(for: .seconds(1.5))
-                                viewModel.showStatusToast = false
+                                await viewModel.deleteProduct()
                             }
                         },
                         onCancel: {

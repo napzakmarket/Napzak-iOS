@@ -106,4 +106,18 @@ extension ProductDetailViewModel {
             logger.error("getSellProduct failed: \(error.localizedDescription)")
         }
     }
+    
+    func deleteProduct() async {
+        let result = await NetworkService.shared.productService.deleteProduct(
+            productId: product.productDetail.id)
+        
+        switch result {
+        case .success:
+            showStatusToast = true
+            try? await Task.sleep(for: .seconds(1.5))
+            showStatusToast = false
+        case .failure(let error):
+            logger.error("getSellProduct failed: \(error.localizedDescription)")
+        }
+    }
 }
