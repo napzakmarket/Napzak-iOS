@@ -104,7 +104,8 @@ extension SearchInputView {
         LazyVStack(spacing: 0) {
             ForEach(viewModel.genreSearchResults) { genre in
                 Button {
-                    //TODO: - 장르 페이지로 이동
+                    navigationRouter.push(next: .genreDetailView(genreId: genre.id,
+                                                                 genreName: genre.name))
                 } label: {
                     GenreItemView(genreName: genre.name)
                 }
