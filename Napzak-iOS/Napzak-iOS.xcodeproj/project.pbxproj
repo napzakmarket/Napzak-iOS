@@ -591,6 +591,7 @@
 		D0310AF42DCBAC0400C265EC /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				D0310AF52DCBAD8600C265EC /* ProductDetailToastView.swift */,
 				D0310AEF2DCB2E3700C265EC /* Modal */,
 			);
 			path = Components;
@@ -832,7 +833,6 @@
 			isa = PBXGroup;
 			children = (
 				D0310AF42DCBAC0400C265EC /* Components */,
-				D0310AF52DCBAD8600C265EC /* ProductDetailToastView.swift */,
 				D0310AE62DC9294400C265EC /* Model */,
 				D0310AE52DC9294100C265EC /* View */,
 				D0310AE42DC9293900C265EC /* ViewModel */,
