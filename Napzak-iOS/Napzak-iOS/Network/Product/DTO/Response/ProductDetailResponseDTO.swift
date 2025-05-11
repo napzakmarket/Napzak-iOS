@@ -17,7 +17,7 @@ struct ProductDetailDTO: Decodable {
 }
 
 struct ProductDetailInfoDTO: Decodable {
-    let id: Int
+    let productId: Int
     let tradeType: String
     let genreName: String
     let productName: String
@@ -36,13 +36,13 @@ struct ProductDetailInfoDTO: Decodable {
 }
 
 struct ProductPhotoInfoDTO: Decodable {
-    let id: Int
+    let photoId: Int
     let photoUrl: String
     let photoSequence: Int
 }
 
 struct StoreInfoDTO: Decodable {
-    let id: Int
+    let userId: Int
     let storePhoto: String
     let nickname: String
     let totalSellCount: Int
