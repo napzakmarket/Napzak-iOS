@@ -24,7 +24,6 @@ struct LoginView: View {
                 .disabled(viewModel.isLoading)
                 
                 Button {
-                    // TODO: Apple 로그인
                     Task {
                         await viewModel.handleAppleAuthCode(router: authRouter)
                     }
