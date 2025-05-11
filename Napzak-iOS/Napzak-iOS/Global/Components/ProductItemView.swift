@@ -16,7 +16,7 @@ struct ProductItemView: View {
     //MARK: - Properties
     
     let width: CGFloat
-    let shouldToggleInterestState: () async -> Bool
+    let shouldToggleInterestState: () -> Void
     
     //MARK: - Main Body
     
@@ -135,12 +135,10 @@ extension ProductItemView {
     
     private var likeButton: some View {
         Button {
-            product.isInterested.toggle()
+//            product.isInterested.toggle()
 
             Task {
-                if await !shouldToggleInterestState() {
-                    product.isInterested.toggle()
-                }
+                shouldToggleInterestState()
             }
         } label: {
             Image(product.isInterested ? .btnHeartSelected : .btnHeartDefault)
@@ -188,7 +186,7 @@ extension ProductItemView {
         @State var product = ProductItemModel.dummyProducts[4]
 
         var body: some View {
-            ProductItemView(product: $product, width: 150, shouldToggleInterestState: { return true })
+            ProductItemView(product: $product, width: 150, shouldToggleInterestState: {})
         }
     }
     
