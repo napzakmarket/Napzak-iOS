@@ -144,7 +144,7 @@ final class MarketViewModel: ObservableObject {
                         isPriceNegotiable: nil,
                         isOwnedByCurrentUser: dto.isOwnedByCurrentUser,
                         interestCount: dto.interestCount,
-                        chatCount: dto.chatInterest
+                        chatCount: dto.chatCount
                     )
                 }
                 

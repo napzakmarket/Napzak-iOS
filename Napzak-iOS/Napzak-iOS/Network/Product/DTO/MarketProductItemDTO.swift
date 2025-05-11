@@ -19,6 +19,6 @@ struct MarketProductItemDTO: Decodable {
     let tradeStatus: String
     let isOwnedByCurrentUser: Bool
     let interestCount: Int
-    let chatInterest: Int
+    let chatCount: Int
 }
 
