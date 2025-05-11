@@ -228,11 +228,33 @@ struct MarketView: View {
     
     private var tabAndFilterSectionView: some View {
         ZStack(alignment: .top) {
-            shadowBackground
-            
+            if viewModel.selectedTabIndex != 2 {
+                ZStack(alignment: .top) {
+                    Color.napzakGrayScale(.gray10)
+                    Color.napzakGrayScale(.white)
+                        .frame(height: 47)
+                        .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
+                }
+                .frame(height: 103)
+                .clipped()
+            } else {
+                Color.napzakGrayScale(.white)
+                    .frame(height: 47)
+                    .overlay(
+                        Rectangle()
+                            .fill(Color.black.opacity(0.1))
+                            .frame(height: 1),
+                        alignment: .bottom
+                    )
+            }
+
             VStack(alignment: .leading, spacing: 0) {
-                NZSegmentedControl(selectedTabIndex: $viewModel.selectedTabIndex, tabs: ["팔아요", "구해요", "리뷰"], spacing: 16)
-                
+                NZSegmentedControl(
+                    selectedTabIndex: $viewModel.selectedTabIndex,
+                    tabs: ["팔아요", "구해요", "리뷰"],
+                    spacing: 16
+                )
+
                 if viewModel.selectedTabIndex != 2 {
                     FilterContainerView(
                         isGenreSelectModalPresented: $isGenreSelectModalPresented,
@@ -256,6 +278,7 @@ struct MarketView: View {
             .padding(.horizontal, 28)
         }
     }
+
 
     private var shadowBackground: some View {
         ZStack(alignment: .top) {
