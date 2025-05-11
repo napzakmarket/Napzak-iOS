@@ -122,7 +122,7 @@ extension HomeViewModel {
         }
     }
     
-    func updateProductInterestState(productId: Int, section: ProductSection, isInterested: Bool) {
+    private func updateProductInterestState(productId: Int, section: ProductSection, isInterested: Bool) {
         switch section {
         case .recommended:
             if let index = recommendedProducts.firstIndex(where: { $0.id == productId }) {

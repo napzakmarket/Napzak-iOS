@@ -147,7 +147,6 @@ extension HomeView {
                                         )
                                     }
                                 }
-                                return canToggle
                             }
                         )
                         .onTapGesture {

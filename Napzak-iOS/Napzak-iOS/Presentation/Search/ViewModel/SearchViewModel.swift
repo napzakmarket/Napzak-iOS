@@ -23,6 +23,10 @@ final class SearchViewModel: ObservableObject {
     
     @Published var showToast: Bool = false
     
+    private(set) var isProcessingLike: Bool = false
+    
+    private let interestService = NetworkService.shared.interestService
+    
     //MARK: - Properties
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Search")
@@ -77,39 +81,41 @@ extension SearchViewModel {
         }
     }
     
-    func canPostInterestState(productID: Int) async -> Bool {
-        let result = await NetworkService.shared.interestService.postInterest(productId: productID)
+    func toggleLike(for productId: Int) async {
+        guard !isProcessingLike else { return }
         
-        var bool = false
+        isProcessingLike = true
+        defer { isProcessingLike = false }
+        
+        let product = (sellProducts.first { $0.id == productId }) ??
+        (buyProducts.first { $0.id == productId })
+        
+        guard let currentProduct = product else { return }
+        
+        let result = currentProduct.isInterested ?
+        await interestService.deleteInterest(productId: productId) :
+        await interestService.postInterest(productId: productId)
         
         switch result {
         case .success:
-            bool = true
+            updateProductInterestState(productId: productId, isInterested: !currentProduct.isInterested)
+            
+            if !currentProduct.isInterested {
+                showToast = true
+                try? await Task.sleep(for: .seconds(2))
+                showToast = false
+            }
         case .failure(let error):
-            logger.error("postInterest failed: \(error.localizedDescription)")
+            logger.error("toggleLike failed: \(error.errorDescription ?? "Unknown error")")
         }
-        
-        if bool {
-            showToast = true
-            try? await Task.sleep(for: .seconds(2))
-            showToast = false
-        }
-        
-        return bool
     }
     
-    func canDeleteInterestState(productID: Int) async -> Bool {
-        let result = await NetworkService.shared.interestService.deleteInterest(productId: productID)
-        
-        var bool = false
-        
-        switch result {
-        case .success:
-            bool = true
-        case .failure(let error):
-            logger.error("deleteInterest failed: \(error.localizedDescription)")
+    private func updateProductInterestState(productId: Int, isInterested: Bool) {
+        if let index = sellProducts.firstIndex(where: { $0.id == productId }) {
+            sellProducts[index].isInterested = isInterested
         }
-        
-        return bool
+        if let index = buyProducts.firstIndex(where: { $0.id == productId }) {
+            buyProducts[index].isInterested = isInterested
+        }
     }
 }

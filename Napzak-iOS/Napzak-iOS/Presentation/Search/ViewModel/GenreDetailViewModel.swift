@@ -31,6 +31,7 @@ final class GenreDetailViewModel: ObservableObject {
     @Published var sellProducts: [ProductItemModel] = []
     @Published var buyProductsCount: Int = 0
     @Published var buyProducts: [ProductItemModel] = []
+    @Published var selectedTabIndex: Int = 0
     
     @Published var showToast: Bool = false
     
@@ -38,6 +39,8 @@ final class GenreDetailViewModel: ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "GenreDetail")
     
+    private(set) var isProcessingLike: Bool = false
+    private let interestService = NetworkService.shared.interestService
     //MARK: - Init
 
     init(genreId: Int, genreName: String) {
@@ -58,6 +61,44 @@ final class GenreDetailViewModel: ObservableObject {
 extension GenreDetailViewModel {
     
     //MARK: - Func
+    
+    func toggleLike(for productId: Int) async {
+        guard !isProcessingLike else { return }
+        
+        isProcessingLike = true
+        defer { isProcessingLike = false }
+        
+        let currentProducts = selectedTabIndex == 0 ? sellProducts : buyProducts
+        guard let currentProduct = currentProducts.first(where: { $0.id == productId }) else {
+            logger.error("toggleLike: Product not found with id: \(productId)")
+            return
+        }
+        
+        let result = currentProduct.isInterested ?
+        await interestService.deleteInterest(productId: productId) :
+        await interestService.postInterest(productId: productId)
+        
+        switch result {
+        case .success:
+            updateProductInterestState(productId: productId, isInterested: !currentProduct.isInterested)
+            if !currentProduct.isInterested {
+                showToast = true
+                try? await Task.sleep(for: .seconds(2))
+                showToast = false
+            }
+        case .failure(let error):
+            logger.error("toggleLike failed: \(error.errorDescription ?? "Unknown error")")
+        }
+    }
+    
+    private func updateProductInterestState(productId: Int, isInterested: Bool) {
+        if let index = sellProducts.firstIndex(where: { $0.id == productId }) {
+            sellProducts[index].isInterested = isInterested
+        }
+        if let index = buyProducts.firstIndex(where: { $0.id == productId }) {
+            buyProducts[index].isInterested = isInterested
+        }
+    }
     
     func fetchGenreInfo(genreId: Int) async {
         let result = await NetworkService.shared.genreService.getGenreDetailInfo(genreId: genreId)
@@ -110,41 +151,5 @@ extension GenreDetailViewModel {
         case .failure(let error):
             logger.error("getBuyProduct failed: \(error.localizedDescription)")
         }
-    }
-
-    func canPostInterestState(productID: Int) async -> Bool {
-        let result = await NetworkService.shared.interestService.postInterest(productId: productID)
-        
-        var bool = false
-        
-        switch result {
-        case .success:
-            bool = true
-        case .failure(let error):
-            logger.error("postInterest failed: \(error.localizedDescription)")
-        }
-        
-        if bool {
-            showToast = true
-            try? await Task.sleep(for: .seconds(2))
-            showToast = false
-        }
-        
-        return bool
-    }
-    
-    func canDeleteInterestState(productID: Int) async -> Bool {
-        let result = await NetworkService.shared.interestService.deleteInterest(productId: productID)
-        
-        var bool = false
-        
-        switch result {
-        case .success:
-            bool = true
-        case .failure(let error):
-            logger.error("deleteInterest failed: \(error.localizedDescription)")
-        }
-        
-        return bool
     }
 }
