@@ -38,8 +38,9 @@ final class ProductDetailViewModel: ObservableObject {
         storeInfo: StoreInfo(id: 0, storePhoto: "", nickname: "", totalSellCount: 0, totalBuyCount: 0)
     )
     
-    @Published var showToast: Bool = false
-    
+    @Published var showInterestToast: Bool = false
+    @Published var showStatusToast = false
+
     //MARK: - Properties
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "ProductDetail")
@@ -81,10 +82,21 @@ extension ProductDetailViewModel {
             product.isInterested.toggle()
 
             if product.isInterested {
-                showToast = true
+                showInterestToast = true
                 try? await Task.sleep(for: .seconds(2))
-                showToast = false
+                showInterestToast = false
             }
+        }
+    }
+    
+    func changeTradeStatus(productId: Int, tradeStatus: ChangeTradeStatusRequestDTO) async {
+        let result = await NetworkService.shared.productService.patchTradeStatus(productId: productId, requestBody: tradeStatus)
+        
+        switch result {
+        case .success:
+            print("상품 상태 변경 성공!")
+        case .failure(let error):
+            logger.error("getSellProduct failed: \(error.localizedDescription)")
         }
     }
 }

@@ -20,6 +20,7 @@ struct ProductDetailView: View {
     @State private var currentPage = 0
     @State private var isReportModalPresented = false
     @State private var isOwnerOptionsModalPresented = false
+    @State private var statusToastStyle: StatusToastStyle = .statusChanged
 
     //MARK: - Properties
     
@@ -37,7 +38,7 @@ struct ProductDetailView: View {
                 Spacer()
                 if !(viewModel.product.productDetail.isOwnedByCurrentUser) {
                     VStack(spacing: 52) {
-                        if viewModel.showToast {
+                        if viewModel.showInterestToast {
                             ToastMessageView(
                                 message: "찜한 상품에 추가되었어요!",
                                 style: .success
@@ -81,15 +82,41 @@ struct ProductDetailView: View {
                 ProductOwnerOptionsModalView(
                     isOwnerOptionsModalPresented: $isOwnerOptionsModalPresented,
                     currentStatus: $viewModel.product.productDetail.tradeStatus,
-                    tradeType: viewModel.product.productDetail.tradeType
+                    currentToastStyle: $statusToastStyle,
+                    tradeType: viewModel.product.productDetail.tradeType,
+                    onChangeStatus: {
+                        Task {
+                            viewModel.showStatusToast = true
+                            try? await Task.sleep(for: .seconds(1))
+                            viewModel.showStatusToast = false
+                        }
+                    },
+                    onDeletePtoduct: {
+                        Task {
+                            viewModel.showStatusToast = true
+                            try? await Task.sleep(for: .seconds(1))
+                            viewModel.showStatusToast = false
+                        }
+                    }
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
             }
+            
+            if viewModel.showStatusToast {
+                ProductDetailToastView(
+                    style: statusToastStyle,
+                    tradeStatus: statusString(status: viewModel.product.productDetail.tradeStatus)
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(3)
+                .padding(.bottom, 44)
+            }
         }
         .navigationBarHidden(true)
         .ignoresSafeArea()
-        .animation(.spring(), value: viewModel.showToast)
+        .animation(.spring(), value: viewModel.showInterestToast)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.showStatusToast)
         .animation(.easeInOut(duration: 0.3), value: isReportModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isOwnerOptionsModalPresented)
     }
@@ -478,6 +505,17 @@ private extension ProductDetailView {
         return viewModel.product.productDetail.tradeType == .sell
         ? "\(String(price).convertPrice(maxPrice: maxPrice))원"
         : "\(String(price).convertPrice(maxPrice: maxPrice))원대"
+    }
+    
+    func statusString(status: TradeStatus) -> String {
+        switch status {
+        case .beforeTrade:
+            return "\(viewModel.product.productDetail.tradeType.title)중"
+        case .reserved:
+            return "예약중"
+        case .completed:
+            return "\(viewModel.product.productDetail.tradeType.title)완료"
+        }
     }
 }
 
