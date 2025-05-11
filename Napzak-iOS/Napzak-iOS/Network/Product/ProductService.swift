@@ -31,6 +31,8 @@ protocol ProductServiceProtocol {
     ) async -> Result<MarketProductBuyListResponseDTO, NetworkError>
     
     func getProductDetailInfo(productId: Int) async -> Result<ProductDetailResponseDTO, NetworkError>
+    
+    func getSearchRecommendation() async -> Result<SearchRecommendationResponseDTO, NetworkError>
 }
 
 final class ProductService: BaseService, ProductServiceProtocol {
@@ -114,5 +116,9 @@ final class ProductService: BaseService, ProductServiceProtocol {
     
     func getProductDetailInfo(productId: Int) async -> Result<ProductDetailResponseDTO, NetworkError> {
         return await requestDecodable(provider, .getProductDetailInfo(productId: productId))
+    }
+    
+    func getSearchRecommendation() async -> Result<SearchRecommendationResponseDTO, NetworkError> {
+        return await requestDecodable(provider, .getSearchRecommendation)
     }
 }

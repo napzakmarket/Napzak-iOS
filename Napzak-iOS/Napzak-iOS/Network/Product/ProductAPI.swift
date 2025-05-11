@@ -30,6 +30,7 @@ enum ProductAPI {
     case getSellProduct(productFetchOption: ProductFetchOption)
     case getBuyProduct(productFetchOption: ProductFetchOption)
     case getProductDetailInfo(productId: Int)
+    case getSearchRecommendation
 }
 
 extension ProductAPI: BaseTargetType {
@@ -52,6 +53,8 @@ extension ProductAPI: BaseTargetType {
             return "products/buy"
         case .getProductDetailInfo(productId: let productId):
             return "products/\(productId)"
+        case .getSearchRecommendation:
+            return "products/search/recommend"
         }
     }
     
