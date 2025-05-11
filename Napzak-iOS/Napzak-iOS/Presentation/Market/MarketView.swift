@@ -85,6 +85,9 @@ struct MarketView: View {
             viewModel.productFetchOption.sortOption = newValue
             viewModel.fetchProducts()
         }
+        .onAppear {
+            viewModel.fetchData()
+        }
     }
 
     private var navigationBarView: some View {
