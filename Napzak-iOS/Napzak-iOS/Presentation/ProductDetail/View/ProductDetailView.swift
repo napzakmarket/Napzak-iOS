@@ -20,6 +20,7 @@ struct ProductDetailView: View {
     @State private var currentPage = 0
     @State private var isReportModalPresented = false
     @State private var isOwnerOptionsModalPresented = false
+    @State private var isDeleteAlertPresented = false
     @State private var statusToastStyle: StatusToastStyle = .statusChanged
 
     //MARK: - Properties
@@ -90,15 +91,43 @@ struct ProductDetailView: View {
                         }
                     },
                     onDeletePtoduct: {
-                        Task {
-                            viewModel.showStatusToast = true
-                            try? await Task.sleep(for: .seconds(1.5))
-                            viewModel.showStatusToast = false
-                        }
+                        isDeleteAlertPresented = true
                     }
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
+            }
+            
+            if isDeleteAlertPresented {
+                ZStack(alignment: .center) {
+                    Color.napzakTransparency(.transBlack)
+                        .onTapGesture {
+                            withAnimation {
+                                isDeleteAlertPresented = false
+                            }
+                        }
+                        .transition(.opacity)
+                    
+                    NZAlertView(
+                        style: .warning,
+                        titleMessage: "상품을 정말 삭제할까요?",
+                        subTitleMessage: "한번 삭제한 상품은 다시 되돌릴 수 없어요.",
+                        confirmText: "예",
+                        cancelText: "아니요",
+                        onConfirm: {
+                            isDeleteAlertPresented = false
+                            Task {
+                                viewModel.showStatusToast = true
+                                try? await Task.sleep(for: .seconds(1.5))
+                                viewModel.showStatusToast = false
+                            }
+                        },
+                        onCancel: {
+                            isDeleteAlertPresented = false
+                        }
+                    )
+                }
+                .zIndex(3)
             }
             
             if viewModel.showStatusToast {

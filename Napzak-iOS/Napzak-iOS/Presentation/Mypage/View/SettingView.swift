@@ -52,14 +52,12 @@ struct SettingView: View {
                             logoutButtonTapped = false
                         }
                     )
-                    .transition(.scale)
                     .zIndex(2)
                 }
             }
         }
         .ignoresSafeArea()
         .background(Color.napzakGrayScale(.gray10))
-        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: logoutButtonTapped)
     }
 }
 
