@@ -71,7 +71,6 @@ final class MarketViewModel: ObservableObject {
                     storeDetail = detailResponse.data
                     if let genres = detailResponse.data?.genrePreferences {
                         let genreNameModels = genres.map { GenreNameModel(id: $0.genreId, name: $0.genreName) }
-                        productFetchOption.genres = genreNameModels
                     }
                     
                     // 상점 정보를 가져온 후 상품 목록 조회
