@@ -86,15 +86,13 @@ struct ProductDetailView: View {
                     tradeType: viewModel.product.productDetail.tradeType,
                     onChangeStatus: {
                         Task {
-                            viewModel.showStatusToast = true
-                            try? await Task.sleep(for: .seconds(1))
-                            viewModel.showStatusToast = false
+                            await viewModel.changeTradeStatus()
                         }
                     },
                     onDeletePtoduct: {
                         Task {
                             viewModel.showStatusToast = true
-                            try? await Task.sleep(for: .seconds(1))
+                            try? await Task.sleep(for: .seconds(1.5))
                             viewModel.showStatusToast = false
                         }
                     }

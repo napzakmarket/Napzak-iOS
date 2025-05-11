@@ -89,12 +89,19 @@ extension ProductDetailViewModel {
         }
     }
     
-    func changeTradeStatus(productId: Int, tradeStatus: ChangeTradeStatusRequestDTO) async {
-        let result = await NetworkService.shared.productService.patchTradeStatus(productId: productId, requestBody: tradeStatus)
+    func changeTradeStatus() async {
+        let result = await NetworkService.shared.productService.patchTradeStatus(
+            productId: product.productDetail.id,
+            requestBody: ChangeTradeStatusRequestDTO(
+                tradeStatus: product.productDetail.tradeStatus
+            )
+        )
         
         switch result {
         case .success:
-            print("상품 상태 변경 성공!")
+            showStatusToast = true
+            try? await Task.sleep(for: .seconds(1.5))
+            showStatusToast = false
         case .failure(let error):
             logger.error("getSellProduct failed: \(error.localizedDescription)")
         }
