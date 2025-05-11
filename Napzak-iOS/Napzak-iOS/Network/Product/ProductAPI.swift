@@ -27,16 +27,14 @@ enum ProductAPI {
     
     case sellRegister(registerItem: SellRegisterRequestDTO)
     case buyRegister(registerItem: BuyRegisterRequestDTO)
+    
+    case getSearchRecommendation
 }
 
 extension ProductAPI: BaseTargetType {
     var headerType: HeaderType {
         switch self {
-        case .getSellProducts, .getBuyProducts:
-            return .accessTokenHeader
-        case .sellRegister:
-            return .accessTokenHeader
-        case .buyRegister:
+        default:
             return .accessTokenHeader
         }
     }
@@ -51,17 +49,19 @@ extension ProductAPI: BaseTargetType {
             return "products/sell"
         case .buyRegister:
             return "products/buy"
+        case .getSearchRecommendation:
+            return "products/search/recommend"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .getSellProducts, .getBuyProducts:
-            return .get
         case .sellRegister:
             return .post
         case .buyRegister:
             return .post
+        default:
+            return .get
         }
     }
     
@@ -117,6 +117,8 @@ extension ProductAPI: BaseTargetType {
             return .requestJSONEncodable(registerItem)
         case .buyRegister(let registerItem):
             return .requestJSONEncodable(registerItem)
+        default:
+            return .requestPlain
         }
     }
 }
