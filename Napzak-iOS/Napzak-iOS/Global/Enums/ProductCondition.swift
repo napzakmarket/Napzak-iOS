@@ -6,7 +6,7 @@
 //
 
 
-enum ProductCondition: String, CaseIterable {
+enum ProductCondition: String, CaseIterable, Decodable {
     case new = "NEW"
     case likeNew = "LIKE_NEW"
     case slightlyUsed = "SLIGHTLY_USED"

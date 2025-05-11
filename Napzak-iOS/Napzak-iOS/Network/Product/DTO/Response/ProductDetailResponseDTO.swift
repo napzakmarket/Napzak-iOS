@@ -18,19 +18,19 @@ struct ProductDetailDTO: Decodable {
 
 struct ProductDetailInfoDTO: Decodable {
     let productId: Int
-    let tradeType: String
+    let tradeType: TradeType
     let genreName: String
     let productName: String
     let price: Int
     let uploadTime: String
     let interestCount: Int
     let description: String
-    let productCondition: String?
+    let productCondition: ProductCondition?
     let standardDeliveryFee: Int
     let halfDeliveryFee: Int
     let isDeliveryIncluded: Bool
     let isPriceNegotiable: Bool
-    var tradeStatus: String
+    var tradeStatus: TradeStatus
     let isOwnedByCurrentUser: Bool
     let chatCount: Int
 }

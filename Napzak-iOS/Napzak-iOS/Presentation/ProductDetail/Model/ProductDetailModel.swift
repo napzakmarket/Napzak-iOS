@@ -33,7 +33,24 @@ struct ProductDetailInfo: Identifiable {
     //MARK: - Init
     
     ///default init
-    init(id: Int, tradeType: TradeType, genreName: String, productName: String, price: Int, uploadTime: String, interestCount: Int, description: String, productCondition: ProductCondition?, standardDeliveryFee: Int, halfDeliveryFee: Int, isDeliveryIncluded: Bool, isPriceNegotiable: Bool, tradeStatus: TradeStatus, isOwnedByCurrentUser: Bool, chatCount: Int) {
+    init(
+        id: Int,
+        tradeType: TradeType,
+        genreName: String,
+        productName: String,
+        price: Int,
+        uploadTime: String,
+        interestCount: Int,
+        description: String,
+        productCondition: ProductCondition?,
+        standardDeliveryFee: Int,
+        halfDeliveryFee: Int,
+        isDeliveryIncluded: Bool,
+        isPriceNegotiable: Bool,
+        tradeStatus: TradeStatus,
+        isOwnedByCurrentUser: Bool,
+        chatCount: Int
+    ) {
         self.id = id
         self.tradeType = tradeType
         self.genreName = genreName
@@ -55,19 +72,19 @@ struct ProductDetailInfo: Identifiable {
     ///init for decoding
     init(dto: ProductDetailInfoDTO) {
         self.id = dto.productId
-        self.tradeType = TradeType(rawValue: dto.tradeType) ?? TradeType.buy
+        self.tradeType = dto.tradeType
         self.genreName = dto.genreName
         self.productName = dto.productName
         self.price = dto.price
         self.uploadTime = dto.uploadTime
         self.interestCount = dto.interestCount
         self.description = dto.description
-        self.productCondition = ProductCondition(rawValue: dto.productCondition ?? "") ?? ProductCondition.likeNew
+        self.productCondition = dto.productCondition
         self.standardDeliveryFee = dto.standardDeliveryFee
         self.halfDeliveryFee = dto.halfDeliveryFee
         self.isDeliveryIncluded = dto.isDeliveryIncluded
         self.isPriceNegotiable = dto.isPriceNegotiable
-        self.tradeStatus = TradeStatus(rawValue: dto.tradeStatus) ?? TradeStatus.beforeTrade
+        self.tradeStatus = dto.tradeStatus
         self.isOwnedByCurrentUser = dto.isOwnedByCurrentUser
         self.chatCount = dto.chatCount
     }

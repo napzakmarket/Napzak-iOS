@@ -64,8 +64,8 @@ struct ProductItemModel: Identifiable {
         self.price = dto.price
         self.uploadTime = dto.uploadTime
         self.isInterested = dto.isInterested
-        self.tradeType = TradeType(rawValue: dto.tradeType) ?? TradeType.sell
-        self.tradeStatus = TradeStatus(rawValue: dto.tradeStatus) ?? TradeStatus.beforeTrade
+        self.tradeType = dto.tradeType
+        self.tradeStatus = dto.tradeStatus
         self.isPriceNegotiable = dto.isPriceNegotiable
         self.isOwnedByCurrentUser = dto.isOwnedByCurrentUser
         self.interestCount = dto.interestCount
