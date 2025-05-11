@@ -114,7 +114,9 @@ struct MarketView: View {
                                 .fill(Color.napzakGrayScale(.gray100))
                         }
                         .resizable()
+                        .scaledToFill()
                         .frame(height: 160)
+                        .clipped()
                 } else {
                     Rectangle()
                         .fill(Color.napzakGrayScale(.gray100))
@@ -126,13 +128,22 @@ struct MarketView: View {
                         .placeholder {
                             Image("profile_market")
                                 .resizable()
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width: 60, height: 60)
                                 .clipShape(Circle())
+                                .overlay(
+                                    Circle()
+                                        .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
+                                )
                         }
                         .resizable()
-                        .scaledToFit()
+                        .aspectRatio(contentMode: .fill)
                         .frame(width: 60, height: 60)
                         .clipShape(Circle())
+                        .overlay(
+                            Circle()
+                                .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
+                        )
                         .offset(y: 80)
                 } else {
                     Image("profile_market")

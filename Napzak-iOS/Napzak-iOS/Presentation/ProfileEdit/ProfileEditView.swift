@@ -21,6 +21,9 @@ struct ProfileEditView: View {
             ScrollView {
                 VStack(spacing: 0) {
                     headerView
+                        .zIndex(3)
+                        .background(Color.white.opacity(0.01))
+                    
                     profileImageSection
                     marketNameView
                     marketDescriptionSection
@@ -57,7 +60,6 @@ struct ProfileEditView: View {
         .edgesIgnoringSafeArea(.bottom)
         .navigationBarHidden(true)
         .onChange(of: viewModel.isSuccess) { success in
-            // 잠시 후 이전 화면으로 이동
             if success {
                 Task {
                 try? await Task.sleep(for: .seconds(1.5))
@@ -80,6 +82,9 @@ extension ProfileEditView {
                     .foregroundColor(Color.napzakGrayScale(.gray200))
                     .frame(width: 24, height: 24)
             }
+            .zIndex(3)
+            .contentShape(Rectangle())
+            
             Text("프로필 편집")
                 .applyNapzakFont(.body1Bold16)
                 .foregroundColor(Color.napzakGrayScale(.gray400))
@@ -87,6 +92,7 @@ extension ProfileEditView {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 18)
+        .background(Color.white.opacity(0.01))
     }
     
     private var profileImageSection: some View {
@@ -100,7 +106,9 @@ extension ProfileEditView {
                                 .fill(Color.napzakGrayScale(.gray100))
                         }
                         .resizable()
+                        .scaledToFill()
                         .frame(height: 160)
+                        .clipped() 
                 } else {
                     Rectangle()
                         .fill(Color.napzakGrayScale(.gray100))
@@ -113,13 +121,22 @@ extension ProfileEditView {
                         .placeholder {
                             Image("profile_edit")
                                 .resizable()
-                                .scaledToFit()
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width: 110, height: 110)
+                                .clipShape(Circle())
+                                .overlay(
+                                   Circle()
+                                       .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
+                               )
                         }
                         .resizable()
-                        .scaledToFit()
+                        .aspectRatio(contentMode: .fill)
                         .frame(width: 110, height: 110)
                         .clipShape(Circle())
+                        .overlay(
+                            Circle()
+                                .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
+                        )
                         .offset(y: 57)
                 } else {
                     Image("profile_edit")
