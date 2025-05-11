@@ -139,9 +139,16 @@ class BaseService {
                         }
                         
                     case 401:
-                        continuation.resume(returning: .failure(.unauthorized))
+                        continuation.resume(returning: .failure(.unauthorized)) 
                     case 404:
                         continuation.resume(returning: .failure(.notFound))
+                    case 409:
+                        if let apiError = try? JSONDecoder()
+                            .decode(ErrorResponseDTO.self, from: response.data) {
+                            continuation.resume(returning: .failure(.apiError(message: apiError.message)))
+                        } else {
+                            continuation.resume(returning: .failure(.badRequest))
+                        }
                     case 500...599:
                         continuation.resume(returning: .failure(.internalServerError))
                     default:
