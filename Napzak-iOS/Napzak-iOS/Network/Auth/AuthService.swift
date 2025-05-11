@@ -9,13 +9,18 @@ import Moya
 
 protocol AuthServiceProtocol {
     func login(type: SocialLoginType, authorizationCode: String) async -> Result<AuthResponseDTO, NetworkError>
+    func logout() async -> Result<LogoutResponseDTO, NetworkError>
 }
 
 final class AuthService: BaseService, AuthServiceProtocol {
-    
     private let provider = MoyaProvider<AuthAPI>.init(plugins: [MoyaPlugin()])
     
     func login(type: SocialLoginType, authorizationCode: String) async -> Result<AuthResponseDTO, NetworkError> {
         return await requestDecodable(provider, .login(type: type, code: authorizationCode))
     }
+    
+    func logout() async -> Result<LogoutResponseDTO, NetworkError> {
+        return await requestDecodable(provider, .logout)
+    }
+
 }

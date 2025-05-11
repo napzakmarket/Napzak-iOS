@@ -8,10 +8,8 @@
 import SwiftUI
 
 struct SellRegisterProductState: View {
-    @Binding var productCondition: String
+    @Binding var productCondition: ProductCondition?
     
-    let options = ["미개봉", "아주 좋은 상태", "약간의 사용감", "사용감 있음"]
-
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("상품 상태")
@@ -27,28 +25,39 @@ struct SellRegisterProductState: View {
                 ],
                 spacing: 12
             ) {
-                ForEach(options, id: \.self) { option in
+                ForEach(ProductCondition.allCases, id: \.self) { condition in
                     Button {
-                        productCondition = option
+                        productCondition = condition
                     } label: {
-                        Text(option)
-                            .applyNapzakFont(.body5SemiBold14)
-                            .frame(height: 42)
-                            .frame(maxWidth: .infinity)
-                            .foregroundColor(productCondition == option ?
-                                             Color.napzakPrimary(.purple500) :
-                                                Color.napzakGrayScale(.gray200)
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 8)
-                                    .stroke(
-                                        option == productCondition ?
-                                        Color.napzakPrimary(.purple500) :
-                                            Color.napzakGrayScale(.gray100),
-                                        lineWidth: 1
-                                    )
-                            )
+                        HStack(alignment: .center, spacing: 0) {
+                            Text(condition.label)
+                                .applyNapzakFont(.body5SemiBold14)
+                                .frame(height: 42)
+                                .padding(.leading, 20)
+                            
+                            Spacer()
+                            
+                            if condition == productCondition {
+                                Image(.iconCheckSort)
+                                    .padding(.trailing, 20)
+                            }
+                            
+                        }
+                        .frame(maxWidth: .infinity)
+                        .foregroundColor(productCondition == condition ?
+                                         Color.napzakPrimary(.purple500) :
+                                            Color.napzakGrayScale(.gray200)
+                        )
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(
+                                    condition == productCondition ?
+                                    Color.napzakPrimary(.purple500) :
+                                        Color.napzakGrayScale(.gray100),
+                                    lineWidth: 1
+                                )
+                        )
                     }
                 }
             }

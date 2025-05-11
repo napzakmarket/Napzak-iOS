@@ -17,10 +17,10 @@ struct RegisterModel {
     var genreId: Int?
     
     // Sell
-    var productCondition: String = ""
+    var productCondition: ProductCondition?
     var isDeliveryIncluded: Bool?
-    var standardDeliveryFee: String = ""
-    var halfDeliveryFee: String = ""
+    var standardDeliveryFee: String = "0"
+    var halfDeliveryFee: String = "0"
     
     // Buy
     var isPriceNegotiable: Bool = false

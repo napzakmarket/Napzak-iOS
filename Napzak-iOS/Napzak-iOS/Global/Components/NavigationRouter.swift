@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum Route: String, Hashable {
+enum Route: Hashable {
     //임시 뷰
     case sView
     case mView
@@ -15,7 +15,8 @@ enum Route: String, Hashable {
     case searchInputView
     case MarketView
     case ProfileEditView
-
+    case genreDetailView(genreId: Int, genreName: String)
+    case productDetailView(productId: Int)
     
     // 등록 뷰 내부 사용
     case registerSearchGenre

@@ -15,6 +15,8 @@ struct SearchView: View {
 
     @StateObject private var viewModel = SearchViewModel()
     
+    @State private var selectedTabIndex = 0
+    
     @Binding var isGenreSelectModalPresented: Bool
     @Binding var isSortModalPresented: Bool
 
@@ -30,7 +32,10 @@ struct SearchView: View {
             VStack(spacing: 0) {
                 searchHeader
                     .padding(.top, 75)
-                productScrollView
+                productScrollView(
+                    products: selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
+                    productsCount: selectedTabIndex == 0 ? viewModel.sellProductsCount : viewModel.buyProductsCount
+                )
                 Spacer()
             }
             
@@ -72,9 +77,38 @@ struct SearchView: View {
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
             }
+            
+            if viewModel.showToast {
+                ToastMessageView(
+                    message: "찜한 상품에 추가되었어요!",
+                    style: .success
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(1)
+                .padding(.bottom, 110)
+            }
         }
+        .animation(.spring(), value: viewModel.showToast)
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .ignoresSafeArea()
+        .onChange(of: selectedTabIndex) { value in
+            Task {
+                if value == 0 {
+                    await viewModel.fetchSellProducts()
+                } else {
+                    await viewModel.fetchBuyProducts()
+                }
+            }
+        }
+        .onChange(of: viewModel.productFetchOption) { value in
+            Task {
+                if selectedTabIndex == 0 {
+                    await viewModel.fetchSellProducts()
+                } else {
+                    await viewModel.fetchBuyProducts()
+                }
+            }
+        }
     }
 }
 
@@ -92,11 +126,11 @@ extension SearchView {
                 shadowBackground
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    NZSegmentedControl(selectedTabIndex: $viewModel.selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
+                    NZSegmentedControl(selectedTabIndex: $selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
                     
                     FilterContainerView(
                         isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                        selectedTabIndex: $viewModel.selectedTabIndex,
+                        selectedTabIndex: $selectedTabIndex,
                         selectedGenres: $viewModel.productFetchOption.genres,
                         isUnopened: $viewModel.productFetchOption.isUnopened,
                         isOnSale: $viewModel.productFetchOption.isOnSale
@@ -146,7 +180,12 @@ extension SearchView {
         LazyVStack(spacing: 0) {
             ForEach(viewModel.productFetchOption.genres.indices, id: \.self) { i in
                 Button {
-                    //TODO: - 장르 페이지로 이동
+                    let genre = viewModel.productFetchOption.genres[i]
+                    let id = genre.id
+                    let name = genre.name
+                    
+                    navigationRouter.push(next: .genreDetailView(genreId: id,
+                                                                 genreName: name))
                 } label: {
                     GenreItemView(genreName: viewModel.productFetchOption.genres[i].name)
                         .frame(height: 64)
@@ -156,8 +195,14 @@ extension SearchView {
             }
         }
     }
+}
+
+private extension SearchView {
     
-    private var productScrollView: some View {
+    //MARK: - ViewBuilder Func
+    
+    @ViewBuilder
+    func productScrollView(products: Binding<[ProductItemModel]>, productsCount: Int) -> some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
                 if !viewModel.productFetchOption.genres.isEmpty {
@@ -167,7 +212,7 @@ extension SearchView {
                     Text("상품")
                         .foregroundStyle(Color.napzakGrayScale(.gray500))
                         .applyNapzakFont(.body5SemiBold14)
-                    Text("\(viewModel.dummyProducts.count)개")
+                    Text("\(productsCount)개")
                         .foregroundStyle(Color.napzakPrimary(.purple500))
                         .applyNapzakFont(.body5SemiBold14)
                     Spacer()
@@ -190,18 +235,18 @@ extension SearchView {
                 .frame(height: 58)
                 
                 LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(viewModel.dummyProducts.indices, id: \.self) { i in
+                    ForEach(products.indices, id: \.self) { i in
                         ProductItemView(
-                            product: $viewModel.dummyProducts[i],
+                            product: products[i],
                             width: productCellWidth,
-                            shouldToggleInterestState: {                                
-                                return viewModel.canToggleInterestState(
-                                    productID: viewModel.dummyProducts[i].id
-                                )
+                            shouldToggleInterestState: {
+                                return products[i].wrappedValue.isInterested ?
+                                await viewModel.canPostInterestState(productID: products[i].id) :
+                                await viewModel.canDeleteInterestState(productID: products[i].id)
                             })
                             .onTapGesture {
-                                //TODO: - 화면 전환
-                                print("\(viewModel.dummyProducts[i].id)번 상품")
+                                print("\(products[i].id)번 상품")
+                                navigationRouter.push(next: .productDetailView(productId: products[i].id))
                             }
                     }
                 }
