@@ -50,6 +50,11 @@ struct SearchInputView: View {
         }
         .ignoresSafeArea(edges: [.top])
         .toolbar(.hidden, for: .navigationBar)
+        .onChange(of: viewModel.searchInputText) { newValue in
+            Task {
+                await viewModel.fetchGenreSearchResults()
+            }
+        }
     }
 }
 

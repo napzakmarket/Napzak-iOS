@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+
+import Combine
 import os
 
 @MainActor
@@ -31,9 +33,21 @@ final class SearchInputViewModel: ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "SearchInput")
     
+    private var cancellables = Set<AnyCancellable>()
+    
     //MARK: - Init
     
     init() {
+        $searchInputText
+            .debounce(for: 0.5, scheduler: RunLoop.main)
+            .removeDuplicates()
+            .sink { [weak self] newSearchText in
+                Task {
+                    await self?.fetchGenreSearchResults()
+                }
+            }
+            .store(in: &cancellables)
+        
         Task {
             await fetchRecommendations()
         }
@@ -57,8 +71,26 @@ extension SearchInputViewModel {
             self.searchRecommendations = data.searchWordList.map { SearchWordModel(dto: $0) }
             self.genreRecommendations = data.genreList.map { PreferGenreModel(dto: $0) }
             isRecommecdationDataDidLoad = true
+            
         case .failure(let error):
             logger.error("getSearchRecommendation failed: \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchGenreSearchResults() async {
+        let result = await NetworkService.shared.genreService.getSearchGenreName(searchWord: searchInputText)
+
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getSearchGenreName: No data received")
+                return
+            }
+            
+            self.genreSearchResults = data.genreList.map { GenreNameModel(dto: $0) }
+            
+        case .failure(let error):
+            logger.error("getSearchGenreName failed: \(error.localizedDescription)")
         }
     }
 }
