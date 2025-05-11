@@ -8,8 +8,8 @@
 struct ProductDetailModel {
     var isInterested: Bool
     var productDetail: ProductDetailInfo
-    let productPhotoList: [ProductPhotoInfo]
-    let storeInfo: StoreInfo
+    var productPhotoList: [ProductPhotoInfo]
+    var storeInfo: StoreInfo
 }
 
 struct ProductDetailInfo: Identifiable {

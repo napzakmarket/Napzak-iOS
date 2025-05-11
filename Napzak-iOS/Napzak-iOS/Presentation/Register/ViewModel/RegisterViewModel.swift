@@ -188,7 +188,7 @@ extension RegisterViewModel {
             title: model.title,
             description: model.description,
             price: model.price.convertInt(),
-            productCondition: model.productCondition?.rawString ?? "",
+            productCondition: model.productCondition?.rawValue ?? "",
             isDeliveryIncluded: model.isDeliveryIncluded ?? true,
             standardDeliveryFee: model.standardDeliveryFee.convertInt(),
             halfDeliveryFee: model.halfDeliveryFee.convertInt()
@@ -270,7 +270,7 @@ extension RegisterViewModel {
     }
     
     var sellRegisterValidate: Bool {
-        let conditionValid = model.productCondition?.rawString.isEmpty == false
+        let conditionValid = model.productCondition?.rawValue.isEmpty == false
         return conditionValid && deliveryValidate
     }
     
