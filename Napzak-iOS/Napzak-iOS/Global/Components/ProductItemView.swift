@@ -16,7 +16,7 @@ struct ProductItemView: View {
     //MARK: - Properties
     
     let width: CGFloat
-    let shouldToggleInterestState: () -> Bool
+    let shouldToggleInterestState: () async -> Bool
     
     //MARK: - Main Body
     
@@ -41,6 +41,7 @@ extension ProductItemView {
             productTypeInterest
         }
         .frame(width: width, height: width * 1.05)
+        .contentShape(Rectangle())
         .clipShape(RoundedRectangle(cornerRadius: 3))
     }
     
@@ -68,7 +69,7 @@ extension ProductItemView {
     
     private var productImage: some View {
         Group {
-            if let url = URL(string: product.photo) {
+            if let imageURL = product.photo, let url = URL(string: imageURL) {
                 KFImage(url)
                     .placeholder {
                         Rectangle()
@@ -79,7 +80,7 @@ extension ProductItemView {
                         print("failure: \(error.localizedDescription)")
                     }
                     .resizable()
-                    .scaledToFill()
+                    .aspectRatio(contentMode: .fill)
             } else {
                 Rectangle()
                     .fill(Color.napzakGrayScale(.gray100))
@@ -134,9 +135,12 @@ extension ProductItemView {
     
     private var likeButton: some View {
         Button {
-            if shouldToggleInterestState() {
-                print("likeButton toggle")
-                product.isInterested.toggle()
+            product.isInterested.toggle()
+
+            Task {
+                if await !shouldToggleInterestState() {
+                    product.isInterested.toggle()
+                }
             }
         } label: {
             Image(product.isInterested ? .btnHeartSelected : .btnHeartDefault)
