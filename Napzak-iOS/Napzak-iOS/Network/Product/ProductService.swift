@@ -12,7 +12,6 @@ protocol ProductServiceProtocol {
     func postBuyRegister(buyRegisterProduct: BuyRegisterRequestDTO) async -> Result<BuyRegisterResponseDTO, NetworkError>
     func getSellProduct(productFetchOption: ProductFetchOption) async -> Result<SellProductResponseDTO, NetworkError>
     func getBuyProduct(productFetchOption: ProductFetchOption) async -> Result<BuyProductResponseDTO, NetworkError>
-    
     func fetchSellProducts(
         storeOwnerId: Int,
         sort: String?,
@@ -21,7 +20,6 @@ protocol ProductServiceProtocol {
         genreId: Int?,
         cursor: String?
     ) async -> Result<MarketProductListResponseDTO, NetworkError>
-    
     func fetchBuyProducts(
         storeOwnerId: Int,
         sort: String?,
@@ -29,10 +27,9 @@ protocol ProductServiceProtocol {
         genreId: Int?,
         cursor: String?
     ) async -> Result<MarketProductBuyListResponseDTO, NetworkError>
-    
     func getProductDetailInfo(productId: Int) async -> Result<ProductDetailResponseDTO, NetworkError>
-    
     func getSearchRecommendation() async -> Result<SearchRecommendationResponseDTO, NetworkError>
+    func patchTradeStatus(productId: Int, requestBody: ChangeTradeStatusRequestDTO) async -> Result<Void, NetworkError>
 }
 
 final class ProductService: BaseService, ProductServiceProtocol {
@@ -120,5 +117,9 @@ final class ProductService: BaseService, ProductServiceProtocol {
     
     func getSearchRecommendation() async -> Result<SearchRecommendationResponseDTO, NetworkError> {
         return await requestDecodable(provider, .getSearchRecommendation)
+    }
+    
+    func patchTradeStatus(productId: Int, requestBody: ChangeTradeStatusRequestDTO) async -> Result<Void, NetworkError> {
+        return await requestVoid(provider, .patchTradeStatus(productId: productId, body: requestBody))
     }
 }

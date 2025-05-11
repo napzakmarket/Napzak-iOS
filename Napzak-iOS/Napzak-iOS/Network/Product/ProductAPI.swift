@@ -31,6 +31,7 @@ enum ProductAPI {
     case getBuyProduct(productFetchOption: ProductFetchOption)
     case getProductDetailInfo(productId: Int)
     case getSearchRecommendation
+    case patchTradeStatus(productId: Int, body: ChangeTradeStatusRequestDTO)
 }
 
 extension ProductAPI: BaseTargetType {
@@ -55,6 +56,8 @@ extension ProductAPI: BaseTargetType {
             return "products/\(productId)"
         case .getSearchRecommendation:
             return "products/search/recommend"
+        case .patchTradeStatus(productId: let productId, _):
+            return "products/\(productId)"
         }
     }
     
@@ -62,6 +65,8 @@ extension ProductAPI: BaseTargetType {
         switch self {
         case .sellRegister, .buyRegister:
             return .post
+        case .patchTradeStatus:
+            return .patch
         default:
             return .get
         }
@@ -134,6 +139,8 @@ extension ProductAPI: BaseTargetType {
                                                    "genreId" : genreIDs,
                                                    "isOnSale" : productFetchOption.isOnSale],
                                       encoding: URLEncoding.queryString)
+        case .patchTradeStatus(_, let requestBody):
+            return .requestJSONEncodable(requestBody)
         default:
             return .requestPlain
         }
