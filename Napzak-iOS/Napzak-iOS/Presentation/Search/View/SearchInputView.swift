@@ -34,11 +34,13 @@ struct SearchInputView: View {
             Color.napzakGrayScale(.gray10)
                 .ignoresSafeArea(edges: [.bottom])
             
-            ScrollView(showsIndicators: false) {
-                if viewModel.searchInputText.isEmpty {
-                    defaultContentView
-                } else {
-                    typingContentView
+            if viewModel.isRecommecdationDataDidLoad {
+                ScrollView(showsIndicators: false) {
+                    if viewModel.searchInputText.isEmpty {
+                        defaultContentView
+                    } else {
+                        typingContentView
+                    }
                 }
             }
             searchNavigationHeader
@@ -48,6 +50,11 @@ struct SearchInputView: View {
         }
         .ignoresSafeArea(edges: [.top])
         .toolbar(.hidden, for: .navigationBar)
+        .onChange(of: viewModel.searchInputText) { newValue in
+            Task {
+                await viewModel.fetchGenreSearchResults()
+            }
+        }
     }
 }
 
@@ -97,7 +104,8 @@ extension SearchInputView {
         LazyVStack(spacing: 0) {
             ForEach(viewModel.genreSearchResults) { genre in
                 Button {
-                    //TODO: - 장르 페이지로 이동
+                    navigationRouter.push(next: .genreDetailView(genreId: genre.id,
+                                                                 genreName: genre.name))
                 } label: {
                     GenreItemView(genreName: genre.name)
                 }
@@ -132,7 +140,7 @@ extension SearchInputView {
                 .frame(height: 18)
             
             PlainChipContainerView(
-                titles: viewModel.searchRecommendations,
+                titles: viewModel.searchRecommendations.map { $0.searchWord },
                 action: { title in
                     //TODO: - 데이터 넘기며 화면 전환
                     print(title)
