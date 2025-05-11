@@ -103,6 +103,9 @@ struct NZTabBarView: View {
                             genreName: genreName
                         )
                     )
+                case .productDetailView(productId: let productId):
+                    ProductDetailView(viewModel: ProductDetailViewModel(productId: productId))
+
                 case .registerSearchGenre:
                     EmptyView()
                 }

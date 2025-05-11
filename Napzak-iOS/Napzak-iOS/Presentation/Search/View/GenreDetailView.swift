@@ -17,6 +17,7 @@ struct GenreDetailView: View {
 
     @StateObject var viewModel: GenreDetailViewModel
     
+    @State private var selectedTabIndex = 0
     @State private var isSortModalPresented = false
     
     //MARK: - Properties
@@ -51,12 +52,40 @@ struct GenreDetailView: View {
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
             }
+            
+            if viewModel.showToast {
+                ToastMessageView(
+                    message: "찜한 상품에 추가되었어요!",
+                    style: .success
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(1)
+                .padding(.bottom, 110)
+            }
         }
+        .animation(.spring(), value: viewModel.showToast)
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .ignoresSafeArea()
         .toolbar(.hidden, for: .navigationBar)
+        .onChange(of: selectedTabIndex) { value in
+            Task {
+                if value == 0 {
+                    await viewModel.fetchSellProducts()
+                } else {
+                    await viewModel.fetchBuyProducts()
+                }
+            }
+        }
+        .onChange(of: viewModel.productFetchOption) { value in
+            Task {
+                if selectedTabIndex == 0 {
+                    await viewModel.fetchSellProducts()
+                } else {
+                    await viewModel.fetchBuyProducts()
+                }
+            }
+        }
     }
-    
 }
 
 private extension GenreDetailView {
@@ -92,7 +121,10 @@ private extension GenreDetailView {
             LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
                 genreInfoView
                 Section(header: segmentedFilterSectionView) {
-                    productsView
+                    productsView(
+                        products: selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
+                        productsCount: selectedTabIndex == 0 ? viewModel.sellProductsCount : viewModel.buyProductsCount
+                    )
                 }
             }
         }
@@ -106,7 +138,9 @@ private extension GenreDetailView {
             Group {
                 HStack(spacing: 4) {
                     Image(.imgGenreTag)
-                    Image(.imgHotTag)
+                    if let _ = viewModel.genreInfo.tag {
+                        Image(.imgHotTag)
+                    }
                 }
                 
                 Text(viewModel.genreInfo.genreName)
@@ -158,7 +192,7 @@ private extension GenreDetailView {
             shadowBackground
             
             VStack(alignment: .leading, spacing: 0) {
-                NZSegmentedControl(selectedTabIndex: $viewModel.selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
+                NZSegmentedControl(selectedTabIndex: $selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
                 
                 filterView
                     .frame(height: 54)
@@ -180,7 +214,7 @@ private extension GenreDetailView {
     
     private var filterView: some View {
         HStack(alignment: .center, spacing: 6) {
-            if viewModel.selectedTabIndex == 0 {
+            if selectedTabIndex == 0 {
                 unopenedFilterChip
             }
             onSaleFilterChip
@@ -205,14 +239,20 @@ private extension GenreDetailView {
             Image(viewModel.productFetchOption.isOnSale ? .btnFilterOnSaleSelected : .btnFilterOnSale)
         }
     }
+}
+
+private extension GenreDetailView {
     
-    var productsView: some View {
+    //MARK: - ViewBuilder Func
+    
+    @ViewBuilder
+    func productsView(products: Binding<[ProductItemModel]>, productsCount: Int) -> some View {
         VStack(spacing: 0) {
             HStack(alignment: .center, spacing: 3) {
                 Text("상품")
                     .foregroundStyle(Color.napzakGrayScale(.gray500))
                     .applyNapzakFont(.body5SemiBold14)
-                Text("\(viewModel.dummyProducts.count)개")
+                Text("\(productsCount)개")
                     .foregroundStyle(Color.napzakPrimary(.purple500))
                     .applyNapzakFont(.body5SemiBold14)
                 Spacer()
@@ -235,19 +275,19 @@ private extension GenreDetailView {
             .frame(height: 58)
             
             LazyVGrid(columns: columns, spacing: 20) {
-                ForEach(viewModel.dummyProducts.indices, id: \.self) { i in
+                ForEach(products.indices, id: \.self) { i in
                     ProductItemView(
-                        product: $viewModel.dummyProducts[i],
+                        product: products[i],
                         width: productCellWidth,
                         shouldToggleInterestState: {
-                            return viewModel.canToggleInterestState(
-                                productID: viewModel.dummyProducts[i].id
-                            )
+                            return products[i].wrappedValue.isInterested ?
+                            await viewModel.canPostInterestState(productID: products[i].id) :
+                            await viewModel.canDeleteInterestState(productID: products[i].id)
                         })
-                    .onTapGesture {
-                        //TODO: - 화면 전환
-                        print("\(viewModel.dummyProducts[i].id)번 상품")
-                    }
+                        .onTapGesture {
+                            //TODO: - 화면 전환
+                            print("\(products[i].id)번 상품")
+                        }
                 }
             }
             .padding(.horizontal, 28)
