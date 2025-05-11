@@ -30,6 +30,7 @@ protocol ProductServiceProtocol {
     func getProductDetailInfo(productId: Int) async -> Result<ProductDetailResponseDTO, NetworkError>
     func getSearchRecommendation() async -> Result<SearchRecommendationResponseDTO, NetworkError>
     func patchTradeStatus(productId: Int, requestBody: ChangeTradeStatusRequestDTO) async -> Result<Void, NetworkError>
+    func deleteProduct(productId: Int) async -> Result<Void, NetworkError>
 }
 
 final class ProductService: BaseService, ProductServiceProtocol {
@@ -121,5 +122,9 @@ final class ProductService: BaseService, ProductServiceProtocol {
     
     func patchTradeStatus(productId: Int, requestBody: ChangeTradeStatusRequestDTO) async -> Result<Void, NetworkError> {
         return await requestVoid(provider, .patchTradeStatus(productId: productId, body: requestBody))
+    }
+
+    func deleteProduct(productId: Int) async -> Result<Void, NetworkError> {
+        return await requestVoid(provider, .deleteProduct(productId: productId))
     }
 }

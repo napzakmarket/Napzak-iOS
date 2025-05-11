@@ -32,6 +32,7 @@ enum ProductAPI {
     case getProductDetailInfo(productId: Int)
     case getSearchRecommendation
     case patchTradeStatus(productId: Int, body: ChangeTradeStatusRequestDTO)
+    case deleteProduct(productId: Int)
 }
 
 extension ProductAPI: BaseTargetType {
@@ -52,12 +53,10 @@ extension ProductAPI: BaseTargetType {
             return "products/sell"
         case .buyRegister, .getBuyProduct:
             return "products/buy"
-        case .getProductDetailInfo(productId: let productId):
+        case .getProductDetailInfo(productId: let productId), .patchTradeStatus(productId: let productId, _), .deleteProduct(productId: let productId):
             return "products/\(productId)"
         case .getSearchRecommendation:
             return "products/search/recommend"
-        case .patchTradeStatus(productId: let productId, _):
-            return "products/\(productId)"
         }
     }
     
@@ -67,6 +66,8 @@ extension ProductAPI: BaseTargetType {
             return .post
         case .patchTradeStatus:
             return .patch
+        case .deleteProduct:
+            return .delete
         default:
             return .get
         }
