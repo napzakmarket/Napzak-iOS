@@ -8,21 +8,11 @@
 import SwiftUI
 
 struct NZTabBarView: View {
-    
-    //MARK: - Enum
-    
-    enum NZTab {
-        case home
-        case search
-        case chat
-        case my
-    }
-    
     //MARK: - Property Wrappers
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @EnvironmentObject private var tabRouter: TabRouter
     
-    @State private var selectedTab: NZTab = .home
     @State private var isRegisterTabSelected = false
     @State private var isRegisterViewPresented = false
     @State private var registerType: TradeType = .sell
@@ -34,7 +24,7 @@ struct NZTabBarView: View {
     var body: some View {
         NavigationStack(path: $navigationRouter.path) {
             ZStack(alignment: .bottom) {
-                TabView(selection: $selectedTab) {
+                TabView(selection: $tabRouter.selectedTab) {
                     Group {
                         HomeView()
                             .tag(NZTab.home)
@@ -116,7 +106,7 @@ struct NZTabBarView: View {
     var tabBar: some View {
         HStack {
             Button {
-                selectedTab = .home
+                tabRouter.switchToHome()
                 isRegisterTabSelected = false
             } label: {
                 VStack(alignment: .center, spacing: 5) {
@@ -131,7 +121,7 @@ struct NZTabBarView: View {
             }
             Spacer()
             Button {
-                selectedTab = .search
+                tabRouter.switchToSearch()
                 isRegisterTabSelected = false
             } label: {
                 VStack(alignment: .center, spacing: 5) {
@@ -160,7 +150,7 @@ struct NZTabBarView: View {
             }
             Spacer()
             Button {
-                selectedTab = .chat
+                tabRouter.switchToChat()
                 isRegisterTabSelected = false
             } label: {
                 VStack(alignment: .center, spacing: 5) {
@@ -175,7 +165,7 @@ struct NZTabBarView: View {
             }
             Spacer()
             Button {
-                selectedTab = .my
+                tabRouter.switchToMy()
                 isRegisterTabSelected = false
             } label: {
                 VStack(alignment: .center, spacing: 5) {
@@ -205,7 +195,7 @@ private extension NZTabBarView {
     //MARK: - Private Method
     
     func isSelectedTab(_ tab: NZTab) -> Bool {
-        return selectedTab == tab && !isRegisterTabSelected
+        return tabRouter.selectedTab == tab && !isRegisterTabSelected
     }
 }
 
