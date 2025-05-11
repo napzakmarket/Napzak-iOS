@@ -89,8 +89,7 @@ extension HomeView {
     private var headerView: some View {
         VStack(spacing: 0) {
             Button {
-                // TODO: - 검색 뷰 이동
-                print("검색 뷰 이동")
+                navigationRouter.push(next: .searchInputView)
             } label: {
                 HStack {
                     Text(placeholder)
@@ -151,6 +150,7 @@ extension HomeView {
                         )
                         .onTapGesture {
                             //TODO: - 화면 전환
+                            navigationRouter.push(next: .productDetailView(productId: viewModel.recommendedProducts[index].id))
                             print("\(viewModel.recommendedProducts[index].id)번 상품")
                         }
                     }
@@ -197,12 +197,11 @@ extension HomeView {
                             )
                         }
                     }
-                    
-                    return canToggle
                 },
                 onTapProduct: { productId in
                     // TODO: 상품 상세 화면으로 이동
                     print("\(productId)번 상품")
+                    navigationRouter.push(next: .productDetailView(productId: productId))
                 }
             )
         }
@@ -246,11 +245,11 @@ extension HomeView {
                             )
                         }
                     }
-                    return canToggle
                 },
                 onTapProduct: { productId in
                     // TODO: 상품 상세 화면으로 이동
                     print("\(productId)번 상품")
+                    navigationRouter.push(next: .productDetailView(productId: productId))
                 }
             )
         }
@@ -299,7 +298,7 @@ extension HomeView {
     func productGrid(
         products: Binding<[ProductItemModel]>,
         cellWidth: CGFloat,
-        onToggleLike: @escaping (Int) -> Bool,
+        onToggleLike: @escaping (Int) -> Void,
         onTapProduct: ((Int) -> Void)? = nil
     ) -> some View {
         LazyVGrid(columns: columns, spacing: 20) {
