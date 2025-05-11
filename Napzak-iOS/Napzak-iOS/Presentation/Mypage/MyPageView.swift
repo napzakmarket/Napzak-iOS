@@ -125,8 +125,8 @@ struct MyPageView: View {
                         .scaledToFit()
                 }
                 .resizable()
-                .scaledToFit()
-                .frame(width: 60, height: 60)
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 60, height: 60)                .frame(width: 60, height: 60)
                 .clipShape(Circle())
             
             VStack(alignment: .leading, spacing:7) {
