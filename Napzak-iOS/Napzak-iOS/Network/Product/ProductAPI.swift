@@ -42,9 +42,9 @@ extension ProductAPI: BaseTargetType {
     var path: String {
         switch self {
         case .getSellProducts(let storeOwnerId, _, _, _, _, _):
-            return "/api/v1/products/sell/stores/\(storeOwnerId)"
+            return "products/sell/stores/\(storeOwnerId)"
         case .getBuyProducts(let storeOwnerId, _, _, _, _):
-            return "/api/v1/products/buy/stores/\(storeOwnerId)"
+            return "products/buy/stores/\(storeOwnerId)"
         case .sellRegister, .getSellProduct:
             return "products/sell"
         case .buyRegister, .getBuyProduct:
