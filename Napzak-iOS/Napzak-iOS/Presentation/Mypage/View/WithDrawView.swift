@@ -57,7 +57,7 @@ struct WithDrawView: View {
         .ignoresSafeArea()
         .background(.white)
         .navigationBarHidden(true)
-
+        
     }
 }
 
@@ -196,24 +196,17 @@ extension WithDrawView {
     }
     
     private var nextButton: some View {
-        ZStack() {
-            Color.napzakGrayScale(.white)
-                .frame(height: 108)
-                .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 1)
-            
-            Button {
-            } label: {
-                Text("계속하기")
-                    .applyNapzakFont(.body4Bold14)
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity, minHeight: 50)
-            }
-            .background(Color.napzakGrayScale(.gray100))
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .padding(.horizontal, 28)
-            .padding(.top, 18)
-            .padding(.bottom, 40)
+        Button {
+        } label: {
+            Text("계속하기")
+                .applyNapzakFont(.body4Bold14)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity, minHeight: 50)
         }
+        .background(Color.napzakGrayScale(.gray100))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .padding(.horizontal, 28)
+        .padding(.bottom, 40)
     }
 }
 
