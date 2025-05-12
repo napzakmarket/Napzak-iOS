@@ -11,12 +11,14 @@ import Kingfisher
 
 struct MarketView: View {
     
+    @EnvironmentObject private var navigationRouter: NavigationRouter
+
     @StateObject var viewModel: MarketViewModel
     
     @State private var isGenreSelectModalPresented = false
     @State private var isSortModalPresented = false
     @State private var selectedSortOption: SortOption = .recent
-    @EnvironmentObject private var navigationRouter: NavigationRouter
+    @State private var isReportModalPresented = false
     
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
     private let columns = [GridItem(.flexible(), spacing: 20), GridItem(.flexible())]
@@ -74,6 +76,28 @@ struct MarketView: View {
                 .edgesIgnoringSafeArea(.bottom)
                 .transition(.move(edge: .bottom))
             }
+            
+            if isReportModalPresented {
+                Color.napzakTransparency(.transBlack)
+                    .onTapGesture {
+                        withAnimation {
+                            isReportModalPresented = false
+                        }
+                    }
+                    .transition(.opacity)
+                    .zIndex(1)
+                
+                ReportModalView(
+                    isReportModalPresented: $isReportModalPresented,
+                    reportType: .product,
+                    onTapped: {
+                        navigationRouter.push(next: .reportView(reportType: .store, id: viewModel.storeDetail?.storeId ?? 0))
+                    }
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(2)
+            }
+
         }
         .ignoresSafeArea(edges: .bottom)
         .navigationBarHidden(true)
@@ -99,15 +123,24 @@ struct MarketView: View {
     }
 
     private var navigationBarView: some View {
-        HStack {
-            Button{
+        HStack() {
+            Button {
                 navigationRouter.pop()
             } label: {
                 Image(.iconBack)
-                    .foregroundColor(Color.napzakGrayScale(.gray200))
-                    .frame(width: 24, height: 24)
+                    .frame(width: 48, height: 48)
             }
             Spacer()
+            if !(viewModel.storeDetail?.isStoreOwner ?? true) {
+                Button {
+                    withAnimation {
+                        isReportModalPresented = true
+                    }
+                } label: {
+                    Image(.iconMoreOptions)
+                        .frame(width: 48, height: 48)
+                }
+            }
         }
         .ignoresSafeArea()
         .padding(.horizontal, 20)
