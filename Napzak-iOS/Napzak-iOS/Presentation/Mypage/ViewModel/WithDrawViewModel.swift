@@ -29,8 +29,30 @@ final class WithDrawViewModel: ObservableObject {
     @Published var withdrawDescription: String = ""
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "WithDrawView")
+}
 
-    
-    
-    
+
+// MARK: - Network
+
+extension WithDrawViewModel {
+    func withdraw() async {
+        
+        let dto = WithDrawRequestDTO(
+            withdrawTitle: withdrawReasonTitle,
+            withdrawDescription: withdrawDescription
+        )
+        
+        let result = await NetworkService.shared.authService.withDraw(item: dto)
+        
+        switch result {
+        case .success(let response):
+            logger.info("✅ 탈퇴 성공: \(response.message)")
+            logger.info("✅ 탈퇴한 ID: \(response.data!.storeId)")
+            logger.info("✅ 탈퇴 사유: \(response.data!.withdrawTitle)")
+            logger.info("✅ 탈퇴 설명: \(response.data!.withdrawDescription ?? "없음")")
+        case .failure(let error):
+            logger.error("❌ 탈퇴 실패: \(error.localizedDescription)")
+        }
+        
+    }
 }

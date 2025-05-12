@@ -11,6 +11,8 @@
 		6C0FA8AE2DD1CB8600D81065 /* WithDrawViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0FA8AD2DD1CB8600D81065 /* WithDrawViewModel.swift */; };
 		6C0FA8B02DD1CD8200D81065 /* WithDrawWriteReasonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0FA8AF2DD1CD8200D81065 /* WithDrawWriteReasonView.swift */; };
 		6C0FA8B22DD1CD9000D81065 /* WithDrawConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0FA8B12DD1CD9000D81065 /* WithDrawConfirmView.swift */; };
+		6C0FA8B42DD1D89400D81065 /* WithDrawRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0FA8B32DD1D89400D81065 /* WithDrawRequestDTO.swift */; };
+		6C0FA8B62DD1D8E700D81065 /* WithDrawResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0FA8B52DD1D8E700D81065 /* WithDrawResponseDTO.swift */; };
 		6C4886BD2DC0CA07009352ED /* RegisterSearchGenre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4886BC2DC0CA07009352ED /* RegisterSearchGenre.swift */; };
 		6C6CBDF92DA574A300763CBA /* SellRegisterDelivery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6CBDF82DA574A300763CBA /* SellRegisterDelivery.swift */; };
 		6C6CBDFB2DA589DD00763CBA /* BuyRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6CBDFA2DA589DD00763CBA /* BuyRegisterView.swift */; };
@@ -193,6 +195,8 @@
 		6C0FA8AD2DD1CB8600D81065 /* WithDrawViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithDrawViewModel.swift; sourceTree = "<group>"; };
 		6C0FA8AF2DD1CD8200D81065 /* WithDrawWriteReasonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithDrawWriteReasonView.swift; sourceTree = "<group>"; };
 		6C0FA8B12DD1CD9000D81065 /* WithDrawConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithDrawConfirmView.swift; sourceTree = "<group>"; };
+		6C0FA8B32DD1D89400D81065 /* WithDrawRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithDrawRequestDTO.swift; sourceTree = "<group>"; };
+		6C0FA8B52DD1D8E700D81065 /* WithDrawResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithDrawResponseDTO.swift; sourceTree = "<group>"; };
 		6C4886BC2DC0CA07009352ED /* RegisterSearchGenre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterSearchGenre.swift; sourceTree = "<group>"; };
 		6C6CBDF82DA574A300763CBA /* SellRegisterDelivery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterDelivery.swift; sourceTree = "<group>"; };
 		6C6CBDFA2DA589DD00763CBA /* BuyRegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyRegisterView.swift; sourceTree = "<group>"; };
@@ -1243,6 +1247,7 @@
 				D64561002DC3411C003D2E2B /* AuthResponseDTO.swift */,
 				D645611E2DC39AE0003D2E2B /* TokenResponseDTO.swift */,
 				6CDC85E02DCFC9ED001C3921 /* LogoutResponseDTO.swift */,
+				6C0FA8B52DD1D8E700D81065 /* WithDrawResponseDTO.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -1251,6 +1256,7 @@
 			isa = PBXGroup;
 			children = (
 				D64561192DC375E2003D2E2B /* LoginRequestDTO.swift */,
+				6C0FA8B32DD1D89400D81065 /* WithDrawRequestDTO.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -1403,6 +1409,7 @@
 				87E920662DC63AB4003C42D5 /* StoreDetailDTO.swift in Sources */,
 				D63270272DA2EA9D002414DA /* ChipsContainerView.swift in Sources */,
 				D02906042DAF4C3A008515FD /* ProductItemModel.swift in Sources */,
+				6C0FA8B62DD1D8E700D81065 /* WithDrawResponseDTO.swift in Sources */,
 				D045DEE82D83786800EB1EB6 /* ColorLiteral.swift in Sources */,
 				D6055AEC2DBF2022005D32A3 /* HomeViewModel.swift in Sources */,
 				D029060F2DAF9978008515FD /* TradeType.swift in Sources */,
@@ -1517,6 +1524,7 @@
 				6CF689412DC67AE800BC63AD /* ReportRequestDTO.swift in Sources */,
 				D0F0355A2DBF27F1003D0CBF /* StoreService.swift in Sources */,
 				D0310B052DCF88F600C265EC /* ProductDTO.swift in Sources */,
+				6C0FA8B42DD1D89400D81065 /* WithDrawRequestDTO.swift in Sources */,
 				D645612C2DC4B35F003D2E2B /* LoginViewModel.swift in Sources */,
 				D0F0355D2DBF27F1003D0CBF /* ProductService.swift in Sources */,
 				D0F0355F2DBF27F1003D0CBF /* GenreAPI.swift in Sources */,

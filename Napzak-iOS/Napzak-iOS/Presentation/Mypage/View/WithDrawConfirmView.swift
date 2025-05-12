@@ -41,9 +41,10 @@ struct WithDrawConfirmView: View {
                     cancelText: "아니요",
                     onConfirm: {
                         Task {
-                            // 탈퇴하기
+                            await viewModel.withdraw()
                         }
                         withDrawButtonTapped = false
+                        navigationRouter.reset()
                     },
                     onCancel: {
                         withDrawButtonTapped = false
@@ -130,7 +131,6 @@ extension WithDrawConfirmView {
             .clipShape(RoundedRectangle(cornerRadius: 14))
             
             Button {
-                // 탈퇴하기
                 withDrawButtonTapped = true
             } label: {
                 Text("탈퇴하기")
@@ -145,9 +145,4 @@ extension WithDrawConfirmView {
         .padding(.bottom, 52)
     }
 
-}
-
-
-#Preview {
-    WithDrawConfirmView()
 }
