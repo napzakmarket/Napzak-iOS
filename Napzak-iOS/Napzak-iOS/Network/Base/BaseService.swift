@@ -47,28 +47,9 @@ class BaseService {
                         do {
                             let decodedData = try JSONDecoder().decode(T.self, from: response.data)
                             continuation.resume(returning: .success(decodedData))
-                        } catch let DecodingError.valueNotFound(value, context) {
-                            print("❌ Value not found:", value)
-                            print("➡️ CodingPath:", context.codingPath.map { $0.stringValue }.joined(separator: " → "))
-                            print("📝 DebugDescription:", context.debugDescription)
-
-                        } catch let DecodingError.keyNotFound(key, context) {
-                            print("❌ Key not found:", key.stringValue)
-                            print("➡️ CodingPath:", context.codingPath.map { $0.stringValue }.joined(separator: " → "))
-                            print("📝 DebugDescription:", context.debugDescription)
-
-                        } catch let DecodingError.typeMismatch(type, context) {
-                            print("❌ Type mismatch:", type)
-                            print("➡️ CodingPath:", context.codingPath.map { $0.stringValue }.joined(separator: " → "))
-                            print("📝 DebugDescription:", context.debugDescription)
-
-                        } catch let DecodingError.dataCorrupted(context) {
-                            print("❌ Data corrupted")
-                            print("➡️ CodingPath:", context.codingPath.map { $0.stringValue }.joined(separator: " → "))
-                            print("📝 DebugDescription:", context.debugDescription)
-
                         } catch {
-                            print("❗ Unknown error:", error.localizedDescription)
+                            Self.logger.error("Decoding error: \(error.localizedDescription)")
+                            continuation.resume(returning: .failure(.decodingError))
                         }
                     case 400:
                         continuation.resume(returning: .failure(.badRequest))
