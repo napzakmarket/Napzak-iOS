@@ -140,7 +140,9 @@ extension SellRegisterView {
                     await viewModel.sellRegister()
                     if let productId = viewModel.productId {
                         dismiss()
-                        navigationRouter.push(next: .productDetailView(productId: productId))
+                        if viewModel.type == .initialRegister {
+                            navigationRouter.push(next: .productDetailView(productId: productId))
+                        }
                     }
                 }
             } label: {

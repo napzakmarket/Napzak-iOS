@@ -122,6 +122,10 @@ struct ProductDetailView: View {
                             isDeleteAlertPresented = false
                             Task {
                                 await viewModel.deleteProduct()
+                                try? await Task.sleep(for: .seconds(2))
+                                await MainActor.run {
+                                    navigationRouter.pop()
+                                }
                             }
                         },
                         onCancel: {
@@ -162,6 +166,13 @@ struct ProductDetailView: View {
                                                                         tradeType: viewModel.product.productDetail.tradeType)),
                     isRegisterTabSelected: .constant(false)
                 )
+            }
+        }
+        .onChange(of: isRegisterViewPresented) { value in
+            if !value {
+                Task {
+                    await viewModel.fetchProduct(id: viewModel.product.productDetail.id)
+                }
             }
         }
     }
