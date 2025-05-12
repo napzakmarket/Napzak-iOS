@@ -128,7 +128,7 @@ extension ProductAPI: BaseTargetType {
         case .getSellProduct(let productFetchOption):
             let genreIDs = productFetchOption.genres.map { $0.id }
             
-            return .requestParameters(parameters: ["sortOption" : productFetchOption.sortOption,
+            return .requestParameters(parameters: ["sortOption" : productFetchOption.sortOptionValue,
                                                    "genreId" : genreIDs,
                                                    "isOnSale" : productFetchOption.isOnSale,
                                                    "isUnopened" : productFetchOption.isUnopened],
@@ -136,7 +136,7 @@ extension ProductAPI: BaseTargetType {
         case .getBuyProduct(let productFetchOption):
             let genreIDs = productFetchOption.genres.map { $0.id }
 
-            return .requestParameters(parameters: ["sortOption" : productFetchOption.sortOption,
+            return .requestParameters(parameters: ["sortOption" : productFetchOption.sortOptionValue,
                                                    "genreId" : genreIDs,
                                                    "isOnSale" : productFetchOption.isOnSale],
                                       encoding: URLEncoding.queryString)
