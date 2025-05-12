@@ -114,22 +114,41 @@ extension RegisterViewModel {
                 logger.error("getSellProductInfoForEdit: No data received")
                 return
             }
-            self.model = RegisterModel(images: [],
-                                       title: data.title,
-                                       description: data.description,
-                                       price: String(data.price),
-                                       genre: data.genreName,
-                                       genreId: data.genreId,
-                                       productCondition: data.productCondition,
-                                       isDeliveryIncluded: data.isDeliveryIncluded,
-                                       standardDeliveryFee: String(data.standardDeliveryFee),
-                                       halfDeliveryFee: String(data.halfDeliveryFee))
-            
+
+            let imageUrls = data.productPhotoList.map { $0.photoUrl }
+
+            do {
+                var images = [UIImage]()
+                var imageNames = [String]()
+
+                for url in imageUrls {
+                    let image = try await loadImage(from: url)
+                    images.append(image)
+                    imageNames.append(UUID().uuidString)
+                }
+
+                imagePickerManager.selectedImages = images
+                imagePickerManager.imageNameList = imageNames
+                self.model = RegisterModel(images: images,
+                                           title: data.title,
+                                           description: data.description,
+                                           price: String(data.price),
+                                           genre: data.genreName,
+                                           genreId: data.genreId,
+                                           productCondition: data.productCondition,
+                                           isDeliveryIncluded: data.isDeliveryIncluded,
+                                           standardDeliveryFee: String(data.standardDeliveryFee),
+                                           halfDeliveryFee: String(data.halfDeliveryFee))
+
+            } catch {
+                logger.error("이미지 로드 중 오류 발생: \(error.localizedDescription)")
+            }
+
         case .failure(let error):
             logger.error("getSellProductInfoForEdit failed: \(error.localizedDescription)")
         }
     }
-    
+
     func getBuyProductInfoForEdit(productId: Int) async {
         let result = await NetworkService.shared.productService.getBuyProductInfoForEdit(productId: productId)
 
@@ -139,14 +158,33 @@ extension RegisterViewModel {
                 logger.error("getBuyProductInfoForEdit: No data received")
                 return
             }
-            self.model = RegisterModel(images: [],
-                                       title: data.title,
-                                       description: data.description,
-                                       price: String(data.price),
-                                       genre: data.genreName,
-                                       genreId: data.genreId,
-                                       isPriceNegotiable: data.isPriceNegotiable ?? false)
             
+            let imageUrls = data.productPhotoList.map { $0.photoUrl }
+
+            do {
+                var images = [UIImage]()
+                var imageNames = [String]()
+
+                for url in imageUrls {
+                    let image = try await loadImage(from: url)
+                    images.append(image)
+                    imageNames.append(UUID().uuidString)
+                }
+
+                imagePickerManager.selectedImages = images
+                imagePickerManager.imageNameList = imageNames
+                self.model = RegisterModel(images: images,
+                                           title: data.title,
+                                           description: data.description,
+                                           price: String(data.price),
+                                           genre: data.genreName,
+                                           genreId: data.genreId,
+                                           isPriceNegotiable: data.isPriceNegotiable ?? false)
+
+            } catch {
+                logger.error("이미지 로드 중 오류 발생: \(error.localizedDescription)")
+            }
+
         case .failure(let error):
             logger.error("getBuyProductInfoForEdit failed: \(error.localizedDescription)")
         }
@@ -342,6 +380,24 @@ extension RegisterViewModel {
         }
         
         return simplifiedUrl
+    }
+    
+    func loadImage(from urlString: String) async throws -> UIImage {
+        guard let url = URL(string: urlString) else {
+            throw URLError(.badURL)
+        }
+        
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw URLError(.badServerResponse)
+        }
+
+        guard let image = UIImage(data: data) else {
+            throw URLError(.cannotDecodeContentData)
+        }
+
+        return image
     }
 }
 
