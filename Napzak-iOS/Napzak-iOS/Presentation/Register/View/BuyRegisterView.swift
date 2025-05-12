@@ -8,10 +8,14 @@
 import SwiftUI
 
 struct BuyRegisterView: View {
+    @EnvironmentObject var navigationRouter: NavigationRouter
     @StateObject private var registerRouter = RegisterNavigationRouter()
     @StateObject var viewModel: RegisterViewModel
+    @Environment(\.dismiss) private var dismiss
+    @FocusState private var isKeyboardActive: Bool
     
     @Binding var isRegisterTabSelected: Bool
+    
     
     var body: some View {
         NavigationStack(path: $registerRouter.path) {
@@ -45,6 +49,9 @@ struct BuyRegisterView: View {
                     )
                 }
             }
+            .onTapGesture {
+                isKeyboardActive = false
+            }
         }
         .onAppear {
             isRegisterTabSelected = false
@@ -76,33 +83,36 @@ extension BuyRegisterView {
                 .frame(height: 4)
                 .padding(.bottom, 29)
                 .background(.white)
-
+            
             RegisterTitle(title: $viewModel.model.title)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 10)
                 .background(.white)
-
+                .focused($isKeyboardActive)
+            
             RegisterDescription(description: $viewModel.model.description)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 23)
                 .background(.white)
-
+                .focused($isKeyboardActive)
+            
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))
                 .frame(height: 4)
                 .padding(.bottom, 23)
                 .background(.white)
-
+            
             BuyRegisterPrice(
                 price: $viewModel.model.price,
                 addPrices: $viewModel.addPrices,
                 maxPrice: $viewModel.maxPrice,
                 priceError: $viewModel.priceError
             )
-                .padding(.horizontal, 28)
-                .padding(.bottom, 32)
-                .background(.white)
-
+            .padding(.horizontal, 28)
+            .padding(.bottom, 32)
+            .background(.white)
+            .focused($isKeyboardActive)
+            
             BuyRegisterSuggestPrice(isPriceNegotiable: $viewModel.model.isPriceNegotiable)
                 .padding(.horizontal, 28)
         }
@@ -117,6 +127,10 @@ extension BuyRegisterView {
             Button {
                 Task {
                     await viewModel.buyRegister()
+                    if let productId = viewModel.productId {
+                        dismiss()
+                        navigationRouter.push(next: .productDetailView(productId: productId))
+                    }
                 }
             } label: {
                 Text("등록하기")
@@ -133,7 +147,7 @@ extension BuyRegisterView {
             .padding(.top, 18)
             .padding(.bottom, 40)
             .disabled(!viewModel.sharedValidate)
-
+            
         }
     }
     
