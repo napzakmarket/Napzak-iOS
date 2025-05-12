@@ -8,9 +8,6 @@
 import SwiftUI
 
 enum Route: Hashable {
-    //임시 뷰
-    case sView
-    case mView
     case SettingView
     case withDrawSelectReasonView
     case withDrawWriteReasonView
