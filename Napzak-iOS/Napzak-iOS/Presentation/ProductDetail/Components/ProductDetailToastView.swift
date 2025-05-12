@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum ProductDetailToastStyle {
+enum StatusToastStyle {
     case statusChanged
     case deleteProduct
     
@@ -31,7 +31,7 @@ struct ProductDetailToastView: View {
     
     //MARK: - Properties
 
-    let style: ProductDetailToastStyle
+    let style: StatusToastStyle
     let tradeStatus: String?
     
     //MARK: - Body

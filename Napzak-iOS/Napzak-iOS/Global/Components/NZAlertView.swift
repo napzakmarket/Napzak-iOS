@@ -7,8 +7,15 @@
 
 import SwiftUI
 
+enum AlertStyle {
+    case plain
+    case warning
+}
+
 struct NZAlertView: View {
-    let message: String
+    let style: AlertStyle
+    let titleMessage: String
+    var subTitleMessage: String? = nil
     let confirmText: String
     let cancelText: String
     let onConfirm: () -> Void
@@ -16,12 +23,20 @@ struct NZAlertView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            Text(message)
+            Spacer()
+            Text(titleMessage)
                 .applyNapzakFont(.title3Bold18)
-                .foregroundStyle(Color.napzakPrimary(.purple500))
-                .frame(height: 23)
+                .foregroundStyle(style == .plain ? Color.napzakPrimary(.purple500) : Color.napzakState(.red))
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 38)
+            
+            if let message = subTitleMessage {
+                Text(message)
+                    .applyNapzakFont(.caption1SemiBold12)
+                    .foregroundStyle(Color.napzakGrayScale(.gray200))
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 6)
+            }
+            Spacer()
             
             Color.napzakGrayScale(.gray200)
                 .frame(height: 1)
@@ -31,9 +46,8 @@ struct NZAlertView: View {
                     Text(confirmText)
                         .applyNapzakFont(.body5SemiBold14)
                         .foregroundStyle(Color.napzakGrayScale(.gray300))
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                .frame(height: 50)
                 
                 Color.napzakGrayScale(.gray200)
                     .frame(width: 1)
@@ -42,25 +56,16 @@ struct NZAlertView: View {
                     Text(cancelText)
                         .applyNapzakFont(.body5SemiBold14)
                         .foregroundStyle(Color.napzakGrayScale(.gray300))
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                .frame(height: 50)
             }
+            .frame(height: 50)
         }
-        .background(Color.white)
         .frame(height: 150)
-        .clipShape(RoundedRectangle(cornerRadius: 13))
+        .background(
+            RoundedRectangle(cornerRadius: 13)
+                .fill(Color.white)
+        )
+        .padding(.horizontal, 45)
     }
-}
-
-#Preview {
-    NZAlertView(
-        message: "로그아웃 하시겠어요?",
-        confirmText: "예",
-        cancelText: "아니요",
-        onConfirm: {
-        },
-        onCancel: {
-        }
-    )
 }

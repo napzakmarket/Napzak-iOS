@@ -9,18 +9,13 @@ typealias SellRegisterResponseDTO = BaseResponseDTO<SellRegisterResponseData>
 
 struct SellRegisterResponseData: Decodable {
     let productId: Int
-    let productPhotoList: [SellRegisterResponsePhotoList]
+    let productPhotoList: [PhotoInfoDTO]
     let genreId: Int
-    let title, description, productCondition: String
+    let title, description: String
+    let productCondition: String?
     let price: Int
     let isDeliveryIncluded: Bool
     let standardDeliveryFee, halfDeliveryFee: Int
     let createdAt: String
     let updatedAt: String?
-}
-
-struct SellRegisterResponsePhotoList: Decodable {
-    let photoId: Int
-    let photoUrl: String
-    let sequence: Int
 }

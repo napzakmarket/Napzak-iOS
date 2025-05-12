@@ -29,7 +29,14 @@ enum ProductAPI {
     case buyRegister(registerItem: BuyRegisterRequestDTO)
     case getSellProduct(productFetchOption: ProductFetchOption)
     case getBuyProduct(productFetchOption: ProductFetchOption)
+    case getProductDetailInfo(productId: Int)
     case getSearchRecommendation
+    case getSellProductInfoForEdit(productId: Int)
+    case getBuyProductInfoForEdit(productId: Int)
+    case putSellProduct(productId: Int, requestBody: SellRegisterRequestDTO)
+    case putBuyProduct(productId: Int, requestBody: BuyRegisterRequestDTO)
+    case patchTradeStatus(productId: Int, body: ChangeTradeStatusRequestDTO)
+    case deleteProduct(productId: Int)
 }
 
 extension ProductAPI: BaseTargetType {
@@ -50,6 +57,12 @@ extension ProductAPI: BaseTargetType {
             return "products/sell"
         case .buyRegister, .getBuyProduct:
             return "products/buy"
+        case .getProductDetailInfo(productId: let productId), .patchTradeStatus(let productId, _), .deleteProduct(let productId):
+            return "products/\(productId)"
+        case .getSellProductInfoForEdit(let productId), .getBuyProductInfoForEdit(let productId):
+            return "products/sell/modify/\(productId)"
+        case .putSellProduct(let productId, _), .putBuyProduct(let productId, _):
+            return "products/buy/modify/\(productId)"
         case .getSearchRecommendation:
             return "products/search/recommend"
         }
@@ -59,6 +72,12 @@ extension ProductAPI: BaseTargetType {
         switch self {
         case .sellRegister, .buyRegister:
             return .post
+        case .putSellProduct, .putBuyProduct:
+            return .put
+        case .patchTradeStatus:
+            return .patch
+        case .deleteProduct:
+            return .delete
         default:
             return .get
         }
@@ -119,7 +138,7 @@ extension ProductAPI: BaseTargetType {
         case .getSellProduct(let productFetchOption):
             let genreIDs = productFetchOption.genres.map { $0.id }
             
-            return .requestParameters(parameters: ["sortOption" : productFetchOption.sortOption,
+            return .requestParameters(parameters: ["sortOption" : productFetchOption.sortOptionValue,
                                                    "genreId" : genreIDs,
                                                    "isOnSale" : productFetchOption.isOnSale,
                                                    "isUnopened" : productFetchOption.isUnopened],
@@ -127,10 +146,16 @@ extension ProductAPI: BaseTargetType {
         case .getBuyProduct(let productFetchOption):
             let genreIDs = productFetchOption.genres.map { $0.id }
 
-            return .requestParameters(parameters: ["sortOption" : productFetchOption.sortOption,
+            return .requestParameters(parameters: ["sortOption" : productFetchOption.sortOptionValue,
                                                    "genreId" : genreIDs,
                                                    "isOnSale" : productFetchOption.isOnSale],
                                       encoding: URLEncoding.queryString)
+        case .patchTradeStatus(_, let requestBody):
+            return .requestJSONEncodable(requestBody)
+        case .putSellProduct(_, let body):
+            return .requestJSONEncodable(body)
+        case .putBuyProduct(_, let body):
+            return .requestJSONEncodable(body)
         default:
             return .requestPlain
         }

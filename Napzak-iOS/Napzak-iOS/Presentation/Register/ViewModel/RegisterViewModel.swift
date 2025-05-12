@@ -9,6 +9,11 @@ import SwiftUI
 
 import os
 
+enum RegisterViewType {
+    case initialRegister
+    case editProduct(productID: Int, tradeType: TradeType)
+}
+
 @MainActor
 final class RegisterViewModel: ObservableObject {
     
@@ -30,9 +35,15 @@ final class RegisterViewModel: ObservableObject {
     @Published var isCompleted: Bool = false
     @Published var genreList: [GenreNameModel] = []
     
+    //MARK: - Properties
+    
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Register")
     
-    init()  {
+    private let type: RegisterViewType
+    
+    init(viewType: RegisterViewType)  {
+        self.type = viewType
+        
         imagePickerManager.onImageSelectionCompleted = { [weak self] images in
             self?.model.images = images
         }
@@ -40,6 +51,22 @@ final class RegisterViewModel: ObservableObject {
         Task {
             await getAllGenre()
         }
+        
+        switch viewType {
+        case .initialRegister:
+            print("dddd")
+        case .editProduct(let productId, let tradeType):
+            self.productId = productId
+            Task {
+                switch tradeType {
+                case .sell:
+                    await getSellProductInfoForEdit(productId: productId)
+                case .buy:
+                    await getBuyProductInfoForEdit(productId: productId)
+                }
+            }
+        }
+
     }
 }
 
@@ -82,6 +109,93 @@ extension RegisterViewModel {
             
         case .failure(let error):
             logger.error("getSearchGenreName failed: \(error.localizedDescription)")
+        }
+    }
+    
+    func getSellProductInfoForEdit(productId: Int) async {
+        let result = await NetworkService.shared.productService.getSellProductInfoForEdit(productId: productId)
+
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getSellProductInfoForEdit: No data received")
+                return
+            }
+
+            let imageUrls = data.productPhotoList.map { $0.photoUrl }
+
+            do {
+                var images = [UIImage]()
+                var imageNames = [String]()
+
+                for url in imageUrls {
+                    let image = try await loadImage(from: url)
+                    images.append(image)
+                    imageNames.append(UUID().uuidString)
+                }
+
+                imagePickerManager.selectedImages = images
+                imagePickerManager.imageNameList = imageNames
+                self.model.images = images
+                self.model.title = data.title
+                self.model.description = data.description
+                self.model.price = String(data.price)
+                self.model.genre = data.genreName
+                self.model.genreId = data.genreId
+                self.model.productCondition = data.productCondition
+                self.model.isDeliveryIncluded = data.isDeliveryIncluded
+                self.model.standardDeliveryFee = String(data.standardDeliveryFee)
+                self.model.halfDeliveryFee = String(data.halfDeliveryFee)
+                self.normalDelivery = data.standardDeliveryFee != 0
+                self.halfDelivery = data.halfDeliveryFee != 0
+
+            } catch {
+                logger.error("이미지 로드 중 오류 발생: \(error.localizedDescription)")
+            }
+
+        case .failure(let error):
+            logger.error("getSellProductInfoForEdit failed: \(error.localizedDescription)")
+        }
+    }
+
+    func getBuyProductInfoForEdit(productId: Int) async {
+        let result = await NetworkService.shared.productService.getBuyProductInfoForEdit(productId: productId)
+
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getBuyProductInfoForEdit: No data received")
+                return
+            }
+            
+            let imageUrls = data.productPhotoList.map { $0.photoUrl }
+
+            do {
+                var images = [UIImage]()
+                var imageNames = [String]()
+
+                for url in imageUrls {
+                    let image = try await loadImage(from: url)
+                    images.append(image)
+                    imageNames.append(UUID().uuidString)
+                }
+
+                imagePickerManager.selectedImages = images
+                imagePickerManager.imageNameList = imageNames
+                self.model.images = images
+                self.model.title = data.title
+                self.model.description = data.description
+                self.model.price = String(data.price)
+                self.model.genre = data.genreName
+                self.model.genreId = data.genreId
+                self.model.isPriceNegotiable = data.isPriceNegotiable ?? false
+
+            } catch {
+                logger.error("이미지 로드 중 오류 발생: \(error.localizedDescription)")
+            }
+
+        case .failure(let error):
+            logger.error("getBuyProductInfoForEdit failed: \(error.localizedDescription)")
         }
     }
     
@@ -162,7 +276,7 @@ extension RegisterViewModel {
     
     // MARK: - POST Register
     
-    func postSellRegister() async {
+    func sellRegister() async {
         // presigned URL 요청
         guard await getPresignedUrl() else { return }
         
@@ -191,27 +305,40 @@ extension RegisterViewModel {
             title: model.title,
             description: model.description,
             price: model.price.convertInt(),
-            productCondition: model.productCondition?.rawString ?? "",
+            productCondition: model.productCondition?.rawValue ?? "",
             isDeliveryIncluded: model.isDeliveryIncluded ?? true,
             standardDeliveryFee: model.standardDeliveryFee.convertInt(),
             halfDeliveryFee: model.halfDeliveryFee.convertInt()
         )
         
-        // POST 요청
-        let result = await NetworkService.shared.productService.postSellRegister(
-            sellRegisterProduct: dto
-        )
-        
-        switch result {
-        case .success(let response):
-            logger.info("✅ 판매 등록 성공: \(response.data!.productId)")
-            self.productId = response.data?.productId
-        case .failure(let error):
-            logger.error("❌ 판매 등록 실패: \(error.localizedDescription)")
+        switch type {
+        case .initialRegister:
+            let result = await NetworkService.shared.productService.postSellRegister(
+                sellRegisterProduct: dto
+            )
+            
+            switch result {
+            case .success(let response):
+                logger.info("✅ 판매 등록 성공: \(response.data!.productId)")
+                self.productId = response.data?.productId
+            case .failure(let error):
+                logger.error("❌ 판매 등록 실패: \(error.localizedDescription)")
+            }
+        case .editProduct:
+            let result = await NetworkService.shared.productService.putSellProduct(productId: productId!, requestBody: dto)
+            
+            switch result {
+            case .success(let response):
+                logger.info("✅ 상품 수정 성공: \(response.data!.productId)")
+                self.productId = response.data?.productId
+            case .failure(let error):
+                logger.error("❌ 상품 수정 실패: \(error.localizedDescription)")
+            }
+
         }
     }
     
-    func postBuyRegister() async {
+    func buyRegister() async {
         // presigned URL 요청
         guard await getPresignedUrl() else { return }
         
@@ -243,17 +370,29 @@ extension RegisterViewModel {
             isPriceNegotiable: model.isPriceNegotiable
         )
         
-        // POST 요청
-        let result = await NetworkService.shared.productService.postBuyRegister(
-            buyRegisterProduct: dto
-        )
-        
-        switch result {
-        case .success(let response):
-            logger.info("✅ 구매 등록 성공: \(response.data!.productId)")
-            self.productId = response.data?.productId
-        case .failure(let error):
-            logger.error("❌ 구매 등록 실패: \(error.localizedDescription)")
+        switch type {
+        case .initialRegister:
+            let result = await NetworkService.shared.productService.postBuyRegister(
+                buyRegisterProduct: dto
+            )
+            
+            switch result {
+            case .success(let response):
+                logger.info("✅ 구매 등록 성공: \(response.data!.productId)")
+                self.productId = response.data?.productId
+            case .failure(let error):
+                logger.error("❌ 구매 등록 실패: \(error.localizedDescription)")
+            }
+        case .editProduct:
+            let result = await NetworkService.shared.productService.putBuyProduct(productId: productId!, requestBody: dto)
+            
+            switch result {
+            case .success(let response):
+                logger.info("✅ 상품 수정 성공: \(response.data!.productId)")
+                self.productId = response.data?.productId
+            case .failure(let error):
+                logger.error("❌ 상품 수정 실패: \(error.localizedDescription)")
+            }
         }
     }
     
@@ -276,6 +415,24 @@ extension RegisterViewModel {
         
         return simplifiedUrl
     }
+    
+    func loadImage(from urlString: String) async throws -> UIImage {
+        guard let url = URL(string: urlString) else {
+            throw URLError(.badURL)
+        }
+        
+        let (data, response) = try await URLSession.shared.data(from: url)
+        
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw URLError(.badServerResponse)
+        }
+
+        guard let image = UIImage(data: data) else {
+            throw URLError(.cannotDecodeContentData)
+        }
+
+        return image
+    }
 }
 
 
@@ -293,7 +450,7 @@ extension RegisterViewModel {
     }
     
     var sellRegisterValidate: Bool {
-        let conditionValid = model.productCondition?.rawString.isEmpty == false
+        let conditionValid = model.productCondition?.rawValue.isEmpty == false
         return conditionValid && deliveryValidate
     }
     

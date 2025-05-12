@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct RegisterSearchGenre: View {
-    @EnvironmentObject private var navigationRouter: NavigationRouter
-    
+    @ObservedObject var registerRouter: RegisterNavigationRouter
+
     @Environment(\.openURL) var openURL
     
     @Binding var genreSearchText: String
@@ -33,7 +33,7 @@ extension RegisterSearchGenre {
     private var headerView: some View {
         VStack(alignment: .leading, spacing: 0){
             Button {
-                navigationRouter.pop()
+                registerRouter.pop()
             } label: {
                 Image(.iconBack)
             }
@@ -73,7 +73,7 @@ extension RegisterSearchGenre {
                         Button {
                             genre = selectedGenre.name
                             genreId = selectedGenre.id
-                            navigationRouter.pop()
+                            registerRouter.pop()
                         } label: {
                             Text("\(selectedGenre.name)")
                                 .applyNapzakFont(

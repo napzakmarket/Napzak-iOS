@@ -17,9 +17,12 @@ struct ProductDetailView: View {
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
 
-    @State private var currentPage = 1
+    @State private var currentPage = 0
     @State private var isReportModalPresented = false
     @State private var isOwnerOptionsModalPresented = false
+    @State private var isDeleteAlertPresented = false
+    @State private var statusToastStyle: StatusToastStyle = .statusChanged
+    @State private var isRegisterViewPresented = false
 
     //MARK: - Properties
     
@@ -37,7 +40,7 @@ struct ProductDetailView: View {
                 Spacer()
                 if !(viewModel.product.productDetail.isOwnedByCurrentUser) {
                     VStack(spacing: 52) {
-                        if viewModel.showToast {
+                        if viewModel.showInterestToast {
                             ToastMessageView(
                                 message: "찜한 상품에 추가되었어요!",
                                 style: .success
@@ -81,17 +84,86 @@ struct ProductDetailView: View {
                 ProductOwnerOptionsModalView(
                     isOwnerOptionsModalPresented: $isOwnerOptionsModalPresented,
                     currentStatus: $viewModel.product.productDetail.tradeStatus,
-                    tradeType: viewModel.product.productDetail.tradeType
+                    currentToastStyle: $statusToastStyle,
+                    tradeType: viewModel.product.productDetail.tradeType,
+                    onEditProduct: {
+                        isRegisterViewPresented = true
+                    },
+                    onChangeStatus: {
+                        Task {
+                            await viewModel.changeTradeStatus()
+                        }
+                    },
+                    onDeletePtoduct: {
+                        isDeleteAlertPresented = true
+                    }
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
             }
+            
+            if isDeleteAlertPresented {
+                ZStack(alignment: .center) {
+                    Color.napzakTransparency(.transBlack)
+                        .onTapGesture {
+                            withAnimation {
+                                isDeleteAlertPresented = false
+                            }
+                        }
+                        .transition(.opacity)
+                    
+                    NZAlertView(
+                        style: .warning,
+                        titleMessage: "상품을 정말 삭제할까요?",
+                        subTitleMessage: "한번 삭제한 상품은 다시 되돌릴 수 없어요.",
+                        confirmText: "예",
+                        cancelText: "아니요",
+                        onConfirm: {
+                            isDeleteAlertPresented = false
+                            Task {
+                                await viewModel.deleteProduct()
+                            }
+                        },
+                        onCancel: {
+                            isDeleteAlertPresented = false
+                        }
+                    )
+                }
+                .zIndex(3)
+            }
+            
+            if viewModel.showStatusToast {
+                ProductDetailToastView(
+                    style: statusToastStyle,
+                    tradeStatus: statusString(status: viewModel.product.productDetail.tradeStatus)
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(3)
+                .padding(.bottom, 44)
+            }
         }
         .navigationBarHidden(true)
         .ignoresSafeArea()
-        .animation(.spring(), value: viewModel.showToast)
+        .animation(.spring(), value: viewModel.showInterestToast)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.showStatusToast)
         .animation(.easeInOut(duration: 0.3), value: isReportModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isOwnerOptionsModalPresented)
+        .fullScreenCover(isPresented: $isRegisterViewPresented) {
+            switch viewModel.product.productDetail.tradeType {
+            case .sell:
+                SellRegisterView(
+                    viewModel: RegisterViewModel(viewType: .editProduct(productID: viewModel.product.productDetail.id,
+                                                                        tradeType: viewModel.product.productDetail.tradeType)),
+                    isRegisterTabSelected: .constant(false)
+                )
+            case .buy:
+                BuyRegisterView(
+                    viewModel: RegisterViewModel(viewType: .editProduct(productID: viewModel.product.productDetail.id,
+                                                                        tradeType: viewModel.product.productDetail.tradeType)),
+                    isRegisterTabSelected: .constant(false)
+                )
+            }
+        }
     }
 }
 
@@ -147,6 +219,7 @@ extension ProductDetailView {
                     marketInfo
                 }
                 .background(Color.napzakGrayScale(.gray50))
+                .frame(maxWidth: .infinity)
             }
         }
     }
@@ -154,7 +227,7 @@ extension ProductDetailView {
     private var productImagePageView: some View {
         ZStack(alignment: .bottomTrailing) {
             TabView(selection: $currentPage) {
-                ForEach(viewModel.product.productPhotoList) { photo in
+                ForEach(Array(viewModel.product.productPhotoList.enumerated()), id: \.1.id) { index, photo in
                     Group {
                         if let url = URL(string: photo.photoUrl) {
                             KFImage(url)
@@ -172,13 +245,14 @@ extension ProductDetailView {
                                 .fill(Color.napzakGrayScale(.gray300))
                         }
                     }
+                    .tag(index)
                 }
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             .frame(width: screenWidth, height: screenWidth * 16 / 15)
             .padding(.bottom, 22)
 
-            Text("\(currentPage)/\(viewModel.product.productPhotoList.count)")
+            Text("\(currentPage + 1)/\(viewModel.product.productPhotoList.count)")
                 .applyNapzakFont(.caption5Regular10)
                 .foregroundStyle(Color.napzakGrayScale(.white))
                 .frame(height: 14)
@@ -283,6 +357,7 @@ extension ProductDetailView {
     
     private var productDescription: some View {
         ZStack(alignment: .top) {
+            Color.napzakGrayScale(.white)
             Text("\(viewModel.product.productDetail.description)".forceCharWrapping)
                 .applyNapzakFont(.caption3Regular12)
                 .foregroundStyle(Color.napzakGrayScale(.black))
@@ -290,10 +365,7 @@ extension ProductDetailView {
                 .padding(.horizontal, 28)
                 .padding(.top, 32)
                 .padding(.bottom, 16)
-                .background(
-                    Color.napzakGrayScale(.white)
-                        .frame(maxWidth: .infinity)
-                )
+                .frame(maxWidth: .infinity, alignment: .leading)
             shadowView
                 .frame(height: 16)
         }
@@ -478,6 +550,17 @@ private extension ProductDetailView {
         return viewModel.product.productDetail.tradeType == .sell
         ? "\(String(price).convertPrice(maxPrice: maxPrice))원"
         : "\(String(price).convertPrice(maxPrice: maxPrice))원대"
+    }
+    
+    func statusString(status: TradeStatus) -> String {
+        switch status {
+        case .beforeTrade:
+            return "\(viewModel.product.productDetail.tradeType.title)중"
+        case .reserved:
+            return "예약중"
+        case .completed:
+            return "\(viewModel.product.productDetail.tradeType.title)완료"
+        }
     }
 }
 

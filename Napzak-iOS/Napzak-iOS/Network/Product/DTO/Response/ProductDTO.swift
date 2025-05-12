@@ -15,8 +15,8 @@ struct ProductDTO: Decodable {
     let price: Int
     let uploadTime: String
     var isInterested: Bool
-    let tradeType: String
-    let tradeStatus: String
+    let tradeType: TradeType
+    let tradeStatus: TradeStatus
     let isPriceNegotiable: Bool?
     let isOwnedByCurrentUser: Bool
     let interestCount: Int

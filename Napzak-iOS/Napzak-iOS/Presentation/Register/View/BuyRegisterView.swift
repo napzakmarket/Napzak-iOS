@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct BuyRegisterView: View {
-    @EnvironmentObject private var navigationRouter: NavigationRouter
+    @StateObject private var registerRouter = RegisterNavigationRouter()
+    @StateObject var viewModel: RegisterViewModel
+    
     @Binding var isRegisterTabSelected: Bool
-
-    @StateObject private var viewModel = RegisterViewModel()
     
     var body: some View {
-        NavigationStack(path: $navigationRouter.path) {
+        NavigationStack(path: $registerRouter.path) {
             VStack(spacing: 0){
                 BuyRegisterHeader()
                 
@@ -32,18 +32,17 @@ struct BuyRegisterView: View {
             .frame(maxWidth: .infinity)
             .scrollIndicators(.hidden)
             .background(Color.napzakGrayScale(.gray10))
-            .navigationDestination(for: Route.self) { route in
+            .navigationDestination(for: RegisterRoute.self) { route in
                 switch route {
                 case .registerSearchGenre:
                     RegisterSearchGenre(
+                        registerRouter: registerRouter,
                         genreSearchText: $viewModel.genreSearchText,
                         isCompleted: $viewModel.isCompleted,
                         genreList: $viewModel.genreList,
                         genre: $viewModel.model.genre,
                         genreId: $viewModel.model.genreId
                     )
-                default:
-                    EmptyView()
                 }
             }
         }
@@ -69,7 +68,7 @@ extension BuyRegisterView {
                 .padding(.bottom, 21)
                 .background(.white)
                 .onTapGesture {
-                    navigationRouter.push(next: .registerSearchGenre)
+                    registerRouter.push(next: .registerSearchGenre)
                 }
             
             Rectangle()
@@ -117,7 +116,7 @@ extension BuyRegisterView {
             
             Button {
                 Task {
-                    await viewModel.postBuyRegister()
+                    await viewModel.buyRegister()
                 }
             } label: {
                 Text("등록하기")

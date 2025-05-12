@@ -12,16 +12,18 @@ struct ProductOwnerOptionsModalView: View {
     //MARK: - Property Wrappers
     
     @State private var isChangeStatusButtonSelected = false
-    @State private var currentStatusString = ""
-    @State private var currentToastStyle: ProductDetailToastStyle = .statusChanged
-    @State private var showToast = false
-
+    
     @Binding var isOwnerOptionsModalPresented: Bool
     @Binding var currentStatus: TradeStatus
-    
+    @Binding var currentToastStyle: StatusToastStyle
+
     //MARK: - Properties
     
     let tradeType: TradeType
+    let onEditProduct: () -> Void
+    let onChangeStatus: () -> Void
+    let onDeletePtoduct: () -> Void
+
     private let tradeStatuses = TradeStatus.allCases
     
     //MARK: - Main Body
@@ -43,16 +45,6 @@ struct ProductOwnerOptionsModalView: View {
             }
             .padding(.top, 17)
             .padding(.horizontal, 28)
-            
-            if showToast {
-                ProductDetailToastView(
-                    style: currentToastStyle,
-                    tradeStatus: currentStatusString
-                )
-                .transition(.move(edge: .bottom).combined(with: .opacity))
-                .zIndex(1)
-                .padding(.bottom, 44)
-            }
         }
         .frame(height: 380)
         .background(Color.napzakGrayScale(.white))
@@ -67,7 +59,6 @@ struct ProductOwnerOptionsModalView: View {
                     }
                 }
         )
-        .animation(.easeInOut(duration: 0.3), value: showToast)
     }
 }
 
@@ -78,6 +69,8 @@ private extension ProductOwnerOptionsModalView {
     var editButton: some View {
         Button {
             isChangeStatusButtonSelected = false
+            isOwnerOptionsModalPresented = false
+            onEditProduct()
         } label: {
             HStack(spacing: 6) {
                 Image(.imgEditModal)
@@ -115,13 +108,10 @@ private extension ProductOwnerOptionsModalView {
                 HStack(alignment: .center, spacing: 4) {
                     Button {
                         currentStatus = status
-                        currentStatusString = statusString(status: status)
                         currentToastStyle = .statusChanged
-                        Task {
-                            showToast = true
-                            try? await Task.sleep(for: .seconds(2))
-                            showToast = false
-                        }
+                        isChangeStatusButtonSelected = false
+                        isOwnerOptionsModalPresented = false
+                        onChangeStatus()
                     } label: {
                         Image(currentStatus == status ? .imgRadioSelected : .imgRadioDefault)
                         Text(statusString(status: status))
@@ -139,13 +129,9 @@ private extension ProductOwnerOptionsModalView {
     
     var deleteButton: some View {
         Button {
-            Task {
-                showToast = true
-                try? await Task.sleep(for: .seconds(2))
-                showToast = false
-            }
             isChangeStatusButtonSelected = false
             currentToastStyle = .deleteProduct
+            onDeletePtoduct()
         } label: {
             HStack(spacing: 6) {
                 Image(.imgDeleteModal)
@@ -173,21 +159,4 @@ private extension ProductOwnerOptionsModalView {
             return "\(tradeType.title)완료"
         }
     }
-}
-
-#Preview {
-    struct PreviewContainer: View {
-        @State private var isViewerOptionsPresented = true
-        @State private var currentStatus: TradeStatus = .beforeTrade
-        
-        var body: some View {
-            ProductOwnerOptionsModalView(
-                isOwnerOptionsModalPresented: $isViewerOptionsPresented,
-                currentStatus: $currentStatus,
-                tradeType: .buy
-            )
-        }
-    }
-    
-    return PreviewContainer()
 }

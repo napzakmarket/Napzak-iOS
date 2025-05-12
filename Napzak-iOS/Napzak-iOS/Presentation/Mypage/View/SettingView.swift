@@ -27,32 +27,33 @@ struct SettingView: View {
             }
             
             if logoutButtonTapped {
-                Color.napzakTransparency(.transBlack)
-                    .onTapGesture {
-                        withAnimation {
+                ZStack(alignment: .center){
+                    Color.napzakTransparency(.transBlack)
+                        .onTapGesture {
+                            withAnimation {
+                                logoutButtonTapped = false
+                            }
+                        }
+                        .transition(.opacity)
+                        .zIndex(1)
+                    
+                    NZAlertView(
+                        style: .plain,
+                        titleMessage: "로그아웃 하시겠어요?",
+                        confirmText: "예",
+                        cancelText: "아니요",
+                        onConfirm: {
+                            Task {
+                                await viewModel.logOut()
+                            }
+                            logoutButtonTapped = false
+                        },
+                        onCancel: {
                             logoutButtonTapped = false
                         }
-                    }
-                    .transition(.opacity)
-                    .zIndex(1)
-                
-                NZAlertView(
-                    message: "로그아웃 하시겠어요?",
-                    confirmText: "예",
-                    cancelText: "아니요",
-                    onConfirm: {
-                        Task {
-                            await viewModel.logOut()
-                        }
-                        logoutButtonTapped = false
-                    },
-                    onCancel: {
-                        logoutButtonTapped = false
-                    }
-                )
-                .padding(.bottom, 120)
-                .padding(.horizontal, 45)
-                .zIndex(2)
+                    )
+                    .zIndex(2)
+                }
             }
         }
         .ignoresSafeArea()
