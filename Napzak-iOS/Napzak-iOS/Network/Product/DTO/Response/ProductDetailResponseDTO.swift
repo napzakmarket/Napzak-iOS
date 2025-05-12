@@ -12,7 +12,7 @@ typealias ProductDetailResponseDTO = BaseResponseDTO<ProductDetailDTO>
 struct ProductDetailDTO: Decodable {
     var isInterested: Bool
     var productDetail: ProductDetailInfoDTO
-    let productPhotoList: [ProductPhotoInfoDTO]
+    let productPhotoList: [PhotoInfoDTO]
     let storeInfo: StoreInfoDTO
 }
 
@@ -35,7 +35,7 @@ struct ProductDetailInfoDTO: Decodable {
     let chatCount: Int
 }
 
-struct ProductPhotoInfoDTO: Decodable {
+struct PhotoInfoDTO: Decodable {
     let photoId: Int
     let photoUrl: String
     let sequence: Int

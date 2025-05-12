@@ -105,7 +105,7 @@ struct ProductPhotoInfo: Identifiable {
     }
     
     ///init for decoding
-    init(dto: ProductPhotoInfoDTO) {
+    init(dto: PhotoInfoDTO) {
         self.id = dto.photoId
         self.photoUrl = dto.photoUrl
         self.sequence = dto.sequence
