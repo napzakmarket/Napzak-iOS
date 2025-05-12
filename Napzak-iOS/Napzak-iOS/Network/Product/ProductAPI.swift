@@ -31,6 +31,8 @@ enum ProductAPI {
     case getBuyProduct(productFetchOption: ProductFetchOption)
     case getProductDetailInfo(productId: Int)
     case getSearchRecommendation
+    case getSellProductInfoForEdit(productId: Int)
+    case getBuyProductInfoForEdit(productId: Int)
     case patchTradeStatus(productId: Int, body: ChangeTradeStatusRequestDTO)
     case deleteProduct(productId: Int)
 }
@@ -53,8 +55,10 @@ extension ProductAPI: BaseTargetType {
             return "products/sell"
         case .buyRegister, .getBuyProduct:
             return "products/buy"
-        case .getProductDetailInfo(productId: let productId), .patchTradeStatus(productId: let productId, _), .deleteProduct(productId: let productId):
+        case .getProductDetailInfo(productId: let productId), .patchTradeStatus(let productId, _), .deleteProduct(let productId):
             return "products/\(productId)"
+        case .getSellProductInfoForEdit(let productId), .getBuyProductInfoForEdit(let productId):
+            return "products/sell/modify/\(productId)"
         case .getSearchRecommendation:
             return "products/search/recommend"
         }

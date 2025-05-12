@@ -5,7 +5,7 @@
 //  Created by 조혜린 on 5/12/25.
 //
 
-typealias EditSellProductResponseDTO = BaseResponseDTO<SellRegisterResponseData>
+typealias EditSellProductResponseDTO = BaseResponseDTO<EditSellProductDTO>
 typealias EditBuyProductResponseDTO = BaseResponseDTO<EditBuyProductDTO>
 
 struct EditSellProductDTO: Decodable {
@@ -14,7 +14,7 @@ struct EditSellProductDTO: Decodable {
     let genreName: String
     let title: String
     let description: String
-    let productCondition: String
+    let productCondition: ProductCondition
     let price: Int
     let isDeliveryIncluded: Bool
     let standardDeliveryFee: Int
@@ -29,6 +29,6 @@ struct EditBuyProductDTO: Decodable {
     let title: String
     let description: String
     let price: Int
-    let isPriceNegotiable: Bool
+    let isPriceNegotiable: Bool?
     let productPhotoList: [PhotoInfoDTO]
 }

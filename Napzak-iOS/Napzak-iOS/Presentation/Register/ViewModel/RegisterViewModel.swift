@@ -9,6 +9,11 @@ import SwiftUI
 
 import os
 
+enum RegisterViewType {
+    case initialRegister
+    case editProduct(productID: Int, tradeType: TradeType)
+}
+
 @MainActor
 final class RegisterViewModel: ObservableObject {
     
@@ -32,7 +37,7 @@ final class RegisterViewModel: ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Register")
     
-    init()  {
+    init(viewType: RegisterViewType)  {
         imagePickerManager.onImageSelectionCompleted = { [weak self] images in
             self?.model.images = images
         }
@@ -40,6 +45,21 @@ final class RegisterViewModel: ObservableObject {
         Task {
             await getAllGenre()
         }
+        
+        switch viewType {
+        case .initialRegister:
+            print("dddd")
+        case .editProduct(let productId, let tradeType):
+            Task {
+                switch tradeType {
+                case .sell:
+                    await getSellProductInfoForEdit(productId: productId)
+                case .buy:
+                    await getBuyProductInfoForEdit(productId: productId)
+                }
+            }
+        }
+
     }
 }
 
@@ -82,6 +102,53 @@ extension RegisterViewModel {
             
         case .failure(let error):
             logger.error("getSearchGenreName failed: \(error.localizedDescription)")
+        }
+    }
+    
+    func getSellProductInfoForEdit(productId: Int) async {
+        let result = await NetworkService.shared.productService.getSellProductInfoForEdit(productId: productId)
+
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getSellProductInfoForEdit: No data received")
+                return
+            }
+            self.model = RegisterModel(images: [],
+                                       title: data.title,
+                                       description: data.description,
+                                       price: String(data.price),
+                                       genre: data.genreName,
+                                       genreId: data.genreId,
+                                       productCondition: data.productCondition,
+                                       isDeliveryIncluded: data.isDeliveryIncluded,
+                                       standardDeliveryFee: String(data.standardDeliveryFee),
+                                       halfDeliveryFee: String(data.halfDeliveryFee))
+            
+        case .failure(let error):
+            logger.error("getSellProductInfoForEdit failed: \(error.localizedDescription)")
+        }
+    }
+    
+    func getBuyProductInfoForEdit(productId: Int) async {
+        let result = await NetworkService.shared.productService.getBuyProductInfoForEdit(productId: productId)
+
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getBuyProductInfoForEdit: No data received")
+                return
+            }
+            self.model = RegisterModel(images: [],
+                                       title: data.title,
+                                       description: data.description,
+                                       price: String(data.price),
+                                       genre: data.genreName,
+                                       genreId: data.genreId,
+                                       isPriceNegotiable: data.isPriceNegotiable ?? false)
+            
+        case .failure(let error):
+            logger.error("getBuyProductInfoForEdit failed: \(error.localizedDescription)")
         }
     }
     

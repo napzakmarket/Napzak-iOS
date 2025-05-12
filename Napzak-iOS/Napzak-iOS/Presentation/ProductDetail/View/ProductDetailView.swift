@@ -22,6 +22,7 @@ struct ProductDetailView: View {
     @State private var isOwnerOptionsModalPresented = false
     @State private var isDeleteAlertPresented = false
     @State private var statusToastStyle: StatusToastStyle = .statusChanged
+    @State private var isRegisterViewPresented = false
 
     //MARK: - Properties
     
@@ -85,6 +86,9 @@ struct ProductDetailView: View {
                     currentStatus: $viewModel.product.productDetail.tradeStatus,
                     currentToastStyle: $statusToastStyle,
                     tradeType: viewModel.product.productDetail.tradeType,
+                    onEditProduct: {
+                        isRegisterViewPresented = true
+                    },
                     onChangeStatus: {
                         Task {
                             await viewModel.changeTradeStatus()
@@ -144,6 +148,22 @@ struct ProductDetailView: View {
         .animation(.easeInOut(duration: 0.3), value: viewModel.showStatusToast)
         .animation(.easeInOut(duration: 0.3), value: isReportModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isOwnerOptionsModalPresented)
+        .fullScreenCover(isPresented: $isRegisterViewPresented) {
+            switch viewModel.product.productDetail.tradeType {
+            case .sell:
+                SellRegisterView(
+                    viewModel: RegisterViewModel(viewType: .editProduct(productID: viewModel.product.productDetail.id,
+                                                                        tradeType: viewModel.product.productDetail.tradeType)),
+                    isRegisterTabSelected: .constant(false)
+                )
+            case .buy:
+                BuyRegisterView(
+                    viewModel: RegisterViewModel(viewType: .editProduct(productID: viewModel.product.productDetail.id,
+                                                                        tradeType: viewModel.product.productDetail.tradeType)),
+                    isRegisterTabSelected: .constant(false)
+                )
+            }
+        }
     }
 }
 
