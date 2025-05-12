@@ -112,8 +112,14 @@ struct NZTabBarView: View {
                 case .SettingView:
                     SettingView()
 
-                case .withDrawView:
-                    WithDrawView()
+                case .withDrawSelectReasonView:
+                    WithDrawSelectReasonView()
+                    
+                case .withDrawWriteReasonView:
+                    WithDrawWriteReasonView()
+                    
+                case .withDrawConfirmView:
+                    WithDrawConfirmView()
                 }
             }
         }

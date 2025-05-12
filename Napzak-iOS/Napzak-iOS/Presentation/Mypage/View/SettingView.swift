@@ -201,7 +201,7 @@ extension SettingView {
             Button {
                 // 탈퇴 뷰 이동
                 print("탈퇴 뷰 이동")
-                navigationRouter.push(next: .withDrawView)
+                navigationRouter.push(next: .withDrawSelectReasonView)
             } label: {
                 Text("탈퇴하기")
                     .applyNapzakFont(.body1Bold16)

@@ -1,5 +1,5 @@
 //
-//  WithDrawView.swift
+//  WithDrawSelectReasonView.swift
 //  Napzak-iOS
 //
 //  Created by OneTen on 5/11/25.
@@ -7,37 +7,13 @@
 
 import SwiftUI
 
-struct WithdrawReasonMessage {
-    static let hardToFindGoods = "원하는 굿즈를 찾기 어려워요"
-    static let poorSales = "상품이 잘 안팔려요"
-    static let inconvenientApp = "앱이 사용하기 불편해요"
-    static let encounteredRudeUser = "비매너 사용자를 만났어요"
-    static let wantNewAccount = "새 마켓(계정)을 만들고 싶어요"
-    static let privacyConcerns = "개인정보 보호가 걱정돼요"
-    static let noLongerInterested = "더 이상 덕질 활동을 하지 않아요"
-    static let other = "다른 이유가 있어요"
-}
-
-struct WithDrawView: View {
+struct WithDrawSelectReasonView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
-    
+
+    @StateObject private var viewModel = WithDrawViewModel.shared
+
     @State var reasonExpanded: Bool = false
-    @State var withdrawTitle: String = "원하는 굿즈를 찾기 어려워요"
-    @State var withdrawDescription: String = ""
-    
-    var withDrawReasons: [String] {
-        return [
-            WithdrawReasonMessage.hardToFindGoods,
-            WithdrawReasonMessage.poorSales,
-            WithdrawReasonMessage.inconvenientApp,
-            WithdrawReasonMessage.encounteredRudeUser,
-            WithdrawReasonMessage.wantNewAccount,
-            WithdrawReasonMessage.privacyConcerns,
-            WithdrawReasonMessage.noLongerInterested,
-            WithdrawReasonMessage.other
-        ]
-    }
-    
+
     var body: some View {
         VStack {
             ScrollView {
@@ -57,15 +33,13 @@ struct WithDrawView: View {
         .ignoresSafeArea()
         .background(.white)
         .navigationBarHidden(true)
-        
     }
 }
 
-extension WithDrawView {
+extension WithDrawSelectReasonView {
     private var withDrawHeader: some View {
         VStack(alignment: .leading) {
             Button {
-                // 네비게이션 pop으로 교체
                 navigationRouter.pop()
             } label: {
                 HStack(alignment: .center, spacing: 0) {
@@ -129,13 +103,12 @@ extension WithDrawView {
                 .padding(.horizontal, 28)
                 .padding(.bottom, 20)
         }
-        
     }
     
     private var selectReasonSection: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack{
-                Text(withdrawTitle)
+                Text(viewModel.withdrawReasonTitle)
                     .applyNapzakFont(.caption1SemiBold12)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
                     .frame(height: 15)
@@ -164,17 +137,17 @@ extension WithDrawView {
             if reasonExpanded {
                 VStack(alignment: .leading, spacing: 16) {
                     ForEach(
-                        withDrawReasons,
+                        viewModel.withDrawReasons,
                         id: \.self
                     ) { reason in
                         Button(action: {
-                            withdrawTitle = reason
+                            viewModel.withdrawReasonTitle = reason
                             reasonExpanded = false
                         }) {
                             Text(reason)
                                 .applyNapzakFont(
-                                    reason == withdrawTitle ? .caption1SemiBold12 : .caption2Medium12)
-                                .foregroundColor(reason == withdrawTitle ? Color
+                                    reason == viewModel.withdrawReasonTitle ? .caption1SemiBold12 : .caption2Medium12)
+                                .foregroundColor(reason == viewModel.withdrawReasonTitle ? Color
                                     .napzakPrimary(.purple500) : Color
                                     .napzakGrayScale(.gray300))
                                 .frame(height: 15)
@@ -197,13 +170,14 @@ extension WithDrawView {
     
     private var nextButton: some View {
         Button {
+            navigationRouter.push(next: .withDrawWriteReasonView)
         } label: {
             Text("계속하기")
                 .applyNapzakFont(.body4Bold14)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity, minHeight: 50)
         }
-        .background(Color.napzakGrayScale(.gray100))
+        .background(Color.napzakPrimary(.purple500))
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .padding(.horizontal, 28)
         .padding(.bottom, 40)
@@ -211,5 +185,5 @@ extension WithDrawView {
 }
 
 #Preview {
-    WithDrawView()
+    WithDrawSelectReasonView()
 }
