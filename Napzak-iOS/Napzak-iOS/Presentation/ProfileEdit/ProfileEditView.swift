@@ -327,15 +327,16 @@ struct ProfileEditView: View {
                 }
             } label: {
                 Text("관심 장르 설정")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.napzakGrayScale(.gray50))
                     .applyNapzakFont(.body4Bold14)
                     .foregroundColor(Color.napzakGrayScale(.gray400))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    .background(Color.napzakGrayScale(.gray50))
                     .cornerRadius(14)
             }
         }
         .padding(.horizontal, 27)
+        .padding(.bottom,15)
     }
     
     private var confirmButton: some View {
@@ -343,17 +344,16 @@ struct ProfileEditView: View {
             viewModel.saveProfile()
         } label: {
             Text("확인")
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(viewModel.isPrimaryButtonEnabled ? Color.napzakPrimary(.purple500) : Color.napzakPrimary(.purple500).opacity(0.5))
                 .applyNapzakFont(.body4Bold14)
                 .foregroundColor(Color.napzakGrayScale(.white))
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .background(viewModel.isPrimaryButtonEnabled ? Color.napzakPrimary(.purple500) : Color.napzakPrimary(.purple500).opacity(0.5))
                 .cornerRadius(14)
         }
         .disabled(!viewModel.isPrimaryButtonEnabled)
         .padding(.bottom, 63)
         .padding(.horizontal, 27)
-        .padding(.top, 5)
     }
 }
 
