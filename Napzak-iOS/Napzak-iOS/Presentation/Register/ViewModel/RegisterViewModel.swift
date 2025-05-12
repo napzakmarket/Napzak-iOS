@@ -188,7 +188,7 @@ extension RegisterViewModel {
                 self.model.price = String(data.price)
                 self.model.genre = data.genreName
                 self.model.genreId = data.genreId
-                self.model.isPriceNegotiable = data.isPriceNegotiable
+                self.model.isPriceNegotiable = data.isPriceNegotiable ?? false
 
             } catch {
                 logger.error("이미지 로드 중 오류 발생: \(error.localizedDescription)")
