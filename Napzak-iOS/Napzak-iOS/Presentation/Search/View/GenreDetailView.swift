@@ -305,6 +305,7 @@ private extension GenreDetailView {
             }
         )
         .onTapGesture {
+            navigationRouter.push(next: .productDetailView(productId: product.wrappedValue.id))
             print("\(product.wrappedValue.id)번 상품")
         }
     }

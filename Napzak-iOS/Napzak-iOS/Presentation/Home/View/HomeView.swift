@@ -153,6 +153,7 @@ extension HomeView {
                             navigationRouter.push(next: .productDetailView(productId: viewModel.recommendedProducts[index].id))
                             print("\(viewModel.recommendedProducts[index].id)번 상품")
                         }
+                        .padding(.trailing, 20)
                     }
                 }
             }

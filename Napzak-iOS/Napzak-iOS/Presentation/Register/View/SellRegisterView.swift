@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct SellRegisterView: View {
+    @EnvironmentObject var navigationRouter: NavigationRouter
     @StateObject private var registerRouter = RegisterNavigationRouter()
     @StateObject var viewModel: RegisterViewModel
+    @Environment(\.dismiss) private var dismiss
+    @FocusState private var isKeyboardActive: Bool
     
     @Binding var isRegisterTabSelected: Bool
     
@@ -86,10 +89,12 @@ extension SellRegisterView {
             RegisterTitle(title: $viewModel.model.title)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 10)
+                .focused($isKeyboardActive)
             
             RegisterDescription(description: $viewModel.model.description)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 23)
+                .focused($isKeyboardActive)
             
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))
@@ -105,8 +110,9 @@ extension SellRegisterView {
                 addPrices: $viewModel.addPrices,
                 maxPrice: $viewModel.maxPrice
             )
-                .padding(.horizontal, 28)
-                .padding(.bottom, 30)
+            .padding(.horizontal, 28)
+            .padding(.bottom, 30)
+            .focused($isKeyboardActive)
             
             SellRegisterDelivery(
                 isDeliveryIncluded: $viewModel.model.isDeliveryIncluded,
@@ -115,7 +121,10 @@ extension SellRegisterView {
                 normalDelivery: $viewModel.normalDelivery,
                 halfDelivery: $viewModel.halfDelivery
             )
-                .padding(.horizontal, 28)
+            .padding(.horizontal, 28)
+        }
+        .onTapGesture {
+            isKeyboardActive = false
         }
     }
     
@@ -129,6 +138,10 @@ extension SellRegisterView {
                 //MARK: - 팔아요 등록
                 Task {
                     await viewModel.sellRegister()
+                    if let productId = viewModel.productId {
+                        dismiss()
+                        navigationRouter.push(next: .productDetailView(productId: productId))
+                    }
                 }
             } label: {
                 Text("등록하기")
