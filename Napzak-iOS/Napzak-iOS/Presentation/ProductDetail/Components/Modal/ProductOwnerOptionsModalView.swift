@@ -69,6 +69,7 @@ private extension ProductOwnerOptionsModalView {
     var editButton: some View {
         Button {
             isChangeStatusButtonSelected = false
+            isOwnerOptionsModalPresented = false
             onEditProduct()
         } label: {
             HStack(spacing: 6) {
@@ -109,6 +110,7 @@ private extension ProductOwnerOptionsModalView {
                         currentStatus = status
                         currentToastStyle = .statusChanged
                         isChangeStatusButtonSelected = false
+                        isOwnerOptionsModalPresented = false
                         onChangeStatus()
                     } label: {
                         Image(currentStatus == status ? .imgRadioSelected : .imgRadioDefault)
