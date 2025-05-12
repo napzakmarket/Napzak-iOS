@@ -355,10 +355,10 @@ struct MarketView: View {
                                     await viewModel.toggleLike(for: viewModel.products[i].id)
                                 }
                             })
-                            .onTapGesture {
-                                //TODO: - 화면 전환
-                                print("\(viewModel.products[i].id)번 상품")
-                            }
+                        .onTapGesture {
+                           navigationRouter.push(next: .productDetailView(productId: viewModel.products[i].id))
+                           print("\(viewModel.products[i].id)번 상품")
+                       }
                     }
                 }
                 .padding(.horizontal, 28)
