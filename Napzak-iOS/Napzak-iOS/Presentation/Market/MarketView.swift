@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import Kingfisher
+
 struct MarketView: View {
     
     @StateObject private var viewModel = MarketViewModel()
@@ -83,6 +85,9 @@ struct MarketView: View {
             viewModel.productFetchOption.sortOption = newValue
             viewModel.fetchProducts()
         }
+        .onAppear {
+            viewModel.fetchData()
+        }
     }
 
     private var navigationBarView: some View {
@@ -106,24 +111,15 @@ struct MarketView: View {
         VStack(spacing: 0) {
             ZStack {
                 if let storeCover = viewModel.storeDetail?.storeCover, !storeCover.isEmpty {
-                    AsyncImage(url: URL(string: storeCover)) { phase in
-                        switch phase {
-                        case .empty:
-                            Rectangle()
-                                .fill(Color.napzakGrayScale(.gray100))
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        case .failure:
-                            Rectangle()
-                                .fill(Color.napzakGrayScale(.gray100))
-                        @unknown default:
+                    KFImage(URL(string: storeCover))
+                        .placeholder {
                             Rectangle()
                                 .fill(Color.napzakGrayScale(.gray100))
                         }
-                    }
-                    .frame(height: 160)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 160)
+                        .clipped()
                 } else {
                     Rectangle()
                         .fill(Color.napzakGrayScale(.gray100))
@@ -131,31 +127,27 @@ struct MarketView: View {
                 }
                 
                 if let storePhoto = viewModel.storeDetail?.storePhoto, !storePhoto.isEmpty {
-                    AsyncImage(url: URL(string: storePhoto)) { phase in
-                        switch phase {
-                        case .empty:
+                    KFImage(URL(string: storePhoto))
+                        .placeholder {
                             Image("profile_market")
                                 .resizable()
+                                .aspectRatio(contentMode: .fill)
                                 .frame(width: 60, height: 60)
                                 .clipShape(Circle())
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                                .clipShape(Circle())
-                        case .failure:
-                            Image("profile_market")
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                                .clipShape(Circle())
-                        @unknown default:
-                            Image("profile_market")
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                                .clipShape(Circle())
+                                .overlay(
+                                    Circle()
+                                        .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
+                                )
                         }
-                    }
-                    .offset(y: 80)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 60, height: 60)
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle()
+                                .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
+                        )
+                        .offset(y: 80)
                 } else {
                     Image("profile_market")
                         .resizable()
@@ -211,7 +203,7 @@ struct MarketView: View {
 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 5) {
-                        if let genres = viewModel.storeDetail?.genrePreferenceList, !genres.isEmpty {
+                        if let genres = viewModel.storeDetail?.genrePreferences, !genres.isEmpty {
                             ForEach(genres, id: \.genreId) { genre in
                                 PlainChip(title: genre.genreName)
                             }
@@ -236,11 +228,33 @@ struct MarketView: View {
     
     private var tabAndFilterSectionView: some View {
         ZStack(alignment: .top) {
-            shadowBackground
-            
+            if viewModel.selectedTabIndex != 2 {
+                ZStack(alignment: .top) {
+                    Color.napzakGrayScale(.gray10)
+                    Color.napzakGrayScale(.white)
+                        .frame(height: 47)
+                        .shadow(color: .black.opacity(0.1), radius: 4, y: 2)
+                }
+                .frame(height: 103)
+                .clipped()
+            } else {
+                Color.napzakGrayScale(.white)
+                    .frame(height: 47)
+                    .overlay(
+                        Rectangle()
+                            .fill(Color.black.opacity(0.1))
+                            .frame(height: 1),
+                        alignment: .bottom
+                    )
+            }
+
             VStack(alignment: .leading, spacing: 0) {
-                NZSegmentedControl(selectedTabIndex: $viewModel.selectedTabIndex, tabs: ["팔아요", "구해요", "리뷰"], spacing: 16)
-                
+                NZSegmentedControl(
+                    selectedTabIndex: $viewModel.selectedTabIndex,
+                    tabs: ["팔아요", "구해요", "리뷰"],
+                    spacing: 16
+                )
+
                 if viewModel.selectedTabIndex != 2 {
                     FilterContainerView(
                         isGenreSelectModalPresented: $isGenreSelectModalPresented,
@@ -264,6 +278,7 @@ struct MarketView: View {
             .padding(.horizontal, 28)
         }
     }
+
 
     private var shadowBackground: some View {
         ZStack(alignment: .top) {

@@ -9,7 +9,9 @@ import SwiftUI
 
 struct RegisterSearchGenre: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
-
+    
+    @Environment(\.openURL) var openURL
+    
     @Binding var genreSearchText: String
     @Binding var isCompleted: Bool
     @Binding var genreList: [GenreNameModel]
@@ -102,6 +104,8 @@ extension RegisterSearchGenre {
                         .padding(.horizontal, 57)
                     
                     Button {
+                        guard let url = URL(string: Bundle.main.infoDictionary?["GENRE_REQUEST_URL"] as! String) else {return}
+                        openURL(url)
                         print("장르 추가 요청 버튼 클릭")
                     } label: {
                         Text("장르 추가 요청하기")

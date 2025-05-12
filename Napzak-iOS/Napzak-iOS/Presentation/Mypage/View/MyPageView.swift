@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct MyPageView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
@@ -57,9 +58,14 @@ struct MyPageView: View {
             
             switch result {
             case .success(let response):
+                // data가 nil일 경우 처리
                 storeInfo = response.data
-            case .failure:
+                if storeInfo == nil {
+                    print("응답에 data가 없습니다")
+                }
+            case .failure(let error):
                 storeInfo = nil
+                print("API 호출 오류: \(error)")
             }
         }
     }
@@ -112,38 +118,21 @@ struct MyPageView: View {
     // API 프로필 정보
     private func profileCardWithData(storeInfo: StoreProfileDTO) -> some View {
         HStack(spacing: 14) {
-            Circle()
+            KFImage(URL(string: storeInfo.storePhoto ?? ""))
+                .placeholder {
+                    Image("profile_img")
+                        .resizable()
+                        .scaledToFit()
+                }
+                .resizable()
+                .aspectRatio(contentMode: .fill)
                 .frame(width: 60, height: 60)
-                .overlay(
-                    AsyncImage(url: URL(string: storeInfo.storePhoto)) { phase in
-                        switch phase {
-                        case .empty:
-                            // 로딩 중일 때 기본 이미지 표시
-                            Image("profile_img")
-                                .resizable()
-                                .scaledToFit()
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .scaledToFit()
-                        case .failure:
-                            // 로드 실패 시 기본 이미지 표시
-                            Image("profile_img")
-                                .resizable()
-                                .scaledToFit()
-                        @unknown default:
-                            Image("profile_img")
-                                .resizable()
-                                .scaledToFit()
-                        }
-                    }
-                )
+                .clipShape(Circle())
             
             VStack(alignment: .leading, spacing:7) {
-                Text(storeInfo.storeNickname)
+                Text(storeInfo.storeNickName ?? "null")
                     .applyNapzakFont(.body4Bold14)
                     .foregroundColor(Color.napzakPrimary(.purple500))
-                
                 HStack(spacing: 14) {
                     HStack(spacing: 2) {
                         Text("팔아요")
@@ -175,6 +164,7 @@ struct MyPageView: View {
         .padding(.horizontal, 27)
         .padding(.top, 30)
     }
+
     
     private var marketButton: some View {
         VStack(spacing: 0) {
@@ -217,9 +207,25 @@ struct MyPageView: View {
         let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 3)
         
         return LazyVGrid(columns: columns, spacing: 4) {
-            ForEach(menuItems.indices, id: \.self) { index in
+            ForEach(menuItems, id: \.title) { item in
                 ZStack {
-                    menuItem(title: menuItems[index].title, iconName: menuItems[index].icon)
+                    Button {
+                        if item.title == "고객센터" {
+                            if let storeInfo = storeInfo,
+                               let url = URL(string: storeInfo.serviceLink),
+                               UIApplication.shared.canOpenURL(url) {
+                                UIApplication.shared.open(url)
+                            }
+                        } else if item.title == "설정" {
+                            navigationRouter.push(next: .SettingView)
+                        } else {
+                            // TODO: - 다른 메뉴 라우팅
+                        }
+                    } label: {
+                        menuItem(title: item.title, iconName: item.icon)
+                            .frame(maxWidth: .infinity, minHeight: 82)
+                            .background(Color.napzakGrayScale(.gray10))
+                    }
                 }
                 .frame(maxWidth: .infinity, minHeight: 82)
                 .background(Color.napzakGrayScale(.gray10))
@@ -229,7 +235,7 @@ struct MyPageView: View {
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .padding(.horizontal, 27)
         .padding(.top, 20)
-        .padding(.bottom,30)
+        .padding(.bottom, 30)
     }
 
     private func menuItem(title: String, iconName: String) -> some View {

@@ -98,6 +98,18 @@ struct NZTabBarView: View {
 
                 case .registerSearchGenre:
                     EmptyView()
+                    
+                case .SettingView:
+                    SettingView()
+
+                case .withDrawSelectReasonView:
+                    WithDrawSelectReasonView()
+                    
+                case .withDrawWriteReasonView:
+                    WithDrawWriteReasonView()
+                    
+                case .withDrawConfirmView:
+                    WithDrawConfirmView()
                 }
             }
         }

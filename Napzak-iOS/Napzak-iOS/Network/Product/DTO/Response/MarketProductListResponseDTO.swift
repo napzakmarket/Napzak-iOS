@@ -12,6 +12,6 @@ typealias BaseMarketProductBuyListResponseDTO = BaseResponseDTO<MarketProductBuy
 
 struct MarketProductListResponseDTO: Decodable {
     let productCount: Int
-    let productSellList: [MarketProductItemDTO]
+    let productSellList: [ProductDTO]
     let nextCursor: String?
 }

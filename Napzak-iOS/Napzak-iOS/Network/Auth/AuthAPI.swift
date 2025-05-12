@@ -11,6 +11,7 @@ enum AuthAPI {
     case login(type: SocialLoginType, code: String)
     case logout
     case refresh
+    case withDraw(item: WithDrawRequestDTO)
 }
 
 extension AuthAPI: BaseTargetType {
@@ -21,6 +22,8 @@ extension AuthAPI: BaseTargetType {
         case .refresh:
             return .refreshTokenHeader
         case .logout:
+            return .accessTokenHeader
+        case .withDraw:
             return .accessTokenHeader
         }
     }
@@ -33,6 +36,8 @@ extension AuthAPI: BaseTargetType {
             return "stores/refresh-token"
         case .logout:
             return "stores/logout"
+        case .withDraw:
+            return "stores/withdraw"
         }
     }
     
@@ -62,6 +67,8 @@ extension AuthAPI: BaseTargetType {
             return .requestPlain
         case .logout:
             return .requestPlain
+        case .withDraw(let item):
+            return .requestJSONEncodable(item)
         }
     }
 }
