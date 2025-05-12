@@ -113,6 +113,9 @@ struct NZTabBarView: View {
                         isGenreSelectModalPresented: $isGenreSelectModalPresented,
                         isSortModalPresented: $isSortModalPresented
                     )
+                    
+                case .reportView(reportType: let reportType, id: let id):
+                    ReportView(reportType: reportType, id: id)
                 }
             }
         }

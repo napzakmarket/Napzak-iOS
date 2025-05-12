@@ -18,6 +18,7 @@ enum Route: Hashable {
     case genreDetailView(genreId: Int, genreName: String)
     case productDetailView(productId: Int)
     case searchView(searchWord: String)
+    case reportView(reportType: ReportType, id: Int)
 }
 
 final class NavigationRouter: ObservableObject {

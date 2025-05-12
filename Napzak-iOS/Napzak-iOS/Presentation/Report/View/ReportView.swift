@@ -8,9 +8,13 @@
 import SwiftUI
 
 struct ReportView: View {
+    
+    @EnvironmentObject private var navigationRouter: NavigationRouter
+
     @StateObject private var viewModel = ReportViewModel()
-    @Binding var reportType: ReportType
-    @Binding var id: Int    // report타입에 따른 id (productId, storeId)
+    
+    let reportType: ReportType
+    let id: Int // report타입에 따른 id (productId, storeId)
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0){
@@ -33,8 +37,9 @@ struct ReportView: View {
             alignment: .bottom
         )
         .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
-        .ignoresSafeArea()
+        .ignoresSafeArea(edges: [.top])
         .scrollDismissesKeyboard(.immediately)
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 
@@ -42,8 +47,7 @@ extension ReportView {
     private var reportHeader: some View {
         VStack(alignment: .leading) {
             Button {
-                //Todo: - 네비게이션 pop
-                print("backButton tapped")
+                navigationRouter.pop()
             } label: {
                 Image(.iconBack)
             }
@@ -218,12 +222,12 @@ extension ReportView {
     
     private var submitReportButton: some View {
         Button {
-            //TODO: - 신고 성공 시 마켓 보기 페이지로 이동
             viewModel.showToast = true
             Task {
                 await viewModel.report(type: reportType, id: id)
                 try? await Task.sleep(nanoseconds: 2_500_000_000)
                 viewModel.showToast = false
+                navigationRouter.pop()
             }
         } label: {
             Text("제출하기")
@@ -259,17 +263,4 @@ extension ReportView {
         .padding(.horizontal, 28)
         .padding(.bottom, 143)
     }
-}
-
-#Preview {
-    struct PreviewContainer: View {
-        @State var reportType: ReportType = .store
-        @State var id: Int = 0
-        
-        var body: some View {
-            ReportView(reportType: $reportType, id: $id)
-        }
-    }
-    
-    return PreviewContainer()
 }

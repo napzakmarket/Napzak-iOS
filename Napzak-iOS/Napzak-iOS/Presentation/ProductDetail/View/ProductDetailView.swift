@@ -65,7 +65,10 @@ struct ProductDetailView: View {
                 
                 ReportModalView(
                     isReportModalPresented: $isReportModalPresented,
-                    reportType: .product
+                    reportType: .product,
+                    onTapped: {
+                        navigationRouter.push(next: .reportView(reportType: .product, id: viewModel.product.productDetail.id))
+                    }
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
