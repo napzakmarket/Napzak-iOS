@@ -99,9 +99,30 @@ final class AuthManager: ObservableObject {
     }
     
     func logout() async -> Result<Void, AuthError> {
-        logger.debug("로그아웃 실행")
+        logger.debug("Starting logout")
+        
+        let result = await authService.logout()
+        switch result {
+        case .success(let response):
+            if response.status == 200 {
+                logger.info("Server logout success")
+            } else {
+                logger.error("Server logout failed:  - status code: \(response.status)")
+                return .failure(.invalidResponse)
+            }
+        case .failure(let error):
+            logger.error("Server logout failed: \(error)")
+            return .failure(.networkError)
+        }
+        
         onboardingManager.clearProgress()
-        return keychain.clearTokens()
+        
+        if case .failure(let error) = keychain.clearTokens() {
+            logger.error("Keychain clear tokens failed: \(error)")
+            return .failure(error)
+        }
+        logger.info("logout success")
+        return .success(())
     }
     
     func getAccessToken() -> Result<String, AuthError> {
