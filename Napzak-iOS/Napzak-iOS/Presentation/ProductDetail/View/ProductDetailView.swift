@@ -513,7 +513,7 @@ extension ProductDetailView {
                 }
                 Spacer()
                 Button {
-                    
+                    navigationRouter.push(next: .marketView(storeId: viewModel.product.storeInfo.id))
                 } label: {
                     Image(.iconArrowRight)
                 }
