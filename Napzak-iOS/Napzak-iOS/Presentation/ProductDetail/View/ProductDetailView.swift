@@ -470,10 +470,25 @@ extension ProductDetailView {
                 .applyNapzakFont(.body4Bold14)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
             HStack(alignment: .center, spacing: 0) {
-                Image(.profileImg)
-                    .resizable()
-                    .frame(width: 60, height: 60)
-                    .padding(.trailing, 14)
+                Group {
+                    if let url = URL(string: viewModel.product.storeInfo.storePhoto) {
+                        KFImage(url)
+                            .placeholder {
+                                Image(.profileImg)
+                            }.retry(maxCount: 3, interval: .seconds(3))
+                            .onFailure { error  in
+                                print("failure: \(error.localizedDescription)")
+                            }
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    } else {
+                        Image(.profileImg)
+                    }
+                }
+                .frame(width: 60, height: 60)
+                .clipShape(Circle())
+                .padding(.trailing, 14)
+                
                 VStack(alignment: .leading) {
                     Text("\(viewModel.product.storeInfo.nickname)")
                         .applyNapzakFont(.body4Bold14)

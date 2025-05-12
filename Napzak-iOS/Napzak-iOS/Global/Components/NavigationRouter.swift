@@ -13,7 +13,7 @@ enum Route: Hashable {
     case withDrawWriteReasonView
     case withDrawConfirmView
     case searchInputView
-    case MarketView
+    case marketView(storeId: Int)
     case ProfileEditView
     case genreDetailView(genreId: Int, genreName: String)
     case productDetailView(productId: Int)

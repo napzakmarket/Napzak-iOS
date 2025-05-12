@@ -11,7 +11,8 @@ import Kingfisher
 
 struct MarketView: View {
     
-    @StateObject private var viewModel = MarketViewModel()
+    @StateObject var viewModel: MarketViewModel
+    
     @State private var isGenreSelectModalPresented = false
     @State private var isSortModalPresented = false
     @State private var selectedSortOption: SortOption = .recent
@@ -79,14 +80,21 @@ struct MarketView: View {
         .animation(.easeInOut, value: isGenreSelectModalPresented)
         .animation(.easeInOut, value: isSortModalPresented)
         .onChange(of: viewModel.selectedTabIndex) { _ in
-            viewModel.fetchData()
+            Task {
+                await viewModel.fetchProducts()
+            }
         }
         .onChange(of: selectedSortOption) { newValue in
             viewModel.productFetchOption.sortOption = newValue
-            viewModel.fetchProducts()
+            Task {
+                await viewModel.fetchProducts()
+            }
         }
         .onAppear {
-            viewModel.fetchData()
+            Task {
+                await viewModel.fetchStoreDetail()
+                await viewModel.fetchProducts()
+            }
         }
     }
 
@@ -211,10 +219,6 @@ struct MarketView: View {
                             ForEach(["로딩 중..."], id: \.self) { tag in
                                 PlainChip(title: tag)
                             }
-                        } else {
-                            ForEach(["선택된 장르 없음"], id: \.self) { tag in
-                                PlainChip(title: tag)
-                            }
                         }
                     }
                     .padding(.horizontal, 25)
@@ -264,14 +268,10 @@ struct MarketView: View {
                         isOnSale: $viewModel.productFetchOption.isOnSale
                     )
                     .frame(height: 54)
-                    .onChange(of: viewModel.productFetchOption.isOnSale) { _ in
-                        viewModel.fetchProducts()
-                    }
-                    .onChange(of: viewModel.productFetchOption.isUnopened) { _ in
-                        viewModel.fetchProducts()
-                    }
-                    .onChange(of: viewModel.productFetchOption.genres) { _ in
-                        viewModel.fetchProducts()
+                    .onChange(of: viewModel.productFetchOption) { _ in
+                        Task {
+                            await viewModel.fetchProducts()
+                        }
                     }
                 }
             }
@@ -374,8 +374,4 @@ struct MarketView: View {
         }
         .frame(maxWidth: .infinity)
     }
-}
-
-#Preview {
-    MarketView()
 }

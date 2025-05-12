@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+
 import os
 
+@MainActor
 final class MarketViewModel: ObservableObject {
-    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "MarketViewModel")
     
     @Published var selectedTabIndex = 0
     @Published var productFetchOption = ProductFetchOption(
@@ -29,26 +30,95 @@ final class MarketViewModel: ObservableObject {
     @Published var productCount: Int = 0
     @Published var showToast: Bool = false
     
+    private let storeId: Int
+    
     private let tabs = ["팔아요", "구해요", "리뷰"]
-    private let storeService: StoreServiceProtocol
-    private let productService: ProductServiceProtocol
-    private let interestService = NetworkService.shared.interestService
     private var nextCursor: String? = nil
     
     private(set) var isProcessingLike: Bool = false
+
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "MarketViewModel")
+
     
+    //MARK: - Init
     
-    init(storeService: StoreServiceProtocol = StoreService(), productService: ProductServiceProtocol = ProductService()) {
-        self.storeService = storeService
-        self.productService = productService
-        fetchData()
-    }
-    
-    func fetchData() {
+    init(storeId: Int) {
+        self.storeId = storeId
+        
         Task {
             await fetchStoreDetail()
+            await fetchProducts()
         }
     }
+    
+    func fetchStoreDetail() async {
+        let result = await NetworkService.shared.storeService.getStoreDetail(storeId: storeId)
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("❌ getMyPageInfo: No data received")
+                return
+            }
+            
+            storeDetail = data
+            
+        case .failure(let error):
+            logger.error("❌ getMyPageInfo failed: \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchProducts() async {
+        isLoadingProducts = true
+        productsError = nil
+        
+        // 탭에 따라 다른 API 호출
+        switch selectedTabIndex {
+        case 0: // 팔아요 탭
+            let result = await NetworkService.shared.productService.getSellProductsForMarket(
+                storeOwnerId: storeId, productFetchOption: productFetchOption)
+            
+            switch result {
+            case .success(let response):
+                guard let data = response.data else {
+                    logger.error("❌ getSellProductsForMarket: No data received")
+                    return
+                }
+                
+                self.nextCursor = data.nextCursor
+                self.productCount = data.productCount
+                self.products = data.productSellList.map { ProductItemModel(dto: $0) }
+                
+            case .failure(let error):
+                logger.error("❌ getSellProductsForMarket failed: \(error.localizedDescription)")
+            }
+            
+        case 1: // 구해요 탭
+            let result = await NetworkService.shared.productService.getBuyProductsForMarket(
+                storeOwnerId: storeId, productFetchOption: productFetchOption)
+            
+            switch result {
+            case .success(let response):
+                guard let data = response.data else {
+                    logger.error("❌ getBuyProductsForMarket: No data received")
+                    return
+                }
+                
+                self.nextCursor = data.nextCursor
+                self.productCount = data.productCount
+                self.products = data.productBuyList.map { ProductItemModel(dto: $0) }
+                
+            case .failure(let error):
+                logger.error("❌ getBuyProductsForMarket failed: \(error.localizedDescription)")
+            }
+            
+        default:
+            break
+        }
+        
+        isLoadingProducts = false
+    }
+    
     
     func toggleLike(for productId: Int) async {
         guard !isProcessingLike else { return }
@@ -62,8 +132,8 @@ final class MarketViewModel: ObservableObject {
         }
         
         let result = currentProduct.isInterested ?
-        await interestService.deleteInterest(productId: productId) :
-        await interestService.postInterest(productId: productId)
+        await NetworkService.shared.interestService.deleteInterest(productId: productId) :
+        await NetworkService.shared.interestService.postInterest(productId: productId)
         
         switch result {
         case .success:
@@ -87,118 +157,5 @@ final class MarketViewModel: ObservableObject {
     
     func getProductCount() -> Int {
         return productCount
-    }
-    
-    @MainActor
-    private func fetchStoreDetail() async {
-        isLoadingProfile = true
-        profileError = nil
-        
-        // MyPage info (본인 상점 정보) 가져옴
-        let result = await storeService.getMyPageInfo()
-        
-        switch result {
-        case .success(let response):
-            if let storeId = response.data?.storeId {
-                // storeId로 상점 상세 정보 가져옴
-                let detailResult = await storeService.getStoreDetail(storeId: storeId)
-                
-                switch detailResult {
-                case .success(let detailResponse):
-                    storeDetail = detailResponse.data
-                    if let genres = detailResponse.data?.genrePreferences {
-                        let genreNameModels = genres.map { GenreNameModel(id: $0.genreId, name: $0.genreName) }
-                    }
-                    
-                    // 상점 정보를 가져온 후 상품 목록 조회
-                    await fetchProductsWithStoreId(storeId)
-                    
-                case .failure(let error):
-                    profileError = error.errorDescription
-                }
-            }
-        case .failure(let error):
-            profileError = error.errorDescription
-        }
-        
-        isLoadingProfile = false
-    }
-    
-    @MainActor
-    private func fetchProductsWithStoreId(_ storeId: Int) async {
-        await fetchProducts(storeId: storeId)
-    }
-    
-    func fetchProducts() {
-        Task {
-            if let storeId = storeDetail?.storeId {
-                await fetchProducts(storeId: storeId)
-            }
-        }
-    }
-    
-    @MainActor
-    private func fetchProducts(storeId: Int) async {
-        isLoadingProducts = true
-        productsError = nil
-        
-        // 장르 필터 설정
-        let genreId = productFetchOption.genres.first?.id
-        
-        // 정렬 옵션 설정 - SortOption의 rawValue 직접 사용
-        let sortOption = productFetchOption.sortOption.rawValue
-        
-        // 탭에 따라 다른 API 호출
-        switch selectedTabIndex {
-        case 0: // 팔아요 탭
-            let result = await productService.fetchSellProducts(
-                storeOwnerId: storeId,
-                sort: sortOption,
-                isOnSale: productFetchOption.isOnSale,
-                isUnopened: productFetchOption.isUnopened,
-                genreId: genreId,
-                cursor: nextCursor
-            )
-            
-            switch result {
-            case .success(let response):
-                self.nextCursor = response.nextCursor
-                self.productCount = response.productCount
-                
-                // MarketProductItemDTO를 ProductItemModel로 변환
-                self.products = response.productSellList.map { dto in
-                    ProductItemModel(dto: dto)
-                }
-                
-            case .failure(let error):
-                productsError = error.errorDescription
-            }
-            
-        case 1: // 구해요 탭
-            let result = await productService.fetchBuyProducts(
-                storeOwnerId: storeId,
-                sort: sortOption,
-                isOnSale: productFetchOption.isOnSale,
-                genreId: genreId,
-                cursor: nextCursor
-            )
-            
-            switch result {
-            case .success(let response):
-                self.nextCursor = response.nextCursor
-                self.productCount = response.productCount
-                
-                // MarketProductBuyItemDTO를 ProductItemModel로 변환
-                self.products = response.productBuyList.map { ProductItemModel(dto: $0) }
-                
-            case .failure(let error):
-                productsError = error.errorDescription
-            }
-            
-        default:
-            break
-        }
-        
-        isLoadingProducts = false
     }
 }
