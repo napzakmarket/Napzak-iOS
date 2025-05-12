@@ -74,6 +74,24 @@ struct ProductItemModel: Identifiable {
 }
 
 extension ProductItemModel {
+    init(dto: ProductWithCountDTO) {
+        self.id = dto.productId
+        self.genreName = dto.genreName
+        self.productName = dto.productName
+        self.photo = dto.photo
+        self.price = dto.price
+        self.uploadTime = dto.uploadTime
+        self.isInterested = dto.isInterested
+        self.tradeType = dto.tradeType
+        self.tradeStatus = dto.tradeStatus
+        self.isPriceNegotiable = dto.isPriceNegotiable
+        self.isOwnedByCurrentUser = dto.isOwnedByCurrentUser
+        self.interestCount = dto.interestCount
+        self.chatCount = dto.chatCount
+    }
+}
+
+extension ProductItemModel {
     static let dummyProducts: [ProductItemModel] = [
         ProductItemModel(
             id: 1,

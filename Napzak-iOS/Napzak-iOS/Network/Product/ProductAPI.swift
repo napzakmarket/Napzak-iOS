@@ -29,6 +29,7 @@ enum ProductAPI {
     case buyRegister(registerItem: BuyRegisterRequestDTO)
     case getSellProduct(productFetchOption: ProductFetchOption)
     case getBuyProduct(productFetchOption: ProductFetchOption)
+    case getSearchRecommendation
 }
 
 extension ProductAPI: BaseTargetType {
@@ -49,6 +50,8 @@ extension ProductAPI: BaseTargetType {
             return "products/sell"
         case .buyRegister, .getBuyProduct:
             return "products/buy"
+        case .getSearchRecommendation:
+            return "products/search/recommend"
         }
     }
     
@@ -56,7 +59,7 @@ extension ProductAPI: BaseTargetType {
         switch self {
         case .sellRegister, .buyRegister:
             return .post
-        case .getSellProduct, .getBuyProduct, .getSellProducts, .getBuyProducts:
+        default:
             return .get
         }
     }
@@ -128,6 +131,8 @@ extension ProductAPI: BaseTargetType {
                                                    "genreId" : genreIDs,
                                                    "isOnSale" : productFetchOption.isOnSale],
                                       encoding: URLEncoding.queryString)
+        default:
+            return .requestPlain
         }
     }
 }

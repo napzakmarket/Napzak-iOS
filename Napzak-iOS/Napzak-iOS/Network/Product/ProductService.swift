@@ -29,6 +29,8 @@ protocol ProductServiceProtocol {
         genreId: Int?,
         cursor: String?
     ) async -> Result<MarketProductBuyListResponseDTO, NetworkError>
+    
+    func getSearchRecommendation() async -> Result<SearchRecommendationResponseDTO, NetworkError>
 }
 
 final class ProductService: BaseService, ProductServiceProtocol {
@@ -108,5 +110,9 @@ final class ProductService: BaseService, ProductServiceProtocol {
             
             return data
         }
+    }
+    
+    func getSearchRecommendation() async -> Result<SearchRecommendationResponseDTO, NetworkError> {
+        return await requestDecodable(provider, .getSearchRecommendation)
     }
 }

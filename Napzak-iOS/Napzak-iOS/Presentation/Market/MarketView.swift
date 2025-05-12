@@ -351,9 +351,9 @@ struct MarketView: View {
                             product: $viewModel.products[i],
                             width: productCellWidth,
                             shouldToggleInterestState: {
-                                return viewModel.canToggleInterestState(
-                                    productID: viewModel.products[i].id
-                                )
+                                Task {
+                                    await viewModel.toggleLike(for: viewModel.products[i].id)
+                                }
                             })
                             .onTapGesture {
                                 //TODO: - 화면 전환

@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import os
 
 final class MarketViewModel: ObservableObject {
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "MarketViewModel")
     
     @Published var selectedTabIndex = 0
     @Published var productFetchOption = ProductFetchOption(
@@ -25,11 +27,16 @@ final class MarketViewModel: ObservableObject {
     @Published var isLoadingProducts = false
     @Published var productsError: String? = nil
     @Published var productCount: Int = 0
+    @Published var showToast: Bool = false
     
     private let tabs = ["팔아요", "구해요", "리뷰"]
     private let storeService: StoreServiceProtocol
     private let productService: ProductServiceProtocol
+    private let interestService = NetworkService.shared.interestService
     private var nextCursor: String? = nil
+    
+    private(set) var isProcessingLike: Bool = false
+    
     
     init(storeService: StoreServiceProtocol = StoreService(), productService: ProductServiceProtocol = ProductService()) {
         self.storeService = storeService
@@ -43,9 +50,39 @@ final class MarketViewModel: ObservableObject {
         }
     }
     
-    func canToggleInterestState(productID: Int) -> Bool {
-        // TODO: - 좋아요 서버 통신 후 성공 여부 반환
-        return true
+    func toggleLike(for productId: Int) async {
+        guard !isProcessingLike else { return }
+        
+        isProcessingLike = true
+        defer { isProcessingLike = false }
+        
+        guard let currentProduct = products.first(where: { $0.id == productId }) else {
+            logger.error("toggleLike: Product not found with id: \(productId)")
+            return
+        }
+        
+        let result = currentProduct.isInterested ?
+        await interestService.deleteInterest(productId: productId) :
+        await interestService.postInterest(productId: productId)
+        
+        switch result {
+        case .success:
+            updateProductInterestState(productId: productId, isInterested: !currentProduct.isInterested)
+            if !currentProduct.isInterested {
+                showToast = true
+                try? await Task.sleep(for: .seconds(2))
+                showToast = false
+            }
+        case .failure(let error):
+            logger.error("toggleLike failed: \(error.errorDescription ?? "Unknown error")")
+        }
+    }
+    
+    // ADD: 상품 상태 업데이트 함수 추가
+    private func updateProductInterestState(productId: Int, isInterested: Bool) {
+        if let index = products.firstIndex(where: { $0.id == productId }) {
+            products[index].isInterested = isInterested
+        }
     }
     
     func getProductCount() -> Int {
