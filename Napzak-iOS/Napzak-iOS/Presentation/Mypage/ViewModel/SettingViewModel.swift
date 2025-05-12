@@ -10,23 +10,22 @@ import os
 
 @MainActor
 final class SettingViewModel: ObservableObject {
-    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "SettingView")
-    private let networkService = NetworkService.shared.authService
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "SettingViewModel")
+    private let authManager = AuthManager.shared
 }
 
 
 // MARK: - LogOut
 
 extension SettingViewModel {
-    func logOut() async {
-        let result = await networkService.logout()
+    func logout() async {
+        let result = await AuthManager.shared.logout()
         
         switch result {
-        case .success(let response):
-            logger.info("📦 [LogOut] code: \(response.status)")
-            logger.info("📦 [LogOut] message: \(response.message)")
+        case .success:
+            logger.info("[Logout] 성공")
         case .failure(let error):
-            logger.error("❌ [LogOut] failed: \(error.localizedDescription)")
+            logger.error("[Logout] 실패: \(error.localizedDescription)")
         }
     }
 }

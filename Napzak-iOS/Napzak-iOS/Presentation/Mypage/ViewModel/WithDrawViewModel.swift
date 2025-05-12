@@ -36,7 +36,6 @@ final class WithDrawViewModel: ObservableObject {
 
 extension WithDrawViewModel {
     func withdraw() async {
-        
         let dto = WithDrawRequestDTO(
             withdrawTitle: withdrawReasonTitle,
             withdrawDescription: withdrawDescription
