@@ -126,7 +126,7 @@ struct MyPageView: View {
                 }
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame(width: 60, height: 60)                .frame(width: 60, height: 60)
+                .frame(width: 60, height: 60)
                 .clipShape(Circle())
             
             VStack(alignment: .leading, spacing:7) {
@@ -207,20 +207,22 @@ struct MyPageView: View {
         let columns = Array(repeating: GridItem(.flexible(), spacing: 4), count: 3)
         
         return LazyVGrid(columns: columns, spacing: 4) {
-            ForEach(menuItems.indices, id: \.self) { index in
+            ForEach(menuItems, id: \.title) { item in
                 ZStack {
                     Button {
-                        if menuItems[index].title == "고객센터" {
+                        if item.title == "고객센터" {
                             if let storeInfo = storeInfo,
                                let url = URL(string: storeInfo.serviceLink),
                                UIApplication.shared.canOpenURL(url) {
                                 UIApplication.shared.open(url)
                             }
+                        } else if item.title == "설정" {
+                            navigationRouter.push(next: .SettingView)
                         } else {
-                            // 다른 메뉴는 추후 라우팅 로직 연결
+                            // TODO: - 다른 메뉴 라우팅
                         }
                     } label: {
-                        menuItem(title: menuItems[index].title, iconName: menuItems[index].icon)
+                        menuItem(title: item.title, iconName: item.icon)
                             .frame(maxWidth: .infinity, minHeight: 82)
                             .background(Color.napzakGrayScale(.gray10))
                     }
@@ -233,7 +235,7 @@ struct MyPageView: View {
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .padding(.horizontal, 27)
         .padding(.top, 20)
-        .padding(.bottom,30)
+        .padding(.bottom, 30)
     }
 
     private func menuItem(title: String, iconName: String) -> some View {
