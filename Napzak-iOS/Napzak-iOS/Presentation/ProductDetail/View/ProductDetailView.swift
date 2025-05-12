@@ -164,6 +164,13 @@ struct ProductDetailView: View {
                 )
             }
         }
+        .onChange(of: isRegisterViewPresented) { value in
+            if !value {
+                Task {
+                    await viewModel.fetchProduct(id: viewModel.product.productDetail.id)
+                }
+            }
+        }
     }
 }
 
