@@ -9,7 +9,7 @@ import SwiftUI
 
 import os
 
-enum RegisterViewType {
+enum RegisterViewType: Equatable {
     case initialRegister
     case editProduct(productID: Int, tradeType: TradeType)
 }
@@ -39,7 +39,7 @@ final class RegisterViewModel: ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Register")
     
-    private let type: RegisterViewType
+    let type: RegisterViewType
     
     init(viewType: RegisterViewType)  {
         self.type = viewType
