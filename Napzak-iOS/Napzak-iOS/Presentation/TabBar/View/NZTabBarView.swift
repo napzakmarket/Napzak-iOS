@@ -30,6 +30,7 @@ struct NZTabBarView: View {
                             .tag(NZTab.home)
                         
                         SearchView(
+                            viewModel: SearchViewModel(searchWord: ""),
                             isGenreSelectModalPresented: $isGenreSelectModalPresented,
                             isSortModalPresented: $isSortModalPresented
                         )
@@ -105,6 +106,13 @@ struct NZTabBarView: View {
                     
                 case .withDrawConfirmView:
                     WithDrawConfirmView()
+                    
+                case .searchView(searchWord: let searchWord):
+                    SearchView(
+                        viewModel: SearchViewModel(searchWord: searchWord),
+                        isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                        isSortModalPresented: $isSortModalPresented
+                    )
                 }
             }
         }

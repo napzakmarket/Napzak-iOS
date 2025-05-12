@@ -31,7 +31,7 @@ final class SearchViewModel: ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Search")
     
-    private var searchWord: String = ""
+    var searchWord: String = ""
     
     //MARK: - Init
     
