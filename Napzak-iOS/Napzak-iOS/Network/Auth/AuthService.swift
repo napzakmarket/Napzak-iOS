@@ -10,6 +10,7 @@ import Moya
 protocol AuthServiceProtocol {
     func login(type: SocialLoginType, authorizationCode: String) async -> Result<AuthResponseDTO, NetworkError>
     func logout() async -> Result<LogoutResponseDTO, NetworkError>
+    func withDraw(item: WithDrawRequestDTO) async -> Result<WithDrawResponseDTO, NetworkError>
 }
 
 final class AuthService: BaseService, AuthServiceProtocol {
@@ -23,4 +24,7 @@ final class AuthService: BaseService, AuthServiceProtocol {
         return await requestDecodable(provider, .logout)
     }
 
+    func withDraw(item: WithDrawRequestDTO) async -> Result<WithDrawResponseDTO, NetworkError> {
+        return await requestDecodable(provider, .withDraw(item: item))
+    }
 }

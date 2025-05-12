@@ -2,7 +2,7 @@
 //  MarketViewModel.swift
 //  Napzak-iOS
 //
-//  Created on 4/30/25.
+//  Created by 어진 on 4/30/25.
 //
 
 import SwiftUI
@@ -106,9 +106,8 @@ final class MarketViewModel: ObservableObject {
                 switch detailResult {
                 case .success(let detailResponse):
                     storeDetail = detailResponse.data
-                    if let genres = detailResponse.data?.genrePreferenceList {
+                    if let genres = detailResponse.data?.genrePreferences {
                         let genreNameModels = genres.map { GenreNameModel(id: $0.genreId, name: $0.genreName) }
-                        productFetchOption.genres = genreNameModels
                     }
                     
                     // 상점 정보를 가져온 후 상품 목록 조회
@@ -146,18 +145,8 @@ final class MarketViewModel: ObservableObject {
         // 장르 필터 설정
         let genreId = productFetchOption.genres.first?.id
         
-        // 정렬 옵션 설정
-        let sortOption: String
-        switch productFetchOption.sortOption {
-        case .recent:
-            sortOption = "RECENT"
-        case .popular:
-            sortOption = "LIKE_COUNT"
-        case .lowPrice:
-            sortOption = "PRICE_ASC"
-        case .highPrice:
-            sortOption = "PRICE_DESC"
-        }
+        // 정렬 옵션 설정 - SortOption의 rawValue 직접 사용
+        let sortOption = productFetchOption.sortOption.rawValue
         
         // 탭에 따라 다른 API 호출
         switch selectedTabIndex {
@@ -178,21 +167,7 @@ final class MarketViewModel: ObservableObject {
                 
                 // MarketProductItemDTO를 ProductItemModel로 변환
                 self.products = response.productSellList.map { dto in
-                    ProductItemModel(
-                        id: dto.productId,
-                        genreName: dto.genreName,
-                        productName: dto.productName,
-                        photo: dto.photo,
-                        price: dto.price,
-                        uploadTime: dto.uploadTime,
-                        isInterested: dto.isInterested,
-                        tradeType: .sell,
-                        tradeStatus: getTradeStatus(from: dto.tradeStatus),
-                        isPriceNegotiable: nil,
-                        isOwnedByCurrentUser: dto.isOwnedByCurrentUser,
-                        interestCount: dto.interestCount,
-                        chatCount: dto.chatInterest
-                    )
+                    ProductItemModel(dto: dto)
                 }
                 
             case .failure(let error):
@@ -214,23 +189,7 @@ final class MarketViewModel: ObservableObject {
                 self.productCount = response.productCount
                 
                 // MarketProductBuyItemDTO를 ProductItemModel로 변환
-                self.products = response.productBuyList.map { dto in
-                    ProductItemModel(
-                        id: dto.productId,
-                        genreName: dto.genreName,
-                        productName: dto.productName,
-                        photo: dto.photo,
-                        price: dto.price,
-                        uploadTime: dto.uploadTime,
-                        isInterested: dto.isLiked,
-                        tradeType: .buy,
-                        tradeStatus: getTradeStatus(from: dto.tradeStatus),
-                        isPriceNegotiable: dto.isPriceNegotiable,
-                        isOwnedByCurrentUser: dto.isOwnedByCurrentUser,
-                        interestCount: dto.interestCount,
-                        chatCount: dto.chatCount
-                    )
-                }
+                self.products = response.productBuyList.map { ProductItemModel(dto: $0) }
                 
             case .failure(let error):
                 productsError = error.errorDescription
@@ -241,19 +200,5 @@ final class MarketViewModel: ObservableObject {
         }
         
         isLoadingProducts = false
-    }
-    
-    // 서버 거래 상태 문자열을 앱의 TradeStatus enum으로 변환
-    private func getTradeStatus(from statusString: String) -> TradeStatus {
-        switch statusString {
-        case "BEFORE_TRADE":
-            return .beforeTrade
-        case "RESERVED":
-            return .reserved
-        case "COMPLETED":
-            return .completed
-        default:
-            return .beforeTrade
-        }
     }
 }

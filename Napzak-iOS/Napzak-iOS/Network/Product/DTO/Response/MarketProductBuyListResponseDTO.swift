@@ -9,6 +9,6 @@ import Foundation
 
 public struct MarketProductBuyListResponseDTO: Decodable {
     let productCount: Int
-    let productBuyList: [MarketProductBuyItemDTO]
+    let productBuyList: [ProductDTO]
     let nextCursor: String?
 }

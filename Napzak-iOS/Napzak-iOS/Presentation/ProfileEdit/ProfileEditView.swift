@@ -14,12 +14,17 @@ struct ProfileEditView: View {
     @State private var isGenreSelectModalPresented: Bool = false
     @State private var displayGenres: [GenreNameModel] = []
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @StateObject private var imagePickerManager = ImagePickerManager()
+    @FocusState private var isKeyboardActive: Bool
 
     var body: some View {
         ZStack(alignment: .bottom) {
             ScrollView {
                 VStack(spacing: 0) {
                     headerView
+                        .zIndex(3)
+                        .background(Color.white.opacity(0.01))
+                    
                     profileImageSection
                     marketNameView
                     marketDescriptionSection
@@ -56,20 +61,31 @@ struct ProfileEditView: View {
         .edgesIgnoringSafeArea(.bottom)
         .navigationBarHidden(true)
         .onChange(of: viewModel.isSuccess) { success in
-            // 잠시 후 이전 화면으로 이동
             if success {
                 Task {
-                try? await Task.sleep(for: .seconds(1.5))
-                await MainActor.run {
-                    navigationRouter.pop()
+                    try? await Task.sleep(for: .seconds(1.5))
+                    await MainActor.run {
+                        navigationRouter.pop()
+                    }
                 }
             }
+        }
+        .onChange(of: imagePickerManager.selectedImages) { images in
+            // 오류와 상관 없이 이미지가 선택되면 처리
+            if let firstImage = images.first {
+                viewModel.selectedProfileImage = firstImage
             }
+            viewModel.checkForChanges()
+        }
+        .onAppear {
+            // 최대 1개의 이미지만 선택 가능하도록 설정
+            imagePickerManager.setOverrideMaxCount(1)
+        }
+        .onTapGesture {
+            isKeyboardActive = false
         }
     }
-}
-
-extension ProfileEditView {
+    
     private var headerView: some View {
         HStack(spacing: 3) {
             Button{
@@ -79,6 +95,9 @@ extension ProfileEditView {
                     .foregroundColor(Color.napzakGrayScale(.gray200))
                     .frame(width: 24, height: 24)
             }
+            .zIndex(3)
+            .contentShape(Rectangle())
+            
             Text("프로필 편집")
                 .applyNapzakFont(.body1Bold16)
                 .foregroundColor(Color.napzakGrayScale(.gray400))
@@ -86,6 +105,7 @@ extension ProfileEditView {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 18)
+        .background(Color.white.opacity(0.01))
     }
     
     private var profileImageSection: some View {
@@ -99,8 +119,9 @@ extension ProfileEditView {
                                 .fill(Color.napzakGrayScale(.gray100))
                         }
                         .resizable()
-                        .aspectRatio(contentMode: .fill)
+                        .scaledToFill()
                         .frame(height: 160)
+                        .clipped()
                 } else {
                     Rectangle()
                         .fill(Color.napzakGrayScale(.gray100))
@@ -108,37 +129,60 @@ extension ProfileEditView {
                 }
                 
                 // 프로필 이미지
-                if !viewModel.profileImageURL.isEmpty {
-                    KFImage(URL(string: viewModel.profileImageURL))
-                        .placeholder {
-                            Image("profile_edit")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 110, height: 110)
-                        }
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 110, height: 110)
-                        .clipShape(Circle())
-                        .offset(y: 57)
-                } else {
-                    Image("profile_edit")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 110, height: 110)
-                        .foregroundColor(.gray)
-                        .offset(y: 57)
+                Group {
+                    if let selectedImage = viewModel.selectedProfileImage {
+                        // 새로 선택한 이미지
+                        Image(uiImage: selectedImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 110, height: 110)
+                            .clipShape(Circle())
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
+                            )
+                    } else if !viewModel.profileImageURL.isEmpty {
+                        // 기존 이미지
+                        KFImage(URL(string: viewModel.profileImageURL))
+                            .placeholder {
+                                Image("profile_edit")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 110, height: 110)
+                                    .clipShape(Circle())
+                                    .overlay(
+                                        Circle()
+                                            .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
+                                    )
+                            }
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 110, height: 110)
+                            .clipShape(Circle())
+                            .overlay(
+                                Circle()
+                                    .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
+                            )
+                    } else {
+                        Image("profile_edit")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 110, height: 110)
+                            .foregroundColor(.gray)
+                    }
                 }
+                .offset(y: 57)
                 
-                Button {
-                    viewModel.uploadProfileImage()
-                } label: {
-                    Image("edit")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 28, height: 28)
+                // 편집 버튼
+                ZStack {
+                    imagePickerManager.photoPickerView(maxCount: 1) {
+                        Image("edit")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 24, height: 24)
+                    }
                 }
-                .offset(x: 50, y: 80)
+                .offset(x: 45, y: 80)
             }
         }
     }
@@ -167,6 +211,7 @@ extension ProfileEditView {
             }
             .padding(.top, 10)
             .padding(.bottom,20)
+            .focused($isKeyboardActive)
 
         }
         .padding(.horizontal, 20)
@@ -226,7 +271,9 @@ extension ProfileEditView {
                     if newValue.count > 200 {
                         viewModel.profileDescription = String(newValue.prefix(200))
                     }
+                    viewModel.checkForChanges()
                 }
+                .focused($isKeyboardActive)
 
             if viewModel.profileDescription.isEmpty {
                 Text("어떤 장르를 좋아하고, 판매하는지!\n덕후력을 뽐내는 소개를 작성해주세요")

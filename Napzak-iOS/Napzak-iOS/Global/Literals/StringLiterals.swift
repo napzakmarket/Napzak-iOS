@@ -17,3 +17,14 @@ struct ReportReasonMessage {
     static let dispute = "거래 과정에서 분쟁이 발생했어요"
     static let other = "기타 문제가 있어요"
 }
+
+struct WithdrawReasonMessage {
+    static let hardToFindGoods = "원하는 굿즈를 찾기 어려워요"
+    static let poorSales = "상품이 잘 안팔려요"
+    static let inconvenientApp = "앱이 사용하기 불편해요"
+    static let encounteredRudeUser = "비매너 사용자를 만났어요"
+    static let wantNewAccount = "새 마켓(계정)을 만들고 싶어요"
+    static let privacyConcerns = "개인정보 보호가 걱정돼요"
+    static let noLongerInterested = "더 이상 덕질 활동을 하지 않아요"
+    static let other = "다른 이유가 있어요"
+}

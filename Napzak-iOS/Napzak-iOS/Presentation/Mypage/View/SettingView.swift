@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct SettingView: View {
-    @Environment(\.dismiss) private var dismiss
-    
+    @EnvironmentObject private var navigationRouter: NavigationRouter
+
     @StateObject private var viewModel = SettingViewModel()
     
     @State var logoutButtonTapped: Bool = false
@@ -58,6 +58,7 @@ struct SettingView: View {
         }
         .ignoresSafeArea()
         .background(Color.napzakGrayScale(.gray10))
+        .navigationBarHidden(true)
     }
 }
 
@@ -65,8 +66,7 @@ extension SettingView {
     private var settingViewHeader: some View {
         VStack(alignment: .leading) {
             Button {
-                // 네비게이션 pop으로 교체
-                dismiss
+                navigationRouter.pop()
             } label: {
                 HStack(alignment: .center, spacing: 0) {
                     Image(.iconBack)
@@ -202,6 +202,7 @@ extension SettingView {
             Button {
                 // 탈퇴 뷰 이동
                 print("탈퇴 뷰 이동")
+                navigationRouter.push(next: .withDrawSelectReasonView)
             } label: {
                 Text("탈퇴하기")
                     .applyNapzakFont(.body1Bold16)
@@ -216,9 +217,3 @@ extension SettingView {
         .background(.white)
     }
 }
-
-#Preview {
-    SettingView()
-}
-
-

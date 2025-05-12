@@ -97,6 +97,18 @@ struct NZTabBarView: View {
                     )
                 case .productDetailView(productId: let productId):
                     ProductDetailView(viewModel: ProductDetailViewModel(productId: productId))
+
+                case .SettingView:
+                    SettingView()
+
+                case .withDrawSelectReasonView:
+                    WithDrawSelectReasonView()
+                    
+                case .withDrawWriteReasonView:
+                    WithDrawWriteReasonView()
+                    
+                case .withDrawConfirmView:
+                    WithDrawConfirmView()
                 }
             }
         }
