@@ -183,7 +183,3 @@ extension WithDrawSelectReasonView {
         .padding(.bottom, 40)
     }
 }
-
-#Preview {
-    WithDrawSelectReasonView()
-}

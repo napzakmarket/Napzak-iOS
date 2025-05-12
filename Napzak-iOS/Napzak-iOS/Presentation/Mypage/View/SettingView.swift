@@ -216,9 +216,3 @@ extension SettingView {
         .background(.white)
     }
 }
-
-#Preview {
-    SettingView()
-}
-
-

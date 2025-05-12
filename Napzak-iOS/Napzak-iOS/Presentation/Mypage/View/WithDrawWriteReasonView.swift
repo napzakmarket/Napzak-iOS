@@ -109,7 +109,6 @@ extension WithDrawWriteReasonView {
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .padding(.horizontal, 28)
             .padding(.bottom, 16)
-            .disabled(viewModel.withdrawDescription.isEmpty)
             
             Button {
                 navigationRouter.push(next: .withDrawConfirmView)
@@ -123,7 +122,6 @@ extension WithDrawWriteReasonView {
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .padding(.horizontal, 28)
             .padding(.bottom, 40)
-            .disabled(viewModel.withdrawDescription.isEmpty)
         }
     }
 
