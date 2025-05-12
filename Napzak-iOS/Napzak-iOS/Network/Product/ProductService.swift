@@ -12,6 +12,8 @@ protocol ProductServiceProtocol {
     func postBuyRegister(buyRegisterProduct: BuyRegisterRequestDTO) async -> Result<BuyRegisterResponseDTO, NetworkError>
     func getSellProduct(productFetchOption: ProductFetchOption) async -> Result<SellProductResponseDTO, NetworkError>
     func getBuyProduct(productFetchOption: ProductFetchOption) async -> Result<BuyProductResponseDTO, NetworkError>
+    func getSellProductForSearch(searchWord: String, productFetchOption: ProductFetchOption) async -> Result<SellProductResponseDTO, NetworkError>
+    func getBuyProductForSearch(searchWord: String, productFetchOption: ProductFetchOption) async -> Result<BuyProductResponseDTO, NetworkError>
     func fetchSellProducts(
         storeOwnerId: Int,
         sort: String?,
@@ -54,6 +56,14 @@ final class ProductService: BaseService, ProductServiceProtocol {
     
     func getBuyProduct(productFetchOption: ProductFetchOption) async -> Result<BuyProductResponseDTO, NetworkError> {
         return await requestDecodable(provider, .getBuyProduct(productFetchOption: productFetchOption))
+    }
+    
+    func getSellProductForSearch(searchWord: String, productFetchOption: ProductFetchOption) async -> Result<SellProductResponseDTO, NetworkError> {
+        return await requestDecodable(provider, .getSellProductForSearch(searchWord: searchWord, productFetchOption: productFetchOption))
+    }
+    
+    func getBuyProductForSearch(searchWord: String, productFetchOption: ProductFetchOption) async -> Result<BuyProductResponseDTO, NetworkError> {
+        return await requestDecodable(provider, .getBuyProductForSearch(searchWord: searchWord, productFetchOption: productFetchOption))
     }
     
     func fetchSellProducts(

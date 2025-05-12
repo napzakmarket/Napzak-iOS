@@ -13,7 +13,7 @@ struct SearchView: View {
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
 
-    @StateObject private var viewModel = SearchViewModel()
+    @StateObject var viewModel: SearchViewModel
     
     @State private var selectedTabIndex = 0
     
@@ -270,17 +270,4 @@ private extension SearchView {
             navigationRouter.push(next: .productDetailView(productId: product.wrappedValue.id))
         }
     }
-}
-
-#Preview {
-    struct PreviewContainer: View {
-        @State private var isGenreSelectModalPresented = false
-        @State private var isSortModalPresented = false
-
-        var body: some View {
-            SearchView(isGenreSelectModalPresented: $isGenreSelectModalPresented, isSortModalPresented: $isSortModalPresented)
-        }
-    }
-    
-    return PreviewContainer()
 }
