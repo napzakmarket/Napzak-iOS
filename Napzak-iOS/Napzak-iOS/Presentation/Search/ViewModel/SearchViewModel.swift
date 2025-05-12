@@ -31,12 +31,19 @@ final class SearchViewModel: ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Search")
     
+    var searchWord: String = ""
+    
     //MARK: - Init
     
-    init() {
+    init(searchWord: String) {
+        self.searchWord = searchWord
         
         Task {
-            await fetchSellProducts()
+            if searchWord == "" {
+                await fetchSellProducts()
+            } else {
+                await fetchSellProductsForSearch()
+            }
         }
     }
 }
@@ -65,6 +72,42 @@ extension SearchViewModel {
     
     func fetchBuyProducts() async {
         let result = await NetworkService.shared.productService.getBuyProduct(productFetchOption: productFetchOption)
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getBuyProduct: No data received")
+                return
+            }
+            
+            self.buyProductsCount = data.productCount
+            self.buyProducts = data.productBuyList.map { ProductItemModel(dto: $0) }
+            
+        case .failure(let error):
+            logger.error("getBuyProduct failed: \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchSellProductsForSearch() async {
+        let result = await NetworkService.shared.productService.getSellProductForSearch(searchWord: searchWord, productFetchOption: productFetchOption)
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getSellProduct: No data received")
+                return
+            }
+            
+            self.sellProductsCount = data.productCount
+            self.sellProducts = data.productSellList.map { ProductItemModel(dto: $0) }
+            
+        case .failure(let error):
+            logger.error("getSellProduct failed: \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchBuyProductsForSearch() async {
+        let result = await NetworkService.shared.productService.getBuyProductForSearch(searchWord: searchWord, productFetchOption: productFetchOption)
         
         switch result {
         case .success(let response):

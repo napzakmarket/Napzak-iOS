@@ -13,7 +13,7 @@ struct SearchView: View {
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
 
-    @StateObject private var viewModel = SearchViewModel()
+    @StateObject var viewModel: SearchViewModel
     
     @State private var selectedTabIndex = 0
     
@@ -88,24 +88,41 @@ struct SearchView: View {
                 .padding(.bottom, 110)
             }
         }
+        .toolbar(.hidden, for: .navigationBar)
         .animation(.spring(), value: viewModel.showToast)
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .ignoresSafeArea()
         .onChange(of: selectedTabIndex) { value in
             Task {
                 if value == 0 {
-                    await viewModel.fetchSellProducts()
+                    if viewModel.searchWord.isEmpty {
+                        await viewModel.fetchSellProducts()
+                    } else {
+                        await viewModel.fetchSellProductsForSearch()
+                    }
                 } else {
-                    await viewModel.fetchBuyProducts()
+                    if viewModel.searchWord.isEmpty {
+                        await viewModel.fetchBuyProducts()
+                    } else {
+                        await viewModel.fetchBuyProductsForSearch()
+                    }
                 }
             }
         }
         .onChange(of: viewModel.productFetchOption) { value in
             Task {
                 if selectedTabIndex == 0 {
-                    await viewModel.fetchSellProducts()
+                    if viewModel.searchWord.isEmpty {
+                        await viewModel.fetchSellProducts()
+                    } else {
+                        await viewModel.fetchSellProductsForSearch()
+                    }
                 } else {
-                    await viewModel.fetchBuyProducts()
+                    if viewModel.searchWord.isEmpty {
+                        await viewModel.fetchBuyProducts()
+                    } else {
+                        await viewModel.fetchBuyProductsForSearch()
+                    }
                 }
             }
         }
@@ -118,9 +135,23 @@ extension SearchView {
     
     private var searchHeader: some View {
         VStack(spacing: 0){
-            searchButton
-                .padding(.horizontal, 27)
-                .padding(.bottom, 19)
+            HStack {
+                if !viewModel.searchWord.isEmpty {
+                    Button {
+                        navigationRouter.pop()
+                    } label: {
+                        Image(.iconBack)
+                            .frame(width: 34)
+                    }
+                    .padding(.leading, 27)
+                    .padding(.bottom, 19)
+                }
+
+                searchButton
+                    .padding(.trailing, 27)
+                    .padding(.leading, viewModel.searchWord.isEmpty ? 27 : 0)
+                    .padding(.bottom, 19)
+            }
             
             ZStack(alignment: .top) {
                 shadowBackground
@@ -150,8 +181,8 @@ extension SearchView {
                 RoundedRectangle(cornerRadius: 14)
                     .fill(Color.napzakGrayScale(.gray50))
                 HStack(spacing: 0) {
-                    Text("어떤 상품을 찾고 계신가요?")
-                        .foregroundStyle(Color.napzakGrayScale(.gray200))
+                    Text(viewModel.searchWord.isEmpty ? "어떤 상품을 찾고 계신가요?" : viewModel.searchWord)
+                        .foregroundStyle(viewModel.searchWord.isEmpty ? Color.napzakGrayScale(.gray200) : Color.napzakGrayScale(.black))
                         .applyNapzakFont(.caption2Medium12)
                     Spacer()
                     Image(.iconSearch)
@@ -270,17 +301,4 @@ private extension SearchView {
             navigationRouter.push(next: .productDetailView(productId: product.wrappedValue.id))
         }
     }
-}
-
-#Preview {
-    struct PreviewContainer: View {
-        @State private var isGenreSelectModalPresented = false
-        @State private var isSortModalPresented = false
-
-        var body: some View {
-            SearchView(isGenreSelectModalPresented: $isGenreSelectModalPresented, isSortModalPresented: $isSortModalPresented)
-        }
-    }
-    
-    return PreviewContainer()
 }
