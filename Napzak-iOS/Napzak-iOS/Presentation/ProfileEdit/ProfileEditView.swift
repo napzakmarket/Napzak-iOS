@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 import Kingfisher
 
 struct ProfileEditView: View {
@@ -14,7 +13,8 @@ struct ProfileEditView: View {
     @State private var isGenreSelectModalPresented: Bool = false
     @State private var displayGenres: [GenreNameModel] = []
     @EnvironmentObject private var navigationRouter: NavigationRouter
-    @StateObject private var imagePickerManager = ImagePickerManager()
+    @StateObject private var profileImagePickerManager = ImagePickerManager()
+    @StateObject private var coverImagePickerManager = ImagePickerManager()
     @FocusState private var isKeyboardActive: Bool
 
     var body: some View {
@@ -70,16 +70,21 @@ struct ProfileEditView: View {
                 }
             }
         }
-        .onChange(of: imagePickerManager.selectedImages) { images in
-            // 오류와 상관 없이 이미지가 선택되면 처리
+        .onChange(of: profileImagePickerManager.selectedImages) { images in
             if let firstImage = images.first {
                 viewModel.selectedProfileImage = firstImage
             }
             viewModel.checkForChanges()
         }
+        .onChange(of: coverImagePickerManager.selectedImages) { images in
+            if let firstImage = images.first {
+                viewModel.selectedCoverImage = firstImage
+            }
+            viewModel.checkForChanges()
+        }
         .onAppear {
-            // 최대 1개의 이미지만 선택 가능하도록 설정
-            imagePickerManager.setOverrideMaxCount(1)
+            profileImagePickerManager.setOverrideMaxCount(1)
+            coverImagePickerManager.setOverrideMaxCount(1)
         }
         .onTapGesture {
             isKeyboardActive = false
@@ -111,27 +116,34 @@ struct ProfileEditView: View {
     private var profileImageSection: some View {
         VStack(spacing: 0) {
             ZStack {
-                // 배경 이미지
-                if !viewModel.coverImageURL.isEmpty {
-                    KFImage(URL(string: viewModel.coverImageURL))
-                        .placeholder {
+                coverImagePickerManager.photoPickerView(maxCount: 1) {
+                    Group {
+                        if let selectedCoverImage = viewModel.selectedCoverImage {
+                            Image(uiImage: selectedCoverImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(height: 160)
+                                .clipped()
+                        } else if !viewModel.coverImageURL.isEmpty {
+                            KFImage(URL(string: viewModel.coverImageURL))
+                                .placeholder {
+                                    Rectangle()
+                                        .fill(Color.napzakGrayScale(.gray100))
+                                }
+                                .resizable()
+                                .scaledToFill()
+                                .frame(height: 160)
+                                .clipped()
+                        } else {
                             Rectangle()
                                 .fill(Color.napzakGrayScale(.gray100))
+                                .frame(height: 160)
                         }
-                        .resizable()
-                        .scaledToFill()
-                        .frame(height: 160)
-                        .clipped()
-                } else {
-                    Rectangle()
-                        .fill(Color.napzakGrayScale(.gray100))
-                        .frame(height: 160)
+                    }
                 }
                 
-                // 프로필 이미지
                 Group {
                     if let selectedImage = viewModel.selectedProfileImage {
-                        // 새로 선택한 이미지
                         Image(uiImage: selectedImage)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
@@ -142,7 +154,6 @@ struct ProfileEditView: View {
                                     .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
                             )
                     } else if !viewModel.profileImageURL.isEmpty {
-                        // 기존 이미지
                         KFImage(URL(string: viewModel.profileImageURL))
                             .placeholder {
                                 Image("profile_edit")
@@ -173,9 +184,8 @@ struct ProfileEditView: View {
                 }
                 .offset(y: 57)
                 
-                // 편집 버튼
                 ZStack {
-                    imagePickerManager.photoPickerView(maxCount: 1) {
+                    profileImagePickerManager.photoPickerView(maxCount: 1) {
                         Image("edit")
                             .resizable()
                             .scaledToFit()
