@@ -14,7 +14,7 @@ struct EditSellProductDTO: Decodable {
     let genreName: String
     let title: String
     let description: String
-    let productCondition: ProductCondition
+    let productCondition: ProductCondition?
     let price: Int
     let isDeliveryIncluded: Bool
     let standardDeliveryFee: Int
