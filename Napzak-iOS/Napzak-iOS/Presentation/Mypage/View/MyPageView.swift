@@ -45,7 +45,8 @@ struct MyPageView: View {
         .background(Color.napzakGrayScale(.white))
         .task {
             await fetchMyPageInfo()
-        }
+        }        .ignoresSafeArea(.all)
+
     }
     
     private func fetchMyPageInfo() async {
@@ -73,14 +74,11 @@ struct MyPageView: View {
     private var logoView: some View {
         HStack {
             Image("logo")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 101, height: 33)
-            
             Spacer()
         }
-        .padding(.top, 60)
-        .padding(.horizontal, 27)
+        .padding(.top,60)
+        .padding(.leading, 28)
+        .ignoresSafeArea(.all)
     }
     
     // 스켈레톤
