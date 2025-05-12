@@ -128,7 +128,7 @@ extension SellRegisterView {
             Button {
                 //MARK: - 팔아요 등록
                 Task {
-                    await viewModel.postSellRegister()
+                    await viewModel.sellRegister()
                 }
             } label: {
                 Text("등록하기")

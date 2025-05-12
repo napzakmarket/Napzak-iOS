@@ -33,6 +33,8 @@ protocol ProductServiceProtocol {
     func deleteProduct(productId: Int) async -> Result<Void, NetworkError>
     func getSellProductInfoForEdit(productId: Int) async -> Result<EditSellProductResponseDTO, NetworkError>
     func getBuyProductInfoForEdit(productId: Int) async -> Result<EditBuyProductResponseDTO, NetworkError>
+    func putSellProduct(productId: Int, requestBody: SellRegisterRequestDTO) async -> Result<SellRegisterResponseDTO, NetworkError>
+    func putBuyProduct(productId: Int, requestBody: BuyRegisterRequestDTO) async -> Result<BuyRegisterResponseDTO, NetworkError>
 }
 
 final class ProductService: BaseService, ProductServiceProtocol {
@@ -136,5 +138,13 @@ final class ProductService: BaseService, ProductServiceProtocol {
     
     func getBuyProductInfoForEdit(productId: Int) async -> Result<EditBuyProductResponseDTO, NetworkError> {
         return await requestDecodable(provider, .getBuyProductInfoForEdit(productId: productId))
+    }
+    
+    func putSellProduct(productId: Int, requestBody: SellRegisterRequestDTO) async -> Result<SellRegisterResponseDTO, NetworkError> {
+        return await requestDecodable(provider, .putSellProduct(productId: productId, requestBody: requestBody))
+    }
+    
+    func putBuyProduct(productId: Int, requestBody: BuyRegisterRequestDTO) async -> Result<BuyRegisterResponseDTO, NetworkError> {
+            return await requestDecodable(provider, .putBuyProduct(productId: productId, requestBody: requestBody))
     }
 }

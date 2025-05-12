@@ -116,7 +116,7 @@ extension BuyRegisterView {
             
             Button {
                 Task {
-                    await viewModel.postBuyRegister()
+                    await viewModel.buyRegister()
                 }
             } label: {
                 Text("등록하기")

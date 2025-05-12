@@ -11,7 +11,8 @@ struct SellRegisterResponseData: Decodable {
     let productId: Int
     let productPhotoList: [PhotoInfoDTO]
     let genreId: Int
-    let title, description, productCondition: String
+    let title, description: String
+    let productCondition: String?
     let price: Int
     let isDeliveryIncluded: Bool
     let standardDeliveryFee, halfDeliveryFee: Int

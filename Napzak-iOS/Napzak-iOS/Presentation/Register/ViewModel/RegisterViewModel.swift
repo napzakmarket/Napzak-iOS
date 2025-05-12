@@ -35,9 +35,15 @@ final class RegisterViewModel: ObservableObject {
     @Published var isCompleted: Bool = false
     @Published var genreList: [GenreNameModel] = []
     
+    //MARK: - Properties
+    
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Register")
     
+    private let type: RegisterViewType
+    
     init(viewType: RegisterViewType)  {
+        self.type = viewType
+        
         imagePickerManager.onImageSelectionCompleted = { [weak self] images in
             self?.model.images = images
         }
@@ -50,6 +56,7 @@ final class RegisterViewModel: ObservableObject {
         case .initialRegister:
             print("dddd")
         case .editProduct(let productId, let tradeType):
+            self.productId = productId
             Task {
                 switch tradeType {
                 case .sell:
@@ -129,16 +136,18 @@ extension RegisterViewModel {
 
                 imagePickerManager.selectedImages = images
                 imagePickerManager.imageNameList = imageNames
-                self.model = RegisterModel(images: images,
-                                           title: data.title,
-                                           description: data.description,
-                                           price: String(data.price),
-                                           genre: data.genreName,
-                                           genreId: data.genreId,
-                                           productCondition: data.productCondition,
-                                           isDeliveryIncluded: data.isDeliveryIncluded,
-                                           standardDeliveryFee: String(data.standardDeliveryFee),
-                                           halfDeliveryFee: String(data.halfDeliveryFee))
+                self.model.images = images
+                self.model.title = data.title
+                self.model.description = data.description
+                self.model.price = String(data.price)
+                self.model.genre = data.genreName
+                self.model.genreId = data.genreId
+                self.model.productCondition = data.productCondition
+                self.model.isDeliveryIncluded = data.isDeliveryIncluded
+                self.model.standardDeliveryFee = String(data.standardDeliveryFee)
+                self.model.halfDeliveryFee = String(data.halfDeliveryFee)
+                self.normalDelivery = data.standardDeliveryFee != 0
+                self.halfDelivery = data.halfDeliveryFee != 0
 
             } catch {
                 logger.error("이미지 로드 중 오류 발생: \(error.localizedDescription)")
@@ -173,13 +182,13 @@ extension RegisterViewModel {
 
                 imagePickerManager.selectedImages = images
                 imagePickerManager.imageNameList = imageNames
-                self.model = RegisterModel(images: images,
-                                           title: data.title,
-                                           description: data.description,
-                                           price: String(data.price),
-                                           genre: data.genreName,
-                                           genreId: data.genreId,
-                                           isPriceNegotiable: data.isPriceNegotiable ?? false)
+                self.model.images = images
+                self.model.title = data.title
+                self.model.description = data.description
+                self.model.price = String(data.price)
+                self.model.genre = data.genreName
+                self.model.genreId = data.genreId
+                self.model.isPriceNegotiable = data.isPriceNegotiable
 
             } catch {
                 logger.error("이미지 로드 중 오류 발생: \(error.localizedDescription)")
@@ -267,7 +276,7 @@ extension RegisterViewModel {
     
     // MARK: - POST Register
     
-    func postSellRegister() async {
+    func sellRegister() async {
         // presigned URL 요청
         guard await getPresignedUrl() else { return }
         
@@ -302,21 +311,34 @@ extension RegisterViewModel {
             halfDeliveryFee: model.halfDeliveryFee.convertInt()
         )
         
-        // POST 요청
-        let result = await NetworkService.shared.productService.postSellRegister(
-            sellRegisterProduct: dto
-        )
-        
-        switch result {
-        case .success(let response):
-            logger.info("✅ 판매 등록 성공: \(response.data!.productId)")
-            self.productId = response.data?.productId
-        case .failure(let error):
-            logger.error("❌ 판매 등록 실패: \(error.localizedDescription)")
+        switch type {
+        case .initialRegister:
+            let result = await NetworkService.shared.productService.postSellRegister(
+                sellRegisterProduct: dto
+            )
+            
+            switch result {
+            case .success(let response):
+                logger.info("✅ 판매 등록 성공: \(response.data!.productId)")
+                self.productId = response.data?.productId
+            case .failure(let error):
+                logger.error("❌ 판매 등록 실패: \(error.localizedDescription)")
+            }
+        case .editProduct:
+            let result = await NetworkService.shared.productService.putSellProduct(productId: productId!, requestBody: dto)
+            
+            switch result {
+            case .success(let response):
+                logger.info("✅ 상품 수정 성공: \(response.data!.productId)")
+                self.productId = response.data?.productId
+            case .failure(let error):
+                logger.error("❌ 상품 수정 실패: \(error.localizedDescription)")
+            }
+
         }
     }
     
-    func postBuyRegister() async {
+    func buyRegister() async {
         // presigned URL 요청
         guard await getPresignedUrl() else { return }
         
@@ -348,17 +370,29 @@ extension RegisterViewModel {
             isPriceNegotiable: model.isPriceNegotiable
         )
         
-        // POST 요청
-        let result = await NetworkService.shared.productService.postBuyRegister(
-            buyRegisterProduct: dto
-        )
-        
-        switch result {
-        case .success(let response):
-            logger.info("✅ 구매 등록 성공: \(response.data!.productId)")
-            self.productId = response.data?.productId
-        case .failure(let error):
-            logger.error("❌ 구매 등록 실패: \(error.localizedDescription)")
+        switch type {
+        case .initialRegister:
+            let result = await NetworkService.shared.productService.postBuyRegister(
+                buyRegisterProduct: dto
+            )
+            
+            switch result {
+            case .success(let response):
+                logger.info("✅ 구매 등록 성공: \(response.data!.productId)")
+                self.productId = response.data?.productId
+            case .failure(let error):
+                logger.error("❌ 구매 등록 실패: \(error.localizedDescription)")
+            }
+        case .editProduct:
+            let result = await NetworkService.shared.productService.putBuyProduct(productId: productId!, requestBody: dto)
+            
+            switch result {
+            case .success(let response):
+                logger.info("✅ 상품 수정 성공: \(response.data!.productId)")
+                self.productId = response.data?.productId
+            case .failure(let error):
+                logger.error("❌ 상품 수정 실패: \(error.localizedDescription)")
+            }
         }
     }
     
