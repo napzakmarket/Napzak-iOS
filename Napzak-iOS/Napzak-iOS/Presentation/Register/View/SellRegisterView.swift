@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct SellRegisterView: View {
-    @EnvironmentObject private var navigationRouter: NavigationRouter
+    @StateObject private var registerRouter = RegisterNavigationRouter()
+    @StateObject var viewModel: RegisterViewModel
+    
     @Binding var isRegisterTabSelected: Bool
-
-    @StateObject private var viewModel = RegisterViewModel()
     
     var body: some View {
-        NavigationStack(path: $navigationRouter.path) {
+        NavigationStack(path: $registerRouter.path) {
             VStack(spacing: 0){
                 SellRegisterHeader()
                 
@@ -31,10 +31,11 @@ struct SellRegisterView: View {
             .scrollDismissesKeyboard(.immediately)
             .frame(maxWidth: .infinity)
             .scrollIndicators(.hidden)
-            .navigationDestination(for: Route.self) { route in
+            .navigationDestination(for: RegisterRoute.self) { route in
                 switch route {
                 case .registerSearchGenre:
                     RegisterSearchGenre(
+                        registerRouter: registerRouter,
                         genreSearchText: $viewModel.genreSearchText,
                         isCompleted: $viewModel.isCompleted,
                         genreList: $viewModel.genreList,
@@ -50,8 +51,6 @@ struct SellRegisterView: View {
                             }
                         }
                     }
-                default:
-                    EmptyView()
                 }
             }
         }
@@ -76,7 +75,7 @@ extension SellRegisterView {
                 .padding(.bottom, 21)
                 .background(.white)
                 .onTapGesture {
-                    navigationRouter.push(next: .registerSearchGenre)
+                    registerRouter.push(next: .registerSearchGenre)
                 }
             
             Rectangle()

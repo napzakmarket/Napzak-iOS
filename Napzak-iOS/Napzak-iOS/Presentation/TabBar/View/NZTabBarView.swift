@@ -66,9 +66,11 @@ struct NZTabBarView: View {
             .fullScreenCover(isPresented: $isRegisterViewPresented) {
                 switch registerType {
                 case .sell:
-                    SellRegisterView(isRegisterTabSelected: $isRegisterTabSelected)
+                    SellRegisterView(viewModel: RegisterViewModel(viewType: .initialRegister),
+                                     isRegisterTabSelected: $isRegisterTabSelected)
                 case .buy:
-                    BuyRegisterView(isRegisterTabSelected: $isRegisterTabSelected)
+                    BuyRegisterView(viewModel: RegisterViewModel(viewType: .initialRegister),
+                                    isRegisterTabSelected: $isRegisterTabSelected)
                 }
             }
             .navigationDestination(for: Route.self) { route in
@@ -95,9 +97,6 @@ struct NZTabBarView: View {
                     )
                 case .productDetailView(productId: let productId):
                     ProductDetailView(viewModel: ProductDetailViewModel(productId: productId))
-
-                case .registerSearchGenre:
-                    EmptyView()
                 }
             }
         }

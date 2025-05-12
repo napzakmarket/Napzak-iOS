@@ -20,6 +20,7 @@ struct ProductOwnerOptionsModalView: View {
     //MARK: - Properties
     
     let tradeType: TradeType
+    let onEditProduct: () -> Void
     let onChangeStatus: () -> Void
     let onDeletePtoduct: () -> Void
 
@@ -68,6 +69,7 @@ private extension ProductOwnerOptionsModalView {
     var editButton: some View {
         Button {
             isChangeStatusButtonSelected = false
+            onEditProduct()
         } label: {
             HStack(spacing: 6) {
                 Image(.imgEditModal)
@@ -106,6 +108,7 @@ private extension ProductOwnerOptionsModalView {
                     Button {
                         currentStatus = status
                         currentToastStyle = .statusChanged
+                        isChangeStatusButtonSelected = false
                         onChangeStatus()
                     } label: {
                         Image(currentStatus == status ? .imgRadioSelected : .imgRadioDefault)

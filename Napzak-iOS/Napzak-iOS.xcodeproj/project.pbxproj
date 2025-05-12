@@ -79,6 +79,7 @@
 		D0310B122DD0CCCB00C265EC /* ProductDetailResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0310B112DD0CCBE00C265EC /* ProductDetailResponseDTO.swift */; };
 		D0310B142DD1197000C265EC /* ChangeTradeStatusRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0310B132DD1195500C265EC /* ChangeTradeStatusRequestDTO.swift */; };
 		D0310B162DD188CF00C265EC /* EditProductResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0310B152DD188A100C265EC /* EditProductResponseDTO.swift */; };
+		D0310B182DD1AFA300C265EC /* RegisterNavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0310B172DD1AF9900C265EC /* RegisterNavigationRouter.swift */; };
 		D045DEBB2D83723A00EB1EB6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */; };
 		D045DEBC2D83723A00EB1EB6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D045DEB72D83723A00EB1EB6 /* Assets.xcassets */; };
 		D045DEBD2D83723A00EB1EB6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEB82D83723A00EB1EB6 /* ContentView.swift */; };
@@ -273,6 +274,7 @@
 		D0310B112DD0CCBE00C265EC /* ProductDetailResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailResponseDTO.swift; sourceTree = "<group>"; };
 		D0310B132DD1195500C265EC /* ChangeTradeStatusRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeTradeStatusRequestDTO.swift; sourceTree = "<group>"; };
 		D0310B152DD188A100C265EC /* EditProductResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProductResponseDTO.swift; sourceTree = "<group>"; };
+		D0310B172DD1AF9900C265EC /* RegisterNavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterNavigationRouter.swift; sourceTree = "<group>"; };
 		D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Napzak-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D045DEB52D83723A00EB1EB6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		D045DEB72D83723A00EB1EB6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -421,6 +423,7 @@
 		6C9938C02DA0233200627DEE /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				D0310B172DD1AF9900C265EC /* RegisterNavigationRouter.swift */,
 				6CB945522DA55E180020A17D /* Sell */,
 				6C6CBE002DA58A5600763CBA /* Buy */,
 				6CC472342DA440B70086E345 /* RegisterImage.swift */,
@@ -1607,6 +1610,7 @@
 				D6FA34352DCF923500795A54 /* BuyProductListResponseDTO .swift in Sources */,
 				D64561282DC48101003D2E2B /* OnboardingManager.swift in Sources */,
 				D06F13962DA300CB0029698C /* NavigationRouter.swift in Sources */,
+				D0310B182DD1AFA300C265EC /* RegisterNavigationRouter.swift in Sources */,
 				6CD972D32DC7C468000AE85E /* BuyRegisterResponseDTO.swift in Sources */,
 				D07837B22DB6C156009122F6 /* SortModalView.swift in Sources */,
 				D64561212DC3BECC003D2E2B /* TokenRefreshService.swift in Sources */,
