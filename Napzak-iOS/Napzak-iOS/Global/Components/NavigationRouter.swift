@@ -12,6 +12,7 @@ enum Route: Hashable {
     case sView
     case mView
     case SettingView
+    case withDrawView
     case searchInputView
     case MarketView
     case ProfileEditView

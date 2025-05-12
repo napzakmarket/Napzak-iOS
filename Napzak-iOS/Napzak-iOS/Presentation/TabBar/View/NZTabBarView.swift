@@ -112,6 +112,8 @@ struct NZTabBarView: View {
                 case .SettingView:
                     SettingView()
 
+                case .withDrawView:
+                    WithDrawView()
                 }
             }
         }
