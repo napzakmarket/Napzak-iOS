@@ -30,6 +30,7 @@ struct NZTabBarView: View {
                             .tag(NZTab.home)
                         
                         SearchView(
+                            viewModel: SearchViewModel(searchWord: ""),
                             isGenreSelectModalPresented: $isGenreSelectModalPresented,
                             isSortModalPresented: $isSortModalPresented
                         )
@@ -75,15 +76,11 @@ struct NZTabBarView: View {
             }
             .navigationDestination(for: Route.self) { route in
                 switch route {
-                case .sView:
-                    SView()
-                case .mView:
-                    MView()
                 case .searchInputView:
                     SearchInputView()
                     
-                case .MarketView:
-                       MarketView()
+                case .marketView(let storeId):
+                    MarketView(viewModel: MarketViewModel(storeId: storeId))
                     
                 case .ProfileEditView:
                     ProfileEditView()
@@ -109,6 +106,16 @@ struct NZTabBarView: View {
                     
                 case .withDrawConfirmView:
                     WithDrawConfirmView()
+                    
+                case .searchView(searchWord: let searchWord):
+                    SearchView(
+                        viewModel: SearchViewModel(searchWord: searchWord),
+                        isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                        isSortModalPresented: $isSortModalPresented
+                    )
+                    
+                case .reportView(reportType: let reportType, id: let id):
+                    ReportView(reportType: reportType, id: id)
                 }
             }
         }
@@ -210,99 +217,12 @@ private extension NZTabBarView {
     }
 }
 
-// 아래로 전부! 임시로 띄울 뷰, 삭제 예정
-// 로직만 확인해주세요
-struct HView: View {
-    @EnvironmentObject private var navigationRouter: NavigationRouter
-    
-    var body: some View {
-        VStack {
-            Button {
-                navigationRouter.push(next: .sView)
-            } label: {
-                Text("눌러")
-                    .background(.red)
-            }
-            Text("홈")
-                .applyNapzakFont(.title1Bold22)
-        }
-    }
-}
-
-struct SView: View {
-    @EnvironmentObject private var navigationRouter: NavigationRouter
-
-    var body: some View {
-        VStack {
-            Button {
-                navigationRouter.push(next: .mView)
-            } label: {
-                Text("다음")
-                    .background(.red)
-            }
-            Text("탐색")
-                .applyNapzakFont(.title1Bold22)
-        }
-    }
-}
-
-struct RView: View {
-    @Binding var isRegisterTabSelected: Bool
-    @Binding var isRegisterViewPresented: Bool
-    
-    var body: some View {
-        VStack {
-            Button {
-                print("버튼 눌림")
-                isRegisterViewPresented = false
-            } label: {
-                Text("닫기")
-                    .background(.red)
-            }
-            Text("등록")
-                .applyNapzakFont(.title1Bold22)
-        }
-        .onAppear {
-            isRegisterTabSelected = false
-        }
-    }
-}
-
 struct CView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
     
     var body: some View {
         VStack {
-            Button {
-                navigationRouter.push(next: .sView)
-            } label: {
-                Text("눌러")
-                    .background(.red)
-            }
             Text("채팅")
-                .applyNapzakFont(.title1Bold22)
-        }
-    }
-}
-
-struct MView: View {
-    @EnvironmentObject private var navigationRouter: NavigationRouter
-
-    var body: some View {
-        VStack {
-            Button {
-                navigationRouter.pop()
-            } label: {
-                Text("뒤로가기")
-                    .background(.red)
-            }
-            Button {
-                navigationRouter.reset()
-            } label: {
-                Text("맨처음")
-                    .background(.red)
-            }
-            Text("마이")
                 .applyNapzakFont(.title1Bold22)
         }
     }

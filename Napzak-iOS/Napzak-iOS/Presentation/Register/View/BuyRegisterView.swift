@@ -129,7 +129,9 @@ extension BuyRegisterView {
                     await viewModel.buyRegister()
                     if let productId = viewModel.productId {
                         dismiss()
-                        navigationRouter.push(next: .productDetailView(productId: productId))
+                        if viewModel.type == .initialRegister {
+                            navigationRouter.push(next: .productDetailView(productId: productId))
+                        }
                     }
                 }
             } label: {
@@ -147,7 +149,6 @@ extension BuyRegisterView {
             .padding(.top, 18)
             .padding(.bottom, 40)
             .disabled(!viewModel.sharedValidate)
-            
         }
     }
     

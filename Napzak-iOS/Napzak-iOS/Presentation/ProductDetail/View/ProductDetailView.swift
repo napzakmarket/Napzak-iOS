@@ -65,7 +65,10 @@ struct ProductDetailView: View {
                 
                 ReportModalView(
                     isReportModalPresented: $isReportModalPresented,
-                    reportType: .product
+                    reportType: .product,
+                    onTapped: {
+                        navigationRouter.push(next: .reportView(reportType: .product, id: viewModel.product.productDetail.id))
+                    }
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
@@ -122,6 +125,10 @@ struct ProductDetailView: View {
                             isDeleteAlertPresented = false
                             Task {
                                 await viewModel.deleteProduct()
+                                try? await Task.sleep(for: .seconds(2))
+                                await MainActor.run {
+                                    navigationRouter.pop()
+                                }
                             }
                         },
                         onCancel: {
@@ -162,6 +169,13 @@ struct ProductDetailView: View {
                                                                         tradeType: viewModel.product.productDetail.tradeType)),
                     isRegisterTabSelected: .constant(false)
                 )
+            }
+        }
+        .onChange(of: isRegisterViewPresented) { value in
+            if !value {
+                Task {
+                    await viewModel.fetchProduct(id: viewModel.product.productDetail.id)
+                }
             }
         }
     }
@@ -456,10 +470,25 @@ extension ProductDetailView {
                 .applyNapzakFont(.body4Bold14)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
             HStack(alignment: .center, spacing: 0) {
-                Image(.profileImg)
-                    .resizable()
-                    .frame(width: 60, height: 60)
-                    .padding(.trailing, 14)
+                Group {
+                    if let url = URL(string: viewModel.product.storeInfo.storePhoto) {
+                        KFImage(url)
+                            .placeholder {
+                                Image(.profileImg)
+                            }.retry(maxCount: 3, interval: .seconds(3))
+                            .onFailure { error  in
+                                print("failure: \(error.localizedDescription)")
+                            }
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    } else {
+                        Image(.profileImg)
+                    }
+                }
+                .frame(width: 60, height: 60)
+                .clipShape(Circle())
+                .padding(.trailing, 14)
+                
                 VStack(alignment: .leading) {
                     Text("\(viewModel.product.storeInfo.nickname)")
                         .applyNapzakFont(.body4Bold14)
@@ -484,7 +513,7 @@ extension ProductDetailView {
                 }
                 Spacer()
                 Button {
-                    
+                    navigationRouter.push(next: .marketView(storeId: viewModel.product.storeInfo.id))
                 } label: {
                     Image(.iconArrowRight)
                 }

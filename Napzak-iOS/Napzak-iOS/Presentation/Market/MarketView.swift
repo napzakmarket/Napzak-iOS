@@ -11,11 +11,14 @@ import Kingfisher
 
 struct MarketView: View {
     
-    @StateObject private var viewModel = MarketViewModel()
+    @EnvironmentObject private var navigationRouter: NavigationRouter
+
+    @StateObject var viewModel: MarketViewModel
+    
     @State private var isGenreSelectModalPresented = false
     @State private var isSortModalPresented = false
     @State private var selectedSortOption: SortOption = .recent
-    @EnvironmentObject private var navigationRouter: NavigationRouter
+    @State private var isReportModalPresented = false
     
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
     private let columns = [GridItem(.flexible(), spacing: 20), GridItem(.flexible())]
@@ -73,33 +76,71 @@ struct MarketView: View {
                 .edgesIgnoringSafeArea(.bottom)
                 .transition(.move(edge: .bottom))
             }
+            
+            if isReportModalPresented {
+                Color.napzakTransparency(.transBlack)
+                    .onTapGesture {
+                        withAnimation {
+                            isReportModalPresented = false
+                        }
+                    }
+                    .transition(.opacity)
+                    .zIndex(1)
+                
+                ReportModalView(
+                    isReportModalPresented: $isReportModalPresented,
+                    reportType: .product,
+                    onTapped: {
+                        navigationRouter.push(next: .reportView(reportType: .store, id: viewModel.storeDetail?.storeId ?? 0))
+                    }
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(2)
+            }
+
         }
         .ignoresSafeArea(edges: .bottom)
         .navigationBarHidden(true)
         .animation(.easeInOut, value: isGenreSelectModalPresented)
         .animation(.easeInOut, value: isSortModalPresented)
         .onChange(of: viewModel.selectedTabIndex) { _ in
-            viewModel.fetchData()
+            Task {
+                await viewModel.fetchProducts()
+            }
         }
         .onChange(of: selectedSortOption) { newValue in
             viewModel.productFetchOption.sortOption = newValue
-            viewModel.fetchProducts()
+            Task {
+                await viewModel.fetchProducts()
+            }
         }
         .onAppear {
-            viewModel.fetchData()
+            Task {
+                await viewModel.fetchStoreDetail()
+                await viewModel.fetchProducts()
+            }
         }
     }
 
     private var navigationBarView: some View {
-        HStack {
-            Button{
+        HStack() {
+            Button {
                 navigationRouter.pop()
             } label: {
                 Image(.iconBack)
-                    .foregroundColor(Color.napzakGrayScale(.gray200))
-                    .frame(width: 24, height: 24)
+                    .frame(width: 48, height: 48)
             }
             Spacer()
+            if !(viewModel.storeDetail?.isStoreOwner ?? true) {
+                Button {
+                    withAnimation {
+                        isReportModalPresented = true
+                    }
+                } label: {
+                    Image(.iconMoreOptions)
+                        .frame(width: 48, height: 48)
+                }
+            }
         }
         .ignoresSafeArea()
         .padding(.horizontal, 20)
@@ -211,10 +252,6 @@ struct MarketView: View {
                             ForEach(["로딩 중..."], id: \.self) { tag in
                                 PlainChip(title: tag)
                             }
-                        } else {
-                            ForEach(["선택된 장르 없음"], id: \.self) { tag in
-                                PlainChip(title: tag)
-                            }
                         }
                     }
                     .padding(.horizontal, 25)
@@ -264,14 +301,10 @@ struct MarketView: View {
                         isOnSale: $viewModel.productFetchOption.isOnSale
                     )
                     .frame(height: 54)
-                    .onChange(of: viewModel.productFetchOption.isOnSale) { _ in
-                        viewModel.fetchProducts()
-                    }
-                    .onChange(of: viewModel.productFetchOption.isUnopened) { _ in
-                        viewModel.fetchProducts()
-                    }
-                    .onChange(of: viewModel.productFetchOption.genres) { _ in
-                        viewModel.fetchProducts()
+                    .onChange(of: viewModel.productFetchOption) { _ in
+                        Task {
+                            await viewModel.fetchProducts()
+                        }
                     }
                 }
             }
@@ -355,10 +388,10 @@ struct MarketView: View {
                                     await viewModel.toggleLike(for: viewModel.products[i].id)
                                 }
                             })
-                            .onTapGesture {
-                                //TODO: - 화면 전환
-                                print("\(viewModel.products[i].id)번 상품")
-                            }
+                        .onTapGesture {
+                           navigationRouter.push(next: .productDetailView(productId: viewModel.products[i].id))
+                           print("\(viewModel.products[i].id)번 상품")
+                       }
                     }
                 }
                 .padding(.horizontal, 28)
@@ -374,8 +407,4 @@ struct MarketView: View {
         }
         .frame(maxWidth: .infinity)
     }
-}
-
-#Preview {
-    MarketView()
 }

@@ -113,7 +113,7 @@ extension SearchInputView {
                     .frame(height: 8)
             }
             Button {
-                //TODO: - 화면 전환
+                navigationRouter.push(next: .searchView(searchWord: viewModel.searchInputText))
             } label: {
                 HStack(alignment: .center, spacing: 6) {
                     Image(.imgSearchInput)
@@ -142,8 +142,7 @@ extension SearchInputView {
             PlainChipContainerView(
                 titles: viewModel.searchRecommendations.map { $0.searchWord },
                 action: { title in
-                    //TODO: - 데이터 넘기며 화면 전환
-                    print(title)
+                    navigationRouter.push(next: .searchView(searchWord: title))
                 }
             )
         }

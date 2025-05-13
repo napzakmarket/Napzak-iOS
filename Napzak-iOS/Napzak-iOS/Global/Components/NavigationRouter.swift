@@ -8,18 +8,17 @@
 import SwiftUI
 
 enum Route: Hashable {
-    //임시 뷰
-    case sView
-    case mView
     case SettingView
     case withDrawSelectReasonView
     case withDrawWriteReasonView
     case withDrawConfirmView
     case searchInputView
-    case MarketView
+    case marketView(storeId: Int)
     case ProfileEditView
     case genreDetailView(genreId: Int, genreName: String)
     case productDetailView(productId: Int)
+    case searchView(searchWord: String)
+    case reportView(reportType: ReportType, id: Int)
 }
 
 final class NavigationRouter: ObservableObject {

@@ -8,27 +8,14 @@
 import Moya
 
 enum ProductAPI {
-    case getSellProducts(
-        storeOwnerId: Int,
-        sort: String?,
-        isOnSale: Bool?,
-        isUnopened: Bool?,
-        genreId: Int?,
-        cursor: String?
-    )
-    
-    case getBuyProducts(
-        storeOwnerId: Int,
-        sort: String?,
-        isOnSale: Bool?,
-        genreId: Int?,
-        cursor: String?
-    )
-    
+    case getSellProductsForMarket(storeOwnerId: Int, productFetchOption: ProductFetchOption)
+    case getBuyProductsForMarket(storeOwnerId: Int, productFetchOption: ProductFetchOption)
     case sellRegister(registerItem: SellRegisterRequestDTO)
     case buyRegister(registerItem: BuyRegisterRequestDTO)
     case getSellProduct(productFetchOption: ProductFetchOption)
     case getBuyProduct(productFetchOption: ProductFetchOption)
+    case getSellProductForSearch(searchWord: String, productFetchOption: ProductFetchOption)
+    case getBuyProductForSearch(searchWord: String, productFetchOption: ProductFetchOption)
     case getProductDetailInfo(productId: Int)
     case getSearchRecommendation
     case getSellProductInfoForEdit(productId: Int)
@@ -49,14 +36,18 @@ extension ProductAPI: BaseTargetType {
     
     var path: String {
         switch self {
-        case .getSellProducts(let storeOwnerId, _, _, _, _, _):
+        case .getSellProductsForMarket(let storeOwnerId, _):
             return "products/sell/stores/\(storeOwnerId)"
-        case .getBuyProducts(let storeOwnerId, _, _, _, _):
+        case .getBuyProductsForMarket(let storeOwnerId, _):
             return "products/buy/stores/\(storeOwnerId)"
         case .sellRegister, .getSellProduct:
             return "products/sell"
         case .buyRegister, .getBuyProduct:
             return "products/buy"
+        case .getSellProductForSearch:
+            return "products/sell/search"
+        case .getBuyProductForSearch:
+            return "products/buy/search"
         case .getProductDetailInfo(productId: let productId), .patchTradeStatus(let productId, _), .deleteProduct(let productId):
             return "products/\(productId)"
         case .getSellProductInfoForEdit(let productId), .getBuyProductInfoForEdit(let productId):
@@ -85,52 +76,21 @@ extension ProductAPI: BaseTargetType {
     
     var task: Moya.Task {
         switch self {
-        case .getSellProducts(_, let sort, let isOnSale, let isUnopened, let genreId, let cursor):
-            var params: [String: Any] = [:]
+        case .getSellProductsForMarket(_, let productFetchOption):
+            let genreIDs = productFetchOption.genres.map { $0.id }
             
-            if let sort = sort {
-                params["sort"] = sort
-            }
-            
-            if let isOnSale = isOnSale {
-                params["isOnSale"] = isOnSale
-            }
-            
-            if let isUnopened = isUnopened {
-                params["isUnopened"] = isUnopened
-            }
-            
-            if let genreId = genreId {
-                params["genreId"] = genreId
-            }
-            
-            if let cursor = cursor {
-                params["cursor"] = cursor
-            }
-            
-            return .requestParameters(parameters: params, encoding: URLEncoding.queryString)
-            
-        case .getBuyProducts(_, let sort, let isOnSale, let genreId, let cursor):
-            var params: [String: Any] = [:]
-            
-            if let sort = sort {
-                params["sort"] = sort
-            }
-            
-            if let isOnSale = isOnSale {
-                params["isOnSale"] = isOnSale
-            }
-            
-            if let genreId = genreId {
-                params["genreId"] = genreId
-            }
-            
-            if let cursor = cursor {
-                params["cursor"] = cursor
-            }
-            
-            return .requestParameters(parameters: params, encoding: URLEncoding.queryString)
-            
+            return .requestParameters(parameters: ["sortOption" : productFetchOption.sortOptionValue,
+                                                   "genreId" : genreIDs,
+                                                   "isOnSale" : productFetchOption.isOnSale,
+                                                   "isUnopened" : productFetchOption.isUnopened],
+                                      encoding: URLEncoding.queryString)
+        case .getBuyProductsForMarket(_, let productFetchOption):
+            let genreIDs = productFetchOption.genres.map { $0.id }
+
+            return .requestParameters(parameters: ["sortOption" : productFetchOption.sortOptionValue,
+                                                   "genreId" : genreIDs,
+                                                   "isOnSale" : productFetchOption.isOnSale],
+                                      encoding: URLEncoding.queryString)
         case .sellRegister(let registerItem):
             return .requestJSONEncodable(registerItem)
         case .buyRegister(let registerItem):
@@ -150,7 +110,24 @@ extension ProductAPI: BaseTargetType {
                                                    "genreId" : genreIDs,
                                                    "isOnSale" : productFetchOption.isOnSale],
                                       encoding: URLEncoding.queryString)
-        case .patchTradeStatus(_, let requestBody):
+        case .getSellProductForSearch(let searchWord, let productFetchOption):
+            let genreIDs = productFetchOption.genres.map { $0.id }
+
+            return .requestParameters(parameters: ["searchWord" : searchWord,
+                                                   "sortOption" : productFetchOption.sortOptionValue,
+                                                   "genreId" : genreIDs,
+                                                   "isOnSale" : productFetchOption.isOnSale,
+                                                   "isUnopened" : productFetchOption.isUnopened],
+                                      encoding: URLEncoding.queryString)
+        case .getBuyProductForSearch(let searchWord, let productFetchOption):
+            let genreIDs = productFetchOption.genres.map { $0.id }
+
+            return .requestParameters(parameters: ["searchWord" : searchWord,
+                                                   "sortOption" : productFetchOption.sortOptionValue,
+                                                   "genreId" : genreIDs,
+                                                   "isOnSale" : productFetchOption.isOnSale,
+                                                   "isUnopened" : productFetchOption.isUnopened],
+                                      encoding: URLEncoding.queryString)        case .patchTradeStatus(_, let requestBody):
             return .requestJSONEncodable(requestBody)
         case .putSellProduct(_, let body):
             return .requestJSONEncodable(body)

@@ -9,7 +9,8 @@ import SwiftUI
 
 struct SettingView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
-
+    @EnvironmentObject private var tabRouter: TabRouter
+    
     @StateObject private var viewModel = SettingViewModel()
     
     @State var logoutButtonTapped: Bool = false
@@ -44,7 +45,9 @@ struct SettingView: View {
                         cancelText: "아니요",
                         onConfirm: {
                             Task {
-                                await viewModel.logOut()
+                                await viewModel.logout()
+                                navigationRouter.reset()
+                                tabRouter.switchToHome()
                             }
                             logoutButtonTapped = false
                         },

@@ -12,21 +12,10 @@ protocol ProductServiceProtocol {
     func postBuyRegister(buyRegisterProduct: BuyRegisterRequestDTO) async -> Result<BuyRegisterResponseDTO, NetworkError>
     func getSellProduct(productFetchOption: ProductFetchOption) async -> Result<SellProductResponseDTO, NetworkError>
     func getBuyProduct(productFetchOption: ProductFetchOption) async -> Result<BuyProductResponseDTO, NetworkError>
-    func fetchSellProducts(
-        storeOwnerId: Int,
-        sort: String?,
-        isOnSale: Bool?,
-        isUnopened: Bool?,
-        genreId: Int?,
-        cursor: String?
-    ) async -> Result<MarketProductListResponseDTO, NetworkError>
-    func fetchBuyProducts(
-        storeOwnerId: Int,
-        sort: String?,
-        isOnSale: Bool?,
-        genreId: Int?,
-        cursor: String?
-    ) async -> Result<MarketProductBuyListResponseDTO, NetworkError>
+    func getSellProductForSearch(searchWord: String, productFetchOption: ProductFetchOption) async -> Result<SellProductResponseDTO, NetworkError>
+    func getBuyProductForSearch(searchWord: String, productFetchOption: ProductFetchOption) async -> Result<BuyProductResponseDTO, NetworkError>
+    func getSellProductsForMarket(storeOwnerId: Int, productFetchOption: ProductFetchOption) async -> Result<SellProductResponseDTO, NetworkError>
+    func getBuyProductsForMarket(storeOwnerId: Int, productFetchOption: ProductFetchOption) async -> Result<BuyProductResponseDTO, NetworkError>
     func getProductDetailInfo(productId: Int) async -> Result<ProductDetailResponseDTO, NetworkError>
     func getSearchRecommendation() async -> Result<SearchRecommendationResponseDTO, NetworkError>
     func patchTradeStatus(productId: Int, requestBody: ChangeTradeStatusRequestDTO) async -> Result<Void, NetworkError>
@@ -38,6 +27,7 @@ protocol ProductServiceProtocol {
 }
 
 final class ProductService: BaseService, ProductServiceProtocol {
+    
     private let provider = MoyaProvider<ProductAPI>(plugins: [MoyaPlugin()])
 
     func postSellRegister(sellRegisterProduct: SellRegisterRequestDTO) async -> Result<SellRegisterResponseDTO, NetworkError> {
@@ -56,64 +46,22 @@ final class ProductService: BaseService, ProductServiceProtocol {
         return await requestDecodable(provider, .getBuyProduct(productFetchOption: productFetchOption))
     }
     
-    func fetchSellProducts(
-        storeOwnerId: Int,
-        sort: String? = "RECENT",
-        isOnSale: Bool? = false,
-        isUnopened: Bool? = false,
-        genreId: Int? = nil,
-        cursor: String? = nil
-    ) async -> Result<MarketProductListResponseDTO, NetworkError> {
-        
-        let result: Result<BaseMarketProductListResponseDTO, NetworkError> = await requestDecodable(
-            provider,
-            ProductAPI.getSellProducts(
-                storeOwnerId: storeOwnerId,
-                sort: sort,
-                isOnSale: isOnSale,
-                isUnopened: isUnopened,
-                genreId: genreId,
-                cursor: cursor
-            )
-        )
-        
-        return result.map { response in
-            guard let data = response.data else {
-                // 빈 응답 객체 생성
-                return MarketProductListResponseDTO(productCount: 0, productSellList: [], nextCursor: nil)
-            }
-            
-            return data
-        }
+    func getSellProductForSearch(searchWord: String, productFetchOption: ProductFetchOption) async -> Result<SellProductResponseDTO, NetworkError> {
+        return await requestDecodable(provider, .getSellProductForSearch(searchWord: searchWord, productFetchOption: productFetchOption))
     }
     
-    func fetchBuyProducts(
-        storeOwnerId: Int,
-        sort: String? = "RECENT",
-        isOnSale: Bool? = false,
-        genreId: Int? = nil,
-        cursor: String? = nil
-    ) async -> Result<MarketProductBuyListResponseDTO, NetworkError> {
+    func getBuyProductForSearch(searchWord: String, productFetchOption: ProductFetchOption) async -> Result<BuyProductResponseDTO, NetworkError> {
+        return await requestDecodable(provider, .getBuyProductForSearch(searchWord: searchWord, productFetchOption: productFetchOption))
+    }
+    
+    func getSellProductsForMarket(storeOwnerId: Int, productFetchOption: ProductFetchOption) async -> Result<SellProductResponseDTO, NetworkError> {
         
-        let result: Result<BaseMarketProductBuyListResponseDTO, NetworkError> = await requestDecodable(
-            provider,
-            ProductAPI.getBuyProducts(
-                storeOwnerId: storeOwnerId,
-                sort: sort,
-                isOnSale: isOnSale,
-                genreId: genreId,
-                cursor: cursor
-            )
-        )
+        return await requestDecodable(provider, .getSellProductsForMarket(storeOwnerId: storeOwnerId, productFetchOption: productFetchOption))
+    }
+    
+    func getBuyProductsForMarket(storeOwnerId: Int, productFetchOption: ProductFetchOption) async -> Result<BuyProductResponseDTO, NetworkError> {
         
-        return result.map { response in
-            guard let data = response.data else {
-                // 빈 응답 객체 생성
-                return MarketProductBuyListResponseDTO(productCount: 0, productBuyList: [], nextCursor: nil)
-            }
-            
-            return data
-        }
+        return await requestDecodable(provider, .getBuyProductsForMarket(storeOwnerId: storeOwnerId, productFetchOption: productFetchOption))
     }
     
     func getProductDetailInfo(productId: Int) async -> Result<ProductDetailResponseDTO, NetworkError> {
