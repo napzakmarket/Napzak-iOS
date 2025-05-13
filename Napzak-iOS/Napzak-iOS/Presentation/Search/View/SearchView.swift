@@ -234,7 +234,7 @@ private extension SearchView {
     
     @ViewBuilder
     private func productScrollView(products: Binding<[ProductItemModel]>, productsCount: Int) -> some View {
-        ScrollView(showsIndicators: false) {
+        ScrollView {
             VStack(spacing: 0) {
                 if !viewModel.productFetchOption.genres.isEmpty {
                     genreListView

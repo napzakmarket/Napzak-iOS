@@ -208,7 +208,7 @@ extension ProductDetailView {
                 }
             }
         }
-        .frame(height: 100)
+        .frame(height: 94)
         .padding(.bottom, 4)
         .padding(.horizontal, 9)
         .background(
@@ -218,7 +218,7 @@ extension ProductDetailView {
     }
     
     private var mainScrollView: some View {
-        ScrollView(showsIndicators: false) {
+        ScrollView {
             VStack(alignment: .leading, spacing: 0) {
                 productImagePageView
                 productInfo
