@@ -58,6 +58,7 @@ struct SellRegisterDelivery: View {
                             
                             HStack(spacing: 0){
                                 TextField("100~30,000", text: $standardDeliveryFee)
+                                    .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
                                     .onChange(of: standardDeliveryFee) { newValue in
                                         standardDeliveryFee = newValue.convertPrice(maxPrice: normalMaxDeliveryCharge)
@@ -93,6 +94,7 @@ struct SellRegisterDelivery: View {
                             
                             HStack(spacing: 0){
                                 TextField("0~5,000", text: $halfDeliveryFee)
+                                    .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
                                     .onChange(of: halfDeliveryFee) { newValue in
                                         halfDeliveryFee = newValue
