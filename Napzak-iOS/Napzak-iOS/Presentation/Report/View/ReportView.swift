@@ -58,7 +58,6 @@ extension ReportView {
             
             Divider()
         }
-        .frame(height: 100)
     }
     
     private var selectReportReason: some View {
@@ -263,4 +262,8 @@ extension ReportView {
         .padding(.horizontal, 28)
         .padding(.bottom, 143)
     }
+}
+
+#Preview {
+    ReportView(reportType: .product, id: 1)
 }
