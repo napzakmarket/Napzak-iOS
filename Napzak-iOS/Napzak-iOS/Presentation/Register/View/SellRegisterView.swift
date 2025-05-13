@@ -12,7 +12,6 @@ struct SellRegisterView: View {
     @StateObject private var registerRouter = RegisterNavigationRouter()
     @StateObject var viewModel: RegisterViewModel
     @Environment(\.dismiss) private var dismiss
-    @FocusState private var isKeyboardActive: Bool
     
     @Binding var isRegisterTabSelected: Bool
     
@@ -56,6 +55,9 @@ struct SellRegisterView: View {
                     }
                 }
             }
+            .onTapGesture {
+                self.dismissKeyboard()
+            }
         }
         .onAppear {
             isRegisterTabSelected = false
@@ -89,12 +91,10 @@ extension SellRegisterView {
             RegisterTitle(title: $viewModel.model.title)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 10)
-                .focused($isKeyboardActive)
             
             RegisterDescription(description: $viewModel.model.description)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 23)
-                .focused($isKeyboardActive)
             
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))
@@ -112,7 +112,6 @@ extension SellRegisterView {
             )
             .padding(.horizontal, 28)
             .padding(.bottom, 30)
-            .focused($isKeyboardActive)
             
             SellRegisterDelivery(
                 isDeliveryIncluded: $viewModel.model.isDeliveryIncluded,
@@ -122,9 +121,6 @@ extension SellRegisterView {
                 halfDelivery: $viewModel.halfDelivery
             )
             .padding(.horizontal, 28)
-        }
-        .onTapGesture {
-            isKeyboardActive = false
         }
     }
     

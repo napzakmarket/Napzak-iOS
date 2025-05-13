@@ -37,9 +37,12 @@ struct ReportView: View {
             alignment: .bottom
         )
         .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
-        .ignoresSafeArea(edges: [.top])
+        .ignoresSafeArea()
         .scrollDismissesKeyboard(.immediately)
         .toolbar(.hidden, for: .navigationBar)
+        .onTapGesture {
+            self.dismissKeyboard()
+        }
     }
 }
 
