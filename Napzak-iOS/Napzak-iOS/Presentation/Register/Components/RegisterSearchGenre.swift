@@ -75,16 +75,21 @@ extension RegisterSearchGenre {
                             genreId = selectedGenre.id
                             registerRouter.pop()
                         } label: {
-                            Text("\(selectedGenre.name)")
-                                .applyNapzakFont(
-                                    genre == selectedGenre.name ? .body5SemiBold14 : .body6Regular14
-                                )
-                                .foregroundStyle(
-                                    genre == selectedGenre.name ? Color
-                                        .napzakPrimary(.purple500) : Color
-                                        .napzakGrayScale(.gray400)
-                                )
-                                .padding(10)
+                            HStack(spacing: 0) {
+                                Text("\(selectedGenre.name)")
+                                    .applyNapzakFont(
+                                        genre == selectedGenre.name ? .body5SemiBold14 : .body6Regular14
+                                    )
+                                    .foregroundStyle(
+                                        genre == selectedGenre.name ? Color
+                                            .napzakPrimary(.purple500) : Color
+                                            .napzakGrayScale(.gray400)
+                                    )
+                                    .padding(10)
+                                
+                                Spacer()
+                                    .background(.clear)
+                            }
                         }
                     }
                 }
