@@ -17,21 +17,20 @@ struct ProfileEditView: View {
     @StateObject private var coverImagePickerManager = ImagePickerManager()
     @FocusState private var isKeyboardActive: Bool
 
-    var body: some View {
-        ZStack(alignment: .bottom) {
-            ScrollView {
+    var body: some View {            
+            ZStack(alignment: .bottom) {
                 VStack(spacing: 0) {
                     headerView
-                        .zIndex(3)
-                        .background(Color.white.opacity(0.01))
-                    
-                    profileImageSection
-                    marketNameView
-                    marketDescriptionSection
-                    genreSelectionSection
-                    confirmButton
+                    ScrollView(showsIndicators: false) {
+                        VStack(spacing: 0) {
+                            profileImageSection
+                            marketNameView
+                            marketDescriptionSection
+                            genreSelectionSection
+                            confirmButton
+                        }
+                    }
                 }
-            }
             
             if isGenreSelectModalPresented {
                 Color.black.opacity(0.3)
