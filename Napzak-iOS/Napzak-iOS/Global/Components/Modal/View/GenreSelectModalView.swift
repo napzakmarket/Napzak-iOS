@@ -79,7 +79,8 @@ extension GenreSelectModalView {
                     placeholder: "어떤 장르의 굿즈인가요? 검색해보세요!",
                     text: $viewModel.inputGenreText,
                     isCompleted: $viewModel.isSearchCompleted,
-                    isFocused: _isSearchBarFocused
+                    isFocused: _isSearchBarFocused,
+                    onSubmit: { }
                 )
                 .onChange(of: viewModel.inputGenreText) { value in
                     Task {
