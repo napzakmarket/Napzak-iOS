@@ -16,6 +16,7 @@ struct ReportModalView: View {
     //MARK: - Properties
     
     let reportType: ReportType
+    let onTapped: () -> Void
     
     //MARK: - Main Body
     
@@ -28,6 +29,7 @@ struct ReportModalView: View {
             Button {
                 withAnimation {
                     isReportModalPresented = false
+                    onTapped()
                 }
             } label: {
                 HStack(spacing: 6) {
@@ -65,7 +67,10 @@ struct ReportModalView: View {
         var body: some View {
             ReportModalView(
                 isReportModalPresented: $isViewerOptionsPresented,
-                reportType: .product
+                reportType: .product,
+                onTapped: {
+                    
+                }
             )
         }
     }

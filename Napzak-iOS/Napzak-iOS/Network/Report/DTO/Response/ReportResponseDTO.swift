@@ -10,7 +10,7 @@ typealias ReportStoreResponseDTO = BaseResponseDTO<ReportStoreResponseData>
 
 struct ReportProductResponseData: Codable {
     let reporterId: Int
-    let reportedProductID: Int
+    let reportedProductID: Int?
     let reportTitle: String
     let reportDescription: String
     let reportContact: String

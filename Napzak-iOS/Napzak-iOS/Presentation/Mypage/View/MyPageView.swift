@@ -169,7 +169,7 @@ struct MyPageView: View {
     private var marketButton: some View {
         VStack(spacing: 0) {
             Button {
-                navigationRouter.push(next: .MarketView)
+                navigationRouter.push(next: .marketView(storeId: storeInfo?.storeId ?? 0))
             } label: {
                 HStack {
                     Spacer()

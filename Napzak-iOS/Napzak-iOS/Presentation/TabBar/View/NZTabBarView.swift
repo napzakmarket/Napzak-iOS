@@ -79,8 +79,8 @@ struct NZTabBarView: View {
                 case .searchInputView:
                     SearchInputView()
                     
-                case .MarketView:
-                       MarketView()
+                case .marketView(let storeId):
+                    MarketView(viewModel: MarketViewModel(storeId: storeId))
                     
                 case .ProfileEditView:
                     ProfileEditView()
@@ -113,6 +113,9 @@ struct NZTabBarView: View {
                         isGenreSelectModalPresented: $isGenreSelectModalPresented,
                         isSortModalPresented: $isSortModalPresented
                     )
+                    
+                case .reportView(reportType: let reportType, id: let id):
+                    ReportView(reportType: reportType, id: id)
                 }
             }
         }
