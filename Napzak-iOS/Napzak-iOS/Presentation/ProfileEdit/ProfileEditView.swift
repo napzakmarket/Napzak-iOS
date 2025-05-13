@@ -73,15 +73,18 @@ struct ProfileEditView: View {
         .onChange(of: profileImagePickerManager.selectedImages) { images in
             if let firstImage = images.first {
                 viewModel.selectedProfileImage = firstImage
+                profileImagePickerManager.selectedImages = []
             }
             viewModel.checkForChanges()
         }
         .onChange(of: coverImagePickerManager.selectedImages) { images in
             if let firstImage = images.first {
                 viewModel.selectedCoverImage = firstImage
+                coverImagePickerManager.selectedImages = [] 
             }
             viewModel.checkForChanges()
         }
+
         .onAppear {
             profileImagePickerManager.setOverrideMaxCount(1)
             coverImagePickerManager.setOverrideMaxCount(1)
