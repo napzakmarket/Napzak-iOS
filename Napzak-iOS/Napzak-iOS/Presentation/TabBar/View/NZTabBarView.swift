@@ -57,6 +57,7 @@ struct NZTabBarView: View {
                 VStack(spacing: 10) {
                     if  isRegisterTabSelected {
                         RegisterFloatingView(isRegisterViewPresented: $isRegisterViewPresented, registerType: $registerType)
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
                     }
                     if !(isGenreSelectModalPresented || isSortModalPresented){
                         tabBar
@@ -64,6 +65,7 @@ struct NZTabBarView: View {
                 }
             }
             .edgesIgnoringSafeArea(.bottom)
+            .animation(.easeInOut(duration: 0.3), value: isRegisterTabSelected)
             .fullScreenCover(isPresented: $isRegisterViewPresented) {
                 switch registerType {
                 case .sell:

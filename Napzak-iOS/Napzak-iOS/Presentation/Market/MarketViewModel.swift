@@ -75,8 +75,7 @@ final class MarketViewModel: ObservableObject {
         // 탭에 따라 다른 API 호출
         switch selectedTabIndex {
         case 0: // 팔아요 탭
-            let result = await NetworkService.shared.productService.getSellProductsForMarket(
-                storeOwnerId: storeId, productFetchOption: productFetchOption)
+            let result = await NetworkService.shared.productService.getSellProductsForMarket(storeOwnerId: storeId, productFetchOption: productFetchOption)
             
             switch result {
             case .success(let response):
