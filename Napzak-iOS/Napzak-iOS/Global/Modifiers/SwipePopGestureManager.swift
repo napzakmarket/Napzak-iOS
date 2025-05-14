@@ -21,3 +21,16 @@ final class SwipePopGestureManager {
         isAllowPopGesture = bool
     }
 }
+
+struct SwipePopGestureDisabledViewModifier: ViewModifier {
+    
+    func body(content: Content) -> some View {
+        content
+            .task {
+                SwipePopGestureManager.shared.updateAllowPopGesture(false)
+            }
+            .onDisappear {
+                SwipePopGestureManager.shared.updateAllowPopGesture(true)
+            }
+    }
+}
