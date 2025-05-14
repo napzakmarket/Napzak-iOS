@@ -39,7 +39,7 @@ struct ProfileEditView: View {
                         withAnimation {
                             isGenreSelectModalPresented = false
                         }
-                    }.zIndex(10)
+                    }.zIndex(1)
                 
                 GenreSelectModalView(
                     viewModel: GenreSelectModalViewModel(
@@ -54,7 +54,7 @@ struct ProfileEditView: View {
                 .onDisappear {
                     viewModel.selectedGenres = displayGenres
                 }
-                .zIndex(11)
+                .zIndex(2)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
             }
