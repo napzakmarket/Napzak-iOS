@@ -465,74 +465,75 @@ extension ProductDetailView {
     }
     
     private var marketInfo: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            Text("마켓 정보")
-                .applyNapzakFont(.body4Bold14)
-                .foregroundStyle(Color.napzakGrayScale(.gray500))
-            HStack(alignment: .center, spacing: 0) {
-                Group {
-                    if let url = URL(string: viewModel.product.storeInfo.storePhoto) {
-                        KFImage(url)
-                            .placeholder {
-                                Image(.profileImg)
-                            }.retry(maxCount: 3, interval: .seconds(3))
-                            .onFailure { error  in
-                                print("failure: \(error.localizedDescription)")
-                            }
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    } else {
-                        Image(.profileImg)
+        Button {
+            navigationRouter.push(next: .marketView(storeId: viewModel.product.storeInfo.id))
+        } label: {
+            VStack(alignment: .leading, spacing: 20) {
+                Text("마켓 정보")
+                    .applyNapzakFont(.body4Bold14)
+                    .foregroundStyle(Color.napzakGrayScale(.gray500))
+                HStack(alignment: .center, spacing: 0) {
+                    Group {
+                        if let url = URL(string: viewModel.product.storeInfo.storePhoto) {
+                            KFImage(url)
+                                .placeholder {
+                                    Image(.profileImg)
+                                }.retry(maxCount: 3, interval: .seconds(3))
+                                .onFailure { error  in
+                                    print("failure: \(error.localizedDescription)")
+                                }
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                        } else {
+                            Image(.profileImg)
+                        }
                     }
-                }
-                .frame(width: 60, height: 60)
-                .clipShape(Circle())
-                .padding(.trailing, 14)
-                
-                VStack(alignment: .leading) {
-                    Text("\(viewModel.product.storeInfo.nickname)")
-                        .applyNapzakFont(.body4Bold14)
-                        .foregroundStyle(Color.napzakPrimary(.purple500))
-                    HStack(alignment: .center, spacing: 0) {
-                        Text("팔아요")
-                            .applyNapzakFont(.caption2Medium12)
-                            .foregroundStyle(Color.napzakGrayScale(.gray500))
-                            .padding(.trailing, 2)
-                        Text("\(viewModel.product.storeInfo.totalSellCount)개")
-                            .applyNapzakFont(.caption1SemiBold12)
-                            .foregroundStyle(Color.napzakGrayScale(.gray500))
-                            .padding(.trailing, 14)
-                        Text("구해요")
-                            .applyNapzakFont(.caption2Medium12)
-                            .foregroundStyle(Color.napzakGrayScale(.gray500))
-                            .padding(.trailing, 2)
-                        Text("\(viewModel.product.storeInfo.totalBuyCount)개")
-                            .applyNapzakFont(.caption1SemiBold12)
-                            .foregroundStyle(Color.napzakGrayScale(.gray500))
+                    .frame(width: 60, height: 60)
+                    .clipShape(Circle())
+                    .padding(.trailing, 14)
+                    
+                    VStack(alignment: .leading) {
+                        Text("\(viewModel.product.storeInfo.nickname)")
+                            .applyNapzakFont(.body4Bold14)
+                            .foregroundStyle(Color.napzakPrimary(.purple500))
+                        HStack(alignment: .center, spacing: 0) {
+                            Text("팔아요")
+                                .applyNapzakFont(.caption2Medium12)
+                                .foregroundStyle(Color.napzakGrayScale(.gray500))
+                                .padding(.trailing, 2)
+                            Text("\(viewModel.product.storeInfo.totalSellCount)개")
+                                .applyNapzakFont(.caption1SemiBold12)
+                                .foregroundStyle(Color.napzakGrayScale(.gray500))
+                                .padding(.trailing, 14)
+                            Text("구해요")
+                                .applyNapzakFont(.caption2Medium12)
+                                .foregroundStyle(Color.napzakGrayScale(.gray500))
+                                .padding(.trailing, 2)
+                            Text("\(viewModel.product.storeInfo.totalBuyCount)개")
+                                .applyNapzakFont(.caption1SemiBold12)
+                                .foregroundStyle(Color.napzakGrayScale(.gray500))
+                        }
                     }
-                }
-                Spacer()
-                Button {
-                    navigationRouter.push(next: .marketView(storeId: viewModel.product.storeInfo.id))
-                } label: {
+                    Spacer()
                     Image(.iconArrowRight)
+                        .frame(width: 22, height: 30)
+                    
                 }
-                .frame(width: 22, height: 30)
+                .padding(.vertical, 17)
+                .padding(.horizontal, 22)
+                .background(
+                    RoundedRectangle(cornerRadius: 24)
+                        .fill(Color.napzakGrayScale(.gray10))
+                )
             }
-            .padding(.vertical, 17)
-            .padding(.horizontal, 22)
+            .padding(.top, 31)
+            .padding(.horizontal, 28)
+            .padding(.bottom, viewModel.product.productDetail.isOwnedByCurrentUser ? 62 : 130)
             .background(
-                RoundedRectangle(cornerRadius: 24)
-                    .fill(Color.napzakGrayScale(.gray10))
+                Color.napzakGrayScale(.white)
+                    .frame(maxWidth: .infinity)
             )
         }
-        .padding(.top, 31)
-        .padding(.horizontal, 28)
-        .padding(.bottom, viewModel.product.productDetail.isOwnedByCurrentUser ? 62 : 130)
-        .background(
-            Color.napzakGrayScale(.white)
-                .frame(maxWidth: .infinity)
-        )
     }
     
     private var bottomView: some View {
