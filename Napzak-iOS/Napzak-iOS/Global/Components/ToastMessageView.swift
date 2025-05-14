@@ -28,7 +28,8 @@ struct ToastMessageView: View {
         
         var backgroundColor: Color {
             switch self {
-            case .warning: return .white
+            case .warning: return
+                Color.napzakTransparency(.transWhite, opacity: 0.5)
             case .success: return Color.napzakPrimary(.purple500)
             }
         }
