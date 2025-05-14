@@ -12,6 +12,9 @@ final class WithDrawViewModel: ObservableObject {
     
     static let shared = WithDrawViewModel()
     
+    private let keychain = KeychainManager.shared
+    private let onboardingManager = OnboardingManager.shared
+    
     private init() { }
     
     @Published var withdrawReasonTitle: String = "원하는 굿즈를 찾기 어려워요"
@@ -49,6 +52,11 @@ extension WithDrawViewModel {
             logger.info("✅ 탈퇴한 ID: \(response.data!.storeId)")
             logger.info("✅ 탈퇴 사유: \(response.data!.withdrawTitle)")
             logger.info("✅ 탈퇴 설명: \(response.data!.withdrawDescription ?? "없음")")
+            
+            onboardingManager.clearProgress()
+            if case .failure(let error) = keychain.clearTokens() {
+                logger.error("❌ 토큰 삭제 실패: \(error)")
+            }
         case .failure(let error):
             logger.error("❌ 탈퇴 실패: \(error.localizedDescription)")
         }
