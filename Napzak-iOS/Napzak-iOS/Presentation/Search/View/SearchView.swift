@@ -15,8 +15,6 @@ struct SearchView: View {
 
     @StateObject var viewModel: SearchViewModel
     
-    @State private var selectedTabIndex = 0
-    
     @Binding var isGenreSelectModalPresented: Bool
     @Binding var isSortModalPresented: Bool
 
@@ -33,8 +31,8 @@ struct SearchView: View {
                 searchHeader
                     .padding(.top, 75)
                 productScrollView(
-                    products: selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
-                    productsCount: selectedTabIndex == 0 ? viewModel.sellProductsCount : viewModel.buyProductsCount
+                    products: viewModel.selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
+                    productsCount: viewModel.selectedTabIndex == 0 ? viewModel.sellProductsCount : viewModel.buyProductsCount
                 )
                 Spacer()
             }
@@ -93,39 +91,14 @@ struct SearchView: View {
         .animation(.spring(), value: viewModel.showToast)
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
-        .onChange(of: selectedTabIndex) { value in
-            Task {
-                if value == 0 {
-                    if viewModel.searchWord.isEmpty {
-                        await viewModel.fetchSellProducts()
-                    } else {
-                        await viewModel.fetchSellProductsForSearch()
-                    }
-                } else {
-                    if viewModel.searchWord.isEmpty {
-                        await viewModel.fetchBuyProducts()
-                    } else {
-                        await viewModel.fetchBuyProductsForSearch()
-                    }
-                }
-            }
+        .onChange(of: viewModel.selectedTabIndex) { _ in
+            viewModel.updateProducts()
         }
-        .onChange(of: viewModel.productFetchOption) { value in
-            Task {
-                if selectedTabIndex == 0 {
-                    if viewModel.searchWord.isEmpty {
-                        await viewModel.fetchSellProducts()
-                    } else {
-                        await viewModel.fetchSellProductsForSearch()
-                    }
-                } else {
-                    if viewModel.searchWord.isEmpty {
-                        await viewModel.fetchBuyProducts()
-                    } else {
-                        await viewModel.fetchBuyProductsForSearch()
-                    }
-                }
-            }
+        .onChange(of: viewModel.productFetchOption) { _ in
+            viewModel.updateProducts()
+        }
+        .onAppear {
+            viewModel.updateProducts()
         }
     }
 }
@@ -158,11 +131,11 @@ extension SearchView {
                 shadowBackground
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    NZSegmentedControl(selectedTabIndex: $selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
+                    NZSegmentedControl(selectedTabIndex: $viewModel.selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
                     
                     FilterContainerView(
                         isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                        selectedTabIndex: $selectedTabIndex,
+                        selectedTabIndex: $viewModel.selectedTabIndex,
                         selectedGenres: $viewModel.productFetchOption.genres,
                         isUnopened: $viewModel.productFetchOption.isUnopened,
                         isOnSale: $viewModel.productFetchOption.isOnSale
