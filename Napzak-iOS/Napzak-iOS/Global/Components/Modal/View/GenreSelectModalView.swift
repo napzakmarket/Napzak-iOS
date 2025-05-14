@@ -79,7 +79,8 @@ extension GenreSelectModalView {
                     placeholder: "어떤 장르의 굿즈인가요? 검색해보세요!",
                     text: $viewModel.inputGenreText,
                     isCompleted: $viewModel.isSearchCompleted,
-                    isFocused: _isSearchBarFocused
+                    isFocused: _isSearchBarFocused,
+                    onSubmit: { }
                 )
                 .onChange(of: viewModel.inputGenreText) { value in
                     Task {
@@ -117,10 +118,13 @@ extension GenreSelectModalView {
                         Button {
                             viewModel.selectGenre(genre)
                         } label: {
-                            Text("\(genre.name)")
-                                .applyNapzakFont(.body6Regular14)
-                                .foregroundStyle(viewModel.selectedGenres.contains(genre) ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray400))
-                                .padding(10)
+                            HStack {
+                                Text("\(genre.name)")
+                                    .applyNapzakFont(.body6Regular14)
+                                    .foregroundStyle(viewModel.selectedGenres.contains(genre) ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray400))
+                                    .padding(10)
+                                Spacer()
+                            }
                         }
                     }
                 }

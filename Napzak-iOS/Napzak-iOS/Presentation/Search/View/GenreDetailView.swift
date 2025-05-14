@@ -117,7 +117,7 @@ private extension GenreDetailView {
     }
     
     var mainScrollView: some View {
-        ScrollView(showsIndicators: false) {
+        ScrollView {
             LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
                 genreInfoView
                 Section(header: segmentedFilterSectionView) {
