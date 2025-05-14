@@ -55,6 +55,8 @@ struct ProfileEditView: View {
                     viewModel.selectedGenres = displayGenres
                 }
                 .zIndex(11)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(2)
             }
         }
         .animation(.easeInOut, value: isGenreSelectModalPresented)
