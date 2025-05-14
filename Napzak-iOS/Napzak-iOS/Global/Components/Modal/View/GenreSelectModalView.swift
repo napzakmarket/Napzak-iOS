@@ -118,10 +118,13 @@ extension GenreSelectModalView {
                         Button {
                             viewModel.selectGenre(genre)
                         } label: {
-                            Text("\(genre.name)")
-                                .applyNapzakFont(.body6Regular14)
-                                .foregroundStyle(viewModel.selectedGenres.contains(genre) ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray400))
-                                .padding(10)
+                            HStack {
+                                Text("\(genre.name)")
+                                    .applyNapzakFont(.body6Regular14)
+                                    .foregroundStyle(viewModel.selectedGenres.contains(genre) ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray400))
+                                    .padding(10)
+                                Spacer()
+                            }
                         }
                     }
                 }
