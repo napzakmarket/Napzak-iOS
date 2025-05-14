@@ -39,16 +39,16 @@ struct RegisterFloatingView: View {
     
     var sellTapArea: some View {
         HStack(alignment: .center, spacing: 5) {
+            Spacer()
             Image(.imgRegisterFloatingSell)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 17.56, height: 17.11)
-                .padding(.leading, 52)
             Text("팔아요 등록")
                 .applyNapzakFont(.body4Bold14)
                 .foregroundStyle(isHighlightedSellArea ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray400))
                 .padding(.vertical, 14)
-                .padding(.trailing, 52)
+            Spacer()
         }
         .background(isHighlightedSellArea ? Color.napzakGrayScale(.gray50) : Color.napzakGrayScale(.white))
         .simultaneousGesture(
@@ -67,16 +67,16 @@ struct RegisterFloatingView: View {
     
     var buyTapArea: some View {
         HStack(alignment: .center, spacing: 5) {
+            Spacer()
             Image(.imgRegisterFloatingBuy)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 18, height: 18)
-                .padding(.leading, 52)
             Text("구해요 등록")
                 .applyNapzakFont(.body4Bold14)
                 .foregroundStyle(isHighlightedBuyArea ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray400))
                 .padding(.vertical, 16)
-                .padding(.trailing, 52)
+            Spacer()
         }
         .background(isHighlightedBuyArea ? Color.napzakGrayScale(.gray50) : Color.napzakGrayScale(.white))
         .simultaneousGesture(

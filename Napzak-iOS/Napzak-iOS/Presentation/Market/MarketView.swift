@@ -27,13 +27,7 @@ struct MarketView: View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
                 navigationBarView
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: 0) {
-                        profileSectionView
-                        tabAndFilterSectionView
-                        contentListView
-                    }
-                }
+                mainScrollView
             }
             
             if isGenreSelectModalPresented {
@@ -44,18 +38,18 @@ struct MarketView: View {
                             isGenreSelectModalPresented = false
                         }
                     }
+                    .transition(.opacity)
+                    .zIndex(1)
                 
-                ZStack(alignment: .bottom) {
-                    GenreSelectModalView(
-                        viewModel: GenreSelectModalViewModel(
-                            selectedGenres: viewModel.productFetchOption.genres
-                        ),
-                        isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                        adaptedGenres: $viewModel.productFetchOption.genres
-                    )
-                }
-                .edgesIgnoringSafeArea(.bottom)
-                .transition(.move(edge: .bottom))
+                GenreSelectModalView(
+                    viewModel: GenreSelectModalViewModel(
+                        selectedGenres: viewModel.productFetchOption.genres
+                    ),
+                    isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                    adaptedGenres: $viewModel.productFetchOption.genres
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(2)
             }
             
             if isSortModalPresented {
@@ -66,15 +60,17 @@ struct MarketView: View {
                             isSortModalPresented = false
                         }
                     }
-                
+                    .transition(.opacity)
+                    .zIndex(1)
+
                 ZStack(alignment: .bottom) {
                     SortModalView(
                         isSortModalPresented: $isSortModalPresented,
                         selectedOption: $selectedSortOption
                     )
                 }
-                .edgesIgnoringSafeArea(.bottom)
-                .transition(.move(edge: .bottom))
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(2)
             }
             
             if isReportModalPresented {
@@ -99,10 +95,10 @@ struct MarketView: View {
             }
 
         }
-        .ignoresSafeArea(edges: .bottom)
+        .ignoresSafeArea()
         .navigationBarHidden(true)
-        .animation(.easeInOut, value: isGenreSelectModalPresented)
-        .animation(.easeInOut, value: isSortModalPresented)
+        .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
+        .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .onChange(of: viewModel.selectedTabIndex) { _ in
             Task {
                 await viewModel.fetchProducts()
@@ -123,29 +119,42 @@ struct MarketView: View {
     }
 
     private var navigationBarView: some View {
-        HStack() {
-            Button {
-                navigationRouter.pop()
-            } label: {
-                Image(.iconBack)
-                    .frame(width: 48, height: 48)
-            }
+        VStack {
             Spacer()
-            if !(viewModel.storeDetail?.isStoreOwner ?? true) {
+            HStack() {
                 Button {
-                    withAnimation {
-                        isReportModalPresented = true
-                    }
+                    navigationRouter.pop()
                 } label: {
-                    Image(.iconMoreOptions)
+                    Image(.iconBack)
                         .frame(width: 48, height: 48)
+                }
+                Spacer()
+                if !(viewModel.storeDetail?.isStoreOwner ?? true) {
+                    Button {
+                        withAnimation {
+                            isReportModalPresented = true
+                        }
+                    } label: {
+                        Image(.iconMoreOptions)
+                            .frame(width: 48, height: 48)
+                    }
                 }
             }
         }
-        .ignoresSafeArea()
-        .padding(.horizontal, 20)
-        .padding(.vertical, 18)
-        .background(Color.napzakGrayScale(.white))
+        .frame(height: 96)
+        .padding(.bottom, 4)
+        .padding(.horizontal, 9)
+    }
+    
+    private var mainScrollView: some View {
+        ScrollView {
+            LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
+                profileSectionView
+                Section(header: tabAndFilterSectionView) {
+                    contentListView
+                }
+            }
+        }
     }
     
     private var profileSectionView: some View {

@@ -75,7 +75,10 @@ extension SearchInputView {
                 placeholder: "원하는 장르를 직접 검색해보세요!",
                 text: $viewModel.searchInputText,
                 isCompleted: $viewModel.isSearchCompleted,
-                isFocused: _isSearchBarFocused
+                isFocused: _isSearchBarFocused,
+                onSubmit: {
+                    navigationRouter.push(next: .searchView(searchWord: viewModel.searchInputText))
+                }
             )
             .frame(height: 38)
             .onAppear {
@@ -102,16 +105,6 @@ extension SearchInputView {
     
     private var typingContentView: some View {
         LazyVStack(spacing: 0) {
-            ForEach(viewModel.genreSearchResults) { genre in
-                Button {
-                    navigationRouter.push(next: .genreDetailView(genreId: genre.id,
-                                                                 genreName: genre.name))
-                } label: {
-                    GenreItemView(genreName: genre.name)
-                }
-                Color.napzakGrayScale(.gray10)
-                    .frame(height: 8)
-            }
             Button {
                 navigationRouter.push(next: .searchView(searchWord: viewModel.searchInputText))
             } label: {
@@ -127,6 +120,16 @@ extension SearchInputView {
                 }
                 .frame(height: 60)
                 .background(Color.napzakGrayScale(.white))
+            }
+            ForEach(viewModel.genreSearchResults) { genre in
+                Color.napzakGrayScale(.gray10)
+                    .frame(height: 8)
+                Button {
+                    navigationRouter.push(next: .genreDetailView(genreId: genre.id,
+                                                                 genreName: genre.name))
+                } label: {
+                    GenreItemView(genreName: genre.name)
+                }
             }
         }
         .padding(.top, 131)
