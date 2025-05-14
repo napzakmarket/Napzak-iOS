@@ -109,24 +109,21 @@ extension ProductItemView {
     }
     
     private var productTypeInterest: some View {
-        HStack(alignment: .bottom, spacing: 2) {
-            switch product.tradeType {
-            case .sell:
-                Image(.imgChipSell)
-                    .resizable()
-                    .frame(width: 40, height: 20)
-            case .buy:
-                Image(.imgChipBuy)
-                    .resizable()
-                    .frame(width: 40, height: 20)
-            }
-            if let isPriceNegotiable = product.isPriceNegotiable {
-                if isPriceNegotiable {
-                    Image(.imgChipBidding)
-                        .frame(width: 50, height: 20)
+        HStack(alignment: .bottom, spacing: 0) {
+            HStack(alignment: .bottom, spacing: 2) {
+                switch product.tradeType {
+                case .sell:
+                    Image(.imgChipSell)
+                case .buy:
+                    Image(.imgChipBuy)
+                }
+                if let isPriceNegotiable = product.isPriceNegotiable {
+                    if isPriceNegotiable {
+                        Image(.imgChipBidding)
+                    }
                 }
             }
-            Spacer()
+            Spacer(minLength: 5)
             if !product.isOwnedByCurrentUser {
                 likeButton
             }
@@ -143,9 +140,11 @@ extension ProductItemView {
         } label: {
             Image(product.isInterested ? .btnHeartSelected : .btnHeartDefault)
                 .resizable()
+                .scaledToFit()
                 .frame(width: 14, height: 13)
         }
-        .padding([.bottom, .trailing], 9)
+        .padding(.bottom, width == 150 ? 9 : 6)
+        .padding(.trailing, width == 150 ? 9 : 5)
     }
     
     private var productSummary: some View {
@@ -183,10 +182,10 @@ extension ProductItemView {
 
 #Preview {
     struct PreviewContainer: View {
-        @State var product = ProductItemModel.dummyProducts[4]
+        @State var product = ProductItemModel.dummyProducts[1]
 
         var body: some View {
-            ProductItemView(product: $product, width: 150, shouldToggleInterestState: {})
+            ProductItemView(product: $product, width: 116, shouldToggleInterestState: {})
         }
     }
     
