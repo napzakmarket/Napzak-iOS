@@ -83,16 +83,15 @@ final class GenreSelectionViewModel: ObservableObject {
     func toggleGenreSelection(_ genre: PreferGenreModel) {
         if selectedGenres.contains(genre) {
             selectedGenres.removeAll { $0.id == genre.id }
-        } else {
-            if selectedGenres.count >= 7 {
-                showToast = true
-                Task {
-                    try? await Task.sleep(for: .seconds(2))
-                    await MainActor.run {
-                        self.showToast = false
-                    }
+        } else if selectedGenres.count >= 7 {
+            showToast = true
+            Task {
+                try? await Task.sleep(for: .seconds(2))
+                await MainActor.run {
+                    self.showToast = false
                 }
             }
+        } else {
             selectedGenres.append(genre)
         }
     }
