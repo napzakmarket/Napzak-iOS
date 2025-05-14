@@ -87,7 +87,8 @@ extension GenreSelectionView {
                 placeholder: "원하는 장르를 직접 검색해보세요!",
                 text: $viewModel.searchText,
                 isCompleted: $isSearchCompleted,
-                isFocused: _isSearchFocused
+                isFocused: _isSearchFocused,
+                onSubmit: { }
             )
             .padding(.top, 20)
         }
