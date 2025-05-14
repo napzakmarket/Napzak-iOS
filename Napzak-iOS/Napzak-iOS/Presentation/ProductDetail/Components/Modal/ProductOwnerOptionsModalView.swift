@@ -96,7 +96,9 @@ private extension ProductOwnerOptionsModalView {
                     .applyNapzakFont(.body4Bold14)
                     .foregroundStyle(Color.napzakGrayScale(.gray500))
                 Spacer()
-                Image(isChangeStatusButtonSelected ? .iconArrowUpModal : .iconArrowDownModal)
+                Image(.iconArrowDownModal)
+                    .rotationEffect(.degrees(isChangeStatusButtonSelected ? 180 : 0))
+                    .animation(.easeInOut(duration: 0.3), value: isChangeStatusButtonSelected)
             }
             .padding(.vertical, 10)
         }
