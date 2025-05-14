@@ -465,13 +465,13 @@ extension ProductDetailView {
     }
     
     private var marketInfo: some View {
-        Button {
-            navigationRouter.push(next: .marketView(storeId: viewModel.product.storeInfo.id))
-        } label: {
-            VStack(alignment: .leading, spacing: 20) {
-                Text("마켓 정보")
-                    .applyNapzakFont(.body4Bold14)
-                    .foregroundStyle(Color.napzakGrayScale(.gray500))
+        VStack(alignment: .leading, spacing: 20) {
+            Text("마켓 정보")
+                .applyNapzakFont(.body4Bold14)
+                .foregroundStyle(Color.napzakGrayScale(.gray500))
+            Button {
+                navigationRouter.push(next: .marketView(storeId: viewModel.product.storeInfo.id))
+            } label: {
                 HStack(alignment: .center, spacing: 0) {
                     Group {
                         if let url = URL(string: viewModel.product.storeInfo.storePhoto) {
@@ -526,14 +526,14 @@ extension ProductDetailView {
                         .fill(Color.napzakGrayScale(.gray10))
                 )
             }
-            .padding(.top, 31)
-            .padding(.horizontal, 28)
-            .padding(.bottom, viewModel.product.productDetail.isOwnedByCurrentUser ? 62 : 130)
-            .background(
-                Color.napzakGrayScale(.white)
-                    .frame(maxWidth: .infinity)
-            )
         }
+        .padding(.top, 31)
+        .padding(.horizontal, 28)
+        .padding(.bottom, viewModel.product.productDetail.isOwnedByCurrentUser ? 62 : 130)
+        .background(
+            Color.napzakGrayScale(.white)
+                .frame(maxWidth: .infinity)
+        )
     }
     
     private var bottomView: some View {
