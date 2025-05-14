@@ -79,7 +79,7 @@ extension RegisterViewModel {
     //MARK: - Get all genre
     
     func getAllGenre() async {
-        let result = await NetworkService.shared.genreService.getAllGenreName()
+        let result = await NetworkService.shared.genreService.getAllGenreName(size: 43)
         
         switch result {
         case .success(let response):

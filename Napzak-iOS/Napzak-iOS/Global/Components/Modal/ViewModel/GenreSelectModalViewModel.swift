@@ -55,7 +55,7 @@ extension GenreSelectModalViewModel {
     //MARK: - Network Func
     
     func fetchAllGenres() async {
-        let result = await NetworkService.shared.genreService.getAllGenreName()
+        let result = await NetworkService.shared.genreService.getAllGenreName(size: 39)
         
         switch result {
         case .success(let response):
