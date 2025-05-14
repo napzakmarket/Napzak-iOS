@@ -17,8 +17,8 @@ struct GenreDetailView: View {
 
     @ObservedObject var viewModel: GenreDetailViewModel
     
-    @State private var selectedTabIndex = 0
     @State private var isSortModalPresented = false
+    @State private var scrollToTopTrigger: Bool = false
     
     //MARK: - Properties
     
@@ -67,23 +67,16 @@ struct GenreDetailView: View {
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .ignoresSafeArea()
         .toolbar(.hidden, for: .navigationBar)
-        .onChange(of: selectedTabIndex) { value in
-            Task {
-                if value == 0 {
-                    await viewModel.fetchSellProducts()
-                } else {
-                    await viewModel.fetchBuyProducts()
-                }
-            }
+        .onChange(of: viewModel.selectedTabIndex) { _ in
+            viewModel.updateProducts()
+            scrollToTopTrigger.toggle()
         }
-        .onChange(of: viewModel.productFetchOption) { value in
-            Task {
-                if selectedTabIndex == 0 {
-                    await viewModel.fetchSellProducts()
-                } else {
-                    await viewModel.fetchBuyProducts()
-                }
-            }
+        .onChange(of: viewModel.productFetchOption) { _ in
+            viewModel.updateProducts()
+            scrollToTopTrigger.toggle()
+        }
+        .onAppear {
+            viewModel.updateProducts()
         }
     }
 }
@@ -117,15 +110,23 @@ private extension GenreDetailView {
     }
     
     var mainScrollView: some View {
-        ScrollView {
-            LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
+        ScrollViewReader { proxy in
+            ScrollView {
                 genreInfoView
-                Section(header: segmentedFilterSectionView) {
-                    productsView(
-                        products: selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
-                        productsCount: selectedTabIndex == 0 ? viewModel.sellProductsCount : viewModel.buyProductsCount
-                    )
+                Color.clear
+                    .frame(height: 0)
+                    .id("top")
+                LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
+                    Section(header: segmentedFilterSectionView) {
+                        productsView(
+                            products: viewModel.selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
+                            productsCount: viewModel.selectedTabIndex == 0 ? viewModel.sellProductsCount : viewModel.buyProductsCount
+                        )
+                    }
                 }
+            }
+            .onChange(of: scrollToTopTrigger) { _ in
+                proxy.scrollTo("top")
             }
         }
     }
@@ -192,7 +193,7 @@ private extension GenreDetailView {
             shadowBackground
             
             VStack(alignment: .leading, spacing: 0) {
-                NZSegmentedControl(selectedTabIndex: $selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
+                NZSegmentedControl(selectedTabIndex: $viewModel.selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
                 
                 filterView
                     .frame(height: 54)
@@ -214,7 +215,7 @@ private extension GenreDetailView {
     
     private var filterView: some View {
         HStack(alignment: .center, spacing: 6) {
-            if selectedTabIndex == 0 {
+            if viewModel.selectedTabIndex == 0 {
                 unopenedFilterChip
             }
             onSaleFilterChip

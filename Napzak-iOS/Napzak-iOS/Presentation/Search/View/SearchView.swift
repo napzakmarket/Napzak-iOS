@@ -15,6 +15,8 @@ struct SearchView: View {
 
     @StateObject var viewModel: SearchViewModel
     
+    @State private var scrollToTopTrigger: Bool = false
+    
     @Binding var isGenreSelectModalPresented: Bool
     @Binding var isSortModalPresented: Bool
 
@@ -93,9 +95,11 @@ struct SearchView: View {
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .onChange(of: viewModel.selectedTabIndex) { _ in
             viewModel.updateProducts()
+            scrollToTopTrigger.toggle()
         }
         .onChange(of: viewModel.productFetchOption) { _ in
             viewModel.updateProducts()
+            scrollToTopTrigger.toggle()
         }
         .onAppear {
             viewModel.updateProducts()
@@ -208,15 +212,23 @@ private extension SearchView {
     
     @ViewBuilder
     private func productScrollView(products: Binding<[ProductItemModel]>, productsCount: Int) -> some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                if !viewModel.productFetchOption.genres.isEmpty {
-                    genreListView
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(spacing: 0) {
+                    Color.clear
+                        .frame(height: 0)
+                        .id("top")
+                    if !viewModel.productFetchOption.genres.isEmpty {
+                        genreListView
+                    }
+                    productsHeader(count: productsCount)
+                    productsGrid(products: products)
                 }
-                productsHeader(count: productsCount)
-                productsGrid(products: products)
+                .padding(.bottom, 108)
             }
-            .padding(.bottom, 108)
+            .onChange(of: scrollToTopTrigger) { _ in
+                proxy.scrollTo("top", anchor: .top)
+            }
         }
     }
     
