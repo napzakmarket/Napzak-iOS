@@ -34,6 +34,7 @@ enum Transparency: String {
     case transPurple100 = "F1EAFF"
     case transPurple300 = "7534FF"
     case transBlack = "1A1A1A"
+    case transWhite = "FFFFFF"
 }
 
 //enum Kakao: String {
@@ -63,12 +64,8 @@ extension Color {
         return Color(hex: color.rawValue)
     }
     
-    static func napzakTransparency(_ color: Transparency) -> Color {
-        let opacity = 0.7
+    static func napzakTransparency(_ color: Transparency, opacity: Double = 0.7) -> Color {
         return Color(hex: color.rawValue, opacity: opacity)
     }
     
-//    static func napzakKakao(_ color: Kakao) -> Color {
-//        return Color(hex: color.rawValue)
-//    }
 }

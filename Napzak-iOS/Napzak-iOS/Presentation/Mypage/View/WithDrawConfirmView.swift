@@ -9,6 +9,8 @@ import SwiftUI
 
 struct WithDrawConfirmView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @EnvironmentObject private var tabRouter: TabRouter
+    
     
     @StateObject var viewModel = WithDrawViewModel.shared
 
@@ -43,9 +45,10 @@ struct WithDrawConfirmView: View {
                     onConfirm: {
                         Task {
                             await viewModel.withdraw()
+                            navigationRouter.reset()
+                            tabRouter.switchToHome()
+                            withDrawButtonTapped = false
                         }
-                        withDrawButtonTapped = false
-                        navigationRouter.reset()
                     },
                     onCancel: {
                         withDrawButtonTapped = false
