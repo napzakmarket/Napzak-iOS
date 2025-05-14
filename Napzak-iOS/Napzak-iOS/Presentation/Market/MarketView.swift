@@ -38,18 +38,18 @@ struct MarketView: View {
                             isGenreSelectModalPresented = false
                         }
                     }
+                    .transition(.opacity)
+                    .zIndex(1)
                 
-                ZStack(alignment: .bottom) {
-                    GenreSelectModalView(
-                        viewModel: GenreSelectModalViewModel(
-                            selectedGenres: viewModel.productFetchOption.genres
-                        ),
-                        isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                        adaptedGenres: $viewModel.productFetchOption.genres
-                    )
-                }
-                .edgesIgnoringSafeArea(.bottom)
-                .transition(.move(edge: .bottom))
+                GenreSelectModalView(
+                    viewModel: GenreSelectModalViewModel(
+                        selectedGenres: viewModel.productFetchOption.genres
+                    ),
+                    isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                    adaptedGenres: $viewModel.productFetchOption.genres
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(2)
             }
             
             if isSortModalPresented {
@@ -60,15 +60,17 @@ struct MarketView: View {
                             isSortModalPresented = false
                         }
                     }
-                
+                    .transition(.opacity)
+                    .zIndex(1)
+
                 ZStack(alignment: .bottom) {
                     SortModalView(
                         isSortModalPresented: $isSortModalPresented,
                         selectedOption: $selectedSortOption
                     )
                 }
-                .edgesIgnoringSafeArea(.bottom)
-                .transition(.move(edge: .bottom))
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(2)
             }
             
             if isReportModalPresented {
@@ -95,8 +97,8 @@ struct MarketView: View {
         }
         .ignoresSafeArea()
         .navigationBarHidden(true)
-        .animation(.easeInOut, value: isGenreSelectModalPresented)
-        .animation(.easeInOut, value: isSortModalPresented)
+        .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
+        .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .onChange(of: viewModel.selectedTabIndex) { _ in
             Task {
                 await viewModel.fetchProducts()

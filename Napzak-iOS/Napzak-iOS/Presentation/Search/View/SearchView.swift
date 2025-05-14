@@ -88,10 +88,11 @@ struct SearchView: View {
                 .padding(.bottom, 110)
             }
         }
+        .ignoresSafeArea()
         .toolbar(.hidden, for: .navigationBar)
         .animation(.spring(), value: viewModel.showToast)
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
-        .ignoresSafeArea()
+        .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .onChange(of: selectedTabIndex) { value in
             Task {
                 if value == 0 {
