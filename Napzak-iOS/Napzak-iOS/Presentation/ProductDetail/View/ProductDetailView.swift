@@ -125,7 +125,7 @@ struct ProductDetailView: View {
                             isDeleteAlertPresented = false
                             Task {
                                 await viewModel.deleteProduct()
-                                try? await Task.sleep(for: .seconds(2))
+                                try? await Task.sleep(for: .seconds(1))
                                 await MainActor.run {
                                     navigationRouter.pop()
                                 }
