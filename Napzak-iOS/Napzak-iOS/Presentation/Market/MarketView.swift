@@ -85,7 +85,7 @@ struct MarketView: View {
                 
                 ReportModalView(
                     isReportModalPresented: $isReportModalPresented,
-                    reportType: .product,
+                    reportType: .store,
                     onTapped: {
                         navigationRouter.push(next: .reportView(reportType: .store, id: viewModel.storeDetail?.storeId ?? 0))
                     }
