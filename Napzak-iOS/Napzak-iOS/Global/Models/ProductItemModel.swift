@@ -19,7 +19,7 @@ struct ProductItemModel: Identifiable {
     let tradeStatus: TradeStatus
     let isPriceNegotiable: Bool?
     let isOwnedByCurrentUser: Bool
-    let interestCount: Int
+    var interestCount: Int
     let chatCount: Int
     
     //MARK: - Init
@@ -104,7 +104,7 @@ extension ProductItemModel {
             tradeType: .buy,
             tradeStatus: .beforeTrade,
             isPriceNegotiable: true,
-            isOwnedByCurrentUser: false,
+            isOwnedByCurrentUser: true,
             interestCount: 30,
             chatCount: 10
         ),
@@ -112,13 +112,13 @@ extension ProductItemModel {
             id: 2,
             genreName: "디즈니",
             productName: "미키마우스 한정판 피규어",
-            photo: "https://example.com/photo2.jpg",
+            photo: "https://napzak-dev-bucket.s3.ap-northeast-2.amazonaws.com/product/0f27a8a2-0db8-49a3-91c5-9b8718e09d2e-27BD4C47-9A7F-42C7-BCCB-B9AF90DD310C",
             price: 50000,
             uploadTime: "1일 전",
             isInterested: false,
             tradeType: .sell,
             tradeStatus: .beforeTrade,
-            isPriceNegotiable: nil,
+            isPriceNegotiable: true,
             isOwnedByCurrentUser: false,
             interestCount: 30,
             chatCount: 10

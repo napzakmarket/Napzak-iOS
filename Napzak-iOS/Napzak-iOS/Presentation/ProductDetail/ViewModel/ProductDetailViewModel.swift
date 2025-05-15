@@ -40,18 +40,39 @@ final class ProductDetailViewModel: ObservableObject {
     
     @Published var showInterestToast: Bool = false
     @Published var showStatusToast = false
+    @ObservedObject private var likeManager = ProductLikeManager.shared
 
     //MARK: - Properties
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "ProductDetail")
+    
+    private let interestService = NetworkService.shared.interestService
+    private let productId: Int
 
     //MARK: - Init
     
     init(productId: Int) {
+        self.productId = productId
         Task {
             await fetchProduct(id: productId)
         }
+        setupLikeObserver()
     }
+    
+    private func setupLikeObserver() {
+        Task {
+            for await _ in likeManager.$updatedProductId.values {
+                if let updatedId = likeManager.updatedProductId,
+                   let newState = likeManager.newLikeState,
+                   updatedId == productId {
+                    
+                    product.isInterested = newState
+                    product.productDetail.interestCount += newState ? 1 : -1
+                }
+            }
+        }
+    }
+
 }
 
 extension ProductDetailViewModel {
@@ -76,15 +97,28 @@ extension ProductDetailViewModel {
     }
     
     func toggleInterestState() {
-        //TODO: - 좋아요 API 연결
-
         Task {
-            product.isInterested.toggle()
+            let result = product.isInterested ?
+            await interestService.deleteInterest(productId: product.productDetail.id) :
+            await interestService.postInterest(productId: product.productDetail.id)
 
-            if product.isInterested {
-                showInterestToast = true
-                try? await Task.sleep(for: .seconds(2))
-                showInterestToast = false
+            switch result {
+            case .success:
+                let newState = !product.isInterested
+                
+                likeManager.productLikeUpdated(
+                    productId: product.productDetail.id,
+                    isLiked: newState
+                )
+                
+                if newState {
+                    showInterestToast = true
+                    try? await Task.sleep(for: .seconds(2))
+                    showInterestToast = false
+                }
+                
+            case .failure(let error):
+                logger.error("toggleInterestState failed: \(error.localizedDescription)")
             }
         }
     }

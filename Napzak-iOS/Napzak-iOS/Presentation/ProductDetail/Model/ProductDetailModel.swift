@@ -19,7 +19,7 @@ struct ProductDetailInfo: Identifiable {
     let productName: String
     let price: Int
     let uploadTime: String
-    let interestCount: Int
+    var interestCount: Int
     let description: String
     let productCondition: ProductCondition?
     let standardDeliveryFee: Int

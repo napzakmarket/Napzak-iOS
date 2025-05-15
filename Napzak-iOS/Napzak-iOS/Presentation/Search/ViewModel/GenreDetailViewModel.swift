@@ -34,6 +34,7 @@ final class GenreDetailViewModel: ObservableObject {
     @Published var selectedTabIndex: Int = 0
     
     @Published var showToast: Bool = false
+    @ObservedObject private var likeManager = ProductLikeManager.shared
     
     //MARK: - Properties
     
@@ -54,6 +55,28 @@ final class GenreDetailViewModel: ObservableObject {
         Task {
             await fetchGenreInfo(genreId: genreId)
             await fetchSellProducts()
+        }
+        
+        setupLikeObserver()
+    }
+    
+    private func setupLikeObserver() {
+        Task {
+            for await _ in likeManager.$updatedProductId.values {
+                if let productId = likeManager.updatedProductId,
+                   let newState = likeManager.newLikeState {
+                    
+                    if let index = sellProducts.firstIndex(where: { $0.id == productId }) {
+                        sellProducts[index].isInterested = newState
+                        sellProducts[index].interestCount += newState ? 1 : -1
+                    }
+                    
+                    if let index = buyProducts.firstIndex(where: { $0.id == productId }) {
+                        buyProducts[index].isInterested = newState
+                        buyProducts[index].interestCount += newState ? 1 : -1
+                    }
+                }
+            }
         }
     }
 }
@@ -80,7 +103,12 @@ extension GenreDetailViewModel {
         
         switch result {
         case .success:
-            updateProductInterestState(productId: productId, isInterested: !currentProduct.isInterested)
+            let newState = !currentProduct.isInterested
+            
+            updateProductInterestState(productId: productId, isInterested: newState)
+            
+            likeManager.productLikeUpdated(productId: productId, isLiked: newState)
+            
             if !currentProduct.isInterested {
                 showToast = true
                 try? await Task.sleep(for: .seconds(2))
