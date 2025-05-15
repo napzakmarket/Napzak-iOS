@@ -174,7 +174,6 @@
 		D64561122DC368E7003D2E2B /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561112DC368E7003D2E2B /* KeychainManager.swift */; };
 		D64561142DC36B4D003D2E2B /* AuthAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561132DC36B4D003D2E2B /* AuthAPI.swift */; };
 		D64561162DC3751D003D2E2B /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561152DC3751D003D2E2B /* AuthService.swift */; };
-		D645611A2DC375E2003D2E2B /* LoginRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561192DC375E2003D2E2B /* LoginRequestDTO.swift */; };
 		D645611F2DC39AE0003D2E2B /* TokenResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D645611E2DC39AE0003D2E2B /* TokenResponseDTO.swift */; };
 		D64561212DC3BECC003D2E2B /* TokenRefreshService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561202DC3BECC003D2E2B /* TokenRefreshService.swift */; };
 		D64561232DC3C05C003D2E2B /* TokenRefresher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561222DC3C05C003D2E2B /* TokenRefresher.swift */; };
@@ -372,7 +371,6 @@
 		D64561112DC368E7003D2E2B /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
 		D64561132DC36B4D003D2E2B /* AuthAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthAPI.swift; sourceTree = "<group>"; };
 		D64561152DC3751D003D2E2B /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
-		D64561192DC375E2003D2E2B /* LoginRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequestDTO.swift; sourceTree = "<group>"; };
 		D645611E2DC39AE0003D2E2B /* TokenResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenResponseDTO.swift; sourceTree = "<group>"; };
 		D64561202DC3BECC003D2E2B /* TokenRefreshService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefreshService.swift; sourceTree = "<group>"; };
 		D64561222DC3C05C003D2E2B /* TokenRefresher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefresher.swift; sourceTree = "<group>"; };
@@ -1304,7 +1302,6 @@
 		D64561182DC375D5003D2E2B /* Request */ = {
 			isa = PBXGroup;
 			children = (
-				D64561192DC375E2003D2E2B /* LoginRequestDTO.swift */,
 				6C0FA8B32DD1D89400D81065 /* WithDrawRequestDTO.swift */,
 			);
 			path = Request;
@@ -1666,7 +1663,6 @@
 				6C6CBDF92DA574A300763CBA /* SellRegisterDelivery.swift in Sources */,
 				D0CBB7032DB893F600BE20C3 /* SearchInputViewModel.swift in Sources */,
 				877F40622DCA73F300008672 /* MarketProductBuyListResponseDTO.swift in Sources */,
-				D645611A2DC375E2003D2E2B /* LoginRequestDTO.swift in Sources */,
 				6C4886BD2DC0CA07009352ED /* RegisterSearchGenre.swift in Sources */,
 				D045DEBE2D83723A00EB1EB6 /* Napzak_iOSApp.swift in Sources */,
 				D0F035802DBF6654003D0CBF /* PresignedService.swift in Sources */,

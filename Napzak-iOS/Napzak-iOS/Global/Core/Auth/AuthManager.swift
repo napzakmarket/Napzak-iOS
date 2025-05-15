@@ -71,8 +71,8 @@ final class AuthManager: ObservableObject {
                 logger.debug("Server response valid - saving tokens")
                 
                 let onboardingStep: OnboardingStep
-                if data.role == .onboarding {
-                    logger.info("New user - starting onboarding")
+                if data.role.needsOnboarding {
+                    logger.info("User needs onboarding - starting from terms")
                     onboardingStep = .terms
                     onboardingManager.saveCheckpoint(.terms)
                 } else {
