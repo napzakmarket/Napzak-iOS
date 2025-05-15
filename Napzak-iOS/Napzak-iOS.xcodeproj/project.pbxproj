@@ -13,6 +13,7 @@
 		6C0FA8B22DD1CD9000D81065 /* WithDrawConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0FA8B12DD1CD9000D81065 /* WithDrawConfirmView.swift */; };
 		6C0FA8B42DD1D89400D81065 /* WithDrawRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0FA8B32DD1D89400D81065 /* WithDrawRequestDTO.swift */; };
 		6C0FA8B62DD1D8E700D81065 /* WithDrawResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C0FA8B52DD1D8E700D81065 /* WithDrawResponseDTO.swift */; };
+		6C37C0672DD5EB7F00DE47AE /* KeyboardObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C37C0662DD5EB7F00DE47AE /* KeyboardObserver.swift */; };
 		6C4886BD2DC0CA07009352ED /* RegisterSearchGenre.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C4886BC2DC0CA07009352ED /* RegisterSearchGenre.swift */; };
 		6C6CBDF92DA574A300763CBA /* SellRegisterDelivery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6CBDF82DA574A300763CBA /* SellRegisterDelivery.swift */; };
 		6C6CBDFB2DA589DD00763CBA /* BuyRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6CBDFA2DA589DD00763CBA /* BuyRegisterView.swift */; };
@@ -215,6 +216,7 @@
 		6C0FA8B12DD1CD9000D81065 /* WithDrawConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithDrawConfirmView.swift; sourceTree = "<group>"; };
 		6C0FA8B32DD1D89400D81065 /* WithDrawRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithDrawRequestDTO.swift; sourceTree = "<group>"; };
 		6C0FA8B52DD1D8E700D81065 /* WithDrawResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WithDrawResponseDTO.swift; sourceTree = "<group>"; };
+		6C37C0662DD5EB7F00DE47AE /* KeyboardObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardObserver.swift; sourceTree = "<group>"; };
 		6C4886BC2DC0CA07009352ED /* RegisterSearchGenre.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterSearchGenre.swift; sourceTree = "<group>"; };
 		6C6CBDF82DA574A300763CBA /* SellRegisterDelivery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellRegisterDelivery.swift; sourceTree = "<group>"; };
 		6C6CBDFA2DA589DD00763CBA /* BuyRegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyRegisterView.swift; sourceTree = "<group>"; };
@@ -803,6 +805,7 @@
 			isa = PBXGroup;
 			children = (
 				6CDD77032DD4BEB2008D2ABC /* SwipePopGestureManager.swift */,
+				6C37C0662DD5EB7F00DE47AE /* KeyboardObserver.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -1613,6 +1616,7 @@
 				D67C177B2D9AEEDD00CFCDFA /* UsernameInputView.swift in Sources */,
 				6CB2EC092DBFFD00003BF298 /* RegisterModel.swift in Sources */,
 				D0310AE82DC9295500C265EC /* ProductDetailView.swift in Sources */,
+				6C37C0672DD5EB7F00DE47AE /* KeyboardObserver.swift in Sources */,
 				D632C52C2DC736A3005CD429 /* AppleLoginAdapter.swift in Sources */,
 				D02906092DAF7D5F008515FD /* SearchViewModel.swift in Sources */,
 				6C6CBDFB2DA589DD00763CBA /* BuyRegisterView.swift in Sources */,
