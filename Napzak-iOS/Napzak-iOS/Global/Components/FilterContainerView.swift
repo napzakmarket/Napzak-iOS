@@ -24,10 +24,14 @@ struct FilterContainerView: View {
                 unopenedFilterChip
             }
             onSaleFilterChip
+            if selectedTabIndex == 1 {
+                Color.clear
+                    .frame(width: 60)
+            }
             Spacer()
         }
         .frame(height: 28)
-        .frame(maxWidth: 275)
+        .frame(maxWidth: 270)
     }
     
     var genreFilterChip: some View {

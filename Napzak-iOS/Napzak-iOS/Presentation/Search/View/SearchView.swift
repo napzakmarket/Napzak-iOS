@@ -15,7 +15,8 @@ struct SearchView: View {
 
     @StateObject var viewModel: SearchViewModel
     
-    @State private var selectedTabIndex: Int
+    @State private var scrollToTopTrigger: Bool = false
+    
     @Binding var isGenreSelectModalPresented: Bool
     @Binding var isSortModalPresented: Bool
 
@@ -26,7 +27,6 @@ struct SearchView: View {
     
     init(viewModel: SearchViewModel, isGenreSelectModalPresented: Binding<Bool>, isSortModalPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: viewModel)
-        self._selectedTabIndex = State(initialValue: viewModel.selectedTabIndex)
         self._isGenreSelectModalPresented = isGenreSelectModalPresented
         self._isSortModalPresented = isSortModalPresented
     }
@@ -99,40 +99,16 @@ struct SearchView: View {
         .animation(.spring(), value: viewModel.showToast)
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
-        .onChange(of: selectedTabIndex) { value in
-            viewModel.selectedTabIndex = value
-            Task {
-                if value == 0 {
-                    if viewModel.searchWord.isEmpty {
-                        await viewModel.fetchSellProducts()
-                    } else {
-                        await viewModel.fetchSellProductsForSearch()
-                    }
-                } else {
-                    if viewModel.searchWord.isEmpty {
-                        await viewModel.fetchBuyProducts()
-                    } else {
-                        await viewModel.fetchBuyProductsForSearch()
-                    }
-                }
-            }
+        .onChange(of: viewModel.selectedTabIndex) { _ in
+            viewModel.updateProducts()
+            scrollToTopTrigger.toggle()
         }
-        .onChange(of: viewModel.productFetchOption) { value in
-            Task {
-                if selectedTabIndex == 0 {
-                    if viewModel.searchWord.isEmpty {
-                        await viewModel.fetchSellProducts()
-                    } else {
-                        await viewModel.fetchSellProductsForSearch()
-                    }
-                } else {
-                    if viewModel.searchWord.isEmpty {
-                        await viewModel.fetchBuyProducts()
-                    } else {
-                        await viewModel.fetchBuyProductsForSearch()
-                    }
-                }
-            }
+        .onChange(of: viewModel.productFetchOption) { _ in
+            viewModel.updateProducts()
+            scrollToTopTrigger.toggle()
+        }
+        .onAppear {
+            viewModel.updateProducts()
         }
     }
 }
@@ -165,11 +141,11 @@ extension SearchView {
                 shadowBackground
                 
                 VStack(alignment: .leading, spacing: 0) {
-                    NZSegmentedControl(selectedTabIndex: $selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
+                    NZSegmentedControl(selectedTabIndex: $viewModel.selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
                     
                     FilterContainerView(
                         isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                        selectedTabIndex: $selectedTabIndex,
+                        selectedTabIndex: $viewModel.selectedTabIndex,
                         selectedGenres: $viewModel.productFetchOption.genres,
                         isUnopened: $viewModel.productFetchOption.isUnopened,
                         isOnSale: $viewModel.productFetchOption.isOnSale
@@ -242,15 +218,23 @@ private extension SearchView {
     
     @ViewBuilder
     private func productScrollView(products: Binding<[ProductItemModel]>, productsCount: Int) -> some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                if !viewModel.productFetchOption.genres.isEmpty {
-                    genreListView
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(spacing: 0) {
+                    Color.clear
+                        .frame(height: 0)
+                        .id("top")
+                    if !viewModel.productFetchOption.genres.isEmpty {
+                        genreListView
+                    }
+                    productsHeader(count: productsCount)
+                    productsGrid(products: products)
                 }
-                productsHeader(count: productsCount)
-                productsGrid(products: products)
+                .padding(.bottom, 108)
             }
-            .padding(.bottom, 108)
+            .onChange(of: scrollToTopTrigger) { _ in
+                proxy.scrollTo("top", anchor: .top)
+            }
         }
     }
     

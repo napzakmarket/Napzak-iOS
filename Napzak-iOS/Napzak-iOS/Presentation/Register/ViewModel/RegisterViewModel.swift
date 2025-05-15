@@ -54,8 +54,9 @@ final class RegisterViewModel: ObservableObject {
         
         switch viewType {
         case .initialRegister:
-            print("dddd")
+            print("상품 등록 작성")
         case .editProduct(let productId, let tradeType):
+            print("상품 수정 작성")
             self.productId = productId
             Task {
                 switch tradeType {
@@ -79,7 +80,7 @@ extension RegisterViewModel {
     //MARK: - Get all genre
     
     func getAllGenre() async {
-        let result = await NetworkService.shared.genreService.getAllGenreName()
+        let result = await NetworkService.shared.genreService.getAllGenreName(size: 43)
         
         switch result {
         case .success(let response):
@@ -443,7 +444,7 @@ extension RegisterViewModel {
         let titleValid = !model.title.trimmingCharacters(in: .whitespaces).isEmpty
         let descriptionValid = !model.description.trimmingCharacters(in: .whitespaces).isEmpty
         let priceValid = model.price.trimmingCharacters(in: .whitespaces).convertInt() > 0
-        let imageValid = !model.images.isEmpty
+        let imageValid = !imagePickerManager.selectedImages.isEmpty
         let genreSelected = model.genreId != nil
         
         return titleValid && descriptionValid && priceValid && imageValid && genreSelected

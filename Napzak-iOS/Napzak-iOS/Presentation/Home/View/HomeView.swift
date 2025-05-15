@@ -13,6 +13,7 @@ struct HomeView: View {
     @EnvironmentObject private var tabRouter: TabRouter
     @StateObject private var viewModel = HomeViewModel()
     @State private var timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
+    @State private var scrollToTopTrigger: Bool = false
     
     private let placeholder: String = "어떤 상품을 찾고 계신가요?"
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
@@ -26,43 +27,51 @@ struct HomeView: View {
                     .padding(.leading, 28)
                     .padding(.bottom, 17)
                     
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 0) {
-                        headerView
-                            .padding(.horizontal, 28)
-                        
-                        topBannerSection
-                            .padding(.top, 21)
-                        
-                        recommendedSection
-                            .padding(.leading, 28)
-                            .padding(.top, 21)
-                        
-                        middleBannerSection
-                            .padding(.leading, 28)
-                            .padding(.vertical, 40)
-                        
-                        popularSellSection
-                            .padding(.horizontal, 28)
-                            .padding(.top, 32)
-                            .padding(.bottom, 20)
-                            .background(Color.napzakGrayScale(.gray10))
-                        
-                        bottomBannerSection
-                            .padding(.leading, 28)
-                            .padding(.vertical, 40)
-                        
-                        popularBuySection
-                            .padding(.horizontal, 28)
-                            .padding(.bottom, 20)
-                        
-                        Text("개인정보처리방침")
-                            .frame(width: UIScreen.main.bounds.width, height: 160)
-                            .background(Color.napzakGrayScale(.gray100))
-                            .padding(.bottom, 54)
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 0) {
+                            Color.clear
+                                .frame(height: 0)
+                                .id("top")
+                            headerView
+                                .padding(.horizontal, 28)
+                            
+                            topBannerSection
+                                .padding(.top, 21)
+                            
+                            recommendedSection
+                                .padding(.leading, 28)
+                                .padding(.top, 21)
+                            
+                            middleBannerSection
+                                .padding(.leading, 28)
+                                .padding(.vertical, 40)
+                            
+                            popularSellSection
+                                .padding(.horizontal, 28)
+                                .padding(.top, 32)
+                                .padding(.bottom, 20)
+                                .background(Color.napzakGrayScale(.gray10))
+                            
+                            bottomBannerSection
+                                .padding(.leading, 28)
+                                .padding(.vertical, 40)
+                            
+                            popularBuySection
+                                .padding(.horizontal, 28)
+                                .padding(.bottom, 20)
+                            
+                            Text("개인정보처리방침")
+                                .frame(width: UIScreen.main.bounds.width, height: 160)
+                                .background(Color.napzakGrayScale(.gray100))
+                                .padding(.bottom, 54)
+                        }
+                    }
+                    .scrollIndicators(.hidden)
+                    .onChange(of: scrollToTopTrigger) { _ in
+                        proxy.scrollTo("top", anchor: .top)
                     }
                 }
-                .scrollIndicators(.hidden)
             }
             
             if viewModel.showLikeToast {
@@ -81,6 +90,12 @@ struct HomeView: View {
                 UIApplication.shared.open(url)
                 viewModel.externalURLToOpen = nil
             }
+        }
+        .onAppear {
+            //탭 간 전환시 데이터를 새로 불러오기 위한 코드
+            //추후 상품에 관한 전역 구현체가 구현되면 제거해도 무방
+            viewModel.fetchHomeData()
+            scrollToTopTrigger.toggle()
         }
     }
 }

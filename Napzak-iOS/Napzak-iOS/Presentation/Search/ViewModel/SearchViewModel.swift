@@ -14,13 +14,13 @@ final class SearchViewModel: ObservableObject {
     
     //MARK: - Property Wrappers
 
+    @Published var selectedTabIndex = 0
     @Published var productFetchOption = ProductFetchOption(sortOption: .recent, genres: [GenreNameModel](), isOnSale: false, isUnopened: false)
     
     @Published var sellProductsCount: Int = 0
     @Published var sellProducts: [ProductItemModel] = []
     @Published var buyProductsCount: Int = 0
     @Published var buyProducts: [ProductItemModel] = []
-    @Published var selectedTabIndex: Int = 0
     @Published var showToast: Bool = false
     @ObservedObject private var likeManager = ProductLikeManager.shared
     
@@ -68,6 +68,26 @@ final class SearchViewModel: ObservableObject {
 extension SearchViewModel {
     
     //MARK: - Func
+    
+    func updateProducts() {
+        Task {
+            if selectedTabIndex == 0 {
+                if searchWord.isEmpty {
+                    await fetchSellProducts()
+                } else {
+                    await fetchSellProductsForSearch()
+                }
+            } else {
+                if searchWord.isEmpty {
+                    await fetchBuyProducts()
+                } else {
+                    await fetchBuyProductsForSearch()
+                }
+            }
+        }
+    }
+    
+    //MARK: - API Func
     
     func fetchSellProducts() async {
         let result = await NetworkService.shared.productService.getSellProduct(productFetchOption: productFetchOption)

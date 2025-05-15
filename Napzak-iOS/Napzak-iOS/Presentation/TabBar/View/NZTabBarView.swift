@@ -165,10 +165,18 @@ struct NZTabBarView: View {
                 isRegisterTabSelected.toggle()
             } label: {
                 VStack(alignment: .center, spacing: 5) {
-                    Image(isRegisterTabSelected ? .iconTabRegisterSelected : .iconTabRegisterDefault)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 25, height: 25)
+                    ZStack(alignment: .center){
+                        Image(isRegisterTabSelected ? .iconTabRegisterBgSelected : .iconTabRegisterBgDefault)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 25, height: 25)
+                        Image(.iconTabRegisterPlus)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 13, height: 13)
+                            .rotationEffect(.degrees(isRegisterTabSelected ? 45 : 0))
+                            .animation(.easeInOut(duration: 0.3), value: isRegisterTabSelected)
+                    }
                     Text("등록")
                         .applyNapzakFont(.caption1SemiBold12)
                         .foregroundStyle(isRegisterTabSelected ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray200))

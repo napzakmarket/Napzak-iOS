@@ -10,7 +10,7 @@ import Moya
 protocol GenreServiceProtocol {
     func getAllPreferGenre() async -> Result<PreferGenreResponseDTO, NetworkError>
     func getSearchPreferGenre(searchWord: String) async -> Result<PreferGenreResponseDTO, NetworkError>
-    func getAllGenreName() async -> Result<GenreNameResponseDTO, NetworkError>
+    func getAllGenreName(size: Int) async -> Result<GenreNameResponseDTO, NetworkError>
     func getSearchGenreName(searchWord: String) async -> Result<GenreNameResponseDTO, NetworkError>
     func registerPreferGenre(request: PreferGenreRequestDTO) async -> Result<PreferGenreResponseDTO, NetworkError>
     func getGenreDetailInfo(genreId: Int) async -> Result<GenreDetailResponseDTO, NetworkError>
@@ -28,8 +28,8 @@ final class GenreService: BaseService, GenreServiceProtocol {
         return await requestDecodable(provider, .getSearchPreferGenre(searchWord: searchWord))
     }
     
-    func getAllGenreName() async -> Result<GenreNameResponseDTO, NetworkError> {
-        return await requestDecodable(provider, .getAllGenreName)
+    func getAllGenreName(size: Int) async -> Result<GenreNameResponseDTO, NetworkError> {
+        return await requestDecodable(provider, .getAllGenreName(size: size))
     }
     
     func getSearchGenreName(searchWord: String) async -> Result<GenreNameResponseDTO, NetworkError> {

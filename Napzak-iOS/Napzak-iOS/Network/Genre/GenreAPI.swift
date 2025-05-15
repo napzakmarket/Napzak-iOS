@@ -10,7 +10,7 @@ import Moya
 enum GenreAPI {
     case getAllPreferGenre
     case getSearchPreferGenre(searchWord: String)
-    case getAllGenreName
+    case getAllGenreName(size: Int)
     case getSearchGenreName(searchWord: String)
     case registerPreferGenre(request: PreferGenreRequestDTO)
     case getGenreDetailInfo(genreId: Int)
@@ -53,8 +53,10 @@ extension GenreAPI: BaseTargetType {
     
     var task: Moya.Task {
         switch self {
-        case .getAllPreferGenre, .getAllGenreName, .getGenreDetailInfo:
+        case .getAllPreferGenre, .getGenreDetailInfo:
             return .requestPlain
+        case .getAllGenreName(let size):
+            return .requestParameters(parameters: ["size" : size], encoding: URLEncoding.queryString)
         case .getSearchPreferGenre(let searchWord):
             return .requestParameters(parameters: ["searchWord" : searchWord], encoding: URLEncoding.queryString)
         case .getSearchGenreName(let searchWord):

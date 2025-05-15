@@ -14,6 +14,7 @@ final class GenreDetailViewModel: ObservableObject {
     
     //MARK: - Property Wrappers
     
+    @Published var selectedTabIndex = 0
     @Published var productFetchOption = ProductFetchOption(
         sortOption: .recent,
         genres: [GenreNameModel](),
@@ -31,7 +32,6 @@ final class GenreDetailViewModel: ObservableObject {
     @Published var sellProducts: [ProductItemModel] = []
     @Published var buyProductsCount: Int = 0
     @Published var buyProducts: [ProductItemModel] = []
-    @Published var selectedTabIndex: Int = 0
     
     @Published var showToast: Bool = false
     @ObservedObject private var likeManager = ProductLikeManager.shared
@@ -84,6 +84,16 @@ final class GenreDetailViewModel: ObservableObject {
 extension GenreDetailViewModel {
     
     //MARK: - Func
+    
+    func updateProducts() {
+        Task {
+            if selectedTabIndex == 0 {
+                await fetchSellProducts()
+            } else {
+                await fetchBuyProducts()
+            }
+        }
+    }
     
     func toggleLike(for productId: Int) async {
         guard !isProcessingLike else { return }

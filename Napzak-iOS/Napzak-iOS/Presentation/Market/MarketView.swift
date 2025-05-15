@@ -19,6 +19,7 @@ struct MarketView: View {
     @State private var isSortModalPresented = false
     @State private var selectedSortOption: SortOption = .recent
     @State private var isReportModalPresented = false
+    @State private var scrollToTopTrigger: Bool = false
     
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
     private let columns = [GridItem(.flexible(), spacing: 20), GridItem(.flexible())]
@@ -85,7 +86,7 @@ struct MarketView: View {
                 
                 ReportModalView(
                     isReportModalPresented: $isReportModalPresented,
-                    reportType: .product,
+                    reportType: .store,
                     onTapped: {
                         navigationRouter.push(next: .reportView(reportType: .store, id: viewModel.storeDetail?.storeId ?? 0))
                     }
@@ -112,12 +113,14 @@ struct MarketView: View {
         .onChange(of: viewModel.selectedTabIndex) { _ in
             Task {
                 await viewModel.fetchProducts()
+                scrollToTopTrigger.toggle()
             }
         }
         .onChange(of: selectedSortOption) { newValue in
             viewModel.productFetchOption.sortOption = newValue
             Task {
                 await viewModel.fetchProducts()
+                scrollToTopTrigger.toggle()
             }
         }
         .onAppear {
@@ -157,12 +160,20 @@ struct MarketView: View {
     }
     
     private var mainScrollView: some View {
-        ScrollView {
-            LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
+        ScrollViewReader { proxy in
+            ScrollView {
                 profileSectionView
-                Section(header: tabAndFilterSectionView) {
-                    contentListView
+                Color.clear
+                    .frame(height: 0)
+                    .id("top")
+                LazyVStack(spacing: 0, pinnedViews: [.sectionHeaders]) {
+                    Section(header: tabAndFilterSectionView) {
+                        contentListView
+                    }
                 }
+            }
+            .onChange(of: scrollToTopTrigger) { _ in
+                proxy.scrollTo("top")
             }
         }
     }

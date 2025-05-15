@@ -54,7 +54,6 @@ struct WithDrawConfirmView: View {
                         withDrawButtonTapped = false
                     }
                 )
-                .padding(.horizontal, 45)
                 .zIndex(2)
             }
         }
