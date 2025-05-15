@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-
 import Kingfisher
 
 struct ProfileEditView: View {
@@ -14,34 +13,38 @@ struct ProfileEditView: View {
     @State private var isGenreSelectModalPresented: Bool = false
     @State private var displayGenres: [GenreNameModel] = []
     @EnvironmentObject private var navigationRouter: NavigationRouter
-    @StateObject private var imagePickerManager = ImagePickerManager()
+    @StateObject private var profileImagePickerManager = ImagePickerManager()
+    @StateObject private var coverImagePickerManager = ImagePickerManager()
     @FocusState private var isKeyboardActive: Bool
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            ScrollView {
-                VStack(spacing: 0) {
-                    headerView
-                        .zIndex(3)
-                        .background(Color.white.opacity(0.01))
-                    
-                    profileImageSection
-                    marketNameView
-                    marketDescriptionSection
-                    genreSelectionSection
-                    confirmButton
+            VStack(spacing: 0) {
+                headerView
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        profileImageSection
+                        marketNameView
+                        marketDescriptionSection
+                        genreSelectionSection
+                        confirmButton
+                    }
                 }
             }
-            
+
             if isGenreSelectModalPresented {
                 Color.black.opacity(0.3)
                     .ignoresSafeArea()
                     .onTapGesture {
                         withAnimation {
                             isGenreSelectModalPresented = false
+                            viewModel.selectedGenres = displayGenres
+                            viewModel.checkForChanges()
                         }
                     }
-                
+                    .transition(.opacity)
+                    .zIndex(1)
+
                 GenreSelectModalView(
                     viewModel: GenreSelectModalViewModel(
                         selectedGenres: displayGenres
@@ -54,7 +57,10 @@ struct ProfileEditView: View {
                 }
                 .onDisappear {
                     viewModel.selectedGenres = displayGenres
+                    viewModel.checkForChanges()
                 }
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(2)
             }
         }
         .animation(.easeInOut, value: isGenreSelectModalPresented)
@@ -70,16 +76,24 @@ struct ProfileEditView: View {
                 }
             }
         }
-        .onChange(of: imagePickerManager.selectedImages) { images in
-            // 오류와 상관 없이 이미지가 선택되면 처리
+        .onChange(of: profileImagePickerManager.selectedImages) { images in
             if let firstImage = images.first {
                 viewModel.selectedProfileImage = firstImage
+                profileImagePickerManager.selectedImages = []
             }
             viewModel.checkForChanges()
         }
+        .onChange(of: coverImagePickerManager.selectedImages) { images in
+            if let firstImage = images.first {
+                viewModel.selectedCoverImage = firstImage
+                coverImagePickerManager.selectedImages = [] 
+            }
+            viewModel.checkForChanges()
+        }
+
         .onAppear {
-            // 최대 1개의 이미지만 선택 가능하도록 설정
-            imagePickerManager.setOverrideMaxCount(1)
+            profileImagePickerManager.setOverrideMaxCount(1)
+            coverImagePickerManager.setOverrideMaxCount(1)
         }
         .onTapGesture {
             isKeyboardActive = false
@@ -111,27 +125,34 @@ struct ProfileEditView: View {
     private var profileImageSection: some View {
         VStack(spacing: 0) {
             ZStack {
-                // 배경 이미지
-                if !viewModel.coverImageURL.isEmpty {
-                    KFImage(URL(string: viewModel.coverImageURL))
-                        .placeholder {
+                coverImagePickerManager.photoPickerView(maxCount: 1) {
+                    Group {
+                        if let selectedCoverImage = viewModel.selectedCoverImage {
+                            Image(uiImage: selectedCoverImage)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(height: 160)
+                                .clipped()
+                        } else if !viewModel.coverImageURL.isEmpty {
+                            KFImage(URL(string: viewModel.coverImageURL))
+                                .placeholder {
+                                    Rectangle()
+                                        .fill(Color.napzakGrayScale(.gray100))
+                                }
+                                .resizable()
+                                .scaledToFill()
+                                .frame(height: 160)
+                                .clipped()
+                        } else {
                             Rectangle()
                                 .fill(Color.napzakGrayScale(.gray100))
+                                .frame(height: 160)
                         }
-                        .resizable()
-                        .scaledToFill()
-                        .frame(height: 160)
-                        .clipped()
-                } else {
-                    Rectangle()
-                        .fill(Color.napzakGrayScale(.gray100))
-                        .frame(height: 160)
+                    }
                 }
                 
-                // 프로필 이미지
                 Group {
                     if let selectedImage = viewModel.selectedProfileImage {
-                        // 새로 선택한 이미지
                         Image(uiImage: selectedImage)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
@@ -142,7 +163,6 @@ struct ProfileEditView: View {
                                     .stroke(Color.napzakGrayScale(.white), lineWidth: 5)
                             )
                     } else if !viewModel.profileImageURL.isEmpty {
-                        // 기존 이미지
                         KFImage(URL(string: viewModel.profileImageURL))
                             .placeholder {
                                 Image("profile_edit")
@@ -173,9 +193,8 @@ struct ProfileEditView: View {
                 }
                 .offset(y: 57)
                 
-                // 편집 버튼
                 ZStack {
-                    imagePickerManager.photoPickerView(maxCount: 1) {
+                    profileImagePickerManager.photoPickerView(maxCount: 1) {
                         Image("edit")
                             .resizable()
                             .scaledToFit()
@@ -300,8 +319,7 @@ struct ProfileEditView: View {
             if !viewModel.selectedGenres.isEmpty {
                 PlainChipContainerView(
                     titles: viewModel.selectedGenres.map { $0.name },
-                    action: { _ in
-                    }
+                    action: { _ in }
                 )
                 .padding(.bottom, 25)
             } else {
@@ -312,20 +330,22 @@ struct ProfileEditView: View {
             }
 
             Button {
+                displayGenres = viewModel.selectedGenres
                 withAnimation {
                     isGenreSelectModalPresented = true
                 }
             } label: {
                 Text("관심 장르 설정")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.napzakGrayScale(.gray50))
                     .applyNapzakFont(.body4Bold14)
                     .foregroundColor(Color.napzakGrayScale(.gray400))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    .background(Color.napzakGrayScale(.gray50))
                     .cornerRadius(14)
             }
         }
         .padding(.horizontal, 27)
+        .padding(.bottom,15)
     }
     
     private var confirmButton: some View {
@@ -333,11 +353,11 @@ struct ProfileEditView: View {
             viewModel.saveProfile()
         } label: {
             Text("확인")
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(viewModel.isPrimaryButtonEnabled ? Color.napzakPrimary(.purple500) : Color.napzakPrimary(.purple500).opacity(0.5))
                 .applyNapzakFont(.body4Bold14)
                 .foregroundColor(Color.napzakGrayScale(.white))
+                .frame(maxWidth: .infinity)
+                .frame(height: 50)
+                .background(viewModel.isPrimaryButtonEnabled ? Color.napzakPrimary(.purple500) : Color.napzakPrimary(.purple500).opacity(0.5))
                 .cornerRadius(14)
         }
         .disabled(!viewModel.isPrimaryButtonEnabled)
