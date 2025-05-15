@@ -95,9 +95,19 @@ struct MarketView: View {
                 .zIndex(2)
             }
 
+            if viewModel.showToast {
+                ToastMessageView(
+                    message: "찜한 상품에 추가되었어요!",
+                    style: .success
+                )
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(3)
+                .padding(.bottom, 110)
+            }
         }
         .ignoresSafeArea()
         .navigationBarHidden(true)
+        .animation(.spring(), value: viewModel.showToast)
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .onChange(of: viewModel.selectedTabIndex) { _ in

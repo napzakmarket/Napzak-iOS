@@ -29,6 +29,7 @@ final class MarketViewModel: ObservableObject {
     @Published var productsError: String? = nil
     @Published var productCount: Int = 0
     @Published var showToast: Bool = false
+    @ObservedObject private var likeManager = ProductLikeManager.shared
     
     private let storeId: Int
     
@@ -39,6 +40,7 @@ final class MarketViewModel: ObservableObject {
 
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "MarketViewModel")
 
+    private let interestService = NetworkService.shared.interestService
     
     //MARK: - Init
     
@@ -49,6 +51,8 @@ final class MarketViewModel: ObservableObject {
             await fetchStoreDetail()
             await fetchProducts()
         }
+        
+        setupLikeObserver()
     }
     
     func fetchStoreDetail() async {
@@ -131,21 +135,26 @@ final class MarketViewModel: ObservableObject {
         }
         
         let result = currentProduct.isInterested ?
-        await NetworkService.shared.interestService.deleteInterest(productId: productId) :
-        await NetworkService.shared.interestService.postInterest(productId: productId)
+        await interestService.deleteInterest(productId: productId) :
+        await interestService.postInterest(productId: productId)
         
         switch result {
         case .success:
-            updateProductInterestState(productId: productId, isInterested: !currentProduct.isInterested)
+            let newState = !currentProduct.isInterested
+            
+            likeManager.productLikeUpdated(productId: productId, isLiked: newState)
+            
             if !currentProduct.isInterested {
                 showToast = true
                 try? await Task.sleep(for: .seconds(2))
                 showToast = false
             }
+            
         case .failure(let error):
             logger.error("toggleLike failed: \(error.errorDescription ?? "Unknown error")")
         }
     }
+
     
     // ADD: 상품 상태 업데이트 함수 추가
     private func updateProductInterestState(productId: Int, isInterested: Bool) {
@@ -156,5 +165,21 @@ final class MarketViewModel: ObservableObject {
     
     func getProductCount() -> Int {
         return productCount
+    }
+}
+
+extension MarketViewModel {
+    private func setupLikeObserver() {
+        Task {
+            for await _ in likeManager.$updatedProductId.values {
+                if let productId = likeManager.updatedProductId,
+                   let newState = likeManager.newLikeState {
+                    if let index = products.firstIndex(where: { $0.id == productId }) {
+                        products[index].isInterested = newState
+                        products[index].interestCount += newState ? 1 : -1
+                    }
+                }
+            }
+        }
     }
 }

@@ -30,11 +30,17 @@ struct NZTabBarView: View {
                             .tag(NZTab.home)
                         
                         SearchView(
-                            viewModel: SearchViewModel(searchWord: ""),
+                            viewModel: SearchViewModel(
+                                searchWord: "",
+                                initialSortOption: tabRouter.currentSortOption,
+                                initialSelectedTab: tabRouter.currentSelectedTab
+                            ),
                             isGenreSelectModalPresented: $isGenreSelectModalPresented,
                             isSortModalPresented: $isSortModalPresented
                         )
+                        .id("\(tabRouter.currentSortOption)-\(tabRouter.currentSelectedTab)")
                         .tag(NZTab.search)
+                        
                         
                         CView()
                             .tag(NZTab.chat)

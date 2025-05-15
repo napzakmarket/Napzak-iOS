@@ -24,6 +24,7 @@ final class GenreSelectionViewModel: ObservableObject {
     
     init() {
         $searchText
+            .dropFirst()
             .debounce(for: 0.5, scheduler: RunLoop.main)
             .removeDuplicates()
             .sink { [weak self] newSearchText in
