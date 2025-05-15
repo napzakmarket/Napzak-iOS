@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WithDrawWriteReasonView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
-    
+    @FocusState private var isSearchBarFocused: Bool
     @StateObject var viewModel = WithDrawViewModel.shared
 
     var body: some View {
@@ -21,6 +21,9 @@ struct WithDrawWriteReasonView: View {
             Spacer()
             
             nextButtonSection
+        }
+        .onTapGesture {
+            isSearchBarFocused = false
         }
         .ignoresSafeArea()
         .background(.white)
@@ -75,6 +78,7 @@ extension WithDrawWriteReasonView {
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
                 .padding(.horizontal, 6)
                 .padding(.vertical, 7)
+                .focused($isSearchBarFocused)
             
             if viewModel.withdrawDescription.isEmpty {
                 Text("어떤 점이 불편하셨는지 솔직히 알려주시면 큰 도움이 됩니다.\n소중한 의견을 바탕으로 더 나은 거래 공간을 만들겠습니다!")

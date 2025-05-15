@@ -22,13 +22,16 @@ struct LoginView: View {
                         lottieAnimationView.contentMode = .scaleAspectFill
                         lottieAnimationView.shouldRasterizeWhenIdle = false
                     })
-                    .playbackMode(.playing(.toProgress(1, loopMode: .playOnce)))
-                    .animationDidFinish { _ in
+                    .playbackMode(.playing(.toProgress(1, loopMode: .loop)))
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .ignoresSafeArea(.all)
+                    .task {
+                        try? await Task.sleep(for: .seconds(2))
                         withAnimation(.easeIn(duration: 0.3)) {
                             showButton = true
                         }
                     }
-                    .ignoresSafeArea(.all)
                 
                 if showButton {
                     VStack {
