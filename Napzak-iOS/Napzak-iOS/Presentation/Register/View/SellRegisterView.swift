@@ -9,8 +9,14 @@ import SwiftUI
 
 struct SellRegisterView: View {
     @EnvironmentObject var navigationRouter: NavigationRouter
+    
     @StateObject private var registerRouter = RegisterNavigationRouter()
     @StateObject var viewModel: RegisterViewModel
+    @StateObject var keyboardObserver = KeyboardObserver()
+    
+    @FocusState var normalDeliveryFocused: Bool
+    @FocusState var halfDeliveryFocused: Bool
+
     @Environment(\.dismiss) private var dismiss
     
     @Binding var isRegisterTabSelected: Bool
@@ -20,12 +26,33 @@ struct SellRegisterView: View {
             VStack(spacing: 0){
                 SellRegisterHeader()
                 
-                ScrollView {
-                    VStack(spacing: 0) {
-                        SellRegisterContent
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            SellRegisterContent
+                            
+                            if normalDeliveryFocused {
+                                Color.clear
+                                    .frame(height: max(keyboardObserver.keyboardHeight - 150, 0))
+                                    .animation(.easeInOut, value: keyboardObserver.keyboardHeight)
+                                    .id("bottom")
+                            }
+                            
+                            if halfDeliveryFocused {
+                                Color.clear
+                                    .frame(height: max(keyboardObserver.keyboardHeight - 150, 0))
+                                    .animation(.easeInOut, value: keyboardObserver.keyboardHeight)
+                                    .id("bottom")
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .onChange(of: keyboardObserver.keyboardHeight) { _ in
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            proxy.scrollTo("bottom", anchor: .bottom)
+                        }
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
                 
                 registerButton
             }
@@ -57,6 +84,8 @@ struct SellRegisterView: View {
             }
             .onTapGesture {
                 self.dismissKeyboard()
+                normalDeliveryFocused = false
+                halfDeliveryFocused = false
             }
         }
         .onAppear {
@@ -118,7 +147,10 @@ extension SellRegisterView {
                 standardDeliveryFee: $viewModel.model.standardDeliveryFee,
                 halfDeliveryFee: $viewModel.model.halfDeliveryFee,
                 normalDelivery: $viewModel.normalDelivery,
-                halfDelivery: $viewModel.halfDelivery
+                halfDelivery: $viewModel.halfDelivery,
+                keyboardObserver: keyboardObserver,
+                normalDeliveryFocused: $normalDeliveryFocused,
+                halfDeliveryFocused: $halfDeliveryFocused
             )
             .padding(.horizontal, 28)
         }

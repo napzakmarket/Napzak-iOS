@@ -13,6 +13,10 @@ struct SellRegisterDelivery: View {
     @Binding var halfDeliveryFee: String
     @Binding var normalDelivery: Bool
     @Binding var halfDelivery: Bool
+    
+    var keyboardObserver: KeyboardObserver
+    var normalDeliveryFocused: FocusState<Bool>.Binding
+    var halfDeliveryFocused: FocusState<Bool>.Binding
 
     let normalMaxDeliveryCharge: Int = 30_000           // 일반 배달 최대 금액 3만원
     let halfMaxDeliveryCharge: Int = 5_000              // 반 값 배달 최대 금액 5000원
@@ -65,6 +69,7 @@ struct SellRegisterDelivery: View {
                                     }
                                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                                     .disabled(!normalDelivery)
+                                    .focused(normalDeliveryFocused)
                                 
                                 Text(" 원")
                                     .foregroundStyle(
@@ -102,6 +107,7 @@ struct SellRegisterDelivery: View {
                                     }
                                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                                     .disabled(!halfDelivery)
+                                    .focused(halfDeliveryFocused)
                                 
                                 Text(" 원")
                                     .foregroundStyle(
