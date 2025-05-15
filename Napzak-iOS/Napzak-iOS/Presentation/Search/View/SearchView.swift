@@ -27,7 +27,6 @@ struct SearchView: View {
     
     init(viewModel: SearchViewModel, isGenreSelectModalPresented: Binding<Bool>, isSortModalPresented: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: viewModel)
-        self._selectedTabIndex = State(initialValue: viewModel.selectedTabIndex)
         self._isGenreSelectModalPresented = isGenreSelectModalPresented
         self._isSortModalPresented = isSortModalPresented
     }
