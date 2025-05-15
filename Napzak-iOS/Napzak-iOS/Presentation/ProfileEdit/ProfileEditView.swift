@@ -17,18 +17,17 @@ struct ProfileEditView: View {
     @StateObject private var coverImagePickerManager = ImagePickerManager()
     @FocusState private var isKeyboardActive: Bool
 
-    var body: some View {            
-            ZStack(alignment: .bottom) {
-                VStack(spacing: 0) {
-                    headerView
-                    ScrollView(showsIndicators: false) {
-                        VStack(spacing: 0) {
-                            profileImageSection
-                            marketNameView
-                            marketDescriptionSection
-                            genreSelectionSection
-                            confirmButton
-                        }
+    var body: some View {
+        ZStack(alignment: .bottom) {
+            VStack(spacing: 0) {
+                headerView
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        profileImageSection
+                        marketNameView
+                        marketDescriptionSection
+                        genreSelectionSection
+                        confirmButton
                     }
                 }
             
@@ -38,9 +37,13 @@ struct ProfileEditView: View {
                     .onTapGesture {
                         withAnimation {
                             isGenreSelectModalPresented = false
+                            viewModel.selectedGenres = displayGenres
+                            viewModel.checkForChanges()
                         }
-                    }.zIndex(1)
-                
+                    }
+                    .transition(.opacity)
+                    .zIndex(1)
+
                 GenreSelectModalView(
                     viewModel: GenreSelectModalViewModel(
                         selectedGenres: displayGenres
@@ -53,8 +56,8 @@ struct ProfileEditView: View {
                 }
                 .onDisappear {
                     viewModel.selectedGenres = displayGenres
+                    viewModel.checkForChanges()
                 }
-                .zIndex(2)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
             }
@@ -327,6 +330,7 @@ struct ProfileEditView: View {
             }
 
             Button {
+                displayGenres = viewModel.selectedGenres
                 withAnimation {
                     isGenreSelectModalPresented = true
                 }
