@@ -92,6 +92,8 @@ struct HomeView: View {
             }
         }
         .onAppear {
+            //탭 간 전환시 데이터를 새로 불러오기 위한 코드
+            //추후 상품에 관한 전역 구현체가 구현되면 제거해도 무방
             viewModel.fetchHomeData()
             scrollToTopTrigger.toggle()
         }
