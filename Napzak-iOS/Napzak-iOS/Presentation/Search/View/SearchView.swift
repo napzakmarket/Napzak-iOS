@@ -15,8 +15,7 @@ struct SearchView: View {
 
     @StateObject var viewModel: SearchViewModel
     
-    @State private var selectedTabIndex = 0
-    
+    @State private var selectedTabIndex: Int
     @Binding var isGenreSelectModalPresented: Bool
     @Binding var isSortModalPresented: Bool
 
@@ -24,6 +23,13 @@ struct SearchView: View {
     
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
     private let columns = [GridItem(.flexible(), spacing: 20), GridItem(.flexible())]
+    
+    init(viewModel: SearchViewModel, isGenreSelectModalPresented: Binding<Bool>, isSortModalPresented: Binding<Bool>) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+        self._selectedTabIndex = State(initialValue: viewModel.selectedTabIndex)
+        self._isGenreSelectModalPresented = isGenreSelectModalPresented
+        self._isSortModalPresented = isSortModalPresented
+    }
     
     //MARK: - Body
     
@@ -33,8 +39,8 @@ struct SearchView: View {
                 searchHeader
                     .padding(.top, 75)
                 productScrollView(
-                    products: selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
-                    productsCount: selectedTabIndex == 0 ? viewModel.sellProductsCount : viewModel.buyProductsCount
+                    products: viewModel.selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
+                    productsCount: viewModel.selectedTabIndex == 0 ? viewModel.sellProductsCount : viewModel.buyProductsCount
                 )
                 Spacer()
             }
@@ -94,6 +100,7 @@ struct SearchView: View {
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .onChange(of: selectedTabIndex) { value in
+            viewModel.selectedTabIndex = value
             Task {
                 if value == 0 {
                     if viewModel.searchWord.isEmpty {

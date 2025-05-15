@@ -177,8 +177,8 @@ extension HomeView {
                 subtitle: viewModel.popularSellSubtitle,
                 showMore: true,
                 onMoreTap: {
-                    // TODO: 인기순 정렬 팔아요 화면 이동
-                    tabRouter.switchToSearch()
+                    tabRouter.searchParams = nil
+                    tabRouter.switchToSearch(sortOption: .popular, searchTabIndex: 0)
                 }
             )
             
@@ -225,8 +225,8 @@ extension HomeView {
                 subtitle: viewModel.popularBuySubtitle,
                 showMore: true,
                 onMoreTap: {
-                    // TODO: 인기순 정렬 구해요 화면 이동
-                    tabRouter.switchToSearch()
+                    tabRouter.searchParams = nil
+                    tabRouter.switchToSearch(sortOption: .popular, searchTabIndex: 1)
                 }
             )
             

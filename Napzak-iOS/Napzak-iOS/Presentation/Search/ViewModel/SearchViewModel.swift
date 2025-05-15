@@ -20,9 +20,9 @@ final class SearchViewModel: ObservableObject {
     @Published var sellProducts: [ProductItemModel] = []
     @Published var buyProductsCount: Int = 0
     @Published var buyProducts: [ProductItemModel] = []
-    
-    @ObservedObject private var likeManager = ProductLikeManager.shared
+    @Published var selectedTabIndex: Int = 0
     @Published var showToast: Bool = false
+    @ObservedObject private var likeManager = ProductLikeManager.shared
     
     private(set) var isProcessingLike: Bool = false
     
@@ -36,14 +36,28 @@ final class SearchViewModel: ObservableObject {
     
     //MARK: - Init
     
-    init(searchWord: String) {
+    init(
+        searchWord: String,
+        initialSortOption: SortOption = .recent,
+        initialSelectedTab: Int = 0
+    ) {
         self.searchWord = searchWord
+        self.productFetchOption.sortOption = initialSortOption
+        self.selectedTabIndex = initialSelectedTab
         
         Task {
             if searchWord == "" {
-                await fetchSellProducts()
+                if initialSelectedTab == 0 {
+                    await fetchSellProducts()
+                } else {
+                    await fetchBuyProducts()
+                }
             } else {
-                await fetchSellProductsForSearch()
+                if initialSelectedTab == 0 {
+                    await fetchSellProductsForSearch()
+                } else {
+                    await fetchBuyProductsForSearch()
+                }
             }
         }
         
