@@ -19,4 +19,8 @@ extension View {
             .lineSpacing(fontSpacing * 2)
             .tracking(letterSpacing)
     }
+    
+    func swipePopGestureDisabled() -> some View {
+        modifier(SwipePopGestureDisabledViewModifier())
+    }
 }
