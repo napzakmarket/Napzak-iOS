@@ -7,6 +7,7 @@
 
 import Foundation
 import os
+import SwiftUICore
 
 @MainActor
 final class HomeViewModel: ObservableObject {
@@ -17,6 +18,7 @@ final class HomeViewModel: ObservableObject {
     @Published var timerPaused: Bool = false
     @Published var showLikeToast: Bool = false
     @Published var externalURLToOpen: URL?
+    @ObservedObject private var likeManager = ProductLikeManager.shared
     private var originalUsername: String = ""
     
     private var username: String {
@@ -44,6 +46,7 @@ final class HomeViewModel: ObservableObject {
     
     init() {
         fetchHomeData()
+        setupLikeObserver()
     }
     
     func fetchHomeData() {
@@ -98,7 +101,12 @@ final class HomeViewModel: ObservableObject {
         
         switch result {
         case .success:
-            updateProductInterestState(productId: productId, section: section, isInterested: !currentProduct.isInterested)
+            let newState = !currentProduct.isInterested
+
+            updateProductInterestState(productId: productId, section: section, isInterested: newState)
+            
+            likeManager.productLikeUpdated(productId: productId, isLiked: newState)
+            
             if !currentProduct.isInterested {
                 showLikeToast = true
                 try? await Task.sleep(for: .seconds(2))
@@ -111,6 +119,28 @@ final class HomeViewModel: ObservableObject {
 }
 
 extension HomeViewModel {
+    private func setupLikeObserver() {
+        Task {
+            for await _ in likeManager.$updatedProductId.values {
+                if let productId = likeManager.updatedProductId,
+                   let newState = likeManager.newLikeState {
+                    if let index = recommendedProducts.firstIndex(where: { $0.id == productId }) {
+                        recommendedProducts[index].isInterested = newState
+                        recommendedProducts[index].interestCount += newState ? 1 : -1
+                    }
+                    if let index = popularSellProducts.firstIndex(where: { $0.id == productId }) {
+                        popularSellProducts[index].isInterested = newState
+                        popularSellProducts[index].interestCount += newState ? 1 : -1
+                    }
+                    if let index = popularBuyProducts.firstIndex(where: { $0.id == productId }) {
+                        popularBuyProducts[index].isInterested = newState
+                        popularBuyProducts[index].interestCount += newState ? 1 : -1
+                    }
+                }
+            }
+        }
+    }
+    
     private func getCurrentProductState(_ productId: Int, in section: ProductSection) -> ProductItemModel? {
         switch section {
         case .recommended:

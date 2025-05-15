@@ -19,7 +19,7 @@ struct ProductItemModel: Identifiable {
     let tradeStatus: TradeStatus
     let isPriceNegotiable: Bool?
     let isOwnedByCurrentUser: Bool
-    let interestCount: Int
+    var interestCount: Int
     let chatCount: Int
     
     //MARK: - Init
