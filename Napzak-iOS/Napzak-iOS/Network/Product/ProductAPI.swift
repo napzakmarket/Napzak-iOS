@@ -50,9 +50,13 @@ extension ProductAPI: BaseTargetType {
             return "products/buy/search"
         case .getProductDetailInfo(productId: let productId), .patchTradeStatus(let productId, _), .deleteProduct(let productId):
             return "products/\(productId)"
-        case .getSellProductInfoForEdit(let productId), .getBuyProductInfoForEdit(let productId):
+        case .getSellProductInfoForEdit(let productId):
             return "products/sell/modify/\(productId)"
-        case .putSellProduct(let productId, _), .putBuyProduct(let productId, _):
+        case .getBuyProductInfoForEdit(let productId):
+            return "products/buy/modify/\(productId)"
+        case .putSellProduct(let productId, _):
+            return "products/sell/modify/\(productId)"
+        case .putBuyProduct(let productId, _):
             return "products/buy/modify/\(productId)"
         case .getSearchRecommendation:
             return "products/search/recommend"

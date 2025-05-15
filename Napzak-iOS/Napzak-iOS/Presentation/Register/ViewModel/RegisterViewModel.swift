@@ -54,8 +54,9 @@ final class RegisterViewModel: ObservableObject {
         
         switch viewType {
         case .initialRegister:
-            print("dddd")
+            print("상품 등록 작성")
         case .editProduct(let productId, let tradeType):
+            print("상품 수정 작성")
             self.productId = productId
             Task {
                 switch tradeType {
