@@ -32,13 +32,16 @@ struct RegisterImage: View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack(alignment: .bottom, spacing: 0) {
                 imagePickerManager.photoPickerView {
-                    VStack {
+                    VStack(spacing: 0) {
+                        Spacer()
                         Image(.iconPhotoPicker)
                             .frame(width: 24, height: 24)
+                            .padding(.bottom, 5)
                         Text("사진 \(imagePickerManager.selectedImageCount())/10")
                             .foregroundStyle(Color.napzakPrimary(.purple500))
                             .applyNapzakFont(.caption3Regular12)
                             .frame(height: 13)
+                            .padding(.bottom, 18)
                     }
                     .frame(width: 88, height: 88)
                     .background(Color.napzakPrimary(.purple100))

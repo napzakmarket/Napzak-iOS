@@ -9,10 +9,15 @@ import SwiftUI
 
 struct SellRegisterView: View {
     @EnvironmentObject var navigationRouter: NavigationRouter
+    
     @StateObject private var registerRouter = RegisterNavigationRouter()
     @StateObject var viewModel: RegisterViewModel
+    @StateObject var keyboardObserver = KeyboardObserver()
+    
+    @FocusState var normalDeliveryFocused: Bool
+    @FocusState var halfDeliveryFocused: Bool
+
     @Environment(\.dismiss) private var dismiss
-    @FocusState private var isKeyboardActive: Bool
     
     @Binding var isRegisterTabSelected: Bool
     
@@ -21,12 +26,33 @@ struct SellRegisterView: View {
             VStack(spacing: 0){
                 SellRegisterHeader()
                 
-                ScrollView {
-                    VStack(spacing: 0) {
-                        SellRegisterContent
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            SellRegisterContent
+                            
+                            if normalDeliveryFocused {
+                                Color.clear
+                                    .frame(height: max(keyboardObserver.keyboardHeight - 150, 0))
+                                    .animation(.easeInOut, value: keyboardObserver.keyboardHeight)
+                                    .id("bottom")
+                            }
+                            
+                            if halfDeliveryFocused {
+                                Color.clear
+                                    .frame(height: max(keyboardObserver.keyboardHeight - 150, 0))
+                                    .animation(.easeInOut, value: keyboardObserver.keyboardHeight)
+                                    .id("bottom")
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .onChange(of: keyboardObserver.keyboardHeight) { _ in
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            proxy.scrollTo("bottom", anchor: .bottom)
+                        }
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
                 
                 registerButton
             }
@@ -55,6 +81,11 @@ struct SellRegisterView: View {
                         }
                     }
                 }
+            }
+            .onTapGesture {
+                self.dismissKeyboard()
+                normalDeliveryFocused = false
+                halfDeliveryFocused = false
             }
         }
         .onAppear {
@@ -89,12 +120,10 @@ extension SellRegisterView {
             RegisterTitle(title: $viewModel.model.title)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 10)
-                .focused($isKeyboardActive)
             
             RegisterDescription(description: $viewModel.model.description)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 23)
-                .focused($isKeyboardActive)
             
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))
@@ -112,19 +141,18 @@ extension SellRegisterView {
             )
             .padding(.horizontal, 28)
             .padding(.bottom, 30)
-            .focused($isKeyboardActive)
             
             SellRegisterDelivery(
                 isDeliveryIncluded: $viewModel.model.isDeliveryIncluded,
                 standardDeliveryFee: $viewModel.model.standardDeliveryFee,
                 halfDeliveryFee: $viewModel.model.halfDeliveryFee,
                 normalDelivery: $viewModel.normalDelivery,
-                halfDelivery: $viewModel.halfDelivery
+                halfDelivery: $viewModel.halfDelivery,
+                keyboardObserver: keyboardObserver,
+                normalDeliveryFocused: $normalDeliveryFocused,
+                halfDeliveryFocused: $halfDeliveryFocused
             )
             .padding(.horizontal, 28)
-        }
-        .onTapGesture {
-            isKeyboardActive = false
         }
     }
     

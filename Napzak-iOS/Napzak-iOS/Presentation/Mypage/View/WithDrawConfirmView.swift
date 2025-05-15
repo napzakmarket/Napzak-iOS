@@ -123,7 +123,7 @@ extension WithDrawConfirmView {
     private var nextButtonSection: some View {
         HStack(alignment: .center, spacing: 16) {
             Button {
-                navigationRouter.pop()
+                navigationRouter.reset()
                 print("취소하기 눌림")
             } label: {
                 Text("취소하기")
