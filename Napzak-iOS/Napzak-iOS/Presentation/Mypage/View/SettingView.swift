@@ -11,10 +11,14 @@ struct SettingView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
     @EnvironmentObject private var tabRouter: TabRouter
     
+    @Environment(\.openURL) var openURL
+    
     @StateObject private var viewModel = SettingViewModel()
     
     @State var logoutButtonTapped: Bool = false
     
+    let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+
     var body: some View {
         ZStack {
             VStack(spacing: 0){
@@ -102,7 +106,8 @@ extension SettingView {
                 .padding(.bottom, 28)
             
             Button {
-                // 공지사항 이동
+                guard let url = URL(string: Bundle.main.infoDictionary?["NOTICE_URL"] as! String) else {return}
+                openURL(url)
                 print("공지사항 이동")
             } label: {
                 HStack {
@@ -120,7 +125,8 @@ extension SettingView {
             .padding(.bottom, 20)
             
             Button {
-                // 이용약관 이동
+                guard let url = URL(string: Bundle.main.infoDictionary?["TERMS_OF_SERVICE_URL"] as! String) else {return}
+                openURL(url)
                 print("이용약관 이동")
             } label: {
                 HStack {
@@ -138,7 +144,8 @@ extension SettingView {
             .padding(.bottom, 20)
             
             Button {
-                // 개인정보 처리방침 이동
+                guard let url = URL(string: Bundle.main.infoDictionary?["PRIVACY_POLICY_URL"] as! String) else {return}
+                openURL(url)
                 print("개인정보 처리방침 이동")
             } label: {
                 HStack {
@@ -155,20 +162,17 @@ extension SettingView {
             .padding(.horizontal, 28)
             .padding(.bottom, 20)
             
-            Button {
-                // 버전 정보 이동
-                print("버전 정보 이동")
-            } label: {
-                HStack {
-                    Text("버전 정보")
-                        .applyNapzakFont(.body1Bold16)
-                        .foregroundStyle(Color.napzakGrayScale(.gray400))
-                        .frame(height: 20)
-                    Spacer()
-                    Image(.arrowRight)
-                        .resizable()
-                        .frame(width: 6, height: 10)
-                }
+            HStack {
+                Text("버전 정보")
+                    .applyNapzakFont(.body1Bold16)
+                    .foregroundStyle(Color.napzakGrayScale(.gray400))
+                    .frame(height: 20)
+                Spacer()
+                Text(appVersion ?? "버전 정보가 없습니다")
+                    .applyNapzakFont(.body2SemiBold16)
+                    .foregroundStyle(Color.napzakGrayScale(.gray400))
+                    .frame(height: 20)
+
             }
             .padding(.horizontal, 28)
             .padding(.bottom, 28)
@@ -219,4 +223,8 @@ extension SettingView {
         }
         .background(.white)
     }
+}
+
+#Preview {
+    SettingView()
 }

@@ -256,7 +256,6 @@ struct MarketView: View {
                         .foregroundColor(Color.napzakGrayScale(.black))
                         .applyNapzakFont(.caption2Medium12)
                         .multilineTextAlignment(.center)
-                        .lineLimit(2)
                         .padding(.top, 6)
                         .padding(.horizontal, 37)
                 }
@@ -265,7 +264,9 @@ struct MarketView: View {
                     HStack(spacing: 5) {
                         if let genres = viewModel.storeDetail?.genrePreferences, !genres.isEmpty {
                             ForEach(genres, id: \.genreId) { genre in
-                                PlainChip(title: genre.genreName)
+                                PlainChip(title: genre.genreName.count > 5
+                                        ?String(genre.genreName.prefix(5)) + "..."
+                                          : genre.genreName)
                             }
                         } else if viewModel.isLoadingProfile {
                             ForEach(["로딩 중..."], id: \.self) { tag in
@@ -425,5 +426,13 @@ struct MarketView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity)
+    }
+}
+
+// MARK: - Preview
+struct MarketView_Previews: PreviewProvider {
+    static var previews: some View {
+        MarketView(viewModel: MarketViewModel(storeId: 0))
+            .environmentObject(NavigationRouter())
     }
 }

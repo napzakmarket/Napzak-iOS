@@ -12,10 +12,8 @@ struct BuyRegisterView: View {
     @StateObject private var registerRouter = RegisterNavigationRouter()
     @StateObject var viewModel: RegisterViewModel
     @Environment(\.dismiss) private var dismiss
-    @FocusState private var isKeyboardActive: Bool
     
     @Binding var isRegisterTabSelected: Bool
-    
     
     var body: some View {
         NavigationStack(path: $registerRouter.path) {
@@ -47,10 +45,19 @@ struct BuyRegisterView: View {
                         genre: $viewModel.model.genre,
                         genreId: $viewModel.model.genreId
                     )
+                    .onChange(of: viewModel.genreSearchText) { word in
+                        Task {
+                            if word.isEmpty {
+                                await viewModel.getAllGenre()
+                            } else {
+                                await viewModel.getSearchGenre(searchWord: word)
+                            }
+                        }
+                    }
                 }
             }
             .onTapGesture {
-                isKeyboardActive = false
+                self.dismissKeyboard()
             }
         }
         .onAppear {
@@ -88,13 +95,11 @@ extension BuyRegisterView {
                 .padding(.horizontal, 28)
                 .padding(.bottom, 10)
                 .background(.white)
-                .focused($isKeyboardActive)
             
             RegisterDescription(description: $viewModel.model.description)
                 .padding(.horizontal, 28)
                 .padding(.bottom, 23)
                 .background(.white)
-                .focused($isKeyboardActive)
             
             Rectangle()
                 .fill(Color.napzakGrayScale(.gray10))
@@ -111,7 +116,6 @@ extension BuyRegisterView {
             .padding(.horizontal, 28)
             .padding(.bottom, 32)
             .background(.white)
-            .focused($isKeyboardActive)
             
             BuyRegisterSuggestPrice(isPriceNegotiable: $viewModel.model.isPriceNegotiable)
                 .padding(.horizontal, 28)

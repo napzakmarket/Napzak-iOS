@@ -10,8 +10,11 @@ import SwiftUI
 struct ReportView: View {
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
-
+    
     @StateObject private var viewModel = ReportViewModel()
+    @StateObject private var keyboardObserver = KeyboardObserver()
+    
+    @FocusState private var contactAddressSectionFocused: Bool
     
     let reportType: ReportType
     let id: Int // report타입에 따른 id (productId, storeId)
@@ -19,12 +22,29 @@ struct ReportView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0){
             reportHeader
-            ScrollView {
-                selectReportReason
-                separator
-                reportDescriptionSection
-                separator
-                contactAddressSection
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(spacing: 0) {
+                        selectReportReason
+                        separator
+                        reportDescriptionSection
+                        separator
+                        contactAddressSection
+                        
+                        if contactAddressSectionFocused {
+                            Color.clear
+                                .frame(height: max(keyboardObserver.keyboardHeight - 150, 0))
+                                .animation(.easeInOut, value: keyboardObserver.keyboardHeight)
+                                .id("bottom")
+                        }
+                    }
+                    .ignoresSafeArea(.keyboard)
+                }
+                .onChange(of: keyboardObserver.keyboardHeight) { _ in
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        proxy.scrollTo("bottom", anchor: .bottom)
+                    }
+                }
             }
             submitReportButton
         }
@@ -37,9 +57,13 @@ struct ReportView: View {
             alignment: .bottom
         )
         .animation(.easeInOut(duration: 0.3), value: viewModel.showToast)
-        .ignoresSafeArea(edges: [.top])
+        .ignoresSafeArea()
         .scrollDismissesKeyboard(.immediately)
         .toolbar(.hidden, for: .navigationBar)
+        .onTapGesture {
+            self.dismissKeyboard()
+            contactAddressSectionFocused = false
+        }
     }
 }
 
@@ -58,7 +82,6 @@ extension ReportView {
             
             Divider()
         }
-        .frame(height: 100)
     }
     
     private var selectReportReason: some View {
@@ -215,6 +238,7 @@ extension ReportView {
                     RoundedRectangle(cornerRadius: 14)
                         .fill(Color.napzakGrayScale(.gray50))
                 }
+                .focused($contactAddressSectionFocused)
         }
         .padding(.horizontal, 28)
         .padding(.bottom, 30)
@@ -225,7 +249,7 @@ extension ReportView {
             viewModel.showToast = true
             Task {
                 await viewModel.report(type: reportType, id: id)
-                try? await Task.sleep(nanoseconds: 2_500_000_000)
+                try? await Task.sleep(for: .seconds(1))
                 viewModel.showToast = false
                 navigationRouter.pop()
             }

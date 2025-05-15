@@ -1,3 +1,10 @@
+//
+//  ProfileEditView.swift
+//  Napzak-iOS
+//
+//  Created by 어진 on 4/24/25.
+//
+
 import SwiftUI
 import Combine
 import os
@@ -13,6 +20,7 @@ final class ProfileEditViewModel: ObservableObject {
     @Published var profileImageURL: String = ""
     @Published var coverImageURL: String = ""
     @Published var selectedProfileImage: UIImage? = nil
+    @Published var selectedCoverImage: UIImage? = nil
     
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
@@ -26,6 +34,7 @@ final class ProfileEditViewModel: ObservableObject {
     private var initialProfileDescription: String = ""
     private var initialGenres: [GenreNameModel] = []
     private var initialProfileImageURL: String = ""
+    private var initialCoverImageURL: String = ""
     
     init(storeService: StoreServiceProtocol = StoreService()) {
         self.storeService = storeService
@@ -79,6 +88,7 @@ final class ProfileEditViewModel: ObservableObject {
                                         self.initialProfileImageURL = self.profileImageURL
                                         
                                         self.coverImageURL = storeDetail.storeCover ?? "profile_market"
+                                        self.initialCoverImageURL = self.coverImageURL
                                         
                                         self.selectedGenres = storeDetail.genrePreferences.map {
                                             GenreNameModel(id: $0.genreId, name: $0.genreName)
@@ -127,7 +137,8 @@ final class ProfileEditViewModel: ObservableObject {
                         self.logger.info("✅ 프로필 이미지 업로드 성공")
                         let finalImageURL = uploadURL.components(separatedBy: "?").first ?? uploadURL
                         self.profileImageURL = finalImageURL
-                        continueProfileUpdate()
+                        // 이후 커버 이미지 업로드 체크
+                        await uploadCoverImageIfNeeded()
                     case .failure(let error):
                         self.logger.error("❌ 프로필 이미지 업로드 실패: \(error.localizedDescription)")
                         self.errorMessage = "이미지 업로드에 실패했습니다."
@@ -140,8 +151,46 @@ final class ProfileEditViewModel: ObservableObject {
                     self.isLoading = false
                 }
             } else {
-                continueProfileUpdate()
+                await uploadCoverImageIfNeeded()
             }
+        }
+    }
+    
+    private func uploadCoverImageIfNeeded() async {
+        if let selectedCoverImage = selectedCoverImage {
+            let imageName = UUID().uuidString + ".jpg"
+            let presignedResult = await NetworkService.shared.presignedService.getPresignedURL(imageNameList: [imageName])
+
+            switch presignedResult {
+            case .success(let response):
+                guard let uploadURL = response.data?.productPresignedUrls[imageName],
+                      let imageData = selectedCoverImage.jpegData(compressionQuality: 0.8) else {
+                    self.errorMessage = "커버 이미지 데이터 생성 혹은 Presigned URL 파싱 실패"
+                    self.isLoading = false
+                    return
+                }
+
+                let uploadResult = await NetworkService.shared.presignedService.putPresignedURL(url: uploadURL, imageData: imageData)
+
+                switch uploadResult {
+                case .success:
+                    self.logger.info("✅ 커버 이미지 업로드 성공")
+                    let finalImageURL = uploadURL.components(separatedBy: "?").first ?? uploadURL
+                    self.coverImageURL = finalImageURL
+                    continueProfileUpdate()
+                case .failure(let error):
+                    self.logger.error("❌ 커버 이미지 업로드 실패: \(error.localizedDescription)")
+                    self.errorMessage = "커버 이미지 업로드에 실패했습니다."
+                    self.isLoading = false
+                }
+
+            case .failure(let error):
+                self.logger.error("❌ Presigned URL 요청 실패: \(error.localizedDescription)")
+                self.errorMessage = "커버 이미지 업로드 URL 요청 실패"
+                self.isLoading = false
+            }
+        } else {
+            continueProfileUpdate()
         }
     }
 
@@ -190,11 +239,12 @@ extension ProfileEditViewModel {
         let hasDescriptionChanged = profileDescription != initialProfileDescription
         let hasGenresChanged = selectedGenres != initialGenres
         let hasProfileImageChanged = selectedProfileImage != nil
+        let hasCoverImageChanged = selectedCoverImage != nil
         
-        print("변경 상태: nickname=\(hasNicknameChanged), description=\(hasDescriptionChanged), genres=\(hasGenresChanged), image=\(hasProfileImageChanged)")
+        print("변경 상태: nickname=\(hasNicknameChanged), description=\(hasDescriptionChanged), genres=\(hasGenresChanged), profileImage=\(hasProfileImageChanged), coverImage=\(hasCoverImageChanged)")
         
         let hasAnyChange = hasNicknameChanged || hasDescriptionChanged ||
-        hasGenresChanged || hasProfileImageChanged
+        hasGenresChanged || hasProfileImageChanged || hasCoverImageChanged
         
         if hasAnyChange {
             if hasNicknameChanged {
