@@ -363,6 +363,7 @@ struct ProfileEditView: View {
         .disabled(!viewModel.isPrimaryButtonEnabled)
         .padding(.bottom, 63)
         .padding(.horizontal, 27)
+        .padding(.top, 5)
     }
 }
 
