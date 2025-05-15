@@ -444,7 +444,7 @@ extension RegisterViewModel {
         let titleValid = !model.title.trimmingCharacters(in: .whitespaces).isEmpty
         let descriptionValid = !model.description.trimmingCharacters(in: .whitespaces).isEmpty
         let priceValid = model.price.trimmingCharacters(in: .whitespaces).convertInt() > 0
-        let imageValid = !model.images.isEmpty
+        let imageValid = !imagePickerManager.selectedImages.isEmpty
         let genreSelected = model.genreId != nil
         
         return titleValid && descriptionValid && priceValid && imageValid && genreSelected
