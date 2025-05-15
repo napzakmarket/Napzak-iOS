@@ -30,7 +30,8 @@ struct ProfileEditView: View {
                         confirmButton
                     }
                 }
-            
+            }
+
             if isGenreSelectModalPresented {
                 Color.black.opacity(0.3)
                     .ignoresSafeArea()
@@ -318,8 +319,7 @@ struct ProfileEditView: View {
             if !viewModel.selectedGenres.isEmpty {
                 PlainChipContainerView(
                     titles: viewModel.selectedGenres.map { $0.name },
-                    action: { _ in
-                    }
+                    action: { _ in }
                 )
                 .padding(.bottom, 25)
             } else {
