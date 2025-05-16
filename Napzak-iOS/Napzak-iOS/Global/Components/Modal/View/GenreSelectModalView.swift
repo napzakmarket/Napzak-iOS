@@ -120,7 +120,7 @@ extension GenreSelectModalView {
                         } label: {
                             HStack {
                                 Text("\(genre.name)")
-                                    .applyNapzakFont(.body6Regular14)
+                                    .applyNapzakFont(viewModel.selectedGenres.contains(genre) ? .body5SemiBold14 : .body6Regular14)
                                     .foregroundStyle(viewModel.selectedGenres.contains(genre) ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray400))
                                     .padding(10)
                                 Spacer()
