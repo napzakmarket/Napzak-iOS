@@ -81,7 +81,7 @@ final class ProfileEditViewModel: ObservableObject {
                                         self.nickname = storeDetail.storeNickName ?? "납자기"
                                         self.initialNickname = self.nickname
                                         
-                                        self.profileDescription = storeDetail.storeDescription ?? "안녕 난 \(self.nickname)야"
+                                        self.profileDescription = storeDetail.storeDescription ?? ""
                                         self.initialProfileDescription = self.profileDescription
                                         
                                         self.profileImageURL = storeDetail.storePhoto ?? "profile_market"
