@@ -8,6 +8,7 @@
 import Foundation
 import os
 import SwiftUICore
+import Combine
 
 @MainActor
 final class HomeViewModel: ObservableObject {
@@ -19,8 +20,11 @@ final class HomeViewModel: ObservableObject {
     @Published var showLikeToast: Bool = false
     @Published var externalURLToOpen: URL?
     @ObservedObject private var likeManager = ProductLikeManager.shared
-    private var originalUsername: String = ""
+    @Published var recommendedProducts: [ProductItemModel] = []
+    @Published var popularSellProducts: [ProductItemModel] = []
+    @Published var popularBuyProducts: [ProductItemModel] = []
     
+    private var originalUsername: String = ""
     private var username: String {
         if originalUsername.count > 10 {
             return originalUsername.prefix(10) + "..."
@@ -28,11 +32,8 @@ final class HomeViewModel: ObservableObject {
         return originalUsername
     }
     
-    @Published var recommendedProducts: [ProductItemModel] = []
-    @Published var popularSellProducts: [ProductItemModel] = []
-    @Published var popularBuyProducts: [ProductItemModel] = []
-    
-    private(set) var isProcessingLike: Bool = false
+    private var cancellables = Set<AnyCancellable>()
+    private let likeSubject = PassthroughSubject<(Int, ProductSection, Bool), Never>()
     
     private let homeService = NetworkService.shared.homeService
     private let interestService = NetworkService.shared.interestService
@@ -47,6 +48,7 @@ final class HomeViewModel: ObservableObject {
     init() {
         fetchHomeData()
         setupLikeObserver()
+        setupLikePublisher()
     }
     
     func fetchHomeData() {
@@ -82,39 +84,51 @@ final class HomeViewModel: ObservableObject {
         return !product.isOwnedByCurrentUser
     }
     
-    func toggleLike(for productId: Int, in section: ProductSection) async  {
-        guard !isProcessingLike else { return }
-        
-        isProcessingLike = true
-        defer { isProcessingLike = false }
-        
-        let currentState = getCurrentProductState(productId, in: section)
-        guard let currentProduct = currentState else {
+    func toggleLike(for productId: Int, in section: ProductSection) {
+        guard let currentProduct = getCurrentProductState(productId, in: section) else {
             logger.error("toggleLike: Product not found with id: \(productId)")
             return
         }
         
-        let result = currentProduct.isInterested ?
-        await interestService.deleteInterest(productId: productId) :
-        await interestService.postInterest(productId: productId)
+        let newState = !currentProduct.isInterested
         
+        updateProductInterestState(productId: productId, section: section, isInterested: newState)
+        likeManager.productLikeUpdated(productId: productId, isLiked: newState)
         
-        switch result {
-        case .success:
-            let newState = !currentProduct.isInterested
-
-            updateProductInterestState(productId: productId, section: section, isInterested: newState)
-            
-            likeManager.productLikeUpdated(productId: productId, isLiked: newState)
-            
-            if !currentProduct.isInterested {
-                showLikeToast = true
+        if newState {
+            showLikeToast = true
+            Task {
                 try? await Task.sleep(for: .seconds(2))
-                showLikeToast = false
+                await MainActor.run {
+                    showLikeToast = false
+                }
             }
-        case .failure(let error):
-            logger.error("toggleLike failed: \(error.errorDescription ?? "Unknown error")")
         }
+        
+        likeSubject.send((productId, section, newState))
+    }
+    
+    private func setupLikePublisher() {
+        likeSubject
+            .throttle(for: .milliseconds(500), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] (productId, section, newState) in
+                guard let self = self else { return }
+                
+                Task {
+                    let result = newState ?
+                    await self.interestService.postInterest(productId: productId) :
+                    await self.interestService.deleteInterest(productId: productId)
+                    
+                    await MainActor.run {
+                        if case .failure(let error) = result {
+                            self.updateProductInterestState(productId: productId, section: section, isInterested: !newState)
+                            self.likeManager.productLikeUpdated(productId: productId, isLiked: !newState)
+                            self.logger.error("toggleLike failed: \(error.errorDescription ?? "Unknown error")")
+                        }
+                    }
+                }
+            }
+            .store(in: &cancellables)
     }
 }
 
