@@ -228,8 +228,7 @@ struct ProfileEditView: View {
                     await viewModel.validateUsername(validatedUsername)
                 }
             }
-            .padding(.top, 10)
-            .padding(.bottom,20)
+            .padding(.bottom,46)
             .focused($isKeyboardActive)
 
         }
