@@ -42,7 +42,7 @@ struct SellRegisterView: View {
                             
                             if halfDeliveryFocused {
                                 Color.clear
-                                    .frame(height: max(keyboardObserver.keyboardHeight - 150, 0))
+                                    .frame(height: max(keyboardObserver.keyboardHeight - 140, 0))
                                     .animation(.easeInOut, value: keyboardObserver.keyboardHeight)
                                     .id("bottom")
                             }

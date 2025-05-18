@@ -25,7 +25,7 @@ class KeyboardObserver: ObservableObject {
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)
             .sink { notification in
-                if let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
+                if notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] is Double {
                     self.keyboardHeight = 0
                 }
             }

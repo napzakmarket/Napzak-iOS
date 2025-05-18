@@ -25,11 +25,11 @@ final class AuthManager: ObservableObject {
     }
     
     private init() {
-        #if DEBUG
-        keychain.clearTokens()
-        OnboardingManager.shared.clearProgress()
-        logger.info("[DEBUG] Keychain cleared for login testing")
-        #endif
+//        #if DEBUG
+//        keychain.clearTokens()
+//        OnboardingManager.shared.clearProgress()
+//        logger.info("[DEBUG] Keychain cleared for login testing")
+//        #endif
         
         if let checkpoint = onboardingManager.getLastCheckpoint() {
             logger.info("Current onboarding checkpoint: \(checkpoint.rawValue)")
