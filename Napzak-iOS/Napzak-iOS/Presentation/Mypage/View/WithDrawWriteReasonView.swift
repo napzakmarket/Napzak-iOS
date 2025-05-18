@@ -113,9 +113,11 @@ extension WithDrawWriteReasonView {
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .padding(.horizontal, 28)
             .padding(.bottom, 16)
+            .disabled(viewModel.withdrawDescription.isEmpty)
             
             Button {
                 navigationRouter.push(next: .withDrawConfirmView)
+                viewModel.withdrawDescriptionNull = true
                 print("건너뛰기")
             } label: {
                 Text("건너뛰기")
