@@ -14,7 +14,7 @@ struct WithDrawConfirmView: View {
     
     @StateObject var viewModel = WithDrawViewModel.shared
 
-    @State var withDrawButtonTapped: Bool = false
+    @State private var withDrawButtonTapped: Bool = false
 
     var body: some View {
         ZStack{
@@ -143,9 +143,9 @@ extension WithDrawConfirmView {
             }
             .background(Color.napzakPrimary(.purple500))
             .clipShape(RoundedRectangle(cornerRadius: 14))
+
         }
         .padding(.horizontal, 28)
         .padding(.bottom, 52)
     }
-
 }

@@ -18,7 +18,7 @@ struct SettingView: View {
     @State var logoutButtonTapped: Bool = false
     
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-
+    
     var body: some View {
         ZStack {
             VStack(spacing: 0){
@@ -32,35 +32,34 @@ struct SettingView: View {
             }
             
             if logoutButtonTapped {
-                ZStack(alignment: .center){
-                    Color.napzakTransparency(.transBlack)
-                        .onTapGesture {
-                            withAnimation {
-                                logoutButtonTapped = false
-                            }
-                        }
-                        .transition(.opacity)
-                        .zIndex(1)
-                    
-                    NZAlertView(
-                        style: .plain,
-                        titleMessage: "로그아웃 하시겠어요?",
-                        confirmText: "예",
-                        cancelText: "아니요",
-                        onConfirm: {
-                            Task {
-                                await viewModel.logout()
-                                navigationRouter.reset()
-                                tabRouter.switchToHome()
-                            }
-                            logoutButtonTapped = false
-                        },
-                        onCancel: {
+                Color.napzakTransparency(.transBlack)
+                    .onTapGesture {
+                        withAnimation {
                             logoutButtonTapped = false
                         }
-                    )
-                    .zIndex(2)
-                }
+                    }
+                    .transition(.opacity)
+                    .zIndex(1)
+                
+                NZAlertView(
+                    style: .plain,
+                    titleMessage: "로그아웃 하시겠어요?",
+                    confirmText: "예",
+                    cancelText: "아니요",
+                    onConfirm: {
+                        Task {
+                            await viewModel.logout()
+                            navigationRouter.reset()
+                            tabRouter.switchToHome()
+                        }
+                        logoutButtonTapped = false
+                    },
+                    onCancel: {
+                        logoutButtonTapped = false
+                    }
+                )
+                .zIndex(2)
+                
             }
         }
         .ignoresSafeArea()
@@ -172,7 +171,7 @@ extension SettingView {
                     .applyNapzakFont(.body2SemiBold16)
                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                     .frame(height: 20)
-
+                
             }
             .padding(.horizontal, 28)
             .padding(.bottom, 28)

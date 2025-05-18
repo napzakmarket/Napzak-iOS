@@ -13,6 +13,8 @@ struct BuyRegisterView: View {
     @StateObject var viewModel: RegisterViewModel
     @Environment(\.dismiss) private var dismiss
     
+    @State private var isProcessing: Bool = false
+    
     @Binding var isRegisterTabSelected: Bool
     
     var body: some View {
@@ -129,6 +131,7 @@ extension BuyRegisterView {
                 .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 1)
             
             Button {
+                isProcessing = true
                 Task {
                     await viewModel.buyRegister()
                     if let productId = viewModel.productId {
@@ -137,6 +140,7 @@ extension BuyRegisterView {
                             navigationRouter.push(next: .productDetailView(productId: productId))
                         }
                     }
+                    isProcessing = false
                 }
             } label: {
                 Text("등록하기")
@@ -153,6 +157,7 @@ extension BuyRegisterView {
             .padding(.top, 18)
             .padding(.bottom, 40)
             .disabled(!viewModel.sharedValidate)
+            .disabled(isProcessing)
         }
     }
     
