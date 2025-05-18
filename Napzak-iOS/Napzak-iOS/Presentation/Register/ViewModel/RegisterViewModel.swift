@@ -442,7 +442,7 @@ extension RegisterViewModel {
 extension RegisterViewModel {
     var sharedValidate: Bool {
         let titleValid = !model.title.trimmingCharacters(in: .whitespaces).isEmpty
-        let descriptionValid = !model.description.trimmingCharacters(in: .whitespaces).isEmpty
+        let descriptionValid = !model.description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         let priceValid = model.price.trimmingCharacters(in: .whitespaces).convertInt() > 0
         let imageValid = !imagePickerManager.selectedImages.isEmpty
         let genreSelected = model.genreId != nil
