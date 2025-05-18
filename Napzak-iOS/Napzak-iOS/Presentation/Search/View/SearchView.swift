@@ -291,9 +291,7 @@ private extension SearchView {
             product: product,
             width: productCellWidth,
             shouldToggleInterestState: {
-                Task {
-                    await viewModel.toggleLike(for: product.wrappedValue.id)
-                }
+                 viewModel.toggleLike(for: product.wrappedValue.id)
             }
         )
         .onTapGesture {

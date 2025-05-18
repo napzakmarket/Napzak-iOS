@@ -19,6 +19,8 @@ struct SellRegisterView: View {
 
     @Environment(\.dismiss) private var dismiss
     
+    @State private var isProcessing: Bool = false
+    
     @Binding var isRegisterTabSelected: Bool
     
     var body: some View {
@@ -40,7 +42,7 @@ struct SellRegisterView: View {
                             
                             if halfDeliveryFocused {
                                 Color.clear
-                                    .frame(height: max(keyboardObserver.keyboardHeight - 150, 0))
+                                    .frame(height: max(keyboardObserver.keyboardHeight - 140, 0))
                                     .animation(.easeInOut, value: keyboardObserver.keyboardHeight)
                                     .id("bottom")
                             }
@@ -163,7 +165,7 @@ extension SellRegisterView {
                 .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 1)
             
             Button {
-                //MARK: - 팔아요 등록
+                isProcessing = true
                 Task {
                     await viewModel.sellRegister()
                     if let productId = viewModel.productId {
@@ -172,6 +174,7 @@ extension SellRegisterView {
                             navigationRouter.push(next: .productDetailView(productId: productId))
                         }
                     }
+                    isProcessing = false
                 }
             } label: {
                 Text("등록하기")
@@ -189,6 +192,7 @@ extension SellRegisterView {
             .padding(.top, 18)
             .padding(.bottom, 40)
             .disabled(!(viewModel.sharedValidate && viewModel.sellRegisterValidate))
+            .disabled(isProcessing)
         }
     }
 }

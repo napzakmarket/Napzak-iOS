@@ -415,9 +415,7 @@ struct MarketView: View {
                             product: $viewModel.products[i],
                             width: productCellWidth,
                             shouldToggleInterestState: {
-                                Task {
-                                    await viewModel.toggleLike(for: viewModel.products[i].id)
-                                }
+                                 viewModel.toggleLike(for: viewModel.products[i].id)
                             })
                         .onTapGesture {
                            navigationRouter.push(next: .productDetailView(productId: viewModel.products[i].id))

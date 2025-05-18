@@ -43,6 +43,12 @@ final class ProfileEditViewModel: ObservableObject {
     }
 
     func validateUsername(_ username: String) async {
+        if username == initialNickname {
+            validationState = .valid
+            isPrimaryButtonEnabled = true
+            return
+        }
+
         isRequesting = true
         let request = NicknameRequestDTO(nickname: username)
         let result = await storeService.validateNickname(request: request)
@@ -81,7 +87,7 @@ final class ProfileEditViewModel: ObservableObject {
                                         self.nickname = storeDetail.storeNickName ?? "납자기"
                                         self.initialNickname = self.nickname
                                         
-                                        self.profileDescription = storeDetail.storeDescription ?? "안녕 난 \(self.nickname)야"
+                                        self.profileDescription = storeDetail.storeDescription ?? ""
                                         self.initialProfileDescription = self.profileDescription
                                         
                                         self.profileImageURL = storeDetail.storePhoto ?? "profile_market"

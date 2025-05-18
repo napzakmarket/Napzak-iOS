@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RegisterSearchGenre: View {
     @ObservedObject var registerRouter: RegisterNavigationRouter
-
+    
     @Environment(\.openURL) var openURL
     
     @Binding var genreSearchText: String
@@ -18,14 +18,33 @@ struct RegisterSearchGenre: View {
     @Binding var genre: String
     @Binding var genreId: Int?
     
+    @StateObject private var keyboard = KeyboardObserver()
+    
     var body: some View {
         ZStack(alignment: .top) {
             genreListScrollView
             headerView
+            
+            if keyboard.keyboardHeight > 0 {
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        .white.opacity(0),
+                        .white
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea(.keyboard, edges: .bottom)
+                .padding(.top, UIScreen.main.bounds.height/2)
+                .allowsHitTesting(false)
+            }
         }
         .ignoresSafeArea()
         .background(Color.napzakGrayScale(.gray10))
         .navigationBarBackButtonHidden()
+        .onTapGesture {
+            self.dismissKeyboard()
+        }
     }
 }
 
@@ -58,7 +77,7 @@ extension RegisterSearchGenre {
                       onSubmit: { })
             .padding(.horizontal, 27)
             .padding(.bottom, 24)
-
+            
         }
         .background(
             Color.napzakGrayScale(.white)
@@ -132,4 +151,3 @@ extension RegisterSearchGenre {
     }
     
 }
-

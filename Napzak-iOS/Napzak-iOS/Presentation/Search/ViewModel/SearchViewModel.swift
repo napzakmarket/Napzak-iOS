@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import Combine
 import os
 
 @MainActor
@@ -24,7 +24,8 @@ final class SearchViewModel: ObservableObject {
     @Published var showToast: Bool = false
     @ObservedObject private var likeManager = ProductLikeManager.shared
     
-    private(set) var isProcessingLike: Bool = false
+    private var cancellables = Set<AnyCancellable>()
+    private let likeSubject = PassthroughSubject<(Int, Bool), Never>()
     
     private let interestService = NetworkService.shared.interestService
     
@@ -45,6 +46,9 @@ final class SearchViewModel: ObservableObject {
         self.productFetchOption.sortOption = initialSortOption
         self.selectedTabIndex = initialSelectedTab
         
+        setupLikeObserver()
+        setupLikePublisher()
+        
         Task {
             if searchWord == "" {
                 if initialSelectedTab == 0 {
@@ -60,8 +64,6 @@ final class SearchViewModel: ObservableObject {
                 }
             }
         }
-        
-        setupLikeObserver()
     }
 }
 
@@ -161,37 +163,51 @@ extension SearchViewModel {
         }
     }
     
-    func toggleLike(for productId: Int) async {
-        guard !isProcessingLike else { return }
-        
-        isProcessingLike = true
-        defer { isProcessingLike = false }
-        
+    func toggleLike(for productId: Int) {
         let product = (sellProducts.first { $0.id == productId }) ??
         (buyProducts.first { $0.id == productId })
         
         guard let currentProduct = product else { return }
         
-        let result = currentProduct.isInterested ?
-        await interestService.deleteInterest(productId: productId) :
-        await interestService.postInterest(productId: productId)
+        let newState = !currentProduct.isInterested
         
-        switch result {
-        case .success:
-            let newState = !currentProduct.isInterested
-            
-            updateProductInterestState(productId: productId, isInterested: newState)
-            
-            likeManager.productLikeUpdated(productId: productId, isLiked: newState)
-            
-            if !currentProduct.isInterested {
-                showToast = true
+        updateProductInterestState(productId: productId, isInterested: newState)
+        likeManager.productLikeUpdated(productId: productId, isLiked: newState)
+        
+        if newState {
+            showToast = true
+            Task {
                 try? await Task.sleep(for: .seconds(2))
-                showToast = false
+                await MainActor.run {
+                    showToast = false
+                }
             }
-        case .failure(let error):
-            logger.error("toggleLike failed: \(error.errorDescription ?? "Unknown error")")
         }
+
+        likeSubject.send((productId, newState))
+    }
+    
+    private func setupLikePublisher() {
+        likeSubject
+            .throttle(for: .milliseconds(500), scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] (productId, newState) in
+                guard let self = self else { return }
+                
+                Task {
+                    let result = newState ?
+                    await self.interestService.postInterest(productId: productId) :
+                    await self.interestService.deleteInterest(productId: productId)
+                    
+                    await MainActor.run {
+                        if case .failure(let error) = result {
+                            self.updateProductInterestState(productId: productId, isInterested: !newState)
+                            self.likeManager.productLikeUpdated(productId: productId, isLiked: !newState)
+                            self.logger.error("toggleLike failed: \(error.errorDescription ?? "Unknown error")")
+                        }
+                    }
+                }
+            }
+            .store(in: &cancellables)
     }
     
     private func updateProductInterestState(productId: Int, isInterested: Bool) {
