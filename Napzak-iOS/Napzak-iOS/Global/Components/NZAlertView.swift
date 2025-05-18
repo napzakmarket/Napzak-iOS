@@ -18,8 +18,11 @@ struct NZAlertView: View {
     var subTitleMessage: String? = nil
     let confirmText: String
     let cancelText: String
-    let onConfirm: () -> Void
+    let onConfirm: () async -> Void
     let onCancel: () -> Void
+    
+    @State private var isProcessing: Bool = false
+    @State private var hasConfirmed: Bool = false
     
     var body: some View {
         VStack(spacing: 0) {
@@ -42,22 +45,31 @@ struct NZAlertView: View {
                 .frame(height: 1)
             
             HStack(alignment: .center, spacing: 0) {
-                Button(action: onConfirm) {
+                Button {
+                    confirmOnce()
+                } label: {
                     Text(confirmText)
                         .applyNapzakFont(.body5SemiBold14)
                         .foregroundStyle(Color.napzakGrayScale(.gray300))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
+                .disabled(isProcessing)
                 
                 Color.napzakGrayScale(.gray200)
                     .frame(width: 1)
                 
-                Button(action: onCancel) {
+                Button{
+                    if !isProcessing {
+                        onCancel()
+                    }
+                } label: {
                     Text(cancelText)
                         .applyNapzakFont(.body5SemiBold14)
                         .foregroundStyle(Color.napzakGrayScale(.gray300))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
+                .disabled(isProcessing)
+                
             }
             .frame(height: 50)
         }
@@ -67,5 +79,16 @@ struct NZAlertView: View {
                 .fill(Color.white)
         )
         .padding(.horizontal, 45)
+    }
+    
+    private func confirmOnce() {
+        guard !isProcessing && !hasConfirmed else { return }
+        isProcessing = true
+        hasConfirmed = true
+
+        Task {
+            await onConfirm()
+            isProcessing = false
+        }
     }
 }
