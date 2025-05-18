@@ -154,17 +154,14 @@ extension HomeView {
                                     in: .recommended
                                 )
                                 if canToggle {
-                                    Task {
-                                        await viewModel.toggleLike(
-                                            for: productId,
-                                            in: .recommended
-                                        )
-                                    }
+                                    viewModel.toggleLike(
+                                        for: productId,
+                                        in: .recommended
+                                    )
                                 }
                             }
                         )
                         .onTapGesture {
-                            //TODO: - 화면 전환
                             navigationRouter.push(next: .productDetailView(productId: viewModel.recommendedProducts[index].id))
                             print("\(viewModel.recommendedProducts[index].id)번 상품")
                         }
@@ -206,17 +203,14 @@ extension HomeView {
                         in: .popularSell
                     )
                     if canToggle {
-                        Task {
-                            await viewModel.toggleLike(
-                                for: productId,
-                                in: .popularSell
-                            )
-                        }
+                        viewModel.toggleLike(
+                            for: productId,
+                            in: .popularSell
+                        )
+                        
                     }
                 },
                 onTapProduct: { productId in
-                    // TODO: 상품 상세 화면으로 이동
-                    print("\(productId)번 상품")
                     navigationRouter.push(next: .productDetailView(productId: productId))
                 }
             )
@@ -254,12 +248,10 @@ extension HomeView {
                         in: .popularBuy
                     )
                     if canToggle {
-                        Task {
-                            await viewModel.toggleLike(
-                                for: productId,
-                                in: .popularBuy
-                            )
-                        }
+                        viewModel.toggleLike(
+                            for: productId,
+                            in: .popularBuy
+                        )
                     }
                 },
                 onTapProduct: { productId in
