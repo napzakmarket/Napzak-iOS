@@ -267,6 +267,7 @@ extension ReportView {
         .padding(.top, 18)
         .padding(.bottom, 68)
         .disabled(!viewModel.reportValidate)
+        .disabled(viewModel.showToast)
     }
     
     private var toastView: some View {
