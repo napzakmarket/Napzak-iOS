@@ -249,7 +249,7 @@ extension ReportView {
             viewModel.showToast = true
             Task {
                 await viewModel.report(type: reportType, id: id)
-                try? await Task.sleep(for: .seconds(1))
+                try? await Task.sleep(for: .seconds(2))
                 viewModel.showToast = false
                 navigationRouter.pop()
             }
