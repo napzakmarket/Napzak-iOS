@@ -147,7 +147,7 @@ struct NZTabBarView: View {
             }
             Spacer()
             Button {
-                tabRouter.switchToSearch()
+                tabRouter.switchToSearch(sortOption: .recent, searchTabIndex: 0)
                 isRegisterTabSelected = false
             } label: {
                 VStack(alignment: .center, spacing: 5) {

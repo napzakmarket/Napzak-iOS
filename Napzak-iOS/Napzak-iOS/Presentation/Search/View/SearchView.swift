@@ -12,6 +12,7 @@ struct SearchView: View {
     //MARK: - Property Wrappers
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @EnvironmentObject private var tabRouter: TabRouter
 
     @StateObject var viewModel: SearchViewModel
     
@@ -106,6 +107,13 @@ struct SearchView: View {
         .onChange(of: viewModel.productFetchOption) { _ in
             viewModel.updateProducts()
             scrollToTopTrigger.toggle()
+        }
+        .onChange(of: tabRouter.selectedTab) { tab in
+            if tab != .search {
+                viewModel.productFetchOption.genres = []
+                scrollToTopTrigger.toggle()
+                viewModel.selectedTabIndex = 0
+            }
         }
         .onAppear {
             viewModel.updateProducts()
