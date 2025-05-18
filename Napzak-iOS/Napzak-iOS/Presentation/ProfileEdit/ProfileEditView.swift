@@ -56,9 +56,12 @@ struct ProfileEditView: View {
                     displayGenres = viewModel.selectedGenres
                 }
                 .onDisappear {
-                    viewModel.selectedGenres = displayGenres
-                    viewModel.checkForChanges()
-                }
+                    viewModel.selectedGenres = []
+                       DispatchQueue.main.async {
+                           viewModel.selectedGenres = displayGenres
+                           viewModel.checkForChanges()
+                       }
+                   }
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
             }
