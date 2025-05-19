@@ -88,18 +88,14 @@ struct NZTabBarView: View {
                     SearchInputView()
                     
                 case .marketView(let storeId):
-                    MarketView(viewModel: MarketViewModel(storeId: storeId))
+                    MarketView(storeId: storeId)
                     
                 case .ProfileEditView:
                     ProfileEditView()
 
                 case .genreDetailView(genreId: let genreId, genreName: let genreName):
-                    GenreDetailView(
-                        viewModel: GenreDetailViewModel(
-                            genreId: genreId,
-                            genreName: genreName
-                        )
-                    )
+                    GenreDetailView(genreId: genreId, genreName: genreName)
+                    
                 case .productDetailView(productId: let productId):
                     ProductDetailView(viewModel: ProductDetailViewModel(productId: productId))
 

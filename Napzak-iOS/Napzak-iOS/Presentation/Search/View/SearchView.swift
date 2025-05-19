@@ -127,7 +127,7 @@ extension SearchView {
     
     private var searchHeader: some View {
         VStack(spacing: 0){
-            HStack {
+            HStack(alignment: .center, spacing: 0) {
                 if !viewModel.searchWord.isEmpty {
                     Button {
                         navigationRouter.pop()
@@ -135,7 +135,7 @@ extension SearchView {
                         Image(.iconBack)
                             .frame(width: 34)
                     }
-                    .padding(.leading, 27)
+                    .padding(.leading, 16)
                     .padding(.bottom, 19)
                 }
 

@@ -11,6 +11,8 @@ import Kingfisher
 
 struct MarketView: View {
     
+    //MARK: - Property Wrappers
+    
     @EnvironmentObject private var navigationRouter: NavigationRouter
 
     @StateObject var viewModel: MarketViewModel
@@ -21,8 +23,18 @@ struct MarketView: View {
     @State private var isReportModalPresented = false
     @State private var scrollToTopTrigger: Bool = false
     
+    //MARK: - Properties
+
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
     private let columns = [GridItem(.flexible(), spacing: 20), GridItem(.flexible())]
+    
+    //MARK: - Init
+    
+    init(storeId: Int) {
+        _viewModel = StateObject(wrappedValue: MarketViewModel(storeId: storeId))
+    }
+    
+    //MARK: - Body
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -121,12 +133,6 @@ struct MarketView: View {
             Task {
                 await viewModel.fetchProducts()
                 scrollToTopTrigger.toggle()
-            }
-        }
-        .onAppear {
-            Task {
-                await viewModel.fetchStoreDetail()
-                await viewModel.fetchProducts()
             }
         }
     }
@@ -435,13 +441,5 @@ struct MarketView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity)
-    }
-}
-
-// MARK: - Preview
-struct MarketView_Previews: PreviewProvider {
-    static var previews: some View {
-        MarketView(viewModel: MarketViewModel(storeId: 0))
-            .environmentObject(NavigationRouter())
     }
 }

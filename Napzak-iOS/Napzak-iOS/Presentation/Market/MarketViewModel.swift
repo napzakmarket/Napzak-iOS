@@ -49,6 +49,7 @@ final class MarketViewModel: ObservableObject {
         
         setupLikeObserver()
         setupLikePublisher()
+        setupProductEventObserver()
         
         Task {
             await fetchStoreDetail()
@@ -197,5 +198,17 @@ extension MarketViewModel {
                 }
             }
         }
+    }
+    
+    private func setupProductEventObserver() {
+        ProductEventManager.shared.productChanged
+            .sink { [weak self] in
+                guard let self = self else { return }
+                
+                Task {
+                    await self.fetchProducts()
+                }
+            }
+            .store(in: &cancellables)
     }
 }
