@@ -94,12 +94,8 @@ struct NZTabBarView: View {
                     ProfileEditView()
 
                 case .genreDetailView(genreId: let genreId, genreName: let genreName):
-                    GenreDetailView(
-                        viewModel: GenreDetailViewModel(
-                            genreId: genreId,
-                            genreName: genreName
-                        )
-                    )
+                    GenreDetailView(genreId: genreId, genreName: genreName)
+                    
                 case .productDetailView(productId: let productId):
                     ProductDetailView(viewModel: ProductDetailViewModel(productId: productId))
 

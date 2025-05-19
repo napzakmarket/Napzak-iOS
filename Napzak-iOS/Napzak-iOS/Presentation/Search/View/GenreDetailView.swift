@@ -15,7 +15,7 @@ struct GenreDetailView: View {
 
     @EnvironmentObject private var navigationRouter: NavigationRouter
 
-    @ObservedObject var viewModel: GenreDetailViewModel
+    @StateObject private var viewModel: GenreDetailViewModel
     
     @State private var isSortModalPresented = false
     @State private var scrollToTopTrigger: Bool = false
@@ -25,6 +25,15 @@ struct GenreDetailView: View {
     private let screenWidth = UIScreen.main.bounds.width
     private let columns = [GridItem(.flexible(), spacing: 20), GridItem(.flexible())]
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
+    
+    //MARK: - Init
+    
+    init(genreId: Int, genreName: String) {
+        _viewModel = StateObject(wrappedValue: GenreDetailViewModel(
+            genreId: genreId,
+            genreName: genreName
+        ))
+    }
 
     //MARK: - Body
     
@@ -308,18 +317,4 @@ private extension GenreDetailView {
             print("\(product.wrappedValue.id)번 상품")
         }
     }
-}
-
-#Preview {
-    struct PreviewContainer: View {
-        @State private var isSortModalPresented = false
-        
-        var body: some View {
-            GenreDetailView(
-                viewModel: GenreDetailViewModel(genreId: 1, genreName: "사카모토 데이즈")
-            )
-        }
-    }
-    
-    return PreviewContainer()
 }
