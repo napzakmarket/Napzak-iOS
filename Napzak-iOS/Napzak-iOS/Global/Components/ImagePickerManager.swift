@@ -9,10 +9,14 @@ import SwiftUI
 
 import PhotosUI
 
-@MainActor
 final class ImagePickerManager: ObservableObject {
     
-    // model의 이미지와의 동기화를 위한 클로저
+    private struct ImageResult {
+        let index: Int
+        let image: UIImage
+        let identifier: String
+    }
+    
     var onImageSelectionCompleted: (([UIImage]) -> Void)?
     
     @Published var selectedImages: [UIImage] = []
@@ -20,7 +24,7 @@ final class ImagePickerManager: ObservableObject {
     @Published var photosPickerItem: [PhotosPickerItem] = [] {
         didSet {
             Task {
-                handlePhotoPickerChange()
+                await handlePhotoPickerChange()
             }
         }
     }
@@ -49,11 +53,13 @@ final class ImagePickerManager: ObservableObject {
         return selectedImages.count
     }
     
+    @MainActor
     func deleteImage(at index: Int) {
         selectedImages.remove(at: index)
         imageNameList.remove(at: index)
     }
     
+    @MainActor
     func moveImageToFront(at index: Int) {
         let movedImage = selectedImages.remove(at: index)
         let movedName = imageNameList.remove(at: index)
@@ -61,48 +67,45 @@ final class ImagePickerManager: ObservableObject {
         imageNameList.insert(movedName, at: 0)
     }
     
-    func handlePhotoPickerChange() {
+    func handlePhotoPickerChange() async {
         guard !isProcessing else { return }
         isProcessing = true
-        
-        Task {
-            defer { isProcessing = false }
-            
-            let limit = max(0, maxSelectedCount - selectedImages.count)
-            let items = Array(photosPickerItem.prefix(limit))
-            let indexedItems = items.enumerated().map { (index, item) in (index, item) }
-            var tempResults: [(index: Int, image: UIImage, name: String)] = []
-            
-            await withTaskGroup(of: (Int, UIImage, String)?.self) { group in
-                for (index, item) in indexedItems {
-                    group.addTask {
-                        if let data = try? await item.loadTransferable(type: Data.self),
-                           let image = UIImage(data: data) {
-                            return (index, image, UUID().uuidString)
-                        }
-                        print("이미지 업로드 실패")
-                        return nil
-                    }
-                }
-                
-                for await result in group {
-                    if let result = result {
-                        tempResults.append(result)
-                    }
-                }
-            }
-            
-            // 인덱스 기준으로 정렬 - 순서 유지
-            let sortedResults = tempResults.sorted { $0.index < $1.index }
-            
-            for result in sortedResults {
+        defer { isProcessing = false }
+
+        let limit = max(0, maxSelectedCount - selectedImages.count)
+        let itemsToProcess = Array(photosPickerItem.prefix(limit))
+
+        let processed = await loadAndDecode(items: itemsToProcess)
+
+        await MainActor.run {
+            for result in processed {
                 selectedImages.append(result.image)
-                imageNameList.append(result.name)
+                imageNameList.append(result.identifier)
             }
-            
             photosPickerItem.removeAll()
-            
             onImageSelectionCompleted?(selectedImages)
+        }
+    }
+
+    private func loadAndDecode(items: [PhotosPickerItem]) async -> [ImageResult] {
+        await withTaskGroup(of: ImageResult?.self) { group in
+            for (index, item) in items.enumerated() {
+                
+                group.addTask(priority: .userInitiated) {
+                    guard
+                      let data = try? await item.loadTransferable(type: Data.self),
+                      let image  = UIImage(data: data)
+                    else { return nil }
+                    return ImageResult(index: index, image: image, identifier: UUID().uuidString)
+                }
+            }
+            var results = [ImageResult]()
+            for await optionalImageResult in group {
+                if let imageResult = optionalImageResult {
+                    results.append(imageResult)
+                }
+            }
+            return results.sorted { $0.index < $1.index }
         }
     }
 }
