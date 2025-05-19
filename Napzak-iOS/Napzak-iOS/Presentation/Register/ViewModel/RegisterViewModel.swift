@@ -331,6 +331,7 @@ extension RegisterViewModel {
             switch result {
             case .success(let response):
                 logger.info("✅ 상품 수정 성공: \(response.data!.productId)")
+                ProductEventManager.shared.productChanged.send(())
                 self.productId = response.data?.productId
             case .failure(let error):
                 logger.error("❌ 상품 수정 실패: \(error.localizedDescription)")
@@ -390,6 +391,7 @@ extension RegisterViewModel {
             switch result {
             case .success(let response):
                 logger.info("✅ 상품 수정 성공: \(response.data!.productId)")
+                ProductEventManager.shared.productChanged.send(())
                 self.productId = response.data?.productId
             case .failure(let error):
                 logger.error("❌ 상품 수정 실패: \(error.localizedDescription)")

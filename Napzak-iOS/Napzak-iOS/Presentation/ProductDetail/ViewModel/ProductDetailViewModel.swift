@@ -156,6 +156,7 @@ extension ProductDetailViewModel {
             showStatusToast = true
             try? await Task.sleep(for: .seconds(1.5))
             showStatusToast = false
+            ProductEventManager.shared.productChanged.send(())
         case .failure(let error):
             logger.error("getSellProduct failed: \(error.localizedDescription)")
         }
@@ -167,6 +168,7 @@ extension ProductDetailViewModel {
         
         switch result {
         case .success:
+            ProductEventManager.shared.productChanged.send(())
             showStatusToast = true
             try? await Task.sleep(for: .seconds(1.5))
             showStatusToast = false
