@@ -30,6 +30,7 @@ final class WithDrawViewModel: ObservableObject {
     ]
     
     @Published var withdrawDescription: String = ""
+    @Published var withdrawDescriptionNull: Bool = false
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "WithDrawView")
 }
@@ -41,7 +42,7 @@ extension WithDrawViewModel {
     func withdraw() async {
         let dto = WithDrawRequestDTO(
             withdrawTitle: withdrawReasonTitle,
-            withdrawDescription: withdrawDescription
+            withdrawDescription: withdrawDescriptionNull ? nil : withdrawDescription
         )
         
         let result = await NetworkService.shared.authService.withDraw(item: dto)
@@ -60,6 +61,11 @@ extension WithDrawViewModel {
         case .failure(let error):
             logger.error("❌ 탈퇴 실패: \(error.localizedDescription)")
         }
-        
+    }
+    
+    func resetWithdraw() {
+        withdrawReasonTitle = "원하는 굿즈를 찾기 어려워요"
+        withdrawDescription = ""
+        withdrawDescriptionNull = false
     }
 }

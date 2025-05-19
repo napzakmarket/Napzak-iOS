@@ -14,6 +14,7 @@ struct SettingView: View {
     @Environment(\.openURL) var openURL
     
     @StateObject private var viewModel = SettingViewModel()
+    @StateObject private var withDrawViewModel = WithDrawViewModel.shared
     
     @State var logoutButtonTapped: Bool = false
     
@@ -65,6 +66,9 @@ struct SettingView: View {
         .ignoresSafeArea()
         .background(Color.napzakGrayScale(.gray10))
         .navigationBarHidden(true)
+        .onAppear {
+            withDrawViewModel.resetWithdraw()
+        }
     }
 }
 
