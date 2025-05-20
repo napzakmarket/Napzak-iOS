@@ -1,14 +1,12 @@
-# 👽 NAPZAKMARKET-iOS
+# 😺 NAPZAKMARKET-iOS
 
-**덕후들이 사랑하는 거래 공간**
+**덕후들이 사랑하는 거래 공간 - 납작마켓**
 
 > 납작한 것만 취급하는 오타쿠 전용 중고거래 서비스
 
 ![image 2719](https://github.com/user-attachments/assets/b2558fc4-9c70-4442-8c3f-d5e329c16c99)
 
 </br>
-
-
 
 ## 👩🏻‍💻🧑🏻‍💻 Developers
 | [조혜린](https://github.com/Johyerin) | [김한열](https://github.com/OneTen19) | [박어진](https://github.com/lalaurrel) | [조호근](https://github.com/joho2022) |
