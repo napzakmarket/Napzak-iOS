@@ -1,25 +1,23 @@
-# 👽 NAPZAKMARKET-iOS
+# 😺 NAPZAKMARKET-iOS
 
-**덕후들이 사랑하는 거래 공간**
+**덕후들이 사랑하는 거래 공간 - 납작마켓**
 
 > 납작한 것만 취급하는 오타쿠 전용 중고거래 서비스
 
-![트위터 배경](https://github.com/user-attachments/assets/7d86d5cb-23be-40fb-9895-0e013270917a)
+![image 2719](https://github.com/user-attachments/assets/b2558fc4-9c70-4442-8c3f-d5e329c16c99)
 
 </br>
-
-
 
 ## 👩🏻‍💻🧑🏻‍💻 Developers
 | [조혜린](https://github.com/Johyerin) | [김한열](https://github.com/OneTen19) | [박어진](https://github.com/lalaurrel) | [조호근](https://github.com/joho2022) |
 | :--------: | :--------: | :--------: | :--------: | 
 | <img width="200px" src="https://github.com/user-attachments/assets/9d373027-209d-43af-8963-494b914ec68a"/> | <img width="200px" src="https://github.com/user-attachments/assets/61b9ec5f-fec0-40f3-9f55-205f3fea1fd3"/> | <img width="200px" src="https://github.com/user-attachments/assets/ffe1b365-a967-4abc-be82-7ad96db25acf"/> | <img width="200px" src="https://github.com/user-attachments/assets/52cd7bfb-cfdb-4ae8-9e43-b7b15da8d3da"/> |
-| <p align = "center">`탐색` <br/> `상세 페이지`<br/> | <p align = "center">`등록`<br/> | <p align = "center">`마이페이지` <br/> `마켓 보기` <br/> `탭바`<br/> | <p align = "center">`온보딩` <br/> `홈`<br/> | 
+| <p align = "center">`개발 환경 세팅` <br/> `커스텀 탭바` <br/> `검색/탐색` <br/> `상세 페이지`<br/> `장르 페이지`<br/>  | <p align = "center"> `등록`<br/> `설정`<br/> `신고하기`<br/> `탈퇴하기`<br/> | <p align = "center">`마이페이지` <br/> `마켓 보기` <br/> `프로필 수정`<br/> | <p align = "center">`카카오 로그인`<br/> `애플 로그인`<br/> `온보딩` <br/> `홈`<br/> | 
 
 </br>
 
 
-## 👽 Project 
+## 😺 Project 
 
 **1️⃣ 덕후 취향 반영 온보딩**
 - 관심 장르를 직접 설정하고 취향에 딱 맞는 아이템들을 한눈에 확인해요
@@ -52,33 +50,39 @@
 ![Xcode](https://img.shields.io/badge/Xcode-007ACC?style=for-the-badge&logo=Xcode&logoColor=white)
 
 |  | Purpose            | Version                                                |
-| ------------------- | ------------------------ | ------------------------------------------------------------ |
+| :--------: | :--------: | :--------: |
 | SwiftUI             | 코드의 간결성과 직관성을 통해 빠르고 쉽게 사용자 인터페이스를 설계하고 유지보수가 가능 | ![SwiftUI](https://img.shields.io/badge/SwiftUI-6.0-blue) |
+| Combine             | 퍼블리셔-서브스크라이버 모델을 통해 비동기 이벤트 스트림을 선언적으로 처리 | ![Combine](https://img.shields.io/badge/Combine-iOS%2013%2B-blue) |
+| Swift Concurrency   | 명확하고 안전한 비동기 흐름 관리를 통해 복잡한 비동기 로직의 가독성과 유지보수성 향상 | ![Swift Concurrency](https://img.shields.io/badge/Swift%20Concurrency-iOS%2015%2B-purple) |
+| OSLog               | 구조화된 로깅을 지원하여 성능 저하 없이 효율적으로 로그 수집 및 분석 가능 | ![OSLog](https://img.shields.io/badge/OSLog-iOS%2014%2B-lightgrey) |
 | Moya           | 간결한 네트워크 요청과 구조화된 관리 방식으로 코드 가독성과 유지보수성 향상        | ![Moya](https://img.shields.io/badge/Moya-15.0.3-orange) |
-| Kingfisher           | 효율적인 이미지 다운로드 및 캐싱을 통해 네트워크 이미지 로딩 성능 향상 | ![Kingfisher](https://img.shields.io/badge/Kingfisher-8.11.0-yellow) |
-
+| Kingfisher           | 효율적인 이미지 다운로드 및 캐싱을 통해 네트워크 이미지 로딩 성능 향상 | ![Kingfisher](https://img.shields.io/badge/Kingfisher-8.11.0-ff612e) |
+| KakaoOpenSDK | 카카오 소셜 로그인을 위해 사용 | ![KakaoOpenSDK](https://img.shields.io/badge/KakaoOpenSDK-2.24.0-yellow) |
+| Lottie | 애니메이션 데이터 처리를 위해 사용 | ![Lottie](https://img.shields.io/badge/Lottie-4.5.1-64d9b5) |
 </br>
 
 
-## 👽 Project Architecture
-<img width="2477" alt="iOS 1차 과제 (2)" src="https://github.com/user-attachments/assets/63153480-b28e-4b5c-a68d-4719b2b68b37" />
-
-### SwiftUI와 MV 패턴: 단순함 속에서 생산성을 극대화하다
-SwiftUI의 **선언적 UI**와 **데이터 바인딩 시스템**을 최대한 활용하기 위해 저희는  **MV(Model-View) 패턴**을 채택했습니다. 복잡한 MVVM 아키텍처를 배제하고 **@State**와 **@Binding**을 활용한 데이터와 UI 간의 자동 동기화를 통해 간결하고 효율적인 코드베이스를 유지합니다.
-
-이 접근 방식은 불필요한 레이어를 제거하여 **개발 속도**를 극대화하는 동시에 단순함 속에서도 **유지보수성**과 **확장성**을 자연스럽게 확보하는 것을 도와줍니다. 특히 추가적인 ViewModel 레이어 없이도 SwiftUI만으로 **효과적인 상태 관리**를 구현할 수 있습니다.
+## 😺 Project Architecture
+<img width="2477" alt="iOS 1차 과제 (2)" src="https://github.com/user-attachments/assets/0b30f933-1639-48e8-a6ba-8ba5f8890a13" />
 
 
+### MVVM 패턴
 
-## 👽 Project Design & Flow Chart
+SwiftUI의 선언형 UI 특성과 자연스럽게 맞물리는 MVVM(Model-View-ViewModel) 아키텍처를 채택하여 뷰와 비즈니스 로직을 명확히 분리했습니다.  
+이로 인해 코드의 재사용성과 테스트 용이성이 높아졌고, 뷰 상태 관리를 더욱 체계적으로 수행할 수 있었습니다.  
+또한, ViewModel을 통해 데이터 흐름을 일관되게 유지함으로써 유지보수성과 확장성을 고려한 구조를 구현하였습니다.
 
-<img width="6352" alt="iOS 1차 과제" src="https://github.com/user-attachments/assets/1bf0a178-251a-4df9-86c3-6479ebe6b9d6" />| <img width="5920" alt="iOS 1차 과제 (1)" src="https://github.com/user-attachments/assets/58dba982-a459-411a-a822-8ca8e9b2a7a1" />
+<br/>
+
+## 😺 Project Design
+
+![image](https://github.com/user-attachments/assets/acd1233d-9d9f-40ed-afc6-1c6cfea60ecb) | ![image](https://github.com/user-attachments/assets/d7c5180a-ec34-4d01-97af-83ba07163c2e)
 ---|---|
 
 
 <br/>
 
-## 👽 Code Convention
+## 😺 Code Convention
 [🔗 Code Convention](https://understood-soldier-501.notion.site/Code-Convention-16df54d645db81d5958efb898ce90b3e?pvs=4)
 
 
@@ -103,30 +107,65 @@ self/강제 언래핑 지양, 긴 View는 extension으로 분리
 
 <br/>
 
-## 👽 Foldering
+## 😺 Foldering
 ```
 📁 Project
 ├── 📁 Applacation
 │   ├── 📁 Preview Content
 │   ├── Napzakmarket_iOSApp.swift
 ├── 📁 Global
+│   ├── 📁 Core
 │   ├── 📁 Modifier
 │   ├── 📁 Extensions
 │   ├── 📁 Components
+│   ├── 📁 Models
+│   ├── 📁 Enums
 │   ├── 📁 Literals
 │   │   ├── StringLiterals.swift
 │   │   ├── FonrLiterals.swift
+│   │   └── ColorLiterals.swift
 │   └── 📁 Resources
-│       ├── Font
+│       ├── 📁 Animation
+│       ├── 📁 Fonts
 │       └── Assets.xcassets
 ├── 📁 Network
 │   ├── 📁 Base
-│   └── 📁 Domain
-│       ├── 📁 DTO
-│       │   ├── 📁 Request
-│       │   └── 📁 Response
-│       ├── Domain1API.swift
-│       └── Domain1Service.swift
+│   ├── 📁 Auth
+│   │   ├── 📁 DTO
+│   │   │   ├── 📁 Request
+│   │   │   └── 📁 Response
+│   │   ├── AuthAPI.swift
+│   │   └── AuthService.swift
+│   ├── 📁 Genre
+│   │   ├── 📁 DTO
+│   │   │   ├── 📁 Request
+│   │   │   └── 📁 Response
+│   │   ├── GenreAPI.swift
+│   │   └── GenreService.swift
+│   ├── 📁 Interest
+│   │   ├── 📁 DTO
+│   │   │   ├── 📁 Request
+│   │   │   └── 📁 Response
+│   │   ├── InterestAPI.swift
+│   │   └── InterestService.swift
+│   ├── 📁 Store
+│   │   ├── 📁 DTO
+│   │   │   ├── 📁 Request
+│   │   │   └── 📁 Response
+│   │   ├── StoretAPI.swift
+│   │   └── StoreService.swift
+│   ├── 📁 Product
+│   │   ├── 📁 DTO
+│   │   │   ├── 📁 Request
+│   │   │   └── 📁 Response
+│   │   ├── ProductAPI.swift
+│   │   └── ProductService.swift
+│   ├── 📁 Report
+│   │   ├── 📁 DTO
+│   │   │   ├── 📁 Request
+│   │   │   └── 📁 Response
+│   │   ├── ReportAPI.swift
+│   │   └── ReportService.swift
 └── 📁 Presentation
     ├── 📁 Splash
     │    ├── 📁 Model
@@ -134,28 +173,46 @@ self/강제 언래핑 지양, 긴 View는 extension으로 분리
     │        └── SplashView.swift
     ├── 📁 Onboarding
     │    ├── 📁 Model
-    │    └── 📁 View
-    │        └── OnboardingView.swift
+    │    ├── 📁 View
+    │    │   └── OnboardingView.swift
+    │    └── 📁 ViewModel
+    │        └── OnboardingViewModel.swift
     ├── 📁 Home
     │    ├── 📁 Model
-    │    └── 📁 View
-    │        └── HomeView.swift
+    │    ├── 📁 View
+    │    │   └── HomeView.swift
+    │    └── 📁 ViewModel
+    │        └── HomeViewModel.swift
     ├── 📁 Search
     │    ├── 📁 Model
-    │    └── 📁 View
-    │        └── SearchView.swift
+    │    ├── 📁 View
+    │    │   └── SearchView.swift
+    │    └── 📁 ViewModel
+    │        └── SearchViewModel.swift
     ├── 📁 Register
     │    ├── 📁 Model
-    │    └── 📁 View
-    │        └── RegisterView.swift
+    │    ├── 📁 View
+    │    │   └── RegisterView.swift
+    │    └── 📁 ViewModel
+    │        └── RegisterViewModel.swift
     ├── 📁 Detail
     │    ├── 📁 Model
-    │    └── 📁 View
-    │        └── DetailView.swift
+    │    ├── 📁 View
+    │    │   └── DetailView.swift
+    │    └── 📁 ViewModel
+    │        └── DetailViewModel.swift
     ├── 📁 Mypage
     │    ├── 📁 Model
-    │    └── 📁 View
-    │        └── MypageView.swift
+    │    ├── 📁 View
+    │    │   └── MypageView.swift
+    │    └── 📁 ViewModel
+    │        └── MypageViewModel.swift
+    ├── 📁 Report
+    │    ├── 📁 Model
+    │    ├── 📁 View
+    │    │   └── ReportView.swift
+    │    └── 📁 ViewModel
+    │        └── ReportViewModel.swift
     └── 📁 Tabbar
          ├── 📁 Model
          └── 📁 View
