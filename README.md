@@ -187,14 +187,14 @@ self/강제 언래핑 지양, 긴 View는 extension으로 분리
     │    ├── 📁 Model
     │    ├── 📁 View
     │    │   └── SearchView.swift
-    │    └── 📁 View
-    │        └── SearchView.swift
+    │    └── 📁 ViewModel
+    │        └── SearchViewModel.swift
     ├── 📁 Register
     │    ├── 📁 Model
     │    ├── 📁 View
     │    │   └── RegisterView.swift
-    │    └── 📁 View
-    │        └── RegisterView.swift
+    │    └── 📁 ViewModel
+    │        └── RegisterViewModel.swift
     ├── 📁 Detail
     │    ├── 📁 Model
     │    ├── 📁 View
