@@ -64,7 +64,7 @@ struct CarouselView: View {
         }
         .onReceive(timer) { _ in
             guard !timerPaused && !banners.isEmpty && !isDragging else { return }
-            withAnimation(.easeInOut(duration: 0.3)) {
+            withAnimation(.easeInOut(duration: 1.0)) {
                 if currentPage == displayBanners.count - 1 {
                     currentPage = 1
                 } else {
