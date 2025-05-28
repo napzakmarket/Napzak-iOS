@@ -98,6 +98,7 @@ extension WithDrawWriteReasonView {
         VStack(spacing: 0) {
             Button {
                 navigationRouter.push(next: .withDrawConfirmView)
+                viewModel.withdrawDescriptionNull = false
                 print("계속하기 눌림")
             } label: {
                 Text("계속하기")
