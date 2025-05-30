@@ -268,13 +268,17 @@ struct MarketView: View {
                         .foregroundColor(Color.napzakGrayScale(.gray500))
                         .applyNapzakFont(.body2SemiBold16)
                         .padding(.top, 42)
-
-                    Text(viewModel.storeDetail?.storeDescription ?? "마켓 소개글이 없습니다.")
-                        .foregroundColor(Color.napzakGrayScale(.black))
-                        .applyNapzakFont(.caption2Medium12)
-                        .multilineTextAlignment(.center)
-                        .padding(.top, 6)
-                        .padding(.horizontal, 37)
+                    
+                    // 소개글이 있을 때만 표시
+                    if let description = viewModel.storeDetail?.storeDescription,
+                       !description.isEmpty {
+                        Text(description)
+                            .foregroundColor(Color.napzakGrayScale(.black))
+                            .applyNapzakFont(.caption2Medium12)
+                            .multilineTextAlignment(.center)
+                            .padding(.top, 6)
+                            .padding(.horizontal, 37)
+                    }
                 }
 
                 ScrollView(.horizontal, showsIndicators: false) {
