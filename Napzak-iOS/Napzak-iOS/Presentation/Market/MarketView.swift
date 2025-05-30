@@ -281,23 +281,27 @@ struct MarketView: View {
                     }
                 }
 
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 5) {
-                        if let genres = viewModel.storeDetail?.genrePreferences, !genres.isEmpty {
-                            ForEach(genres, id: \.genreId) { genre in
-                                PlainChip(title: genre.genreName.count > 5
-                                        ?String(genre.genreName.prefix(5)) + "..."
-                                          : genre.genreName)
-                            }
-                        } else if viewModel.isLoadingProfile {
-                            ForEach(["로딩 중..."], id: \.self) { tag in
-                                PlainChip(title: tag)
+                GeometryReader { geometry in
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 5) {
+                            if let genres = viewModel.storeDetail?.genrePreferences, !genres.isEmpty {
+                                ForEach(genres, id: \.genreId) { genre in
+                                    PlainChip(title: genre.genreName.count > 5
+                                            ? String(genre.genreName.prefix(5)) + "..."
+                                            : genre.genreName)
+                                }
+                            } else if viewModel.isLoadingProfile {
+                                ForEach(["로딩 중..."], id: \.self) { tag in
+                                    PlainChip(title: tag)
+                                }
                             }
                         }
+                        .padding(.horizontal, 25)
+                        .padding(.vertical, 2)
+                        .frame(minWidth: geometry.size.width, alignment: .center)
                     }
-                    .padding(.horizontal, 25)
-                    .padding(.vertical, 2)
                 }
+                .frame(height: 50)
                 .padding(.top, 17)
                 .padding(.bottom, 17)
             }
