@@ -38,7 +38,7 @@ final class HomeViewModel: ObservableObject {
     private let homeService = NetworkService.shared.homeService
     private let interestService = NetworkService.shared.interestService
     
-    var recommendedTitle: String { "\(username)님을 위한 맞춤 PICK" }
+    var recommendedTitle: String { "\(username)님을 위한 맞춤 PICK!" }
     var recommendedSubtitle: String { "\(username)님의 취향에 딱 맞는 아이템들을 모아봤어요."}
     let popularSellTitle = "지금 가장 많이 찜한 납작템"
     let popularSellSubtitle = "놓치면 아쉬운 인기 아이템들을 구경해볼까요?"

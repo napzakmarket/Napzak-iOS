@@ -16,12 +16,13 @@ struct ProductItemView: View {
     //MARK: - Properties
     
     let width: CGFloat
+    let isHiddenProductSummary: Bool
     let shouldToggleInterestState: () -> Void
     
     //MARK: - Main Body
     
     var body: some View {
-        VStack() {
+        VStack {
             productMain
             productInfo
         }
@@ -47,10 +48,13 @@ extension ProductItemView {
     
     private var productInfo: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(product.genreName)
-                .applyNapzakFont(.caption3Regular12)
-                .foregroundStyle(Color.napzakGrayScale(.gray500))
-                .frame(height: 15)
+            HStack {
+                Text(product.genreName)
+                    .applyNapzakFont(.caption3Regular12)
+                    .foregroundStyle(Color.napzakGrayScale(.gray500))
+                    .frame(height: 15)
+                Spacer()
+            }
             Text(product.productName)
                 .applyNapzakFont(.body5SemiBold14)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
@@ -62,7 +66,9 @@ extension ProductItemView {
                 .frame(height: 20)
                 .lineLimit(1)
                 .padding(.top, 4)
-            productSummary
+            if !isHiddenProductSummary {
+                productSummary
+            }
         }
         .frame(width: width)
     }
@@ -132,8 +138,6 @@ extension ProductItemView {
     
     private var likeButton: some View {
         Button {
-//            product.isInterested.toggle()
-
             Task {
                 shouldToggleInterestState()
             }
@@ -185,7 +189,9 @@ extension ProductItemView {
         @State var product = ProductItemModel.dummyProducts[1]
 
         var body: some View {
-            ProductItemView(product: $product, width: 116, shouldToggleInterestState: {})
+            ProductItemView(product: $product, width: 116,
+                            isHiddenProductSummary: true,
+                            shouldToggleInterestState: {})
         }
     }
     

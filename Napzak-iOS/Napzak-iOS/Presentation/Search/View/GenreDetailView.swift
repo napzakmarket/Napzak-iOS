@@ -316,6 +316,7 @@ private extension GenreDetailView {
         ProductItemView(
             product: product,
             width: productCellWidth,
+            isHiddenProductSummary: false,
             shouldToggleInterestState: {
                 viewModel.toggleLike(for: product.wrappedValue.id)
             }

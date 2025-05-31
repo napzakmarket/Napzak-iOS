@@ -147,6 +147,7 @@ extension HomeView {
                         ProductItemView(
                             product: $viewModel.recommendedProducts[index],
                             width: 116,
+                            isHiddenProductSummary: true,
                             shouldToggleInterestState: {
                                 let productId = viewModel.recommendedProducts[index].id
                                 let canToggle = viewModel.canToggleInterestState(
@@ -314,6 +315,7 @@ extension HomeView {
                 ProductItemView(
                     product: products[index],
                     width: cellWidth,
+                    isHiddenProductSummary: false,
                     shouldToggleInterestState: {
                         onToggleLike(products[index].wrappedValue.id)
                     }
