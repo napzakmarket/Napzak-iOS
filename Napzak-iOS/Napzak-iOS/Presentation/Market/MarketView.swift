@@ -268,32 +268,40 @@ struct MarketView: View {
                         .foregroundColor(Color.napzakGrayScale(.gray500))
                         .applyNapzakFont(.body2SemiBold16)
                         .padding(.top, 42)
-
-                    Text(viewModel.storeDetail?.storeDescription ?? "마켓 소개글이 없습니다.")
-                        .foregroundColor(Color.napzakGrayScale(.black))
-                        .applyNapzakFont(.caption2Medium12)
-                        .multilineTextAlignment(.center)
-                        .padding(.top, 6)
-                        .padding(.horizontal, 37)
+                    
+                    // 소개글이 있을 때만 표시
+                    if let description = viewModel.storeDetail?.storeDescription,
+                       !description.isEmpty {
+                        Text(description)
+                            .foregroundColor(Color.napzakGrayScale(.black))
+                            .applyNapzakFont(.caption2Medium12)
+                            .multilineTextAlignment(.center)
+                            .padding(.top, 6)
+                            .padding(.horizontal, 37)
+                    }
                 }
 
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 5) {
-                        if let genres = viewModel.storeDetail?.genrePreferences, !genres.isEmpty {
-                            ForEach(genres, id: \.genreId) { genre in
-                                PlainChip(title: genre.genreName.count > 5
-                                        ?String(genre.genreName.prefix(5)) + "..."
-                                          : genre.genreName)
-                            }
-                        } else if viewModel.isLoadingProfile {
-                            ForEach(["로딩 중..."], id: \.self) { tag in
-                                PlainChip(title: tag)
+                GeometryReader { geometry in
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 5) {
+                            if let genres = viewModel.storeDetail?.genrePreferences, !genres.isEmpty {
+                                ForEach(genres, id: \.genreId) { genre in
+                                    PlainChip(title: genre.genreName.count > 5
+                                            ? String(genre.genreName.prefix(5)) + "..."
+                                            : genre.genreName)
+                                }
+                            } else if viewModel.isLoadingProfile {
+                                ForEach(["로딩 중..."], id: \.self) { tag in
+                                    PlainChip(title: tag)
+                                }
                             }
                         }
+                        .padding(.horizontal, 25)
+                        .padding(.vertical, 2)
+                        .frame(minWidth: geometry.size.width, alignment: .center)
                     }
-                    .padding(.horizontal, 25)
-                    .padding(.vertical, 2)
                 }
+                .frame(height: 50)
                 .padding(.top, 17)
                 .padding(.bottom, 17)
             }
