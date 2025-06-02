@@ -428,6 +428,7 @@ struct MarketView: View {
                         ProductItemView(
                             product: $viewModel.products[i],
                             width: productCellWidth,
+                            isHiddenProductSummary: false,
                             shouldToggleInterestState: {
                                  viewModel.toggleLike(for: viewModel.products[i].id)
                             })

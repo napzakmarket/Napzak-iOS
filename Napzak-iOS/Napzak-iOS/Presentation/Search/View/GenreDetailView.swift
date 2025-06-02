@@ -148,8 +148,16 @@ private extension GenreDetailView {
             Group {
                 HStack(spacing: 4) {
                     Image(.imgGenreTag)
-                    if let _ = viewModel.genreInfo.tag {
-                        Image(.imgHotTag)
+                    if let tag = viewModel.genreInfo.tag {
+                        Text(tag)
+                            .applyNapzakFont(.caption4SemiBold10)
+                            .foregroundStyle(Color.napzakState(.red))
+                            .padding(.horizontal, 6)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .stroke(Color.napzakState(.red), lineWidth: 1)
+                                    .frame(height: 18)
+                            )
                     }
                 }
                 
@@ -308,6 +316,7 @@ private extension GenreDetailView {
         ProductItemView(
             product: product,
             width: productCellWidth,
+            isHiddenProductSummary: false,
             shouldToggleInterestState: {
                 viewModel.toggleLike(for: product.wrappedValue.id)
             }

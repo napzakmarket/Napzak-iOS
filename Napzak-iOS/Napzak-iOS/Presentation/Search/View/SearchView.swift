@@ -111,6 +111,7 @@ struct SearchView: View {
         .onChange(of: tabRouter.selectedTab) { tab in
             if tab != .search {
                 viewModel.productFetchOption.genres = []
+                viewModel.productFetchOption.sortOption = .recent
                 scrollToTopTrigger.toggle()
                 viewModel.selectedTabIndex = 0
             }
@@ -290,6 +291,7 @@ private extension SearchView {
         ProductItemView(
             product: product,
             width: productCellWidth,
+            isHiddenProductSummary: false,
             shouldToggleInterestState: {
                  viewModel.toggleLike(for: product.wrappedValue.id)
             }
