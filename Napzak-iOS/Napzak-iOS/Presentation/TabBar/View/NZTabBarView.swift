@@ -31,14 +31,14 @@ struct NZTabBarView: View {
                         
                         SearchView(
                             viewModel: SearchViewModel(
-                                searchWord: "",
+                                searchWord: tabRouter.currentSearchWord,
                                 initialSortOption: tabRouter.currentSortOption,
                                 initialSelectedTab: tabRouter.currentSelectedTab
                             ),
                             isGenreSelectModalPresented: $isGenreSelectModalPresented,
                             isSortModalPresented: $isSortModalPresented
                         )
-                        .id("\(tabRouter.currentSortOption)-\(tabRouter.currentSelectedTab)")
+                        .id("\(tabRouter.currentSearchWord)-\(tabRouter.currentSortOption)-\(tabRouter.currentSelectedTab)")
                         .tag(NZTab.search)
                         
                         
@@ -123,6 +123,10 @@ struct NZTabBarView: View {
                 }
             }
         }
+        .onReceive(SearchEventManager.shared.searchCompleted) { searchWord in
+            navigationRouter.reset()
+            tabRouter.switchToSearch(searchWord: searchWord, sortOption: .recent, searchTabIndex: 0)
+        }
     }
     
     var tabBar: some View {
@@ -143,7 +147,7 @@ struct NZTabBarView: View {
             }
             Spacer()
             Button {
-                tabRouter.switchToSearch(sortOption: .recent, searchTabIndex: 0)
+                tabRouter.switchToSearch(searchWord: "", sortOption: .recent, searchTabIndex: 0)
                 isRegisterTabSelected = false
             } label: {
                 VStack(alignment: .center, spacing: 5) {

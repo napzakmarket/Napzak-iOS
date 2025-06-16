@@ -9,7 +9,11 @@ import SwiftUI
 
 class TabRouter: ObservableObject {
     @Published var selectedTab: NZTab = .home
-    @Published var searchParams: (sortOption: SortOption, selectedTab: Int)?
+    @Published var searchParams: (searchWord: String, sortOption: SortOption, selectedTab: Int)?
+    
+    var currentSearchWord: String {
+        return searchParams?.searchWord ?? ""
+    }
     
     var currentSortOption: SortOption {
         return searchParams?.sortOption ?? .recent
@@ -19,13 +23,13 @@ class TabRouter: ObservableObject {
         return searchParams?.selectedTab ?? 0
     }
     
-    func switchToSearch(sortOption: SortOption? = nil, searchTabIndex: Int? = nil) -> Void {
+    func switchToSearch(searchWord: String, sortOption: SortOption? = nil, searchTabIndex: Int? = nil) -> Void {
         selectedTab = .search
         
         if let sortOption = sortOption {
-            searchParams = (sortOption: sortOption, selectedTab: searchTabIndex ?? 0)
+            searchParams = (searchWord: searchWord, sortOption: sortOption, selectedTab: searchTabIndex ?? 0)
         } else if searchParams == nil {
-            searchParams = (sortOption: .recent, selectedTab: 0)
+            searchParams = (searchWord: "", sortOption: .recent, selectedTab: 0)
         }
     }
     

@@ -191,7 +191,7 @@ extension HomeView {
                 showMore: true,
                 onMoreTap: {
                     tabRouter.searchParams = nil
-                    tabRouter.switchToSearch(sortOption: .popular, searchTabIndex: 0)
+                    tabRouter.switchToSearch(searchWord: "", sortOption: .popular, searchTabIndex: 0)
                 }
             )
             
@@ -236,7 +236,7 @@ extension HomeView {
                 showMore: true,
                 onMoreTap: {
                     tabRouter.searchParams = nil
-                    tabRouter.switchToSearch(sortOption: .popular, searchTabIndex: 1)
+                    tabRouter.switchToSearch(searchWord: "", sortOption: .popular, searchTabIndex: 1)
                 }
             )
             
