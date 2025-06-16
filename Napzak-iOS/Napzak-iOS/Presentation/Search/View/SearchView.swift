@@ -101,11 +101,15 @@ struct SearchView: View {
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .onChange(of: viewModel.selectedTabIndex) { _ in
-            viewModel.updateProducts()
+            Task {
+                await viewModel.updateProducts()
+            }
             scrollToTopTrigger.toggle()
         }
         .onChange(of: viewModel.productFetchOption) { _ in
-            viewModel.updateProducts()
+            Task {
+                await viewModel.updateProducts()
+            }
             scrollToTopTrigger.toggle()
         }
         .onChange(of: tabRouter.selectedTab) { tab in
@@ -115,9 +119,6 @@ struct SearchView: View {
                 scrollToTopTrigger.toggle()
                 viewModel.selectedTabIndex = 0
             }
-        }
-        .onAppear {
-            viewModel.updateProducts()
         }
     }
 }

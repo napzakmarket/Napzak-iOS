@@ -48,6 +48,7 @@ final class SearchViewModel: ObservableObject {
         
         setupLikeObserver()
         setupLikePublisher()
+        setupProductEventObserver()
         
         Task {
             if searchWord == "" {
@@ -71,7 +72,7 @@ extension SearchViewModel {
     
     //MARK: - Func
     
-    func updateProducts() {
+    func updateProducts() async {
         Task {
             if selectedTabIndex == 0 {
                 if searchWord.isEmpty {
@@ -237,5 +238,17 @@ extension SearchViewModel {
                 }
             }
         }
+    }
+    
+    private func setupProductEventObserver() {
+        ProductEventManager.shared.productChanged
+            .sink { [weak self] in
+                guard let self = self else { return }
+                
+                Task {
+                    await self.updateProducts()
+                }
+            }
+            .store(in: &cancellables)
     }
 }
