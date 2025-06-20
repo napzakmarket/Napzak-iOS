@@ -190,7 +190,6 @@ extension HomeView {
                 subtitle: viewModel.popularSellSubtitle,
                 showMore: true,
                 onMoreTap: {
-                    tabRouter.searchParams = nil
                     tabRouter.switchToSearch(searchWord: "", sortOption: .popular, searchTabIndex: 0)
                 }
             )
@@ -235,7 +234,6 @@ extension HomeView {
                 subtitle: viewModel.popularBuySubtitle,
                 showMore: true,
                 onMoreTap: {
-                    tabRouter.searchParams = nil
                     tabRouter.switchToSearch(searchWord: "", sortOption: .popular, searchTabIndex: 1)
                 }
             )
