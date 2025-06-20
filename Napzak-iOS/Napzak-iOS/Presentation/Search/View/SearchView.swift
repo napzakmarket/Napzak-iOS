@@ -101,11 +101,15 @@ struct SearchView: View {
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .onChange(of: viewModel.selectedTabIndex) { _ in
-            viewModel.updateProducts()
+            Task {
+                await viewModel.updateProducts()
+            }
             scrollToTopTrigger.toggle()
         }
         .onChange(of: viewModel.productFetchOption) { _ in
-            viewModel.updateProducts()
+            Task {
+                await viewModel.updateProducts()
+            }
             scrollToTopTrigger.toggle()
         }
         .onChange(of: tabRouter.selectedTab) { tab in
@@ -116,9 +120,6 @@ struct SearchView: View {
                 viewModel.selectedTabIndex = 0
             }
         }
-        .onAppear {
-            viewModel.updateProducts()
-        }
     }
 }
 
@@ -127,24 +128,10 @@ extension SearchView {
     //MARK: - UI Properties
     
     private var searchHeader: some View {
-        VStack(spacing: 0){
-            HStack(alignment: .center, spacing: 0) {
-                if !viewModel.searchWord.isEmpty {
-                    Button {
-                        navigationRouter.pop()
-                    } label: {
-                        Image(.iconBack)
-                            .frame(width: 34)
-                    }
-                    .padding(.leading, 16)
-                    .padding(.bottom, 19)
-                }
-
-                searchButton
-                    .padding(.trailing, 27)
-                    .padding(.leading, viewModel.searchWord.isEmpty ? 27 : 0)
-                    .padding(.bottom, 19)
-            }
+        VStack(spacing: 0) {
+            searchButton
+                .padding(.horizontal, 27)
+                .padding(.bottom, 19)
             
             ZStack(alignment: .top) {
                 shadowBackground

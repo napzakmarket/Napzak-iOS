@@ -77,7 +77,10 @@ extension SearchInputView {
                 isCompleted: $viewModel.isSearchCompleted,
                 isFocused: _isSearchBarFocused,
                 onSubmit: {
-                    navigationRouter.push(next: .searchView(searchWord: viewModel.searchInputText))
+                    if viewModel.searchInputText.isEmpty { return }
+                    else {
+                        SearchEventManager.shared.searchCompleted.send(viewModel.searchInputText)
+                    }
                 }
             )
             .frame(height: 38)
@@ -145,7 +148,7 @@ extension SearchInputView {
             PlainChipContainerView(
                 titles: viewModel.searchRecommendations.map { $0.searchWord },
                 action: { title in
-                    navigationRouter.push(next: .searchView(searchWord: title))
+                    SearchEventManager.shared.searchCompleted.send(title)
                 }
             )
         }

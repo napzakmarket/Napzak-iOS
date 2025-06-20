@@ -7,26 +7,38 @@
 
 import SwiftUI
 
+struct SearchParams {
+    var searchWord: String
+    var sortOption: SortOption
+    var selectedTab: Int
+}
+
 class TabRouter: ObservableObject {
     @Published var selectedTab: NZTab = .home
-    @Published var searchParams: (sortOption: SortOption, selectedTab: Int)?
+    @Published var searchParams: SearchParams = SearchParams(
+        searchWord: "",
+        sortOption: .recent,
+        selectedTab: 0
+    )
+    
+    var currentSearchWord: String {
+        return searchParams.searchWord
+    }
     
     var currentSortOption: SortOption {
-        return searchParams?.sortOption ?? .recent
+        return searchParams.sortOption
     }
     
     var currentSelectedTab: Int {
-        return searchParams?.selectedTab ?? 0
+        return searchParams.selectedTab
     }
     
-    func switchToSearch(sortOption: SortOption? = nil, searchTabIndex: Int? = nil) -> Void {
+    func switchToSearch(searchWord: String, sortOption: SortOption, searchTabIndex: Int) -> Void {
         selectedTab = .search
         
-        if let sortOption = sortOption {
-            searchParams = (sortOption: sortOption, selectedTab: searchTabIndex ?? 0)
-        } else if searchParams == nil {
-            searchParams = (sortOption: .recent, selectedTab: 0)
-        }
+        searchParams.searchWord = searchWord
+        searchParams.sortOption = sortOption
+        searchParams.selectedTab = searchTabIndex
     }
     
     func switchToHome() {
