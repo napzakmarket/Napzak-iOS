@@ -26,8 +26,18 @@ struct SearchView: View {
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
     private let columns = [GridItem(.flexible(), spacing: 20), GridItem(.flexible())]
     
-    init(viewModel: SearchViewModel, isGenreSelectModalPresented: Binding<Bool>, isSortModalPresented: Binding<Bool>) {
-        self._viewModel = StateObject(wrappedValue: viewModel)
+    init(
+        searchWord: String,
+        sortOption: SortOption,
+        selectedTab: Int,
+        isGenreSelectModalPresented: Binding<Bool>,
+        isSortModalPresented: Binding<Bool>
+    ) {
+        self._viewModel = StateObject(wrappedValue: SearchViewModel(
+            searchWord: searchWord,
+            initialSortOption: sortOption,
+            initialSelectedTab: selectedTab
+        ))
         self._isGenreSelectModalPresented = isGenreSelectModalPresented
         self._isSortModalPresented = isSortModalPresented
     }
@@ -114,8 +124,7 @@ struct SearchView: View {
         }
         .onChange(of: tabRouter.selectedTab) { tab in
             if tab != .search {
-                viewModel.productFetchOption.genres = []
-                viewModel.productFetchOption.sortOption = .recent
+                viewModel.resetSearchParams()
                 scrollToTopTrigger.toggle()
                 viewModel.selectedTabIndex = 0
             }

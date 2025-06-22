@@ -90,6 +90,19 @@ extension SearchViewModel {
         }
     }
     
+    func resetSearchParams() {
+        searchWord = ""
+        
+        productFetchOption = ProductFetchOption(
+            sortOption: .recent,
+            genres: [],
+            isOnSale: false,
+            isUnopened: false
+        )
+        
+        selectedTabIndex = 0
+    }
+    
     //MARK: - API Func
     
     func fetchSellProducts() async {
