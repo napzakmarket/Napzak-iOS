@@ -24,7 +24,7 @@ final class HomeViewModel: ObservableObject {
     @Published var popularSellProducts: [ProductItemModel] = []
     @Published var popularBuyProducts: [ProductItemModel] = []
     
-    @Published private(set) var isLoadingNetwork: Bool = false
+    @Published var isLoadingNetwork: Bool = false
     
     private var originalUsername: String = ""
     private var username: String {

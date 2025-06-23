@@ -13,6 +13,8 @@ struct MyPageView: View {
     @State private var storeInfo: StoreProfileDTO?
     @State private var isLoading = true
     @State private var errorMessage: String?
+    @State private var isLoadingNetwork: Bool = false
+
         
     // StoreService 주입
     private let storeService: StoreServiceProtocol
@@ -22,34 +24,44 @@ struct MyPageView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            logoView
-            
-            if let storeInfo = storeInfo {
-                // API 프로필 정보
-                profileCardWithData(storeInfo: storeInfo)
-            } else {
-                // 스켈레톤
-                profileCardPlaceholder
-            }
-            
-            marketButton
-            menuGrid
+        ZStack {
+            VStack(spacing: 0) {
+                logoView
+                
+                if let storeInfo = storeInfo {
+                    // API 프로필 정보
+                    profileCardWithData(storeInfo: storeInfo)
+                } else {
+                    // 스켈레톤
+                    profileCardPlaceholder
+                }
+                
+                marketButton
+                menuGrid
 
-            Spacer()
+                Spacer()
+                
+                Rectangle()
+                    .fill(Color.napzakGrayScale(.gray10))
+                    .edgesIgnoringSafeArea(.bottom)
+            }
+            .background(Color.napzakGrayScale(.white))
+            .task {
+                await fetchMyPageInfo()
+            }
+            .ignoresSafeArea(.all)
             
-            Rectangle()
-                .fill(Color.napzakGrayScale(.gray10))
-                .edgesIgnoringSafeArea(.bottom)
+            if isLoadingNetwork {
+                LoadingView()
+            }
         }
-        .background(Color.napzakGrayScale(.white))
-        .task {
-            await fetchMyPageInfo()
-        }        .ignoresSafeArea(.all)
 
     }
     
     private func fetchMyPageInfo() async {
+        startLoading()
+        defer { stopLoading() }
+        
         isLoading = true
         
         let result = await storeService.getMyPageInfo()
@@ -249,7 +261,14 @@ struct MyPageView: View {
     }
 }
 
-#Preview {
-    MyPageView()
-        .environmentObject(NavigationRouter())
+//MARK: - Private Func
+
+extension MyPageView {
+    private func startLoading() {
+        isLoadingNetwork = true
+    }
+
+    private func stopLoading() {
+        isLoadingNetwork = false
+    }
 }
