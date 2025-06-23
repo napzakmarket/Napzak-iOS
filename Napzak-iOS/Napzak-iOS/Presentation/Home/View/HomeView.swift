@@ -26,52 +26,57 @@ struct HomeView: View {
                 Image(.logo)
                     .padding(.leading, 28)
                     .padding(.bottom, 17)
-                    
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Color.clear
-                                .frame(height: 0)
-                                .id("top")
-                            headerView
-                                .padding(.horizontal, 28)
-                            
-                            topBannerSection
-                                .padding(.top, 21)
-                            
-                            recommendedSection
-                                .padding(.leading, 28)
-                                .padding(.top, 21)
-                            
-                            middleBannerSection
-                                .padding(.leading, 28)
-                                .padding(.vertical, 40)
-                            
-                            popularSellSection
-                                .padding(.horizontal, 28)
-                                .padding(.top, 32)
-                                .padding(.bottom, 20)
-                                .background(Color.napzakGrayScale(.gray10))
-                            
-                            bottomBannerSection
-                                .padding(.leading, 28)
-                                .padding(.vertical, 40)
-                            
-                            popularBuySection
-                                .padding(.horizontal, 28)
-                                .padding(.bottom, 20)
-                            
-                            Text("개인정보처리방침")
-                                .frame(width: UIScreen.main.bounds.width, height: 160)
-                                .background(Color.napzakGrayScale(.gray100))
-                                .padding(.bottom, 54)
+                
+                if viewModel.isLoadingNetwork {
+                    LoadingView()
+                } else {
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 0) {
+                                Color.clear
+                                    .frame(height: 0)
+                                    .id("top")
+                                headerView
+                                    .padding(.horizontal, 28)
+                                
+                                topBannerSection
+                                    .padding(.top, 21)
+                                
+                                recommendedSection
+                                    .padding(.leading, 28)
+                                    .padding(.top, 21)
+                                
+                                middleBannerSection
+                                    .padding(.leading, 28)
+                                    .padding(.vertical, 40)
+                                
+                                popularSellSection
+                                    .padding(.horizontal, 28)
+                                    .padding(.top, 32)
+                                    .padding(.bottom, 20)
+                                    .background(Color.napzakGrayScale(.gray10))
+                                
+                                bottomBannerSection
+                                    .padding(.leading, 28)
+                                    .padding(.vertical, 40)
+                                
+                                popularBuySection
+                                    .padding(.horizontal, 28)
+                                    .padding(.bottom, 20)
+                                
+                                Text("개인정보처리방침")
+                                    .frame(width: UIScreen.main.bounds.width, height: 160)
+                                    .background(Color.napzakGrayScale(.gray100))
+                                    .padding(.bottom, 54)
+                            }
+                        }
+                        .scrollIndicators(.hidden)
+                        .onChange(of: scrollToTopTrigger) { _ in
+                            proxy.scrollTo("top", anchor: .top)
                         }
                     }
-                    .scrollIndicators(.hidden)
-                    .onChange(of: scrollToTopTrigger) { _ in
-                        proxy.scrollTo("top", anchor: .top)
-                    }
                 }
+                    
             }
             
             if viewModel.showLikeToast {

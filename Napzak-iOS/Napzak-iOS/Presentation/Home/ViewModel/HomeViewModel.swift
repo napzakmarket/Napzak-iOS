@@ -24,6 +24,8 @@ final class HomeViewModel: ObservableObject {
     @Published var popularSellProducts: [ProductItemModel] = []
     @Published var popularBuyProducts: [ProductItemModel] = []
     
+    @Published private(set) var isLoadingNetwork: Bool = false
+    
     private var originalUsername: String = ""
     private var username: String {
         if originalUsername.count > 10 {
@@ -37,6 +39,12 @@ final class HomeViewModel: ObservableObject {
     
     private let homeService = NetworkService.shared.homeService
     private let interestService = NetworkService.shared.interestService
+    
+    private var loadingCount = 0 {
+        didSet {
+            isLoadingNetwork = loadingCount > 0
+        }
+    }
     
     var recommendedTitle: String { "\(username)님을 위한 맞춤 PICK!" }
     var recommendedSubtitle: String { "\(username)님의 취향에 딱 맞는 아이템들을 모아봤어요."}
@@ -185,6 +193,8 @@ extension HomeViewModel {
     
     private func fetchBanners() {
         Task {
+            startLoading()
+            defer { stopLoading() }
             let result = await homeService.getBannerList()
             switch result {
             case .success(let response):
@@ -203,6 +213,8 @@ extension HomeViewModel {
     
     private func fetchRecommendations() {
         Task {
+            startLoading()
+            defer { stopLoading() }
             let result = await homeService.getHomeRecommendations()
             switch result {
             case .success(let response):
@@ -219,6 +231,8 @@ extension HomeViewModel {
     
     private func fetchPopularSell() {
         Task {
+            startLoading()
+            defer { stopLoading() }
             let result = await homeService.getHomePopularSell()
             switch result {
             case .success(let response):
@@ -233,6 +247,8 @@ extension HomeViewModel {
     
     private func fetchPopularBuy() {
         Task {
+            startLoading()
+            defer { stopLoading() }
             let result = await homeService.getHomePopularBuy()
             switch result {
             case .success(let response):
@@ -250,5 +266,18 @@ extension HomeViewModel {
 extension HomeViewModel {
     private func requestOpenExternalURL(_ urlString: String) {
         externalURLToOpen = URL(string: urlString)
+    }
+}
+
+
+//MARK: - Private Func
+
+extension HomeViewModel {
+    private func startLoading() {
+        loadingCount += 1
+    }
+
+    private func stopLoading() {
+        loadingCount = max(loadingCount - 1, 0)
     }
 }

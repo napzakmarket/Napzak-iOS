@@ -27,6 +27,9 @@ struct RootView: View {
                 LoginView()
                     .environmentObject(authRouter)
             }
+//            NZTabBarView()
+//                .environmentObject(navigationRouter)
+//                .environmentObject(tabRouter)
         }
         .onAppear {
             isShowingSplash = true
