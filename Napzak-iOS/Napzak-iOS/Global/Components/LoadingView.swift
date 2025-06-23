@@ -28,7 +28,7 @@ struct LoadingView: View {
             }
             Spacer()
         }
-        .background(Color.white.opacity(0.4))
+        .background(Color.white)
     }
 }
 

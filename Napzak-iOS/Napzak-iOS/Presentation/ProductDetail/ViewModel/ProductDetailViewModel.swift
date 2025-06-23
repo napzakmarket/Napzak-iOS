@@ -40,6 +40,7 @@ final class ProductDetailViewModel: ObservableObject {
     
     @Published var showInterestToast: Bool = false
     @Published var showStatusToast = false
+    @Published var isLoadingNetwork: Bool = true
     @ObservedObject private var likeManager = ProductLikeManager.shared
 
     //MARK: - Properties
@@ -50,6 +51,12 @@ final class ProductDetailViewModel: ObservableObject {
     
     private let interestService = NetworkService.shared.interestService
     private let productId: Int
+    
+    private var loadingCount = 0 {
+        didSet {
+            isLoadingNetwork = loadingCount > 0
+        }
+    }
 
     //MARK: - Init
     
@@ -81,6 +88,9 @@ final class ProductDetailViewModel: ObservableObject {
 
 extension ProductDetailViewModel {
     func fetchProduct(id: Int) async {
+        startLoading()
+        defer { stopLoading() }
+        
         let result = await NetworkService.shared.productService.getProductDetailInfo(productId: id)
         
         switch result {
@@ -163,6 +173,8 @@ extension ProductDetailViewModel {
     }
     
     func deleteProduct() async {
+        startLoading()
+        defer { stopLoading() }
         let result = await NetworkService.shared.productService.deleteProduct(
             productId: product.productDetail.id)
         
@@ -175,5 +187,17 @@ extension ProductDetailViewModel {
         case .failure(let error):
             logger.error("getSellProduct failed: \(error.localizedDescription)")
         }
+    }
+}
+
+//MARK: - Private Func
+
+extension ProductDetailViewModel {
+    private func startLoading() {
+        loadingCount += 1
+    }
+
+    private func stopLoading() {
+        loadingCount = max(loadingCount - 1, 0)
     }
 }
