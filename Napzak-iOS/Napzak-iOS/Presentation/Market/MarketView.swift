@@ -116,6 +116,10 @@ struct MarketView: View {
                 .zIndex(3)
                 .padding(.bottom, 110)
             }
+            
+            if viewModel.isLoadingNetwork {
+                LoadingView()
+            }
         }
         .ignoresSafeArea()
         .navigationBarHidden(true)
