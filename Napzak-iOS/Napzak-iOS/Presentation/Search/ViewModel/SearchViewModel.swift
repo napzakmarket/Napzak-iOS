@@ -22,7 +22,7 @@ final class SearchViewModel: ObservableObject {
     @Published var buyProductsCount: Int = 0
     @Published var buyProducts: [ProductItemModel] = []
     @Published var showToast: Bool = false
-    @Published var isLoadingNetwork: Bool = true
+    @Published var isLoadingNetwork: Bool = false
     
     @ObservedObject private var likeManager = ProductLikeManager.shared
     

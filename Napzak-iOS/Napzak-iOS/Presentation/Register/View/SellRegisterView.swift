@@ -25,38 +25,43 @@ struct SellRegisterView: View {
     
     var body: some View {
         NavigationStack(path: $registerRouter.path) {
-            VStack(spacing: 0){
-                SellRegisterHeader()
-                
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        VStack(spacing: 0) {
-                            SellRegisterContent
-                            
-                            if normalDeliveryFocused {
-                                Color.clear
-                                    .frame(height: max(keyboardObserver.keyboardHeight - 150, 0))
-                                    .animation(.easeInOut, value: keyboardObserver.keyboardHeight)
-                                    .id("bottom")
+            ZStack {
+                VStack(spacing: 0){
+                    SellRegisterHeader()
+                    
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            VStack(spacing: 0) {
+                                SellRegisterContent
+                                
+                                if normalDeliveryFocused {
+                                    Color.clear
+                                        .frame(height: max(keyboardObserver.keyboardHeight - 150, 0))
+                                        .animation(.easeInOut, value: keyboardObserver.keyboardHeight)
+                                        .id("bottom")
+                                }
+                                
+                                if halfDeliveryFocused {
+                                    Color.clear
+                                        .frame(height: max(keyboardObserver.keyboardHeight - 140, 0))
+                                        .animation(.easeInOut, value: keyboardObserver.keyboardHeight)
+                                        .id("bottom")
+                                }
                             }
-                            
-                            if halfDeliveryFocused {
-                                Color.clear
-                                    .frame(height: max(keyboardObserver.keyboardHeight - 140, 0))
-                                    .animation(.easeInOut, value: keyboardObserver.keyboardHeight)
-                                    .id("bottom")
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .onChange(of: keyboardObserver.keyboardHeight) { _ in
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                proxy.scrollTo("bottom", anchor: .bottom)
                             }
                         }
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .onChange(of: keyboardObserver.keyboardHeight) { _ in
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            proxy.scrollTo("bottom", anchor: .bottom)
-                        }
-                    }
+                    
+                    registerButton
                 }
-                
-                registerButton
+                if viewModel.isLoadingNetwork {
+                    LoadingView()
+                }
             }
             .ignoresSafeArea()
             .scrollDismissesKeyboard(.immediately)

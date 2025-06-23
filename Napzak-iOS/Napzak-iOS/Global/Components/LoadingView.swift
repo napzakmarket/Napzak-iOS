@@ -23,13 +23,12 @@ struct LoadingView: View {
                     .playbackMode(.playing(.toProgress(1, loopMode: .loop)))
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 121, height: 153)
-                    .background(.blue)
                 
                 Spacer()
             }
             Spacer()
         }
-        .background(Color.red.opacity(0.4))
+        .background(Color.white.opacity(0.4))
     }
 }
 
