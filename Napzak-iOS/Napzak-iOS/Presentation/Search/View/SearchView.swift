@@ -39,11 +39,15 @@ struct SearchView: View {
             VStack(spacing: 0) {
                 searchHeader
                     .padding(.top, 75)
-                productScrollView(
-                    products: viewModel.selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
-                    productsCount: viewModel.selectedTabIndex == 0 ? viewModel.sellProductsCount : viewModel.buyProductsCount
-                )
-                Spacer()
+                if viewModel.isLoadingNetwork {
+                    LoadingView()
+                } else {
+                    productScrollView(
+                        products: viewModel.selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
+                        productsCount: viewModel.selectedTabIndex == 0 ? viewModel.sellProductsCount : viewModel.buyProductsCount
+                    )
+                    Spacer()
+                }
             }
             
             if isGenreSelectModalPresented {
