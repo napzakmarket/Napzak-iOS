@@ -39,8 +39,9 @@ struct SearchView: View {
             VStack(spacing: 0) {
                 searchHeader
                     .padding(.top, 75)
-                if viewModel.isLoadingNetwork {
+                if viewModel.loadingManager.isLoadingNetwork {
                     LoadingView()
+                        .padding(.bottom, 180)
                 } else {
                     productScrollView(
                         products: viewModel.selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
@@ -143,14 +144,16 @@ extension SearchView {
                 VStack(alignment: .leading, spacing: 0) {
                     NZSegmentedControl(selectedTabIndex: $viewModel.selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
                     
-                    FilterContainerView(
-                        isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                        selectedTabIndex: $viewModel.selectedTabIndex,
-                        selectedGenres: $viewModel.productFetchOption.genres,
-                        isUnopened: $viewModel.productFetchOption.isUnopened,
-                        isOnSale: $viewModel.productFetchOption.isOnSale
-                    )
-                    .frame(height: 54)
+                    if !viewModel.loadingManager.isLoadingNetwork {
+                        FilterContainerView(
+                            isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                            selectedTabIndex: $viewModel.selectedTabIndex,
+                            selectedGenres: $viewModel.productFetchOption.genres,
+                            isUnopened: $viewModel.productFetchOption.isUnopened,
+                            isOnSale: $viewModel.productFetchOption.isOnSale
+                        )
+                        .frame(height: 54)
+                    }
                 }
                 .padding(.horizontal, 28)
             }
@@ -182,7 +185,7 @@ extension SearchView {
     
     private var shadowBackground: some View {
         ZStack(alignment: .top) {
-            Color.napzakGrayScale(.gray10)
+            Color.napzakGrayScale(viewModel.loadingManager.isLoadingNetwork ? .white : .gray10)
             Color.napzakGrayScale(.white)
                 .frame(height: 47)
                 .shadow(color: .black.opacity(0.1), radius: 4)

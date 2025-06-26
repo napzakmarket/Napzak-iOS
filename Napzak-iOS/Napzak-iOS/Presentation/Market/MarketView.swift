@@ -117,7 +117,7 @@ struct MarketView: View {
                 .padding(.bottom, 110)
             }
             
-            if viewModel.isLoadingNetwork {
+            if viewModel.loadingManager.isLoadingNetwork {
                 LoadingView()
             }
         }

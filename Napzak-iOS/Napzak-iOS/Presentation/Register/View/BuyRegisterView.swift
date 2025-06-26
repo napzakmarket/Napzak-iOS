@@ -32,7 +32,7 @@ struct BuyRegisterView: View {
                     
                     registerButton
                 }
-                if viewModel.isLoadingNetwork {
+                if viewModel.loadingManager.isLoadingNetwork {
                     LoadingView()
                 }
             }

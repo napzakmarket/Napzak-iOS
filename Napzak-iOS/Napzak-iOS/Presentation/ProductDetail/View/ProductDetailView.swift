@@ -149,7 +149,7 @@ struct ProductDetailView: View {
                 .padding(.bottom, 44)
             }
             
-            if viewModel.isLoadingNetwork {
+            if viewModel.loadingManager.isLoadingNetwork {
                 LoadingView()
             }
         }

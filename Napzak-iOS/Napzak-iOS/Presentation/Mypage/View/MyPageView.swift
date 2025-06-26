@@ -13,8 +13,7 @@ struct MyPageView: View {
     @State private var storeInfo: StoreProfileDTO?
     @State private var isLoading = true
     @State private var errorMessage: String?
-    @State private var isLoadingNetwork: Bool = false
-
+    @State var loadingManager = LoadingViewManager()
         
     // StoreService 주입
     private let storeService: StoreServiceProtocol
@@ -51,7 +50,7 @@ struct MyPageView: View {
             }
             .ignoresSafeArea(.all)
             
-            if isLoadingNetwork {
+            if loadingManager.isLoadingNetwork {
                 LoadingView()
             }
         }
@@ -59,8 +58,8 @@ struct MyPageView: View {
     }
     
     private func fetchMyPageInfo() async {
-        startLoading()
-        defer { stopLoading() }
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
         
         isLoading = true
         
@@ -258,17 +257,5 @@ struct MyPageView: View {
                 .applyNapzakFont(.caption1SemiBold12)
                 .foregroundColor(Color.napzakGrayScale(.gray400))
         }
-    }
-}
-
-//MARK: - Private Func
-
-extension MyPageView {
-    private func startLoading() {
-        isLoadingNetwork = true
-    }
-
-    private func stopLoading() {
-        isLoadingNetwork = false
     }
 }

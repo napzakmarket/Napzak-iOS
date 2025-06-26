@@ -8,8 +8,6 @@
 import SwiftUI
 
 final class LoadingViewManager: ObservableObject {
-    static let shared = LoadingViewManager()
-
     @Published var isLoadingNetwork: Bool = false
     
     private var loadingCount = 0 {

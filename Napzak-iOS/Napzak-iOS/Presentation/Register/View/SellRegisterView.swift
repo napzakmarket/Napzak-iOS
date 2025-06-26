@@ -59,7 +59,7 @@ struct SellRegisterView: View {
                     
                     registerButton
                 }
-                if viewModel.isLoadingNetwork {
+                if viewModel.loadingManager.isLoadingNetwork {
                     LoadingView()
                 }
             }

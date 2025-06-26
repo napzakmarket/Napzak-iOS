@@ -22,16 +22,10 @@ final class SearchViewModel: ObservableObject {
     @Published var buyProductsCount: Int = 0
     @Published var buyProducts: [ProductItemModel] = []
     @Published var showToast: Bool = false
-    @Published var isLoadingNetwork: Bool = false
+    @Published var loadingManager = LoadingViewManager()
     
     @ObservedObject private var likeManager = ProductLikeManager.shared
-    
-    private var loadingCount = 0 {
-        didSet {
-            isLoadingNetwork = loadingCount > 0
-        }
-    }
-    
+
     private var cancellables = Set<AnyCancellable>()
     private let likeSubject = PassthroughSubject<(Int, Bool), Never>()
     
@@ -59,6 +53,8 @@ final class SearchViewModel: ObservableObject {
         setupProductEventObserver()
         
         Task {
+            loadingManager.startLoading()
+            defer { loadingManager.stopLoading() }
             if searchWord == "" {
                 if initialSelectedTab == 0 {
                     await fetchSellProducts()
@@ -82,6 +78,8 @@ extension SearchViewModel {
     
     func updateProducts() async {
         Task {
+            loadingManager.startLoading()
+            defer { loadingManager.stopLoading() }
             if selectedTabIndex == 0 {
                 if searchWord.isEmpty {
                     await fetchSellProducts()
@@ -101,8 +99,6 @@ extension SearchViewModel {
     //MARK: - API Func
     
     func fetchSellProducts() async {
-        startLoading()
-        defer { stopLoading() }
         let result = await NetworkService.shared.productService.getSellProduct(productFetchOption: productFetchOption)
         
         switch result {
@@ -121,8 +117,6 @@ extension SearchViewModel {
     }
     
     func fetchBuyProducts() async {
-        startLoading()
-        defer { stopLoading() }
         let result = await NetworkService.shared.productService.getBuyProduct(productFetchOption: productFetchOption)
         
         switch result {
@@ -141,8 +135,6 @@ extension SearchViewModel {
     }
     
     func fetchSellProductsForSearch() async {
-        startLoading()
-        defer { stopLoading() }
         let result = await NetworkService.shared.productService.getSellProductForSearch(searchWord: searchWord, productFetchOption: productFetchOption)
         
         switch result {
@@ -161,8 +153,6 @@ extension SearchViewModel {
     }
     
     func fetchBuyProductsForSearch() async {
-        startLoading()
-        defer { stopLoading() }
         let result = await NetworkService.shared.productService.getBuyProductForSearch(searchWord: searchWord, productFetchOption: productFetchOption)
         
         switch result {
@@ -266,18 +256,5 @@ extension SearchViewModel {
                 }
             }
             .store(in: &cancellables)
-    }
-}
-
-
-//MARK: - Func
-
-extension SearchViewModel {
-    private func startLoading() {
-        loadingCount += 1
-    }
-
-    private func stopLoading() {
-        loadingCount = max(loadingCount - 1, 0)
     }
 }

@@ -21,6 +21,7 @@ final class RegisterViewModel: ObservableObject {
     
     @Published var model: RegisterModel = RegisterModel()
     @Published var imagePickerManager = ImagePickerManager()
+    @Published var loadingManager = LoadingViewManager()
     
     // MARK: - Property Wrappers
     
@@ -34,16 +35,10 @@ final class RegisterViewModel: ObservableObject {
     @Published var genreSearchText = ""
     @Published var isCompleted: Bool = false
     @Published var genreList: [GenreNameModel] = []
-    @Published var isLoadingNetwork: Bool = false
     
     //MARK: - Properties
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Register")
-    private var loadingCount = 0 {
-        didSet {
-            isLoadingNetwork = loadingCount > 0
-        }
-    }
     
     let type: RegisterViewType
     
@@ -86,8 +81,8 @@ extension RegisterViewModel {
     //MARK: - Get all genre
     
     func getAllGenre() async {
-        startLoading()
-        defer { stopLoading() }
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
         let result = await NetworkService.shared.genreService.getAllGenreName(size: 43)
         
         switch result {
@@ -122,8 +117,8 @@ extension RegisterViewModel {
     }
     
     func getSellProductInfoForEdit(productId: Int) async {
-        startLoading()
-        defer { stopLoading() }
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
         let result = await NetworkService.shared.productService.getSellProductInfoForEdit(productId: productId)
 
         switch result {
@@ -170,8 +165,8 @@ extension RegisterViewModel {
     }
 
     func getBuyProductInfoForEdit(productId: Int) async {
-        startLoading()
-        defer { stopLoading() }
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
         let result = await NetworkService.shared.productService.getBuyProductInfoForEdit(productId: productId)
 
         switch result {
@@ -290,8 +285,8 @@ extension RegisterViewModel {
     // MARK: - POST Register
     
     func sellRegister() async {
-        startLoading()
-        defer { stopLoading() }
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
         // presigned URL 요청
         guard await getPresignedUrl() else { return }
         
@@ -356,8 +351,8 @@ extension RegisterViewModel {
     }
     
     func buyRegister() async {
-        startLoading()
-        defer { stopLoading() }
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
         // presigned URL 요청
         guard await getPresignedUrl() else { return }
         
@@ -495,18 +490,5 @@ extension RegisterViewModel {
         allCheckedConditionsValid
         
         return isDeliveryIncluded || isSeparateDeliveryValid
-    }
-}
-
-
-//MARK: - Private Func
-
-extension RegisterViewModel {
-    private func startLoading() {
-        loadingCount += 1
-    }
-
-    private func stopLoading() {
-        loadingCount = max(loadingCount - 1, 0)
     }
 }

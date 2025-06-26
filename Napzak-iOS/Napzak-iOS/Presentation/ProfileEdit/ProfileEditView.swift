@@ -66,6 +66,10 @@ struct ProfileEditView: View {
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
             }
+            
+            if !viewModel.loadingManager.isLoadingNetwork {
+                LoadingView()
+            }
         }
         .animation(.easeInOut, value: isGenreSelectModalPresented)
         .edgesIgnoringSafeArea(.bottom)

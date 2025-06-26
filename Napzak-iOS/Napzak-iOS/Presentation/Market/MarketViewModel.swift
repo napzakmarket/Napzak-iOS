@@ -29,7 +29,7 @@ final class MarketViewModel: ObservableObject {
     @Published var productsError: String? = nil
     @Published var productCount: Int = 0
     @Published var showToast: Bool = false
-    @Published var isLoadingNetwork: Bool = false
+    @Published var loadingManager = LoadingViewManager()
     
     @ObservedObject private var likeManager = ProductLikeManager.shared
     
@@ -43,12 +43,6 @@ final class MarketViewModel: ObservableObject {
     private let likeSubject = PassthroughSubject<(Int, Bool), Never>()
     
     private let interestService = NetworkService.shared.interestService
-    
-    private var loadingCount = 0 {
-        didSet {
-            isLoadingNetwork = loadingCount > 0
-        }
-    }
     
     //MARK: - Init
     
@@ -66,8 +60,8 @@ final class MarketViewModel: ObservableObject {
     }
     
     func fetchStoreDetail() async {
-        startLoading()
-        defer { stopLoading() }
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
         let result = await NetworkService.shared.storeService.getStoreDetail(storeId: storeId)
         
         switch result {
@@ -85,8 +79,8 @@ final class MarketViewModel: ObservableObject {
     }
     
     func fetchProducts() async {
-        startLoading()
-        defer { stopLoading() }
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
         isLoadingProducts = true
         productsError = nil
         
@@ -222,17 +216,5 @@ extension MarketViewModel {
                 }
             }
             .store(in: &cancellables)
-    }
-}
-
-//MARK: - Private Func
-
-extension MarketViewModel {
-    private func startLoading() {
-        loadingCount += 1
-    }
-
-    private func stopLoading() {
-        loadingCount = max(loadingCount - 1, 0)
     }
 }

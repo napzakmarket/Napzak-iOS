@@ -10,6 +10,7 @@ import Combine
 import os
 
 final class ProfileEditViewModel: ObservableObject {
+
     @Published var nickname: String = ""
     @Published var profileDescription: String = ""
     @Published var selectedGenres: [GenreNameModel] = []
@@ -25,6 +26,8 @@ final class ProfileEditViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
     @Published var isSuccess: Bool = false
+    
+    @Published var loadingManager = LoadingViewManager()
     
     private let storeService: StoreServiceProtocol
     private var cancellables = Set<AnyCancellable>()
@@ -70,6 +73,11 @@ final class ProfileEditViewModel: ObservableObject {
         errorMessage = nil
         
         Task {
+            loadingManager.startLoading()
+            defer{
+                loadingManager.stopLoading()
+            }
+            
             let myPageResult = await storeService.getMyPageInfo()
             
             await MainActor.run {
@@ -123,6 +131,11 @@ final class ProfileEditViewModel: ObservableObject {
         errorMessage = nil
 
         Task {
+            loadingManager.startLoading()
+            defer{
+                loadingManager.stopLoading()
+            }
+            
             if let selectedImage = selectedProfileImage {
                 let imageName = UUID().uuidString + ".jpg"
                 let presignedResult = await NetworkService.shared.presignedService.getPresignedURL(imageNameList: [imageName])
@@ -212,6 +225,11 @@ final class ProfileEditViewModel: ObservableObject {
         )
 
         Task {
+            loadingManager.startLoading()
+            defer{
+                loadingManager.stopLoading()
+            }
+            
             let result = await storeService.modifyProfile(request: request)
 
             await MainActor.run {
