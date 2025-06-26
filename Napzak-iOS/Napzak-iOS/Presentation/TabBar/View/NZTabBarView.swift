@@ -30,11 +30,9 @@ struct NZTabBarView: View {
                             .tag(NZTab.home)
                         
                         SearchView(
-                            viewModel: SearchViewModel(
-                                searchWord: tabRouter.currentSearchWord,
-                                initialSortOption: tabRouter.currentSortOption,
-                                initialSelectedTab: tabRouter.currentSelectedTab
-                            ),
+                            searchWord: tabRouter.currentSearchWord,
+                            sortOption: tabRouter.currentSortOption,
+                            selectedTab: tabRouter.currentSelectedTab,
                             isGenreSelectModalPresented: $isGenreSelectModalPresented,
                             isSortModalPresented: $isSortModalPresented
                         )
@@ -113,7 +111,9 @@ struct NZTabBarView: View {
                     
                 case .searchView(searchWord: let searchWord):
                     SearchView(
-                        viewModel: SearchViewModel(searchWord: searchWord),
+                        searchWord: searchWord,
+                        sortOption: .recent,
+                        selectedTab: 0,
                         isGenreSelectModalPresented: $isGenreSelectModalPresented,
                         isSortModalPresented: $isSortModalPresented
                     )

@@ -68,17 +68,31 @@ final class KeychainManager {
 
     private func save(key: String, value: String) -> Result<Void, AuthError> {
         let data = Data(value.utf8)
-        
+
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
-            kSecAttrAccount as String: key,
+            kSecAttrAccount as String: key
+        ]
+
+        let attributesToUpdate: [String: Any] = [
             kSecValueData as String: data
         ]
-        
-        SecItemDelete(query as CFDictionary)
-        
-        let status = SecItemAdd(query as CFDictionary, nil)
-        return status == errSecSuccess ? .success(()) : .failure(.keychainError)
+
+        let status: OSStatus
+
+        if SecItemCopyMatching(query as CFDictionary, nil) == errSecSuccess {
+            status = SecItemUpdate(query as CFDictionary, attributesToUpdate as CFDictionary)
+        } else {
+            var newItem = query
+            newItem[kSecValueData as String] = data
+            status = SecItemAdd(newItem as CFDictionary, nil)
+        }
+
+        if status == errSecSuccess {
+            return .success(())
+        } else {
+            return .failure(.keychainError)
+        }
     }
     
     private func load(key: String) -> Result<String, AuthError> {

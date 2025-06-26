@@ -46,7 +46,6 @@ struct MyPageView: View {
         .task {
             await fetchMyPageInfo()
         }        .ignoresSafeArea(.all)
-
     }
     
     private func fetchMyPageInfo() async {
