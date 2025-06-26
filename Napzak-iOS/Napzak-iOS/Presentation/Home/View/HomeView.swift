@@ -99,7 +99,7 @@ struct HomeView: View {
             }
         }
         .onChange(of: tabRouter.selectedTab) { tab in
-            if tab != .search {
+            if tab == .home {
                 viewModel.fetchHomeData()
                 scrollToTopTrigger.toggle()
             }

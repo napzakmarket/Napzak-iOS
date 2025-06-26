@@ -55,6 +55,10 @@ struct MyPageView: View {
             }
         }
 
+        .background(Color.napzakGrayScale(.white))
+        .task {
+            await fetchMyPageInfo()
+        }        .ignoresSafeArea(.all)
     }
     
     private func fetchMyPageInfo() async {
