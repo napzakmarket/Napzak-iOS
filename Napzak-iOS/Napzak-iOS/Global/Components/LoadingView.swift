@@ -31,7 +31,3 @@ struct LoadingView: View {
         .background(Color.white)
     }
 }
-
-#Preview {
-    LoadingView()
-}
