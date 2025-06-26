@@ -14,7 +14,7 @@ struct MyPageView: View {
     @State private var isLoading = true
     @State private var errorMessage: String?
     @State var loadingManager = LoadingViewManager()
-        
+    
     // StoreService 주입
     private let storeService: StoreServiceProtocol
     
@@ -37,7 +37,7 @@ struct MyPageView: View {
                 
                 marketButton
                 menuGrid
-
+                
                 Spacer()
                 
                 Rectangle()
@@ -54,11 +54,6 @@ struct MyPageView: View {
                 LoadingView()
             }
         }
-
-        .background(Color.napzakGrayScale(.white))
-        .task {
-            await fetchMyPageInfo()
-        }        .ignoresSafeArea(.all)
     }
     
     private func fetchMyPageInfo() async {
@@ -177,7 +172,7 @@ struct MyPageView: View {
         .padding(.horizontal, 27)
         .padding(.top, 30)
     }
-
+    
     
     private var marketButton: some View {
         VStack(spacing: 0) {
@@ -250,7 +245,7 @@ struct MyPageView: View {
         .padding(.top, 20)
         .padding(.bottom, 30)
     }
-
+    
     private func menuItem(title: String, iconName: String) -> some View {
         VStack(spacing: 5) {
             Image(iconName)
