@@ -34,7 +34,7 @@ struct LikeView: View {
             
             if viewModel.showToast {
                 ToastMessageView(
-                    message: "찜한 상품에서 제거되었어요!",
+                    message: "찜한 상품에서 추가되었어요!",
                     style: .success
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -72,6 +72,7 @@ extension LikeView {
                 }
                 .padding(.horizontal, 28)
                 .frame(height: 47)
+                .padding(.bottom,20)
             }
         }
     }
@@ -175,9 +176,7 @@ extension LikeView {
 }
 
 private extension LikeView {
-    
-    //MARK: - ViewBuilder Func
-    
+        
     @ViewBuilder
     private func productGridItem(index: Int) -> some View {
         let product = currentProducts[index]
