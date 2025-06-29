@@ -24,16 +24,18 @@ protocol ProductServiceProtocol {
     func getBuyProductInfoForEdit(productId: Int) async -> Result<EditBuyProductResponseDTO, NetworkError>
     func putSellProduct(productId: Int, requestBody: SellRegisterRequestDTO) async -> Result<SellRegisterResponseDTO, NetworkError>
     func putBuyProduct(productId: Int, requestBody: BuyRegisterRequestDTO) async -> Result<BuyRegisterResponseDTO, NetworkError>
-}
+    func getLikedSellProducts() async -> Result<LikedSellProductsResponseDTO, NetworkError>
+       func getLikedBuyProducts() async -> Result<LikedBuyProductsResponseDTO, NetworkError>
+   }
 
 final class ProductService: BaseService, ProductServiceProtocol {
     
     private let provider = MoyaProvider<ProductAPI>(plugins: [MoyaPlugin()])
-
+    
     func postSellRegister(sellRegisterProduct: SellRegisterRequestDTO) async -> Result<SellRegisterResponseDTO, NetworkError> {
         return await requestDecodable(provider, ProductAPI.sellRegister(registerItem: sellRegisterProduct))
     }
-
+    
     func postBuyRegister(buyRegisterProduct: BuyRegisterRequestDTO) async -> Result<BuyRegisterResponseDTO, NetworkError> {
         return await requestDecodable(provider, ProductAPI.buyRegister(registerItem: buyRegisterProduct))
     }
@@ -75,7 +77,7 @@ final class ProductService: BaseService, ProductServiceProtocol {
     func patchTradeStatus(productId: Int, requestBody: ChangeTradeStatusRequestDTO) async -> Result<Void, NetworkError> {
         return await requestVoid(provider, .patchTradeStatus(productId: productId, body: requestBody))
     }
-
+    
     func deleteProduct(productId: Int) async -> Result<Void, NetworkError> {
         return await requestVoid(provider, .deleteProduct(productId: productId))
     }
@@ -92,7 +94,37 @@ final class ProductService: BaseService, ProductServiceProtocol {
         return await requestDecodable(provider, .putSellProduct(productId: productId, requestBody: requestBody))
     }
     
-    func putBuyProduct(productId: Int, requestBody: BuyRegisterRequestDTO) async -> Result<BuyRegisterResponseDTO, NetworkError> {
-            return await requestDecodable(provider, .putBuyProduct(productId: productId, requestBody: requestBody))
+    func putBuyProduct(productId: Int, requestBody: BuyRegisterRequestDTO) async -> Result<BuyRegisterResponseDTO, NetworkError>         {
+        return await requestDecodable(provider, .putBuyProduct(productId: productId, requestBody: requestBody))
+    }
+    
+    func getLikedSellProducts() async -> Result<LikedSellProductsResponseDTO, NetworkError> {
+        let result: Result<BaseResponseDTO<LikedSellProductsResponseDTO>, NetworkError> = await requestDecodable(provider, .getLikedSellProducts)
+        
+        switch result {
+        case .success(let baseResponse):
+            if let data = baseResponse.data {
+                return .success(data)
+            } else {
+                return .failure(.decodingError)
+            }
+        case .failure(let error):
+            return .failure(error)
+        }
+    }
+    
+    func getLikedBuyProducts() async -> Result<LikedBuyProductsResponseDTO, NetworkError> {
+        let result: Result<BaseResponseDTO<LikedBuyProductsResponseDTO>, NetworkError> = await requestDecodable(provider, .getLikedBuyProducts)
+        
+        switch result {
+        case .success(let baseResponse):
+            if let data = baseResponse.data {
+                return .success(data)
+            } else {
+                return .failure(.decodingError)
+            }
+        case .failure(let error):
+            return .failure(error)
+        }
     }
 }

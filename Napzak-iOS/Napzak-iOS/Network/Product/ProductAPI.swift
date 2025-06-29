@@ -24,6 +24,8 @@ enum ProductAPI {
     case putBuyProduct(productId: Int, requestBody: BuyRegisterRequestDTO)
     case patchTradeStatus(productId: Int, body: ChangeTradeStatusRequestDTO)
     case deleteProduct(productId: Int)
+    case getLikedSellProducts
+    case getLikedBuyProducts
 }
 
 extension ProductAPI: BaseTargetType {
@@ -60,6 +62,10 @@ extension ProductAPI: BaseTargetType {
             return "products/buy/modify/\(productId)"
         case .getSearchRecommendation:
             return "products/search/recommend"
+        case .getLikedSellProducts:
+            return "products/interest/sell"
+        case .getLikedBuyProducts:
+            return "products/interest/buy"
         }
     }
     
@@ -131,7 +137,8 @@ extension ProductAPI: BaseTargetType {
                                                    "genreId" : genreIDs,
                                                    "isOnSale" : productFetchOption.isOnSale,
                                                    "isUnopened" : productFetchOption.isUnopened],
-                                      encoding: URLEncoding.queryString)        case .patchTradeStatus(_, let requestBody):
+                                      encoding: URLEncoding.queryString)
+        case .patchTradeStatus(_, let requestBody):
             return .requestJSONEncodable(requestBody)
         case .putSellProduct(_, let body):
             return .requestJSONEncodable(body)
