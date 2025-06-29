@@ -169,8 +169,6 @@ extension ProductDetailViewModel {
     }
     
     func deleteProduct() async {
-        loadingManager.startLoading()
-        defer { loadingManager.stopLoading() }
         let result = await NetworkService.shared.productService.deleteProduct(
             productId: product.productDetail.id)
         

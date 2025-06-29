@@ -67,7 +67,7 @@ struct ProfileEditView: View {
                 .zIndex(2)
             }
             
-            if !viewModel.loadingManager.isLoadingNetwork {
+            if viewModel.loadingManager.isLoadingNetwork {
                 LoadingView()
             }
         }
