@@ -63,7 +63,7 @@ struct NZTabBarView: View {
                         RegisterFloatingView(isRegisterViewPresented: $isRegisterViewPresented, registerType: $registerType)
                             .transition(.move(edge: .bottom).combined(with: .opacity))
                     }
-                    if !(isGenreSelectModalPresented || isSortModalPresented){
+                    if !(isGenreSelectModalPresented || isSortModalPresented) && navigationRouter.path.isEmpty {
                         tabBar
                     }
                 }
@@ -81,18 +81,19 @@ struct NZTabBarView: View {
                 }
             }
             .navigationDestination(for: Route.self) { route in
-                switch route {
-                case .searchInputView:
-                    SearchInputView()
-                    
-                case .LikeView:
-                    LikeView()
-                    
-                case .marketView(let storeId):
-                    MarketView(storeId: storeId)
-                    
-                case .ProfileEditView:
-                    ProfileEditView()
+                ZStack(alignment: .bottom) {
+                    switch route {
+                    case .searchInputView:
+                        SearchInputView()
+                        
+                    case .LikeView:
+                        LikeView()
+                        
+                    case .marketView(let storeId):
+                        MarketView(storeId: storeId)
+                        
+                    case .ProfileEditView:
+                        ProfileEditView()
 
                 case .genreDetailView(genreId: let genreId, genreName: let genreName):
                     GenreDetailView(genreId: genreId, genreName: genreName)
@@ -103,32 +104,55 @@ struct NZTabBarView: View {
                 case .SettingView:
                     SettingView()
 
-                case .withDrawSelectReasonView:
-                    WithDrawSelectReasonView()
+                    case .withDrawSelectReasonView:
+                        WithDrawSelectReasonView()
+                        
+                    case .withDrawWriteReasonView:
+                        WithDrawWriteReasonView()
+                        
+                    case .withDrawConfirmView:
+                        WithDrawConfirmView()
+                        
+                    case .searchView(searchWord: let searchWord):
+                        SearchView(
+                            searchWord: searchWord,
+                            sortOption: .recent,
+                            selectedTab: 0,
+                            isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                            isSortModalPresented: $isSortModalPresented
+                        )
+                        
+                    case .reportView(reportType: let reportType, id: let id):
+                        ReportView(reportType: reportType, id: id)
+                    }
                     
-                case .withDrawWriteReasonView:
-                    WithDrawWriteReasonView()
-                    
-                case .withDrawConfirmView:
-                    WithDrawConfirmView()
-                    
-                case .searchView(searchWord: let searchWord):
-                    SearchView(
-                        searchWord: searchWord,
-                        sortOption: .recent,
-                        selectedTab: 0,
-                        isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                        isSortModalPresented: $isSortModalPresented
-                    )
-                    
-                case .reportView(reportType: let reportType, id: let id):
-                    ReportView(reportType: reportType, id: id)
+                    if shouldShowTabBarForRoute(route) {
+                        VStack(spacing: 10) {
+                            if isRegisterTabSelected {
+                                RegisterFloatingView(isRegisterViewPresented: $isRegisterViewPresented, registerType: $registerType)
+                                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                            }
+                            if !(isGenreSelectModalPresented || isSortModalPresented) {
+                                tabBar
+                            }
+                        }
+                    }
                 }
+                .edgesIgnoringSafeArea(.bottom)
             }
         }
         .onReceive(SearchEventManager.shared.searchCompleted) { searchWord in
             navigationRouter.reset()
             tabRouter.switchToSearch(searchWord: searchWord, sortOption: .recent, searchTabIndex: 0)
+        }
+    }
+    
+    private func shouldShowTabBarForRoute(_ route: Route) -> Bool {
+        switch route {
+        case .LikeView:
+            return true
+        default:
+            return false
         }
     }
     
