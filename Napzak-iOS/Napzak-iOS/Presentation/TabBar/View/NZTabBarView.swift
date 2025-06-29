@@ -159,6 +159,7 @@ struct NZTabBarView: View {
     var tabBar: some View {
         HStack {
             Button {
+                navigationRouter.reset()
                 tabRouter.switchToHome()
                 isRegisterTabSelected = false
             } label: {
@@ -174,6 +175,7 @@ struct NZTabBarView: View {
             }
             Spacer()
             Button {
+                navigationRouter.reset()
                 tabRouter.switchToSearch(searchWord: "", sortOption: .recent, searchTabIndex: 0)
                 isRegisterTabSelected = false
             } label: {
@@ -189,6 +191,7 @@ struct NZTabBarView: View {
             }
             Spacer()
             Button {
+                navigationRouter.reset()
                 isRegisterTabSelected.toggle()
             } label: {
                 VStack(alignment: .center, spacing: 5) {
@@ -211,6 +214,7 @@ struct NZTabBarView: View {
             }
             Spacer()
             Button {
+                navigationRouter.reset()
                 tabRouter.switchToChat()
                 isRegisterTabSelected = false
             } label: {
@@ -226,6 +230,7 @@ struct NZTabBarView: View {
             }
             Spacer()
             Button {
+                navigationRouter.reset()
                 tabRouter.switchToMy()
                 isRegisterTabSelected = false
             } label: {
