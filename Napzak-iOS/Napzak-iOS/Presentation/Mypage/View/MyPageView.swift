@@ -215,7 +215,9 @@ struct MyPageView: View {
                             }
                         } else if item.title == "설정" {
                             navigationRouter.push(next: .SettingView)
-                        } else {
+                        }else if item.title == "찜" {
+                            navigationRouter.push(next: .LikeView)
+                        }else {
                             // TODO: - 다른 메뉴 라우팅
                         }
                     } label: {

@@ -85,6 +85,9 @@ struct NZTabBarView: View {
                 case .searchInputView:
                     SearchInputView()
                     
+                case .LikeView:
+                    LikeView()
+                    
                 case .marketView(let storeId):
                     MarketView(storeId: storeId)
                     
