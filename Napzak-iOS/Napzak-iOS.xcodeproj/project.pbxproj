@@ -116,6 +116,7 @@
 		D06D42932E11910100EEA82A /* ChatMessageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D42922E1190DB00EEA82A /* ChatMessageBar.swift */; };
 		D06D42962E11BE1500EEA82A /* ChatDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D42952E11BE0900EEA82A /* ChatDetailModel.swift */; };
 		D06D42992E11C2E800EEA82A /* ChatDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D42982E11C2E200EEA82A /* ChatDetailViewModel.swift */; };
+		D06D429B2E11C5BD00EEA82A /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D429A2E11C5B900EEA82A /* Int+.swift */; };
 		D06E5B362DAE0A88002E68A1 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06E5B352DAE0A83002E68A1 /* SearchView.swift */; };
 		D06E5B382DAE2121002E68A1 /* NZSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06E5B372DAE2111002E68A1 /* NZSegmentedControl.swift */; };
 		D06F13962DA300CB0029698C /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06F13952DA300C30029698C /* NavigationRouter.swift */; };

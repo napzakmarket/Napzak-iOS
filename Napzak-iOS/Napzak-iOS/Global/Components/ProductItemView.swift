@@ -60,7 +60,7 @@ extension ProductItemView {
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
                 .frame(height: 18)
                 .lineLimit(1)
-            Text(formatPrice())
+            Text(product.price.convertPriceByTradeType(tradeType: product.tradeType))
                 .applyNapzakFont(.body1Bold16)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
                 .frame(height: 20)
@@ -170,17 +170,6 @@ extension ProductItemView {
                 .foregroundStyle(Color.napzakGrayScale(.gray100))
                 .frame(height: 13)
         }
-    }
-}
-
-extension ProductItemView {
-    
-    //MARK: - Private Func
-    
-    private func formatPrice() -> String {
-        return product.tradeType == .sell
-        ? "\(String(product.price).convertPrice(maxPrice: 1_000_000))원"
-        : "\(String(product.price).convertPrice(maxPrice: 1_000_000))원대"
     }
 }
 

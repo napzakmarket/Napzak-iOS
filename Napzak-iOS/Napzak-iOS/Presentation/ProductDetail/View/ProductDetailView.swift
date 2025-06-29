@@ -332,7 +332,7 @@ extension ProductDetailView {
                 .applyNapzakFont(.title6Medium18)
                 .foregroundStyle(Color.napzakGrayScale(.black))
                 .padding(.bottom, 10)
-            Text(formatPrice(price: viewModel.product.productDetail.price))
+            Text(viewModel.product.productDetail.price.convertPriceByTradeType(tradeType: viewModel.product.productDetail.tradeType))
                 .applyNapzakFont(.title3Bold18)
                 .foregroundStyle(Color.napzakGrayScale(.black))
                 .padding(.bottom, 20)
@@ -444,12 +444,12 @@ extension ProductDetailView {
             } else {
                 VStack(alignment: .trailing, spacing: 12) {
                     if viewModel.product.productDetail.standardDeliveryFee != 0 {
-                        Text("일반택배 \(formatPrice(price: viewModel.product.productDetail.standardDeliveryFee))")
+                        Text("일반택배 \(viewModel.product.productDetail.standardDeliveryFee.convertPriceByTradeType(tradeType: viewModel.product.productDetail.tradeType))")
                             .applyNapzakFont(.body4Bold14)
                             .foregroundStyle(Color.napzakGrayScale(.gray300))
                     }
                     if viewModel.product.productDetail.halfDeliveryFee != 0 {
-                        Text("반값/알뜰택배 \(formatPrice(price: viewModel.product.productDetail.halfDeliveryFee))")
+                        Text("반값/알뜰택배 \(viewModel.product.productDetail.halfDeliveryFee.convertPriceByTradeType(tradeType: viewModel.product.productDetail.tradeType))")
                             .applyNapzakFont(.body4Bold14)
                             .foregroundStyle(Color.napzakGrayScale(.gray300))
                    }
