@@ -9,9 +9,14 @@ import SwiftUI
 
 struct ChatMessageInputBar: View {
         
+    //MARK: - Property Wrappers
+    
     @Binding var text: String
     @FocusState var isFocused: Bool
     
+    //MARK: - Properites
+    
+    let isChatDisabled: Bool
     let onSubmit: () -> Void
     
     var body: some View {
@@ -19,7 +24,7 @@ struct ChatMessageInputBar: View {
             ZStack(alignment: .center) {
                 if text.isEmpty {
                     HStack {
-                        Text("메시지를 입력하세요")
+                        Text(isChatDisabled ? "상대방과 대화가 불가능합니다." : "메시지를 입력하세요.")
                             .foregroundColor(Color.napzakGrayScale(.gray200))
                             .font(.napzakFont(.body6Regular14))
                             .frame(height: 42)
@@ -37,6 +42,7 @@ struct ChatMessageInputBar: View {
                     .padding(.top, 10)
                     .padding(.leading, 12)
                     .scrollContentBackground(.hidden)
+                    .disabled(isChatDisabled)
             }
             
             Button {
@@ -71,6 +77,7 @@ private extension ChatMessageInputBar {
         var body: some View {
             ChatMessageInputBar(
                 text: $text,
+                isChatDisabled: false,
                 onSubmit: { }
             )
         }

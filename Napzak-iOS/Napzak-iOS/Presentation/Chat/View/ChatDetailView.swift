@@ -160,6 +160,7 @@ extension ChatDetailView {
             }
             ChatMessageInputBar (
                 text: $viewModel.messageText,
+                isChatDisabled: viewModel.chatDetailInfo.chatStoreInfo.isWithdrawn,
                 onSubmit: { }
             )
         }
