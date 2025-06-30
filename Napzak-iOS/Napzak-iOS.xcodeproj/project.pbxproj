@@ -117,6 +117,7 @@
 		D06D42962E11BE1500EEA82A /* ChatDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D42952E11BE0900EEA82A /* ChatDetailModel.swift */; };
 		D06D42992E11C2E800EEA82A /* ChatDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D42982E11C2E200EEA82A /* ChatDetailViewModel.swift */; };
 		D06D429B2E11C5BD00EEA82A /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D429A2E11C5B900EEA82A /* Int+.swift */; };
+		D06D429F2E11D24700EEA82A /* SelectiveCornerRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D429E2E11D24600EEA82A /* SelectiveCornerRadius.swift */; };
 		D06E5B362DAE0A88002E68A1 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06E5B352DAE0A83002E68A1 /* SearchView.swift */; };
 		D06E5B382DAE2121002E68A1 /* NZSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06E5B372DAE2111002E68A1 /* NZSegmentedControl.swift */; };
 		D06F13962DA300CB0029698C /* NavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06F13952DA300C30029698C /* NavigationRouter.swift */; };
@@ -325,6 +326,7 @@
 		D06D42952E11BE0900EEA82A /* ChatDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailModel.swift; sourceTree = "<group>"; };
 		D06D42982E11C2E200EEA82A /* ChatDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailViewModel.swift; sourceTree = "<group>"; };
 		D06D429A2E11C5B900EEA82A /* Int+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
+		D06D429E2E11D24600EEA82A /* SelectiveCornerRadius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectiveCornerRadius.swift; sourceTree = "<group>"; };
 		D06E5B352DAE0A83002E68A1 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		D06E5B372DAE2111002E68A1 /* NZSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NZSegmentedControl.swift; sourceTree = "<group>"; };
 		D06F13952DA300C30029698C /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
@@ -789,6 +791,7 @@
 		D045DEED2D837E3C00EB1EB6 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				D06D429E2E11D24600EEA82A /* SelectiveCornerRadius.swift */,
 				D02906052DAF4E01008515FD /* ProductItemView.swift */,
 				D06E5B372DAE2111002E68A1 /* NZSegmentedControl.swift */,
 				D02905FC2DAE3167008515FD /* FilterContainerView.swift */,
@@ -1565,6 +1568,7 @@
 				D045DEE82D83786800EB1EB6 /* ColorLiteral.swift in Sources */,
 				D0310B162DD188CF00C265EC /* EditProductResponseDTO.swift in Sources */,
 				D6055AEC2DBF2022005D32A3 /* HomeViewModel.swift in Sources */,
+				D06D429F2E11D24700EEA82A /* SelectiveCornerRadius.swift in Sources */,
 				D029060F2DAF9978008515FD /* TradeType.swift in Sources */,
 				D045DEF82D8383CC00EB1EB6 /* Encodable+.swift in Sources */,
 				D0CBB6FF2DB8110300BE20C3 /* PlainChip.swift in Sources */,
