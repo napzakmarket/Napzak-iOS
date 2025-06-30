@@ -16,17 +16,35 @@ final class ChatDetailViewModel: ObservableObject {
         productInfo: ChatProductInfo(productId: 0, photo: "", tradeType: .buy, title: "", price: 0, isPriceNegotiable: false, genreName: ""),
         chatStoreInfo: ChatStoreInfo(storeId: 0, nickname: "", isWithdrawn: false, storePhoto: "")
     )
+    @Published var chatMessages: [ChatMessageModel] = [
+        ChatMessageModel(
+            id: 0,
+            senderId: 0,
+            type: .text,
+            content: nil,
+            metaData: nil,
+            createdAt: "",
+            isFirstChat: false,
+            isMessageOwner: false,
+            isRead: false
+        )
+    ]
     @Published var messageText = ""
     
     //MARK: - Init
 
     init() {
         fetchChatDetailInfo()
+        fetchChatMessages()
     }
 }
 
 extension ChatDetailViewModel {
     func fetchChatDetailInfo() {
         chatDetailInfo = ChatDetailModel.mock
+    }
+    
+    func fetchChatMessages() {
+        chatMessages = ChatMessageModel.mock
     }
 }

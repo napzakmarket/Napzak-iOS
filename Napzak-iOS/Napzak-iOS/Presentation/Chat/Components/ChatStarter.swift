@@ -12,7 +12,7 @@ struct ChatStarter: View {
     //MARK: - Properties
     
     let product: ProductMeta
-    let isReceived: Bool
+    let isMessageOwner: Bool
     let onProductButtonTapped: () -> Void
     
     //MARK: - Main Body
@@ -33,8 +33,8 @@ struct ChatStarter: View {
         .clipShape(SelectiveCornerRadius(
             topLeft: 12,
             topRight: 12,
-            bottomLeft: isReceived ? 0 : 12,
-            bottomRight: isReceived ? 12 : 0
+            bottomLeft: isMessageOwner ? 12 : 0,
+            bottomRight: isMessageOwner ? 0 : 12
         ))
     }
 }
@@ -44,7 +44,7 @@ extension ChatStarter {
     //MARK: - UI Properties
     
     private var header: some View {
-        Text("\(product.tradeType.title) 상품 문의\(isReceived ? "가 도착했어요!" : "를 전송했어요!")")
+        Text("\(product.tradeType.title) 상품 문의\(isMessageOwner ? "를 전송했어요!" : "가 도착했어요!")")
             .applyNapzakFont(.caption1SemiBold12)
             .foregroundStyle(Color.napzakGrayScale(.white))
             .frame(maxWidth: .infinity)
@@ -103,7 +103,7 @@ extension ChatStarter {
         var body: some View {
             ChatStarter(
                 product: product,
-                isReceived: false,
+                isMessageOwner: false,
                 onProductButtonTapped: { }
             )
         }

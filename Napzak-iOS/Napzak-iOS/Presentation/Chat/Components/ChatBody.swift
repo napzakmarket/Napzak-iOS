@@ -16,13 +16,15 @@ struct ChatBody: View {
     let chatData: ChatMessageModel
     let storeImage: String
     
+    let screenWidth = UIScreen.main.bounds.width
+
     //MARK: - Main Body
     
     var body: some View {
         HStack(alignment: .bottom, spacing: 0) {
             switch chatData.type {
             case .text, .image, .product:
-                if !chatData.isReceived {
+                if chatData.isMessageOwner {
                     Spacer()
                     timeLabel
                 }
@@ -33,19 +35,20 @@ struct ChatBody: View {
             switch chatData.type {
             case .text:
                 HStack(alignment: .top, spacing: 0) {
-                    if chatData.isFirstChat && chatData.isReceived {
+                    if chatData.isFirstChat && !chatData.isMessageOwner {
                         profileImage
                     }
                     ChatBubble(
                         message: chatData.content ?? "",
-                        isReceived: chatData.isReceived
+                        isMessageOwner: chatData.isMessageOwner
                     )
                     .padding(.top, chatData.isFirstChat ? 20 : 0)
+                    .padding(.leading, !chatData.isFirstChat && !chatData.isMessageOwner ? 44 : 0)
                 }
             case .image:
                 if case let .image(image) = chatData.metaData {
                     HStack(alignment: .top, spacing: 0) {
-                        if chatData.isFirstChat && chatData.isReceived {
+                        if chatData.isFirstChat && !chatData.isMessageOwner {
                             profileImage
                         }
                         ChatImageMessage(
@@ -53,23 +56,27 @@ struct ChatBody: View {
                             onZoomButtonTapped: { }
                         )
                         .padding(.top, chatData.isFirstChat ? 20 : 0)
+                        .padding(.leading, !chatData.isFirstChat && !chatData.isMessageOwner ? 44 : 0)
                     }
                 }
             case .product:
                 if case let .product(product) = chatData.metaData {
                     ChatStarter(
                         product: product,
-                        isReceived: chatData.isReceived,
+                        isMessageOwner: chatData.isMessageOwner,
                         onProductButtonTapped: { }
                     )
+                    .frame(width: screenWidth - 140)
                 }
             case .system:
                 if case let .system(system) = chatData.metaData {
                     switch system.type {
                     case .leave:
                         userLeavingDivider
+                            .padding(.vertical, 17)
                     case .reported:
                         Image(.imgUserBlocked)
+                            .padding(.vertical, 20)
                     case .withdrawn:
                         EmptyView()
                     }
@@ -82,7 +89,7 @@ struct ChatBody: View {
             
             switch chatData.type {
             case .text, .image, .product:
-                if chatData.isReceived {
+                if !chatData.isMessageOwner {
                     timeLabel
                     Spacer()
                 }
@@ -122,7 +129,7 @@ extension ChatBody {
     
     private var timeLabel: some View {
         VStack(alignment: .trailing, spacing: 0) {
-            if !chatData.isReceived && !chatData.isRead {
+            if chatData.isMessageOwner && !chatData.isRead {
                 Text("1")
                     .applyNapzakFont(.caption5Regular10)
                     .foregroundStyle(Color.napzakGrayScale(.gray200))

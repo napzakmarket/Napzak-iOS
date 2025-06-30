@@ -26,15 +26,15 @@ enum SystemMetaType: String {
     case withdrawn = "WITHDRAWN"
 }
 
-struct ChatMessageModel {
-    let messageId: Int
+struct ChatMessageModel: Identifiable {
+    let id: Int
     let senderId: Int
     let type: ChatMessageType
     let content: String?
     let metaData: ChatMetaDataType?
     let createdAt: String
     let isFirstChat: Bool
-    let isReceived: Bool
+    let isMessageOwner: Bool
     let isRead: Bool
 }
 
@@ -65,7 +65,20 @@ struct DateMeta {
 extension ChatMessageModel {
     static let mock: [ChatMessageModel] = [
         ChatMessageModel(
-            messageId: 2,
+            id: 0,
+            senderId: 3,
+            type: .date,
+            content: nil,
+            metaData: .date(
+                DateMeta(type: .date, date: "2025년 4월 30일")
+            ),
+            createdAt: "오전 7:30",
+            isFirstChat: false,
+            isMessageOwner: false,
+            isRead: true
+        ),
+        ChatMessageModel(
+            id: 1,
             senderId: 2,
             type: .product,
             content: nil,
@@ -81,22 +94,68 @@ extension ChatMessageModel {
             ),
             createdAt: "오전 7:30",
             isFirstChat: false,
-            isReceived: true,
+            isMessageOwner: false,
             isRead: true
         ),
         ChatMessageModel(
-            messageId: 0,
+            id: 2,
             senderId: 0,
             type: .text,
-            content: "메시진데요",
+            content: "구매할래요",
             metaData: nil,
             createdAt: "오전 7:30",
-            isFirstChat: false,
-            isReceived: false,
+            isFirstChat: true,
+            isMessageOwner: false,
             isRead: false
         ),
         ChatMessageModel(
-            messageId: 1,
+            id: 3,
+            senderId: 0,
+            type: .text,
+            content: "좀 애매하긴 해",
+            metaData: nil,
+            createdAt: "오전 7:30",
+            isFirstChat: false,
+            isMessageOwner: false,
+            isRead: false
+        ),
+        ChatMessageModel(
+            id: 4,
+            senderId: 0,
+            type: .text,
+            content: "?",
+            metaData: nil,
+            createdAt: "오전 7:30",
+            isFirstChat: false,
+            isMessageOwner: true,
+            isRead: false
+        ),
+        ChatMessageModel(
+            id: 5,
+            senderId: 0,
+            type: .text,
+            content: "뭐야 가세요;; 뭐야 가세요;; 뭐야 가세요;; 뭐야 가세요;; 뭐야 가세요;; 뭐야 가세요;; 뭐야 가세요;; 뭐야 가세요;; 뭐야 가세요;; 뭐야 가세요;; 뭐야 가세요;; 뭐야 가세요;;",
+            metaData: nil,
+            createdAt: "오전 7:30",
+            isFirstChat: false,
+            isMessageOwner: true,
+            isRead: false
+        ),
+        ChatMessageModel(
+            id: 6,
+            senderId: 3,
+            type: .date,
+            content: nil,
+            metaData: .date(
+                DateMeta(type: .date, date: "2025년 4월 31일")
+            ),
+            createdAt: "오전 7:30",
+            isFirstChat: false,
+            isMessageOwner: false,
+            isRead: true
+        ),
+        ChatMessageModel(
+            id: 7,
             senderId: 1,
             type: .image,
             content: nil,
@@ -108,24 +167,27 @@ extension ChatMessageModel {
             ),
             createdAt: "오전 7:30",
             isFirstChat: true,
-            isReceived: true,
+            isMessageOwner: false,
             isRead: true
         ),
         ChatMessageModel(
-            messageId: 3,
-            senderId: 3,
-            type: .date,
+            id: 8,
+            senderId: 1,
+            type: .image,
             content: nil,
-            metaData: .date(
-                DateMeta(type: .date, date: "2025년 4월 30일")
+            metaData: .image(
+                ImageMeta(
+                    type: .image,
+                    imageUrls: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOrPQwOTaU_L8EIFpWzLjgiUHc3CcmGEq84A&s"]
+                )
             ),
             createdAt: "오전 7:30",
             isFirstChat: false,
-            isReceived: false,
+            isMessageOwner: true,
             isRead: true
         ),
         ChatMessageModel(
-            messageId: 4,
+            id: 9,
             senderId: 4,
             type: .system,
             content: nil,
@@ -137,7 +199,7 @@ extension ChatMessageModel {
             ),
             createdAt: "오전 7:30",
             isFirstChat: false,
-            isReceived: false,
+            isMessageOwner: false,
             isRead: true
         )
     ]

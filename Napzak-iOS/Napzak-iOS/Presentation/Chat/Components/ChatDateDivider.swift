@@ -22,6 +22,7 @@ struct ChatDateDivider: View {
                 .applyNapzakFont(.caption3Regular12)
                 .foregroundStyle(Color.napzakGrayScale(.gray200))
         }
+        .padding(.vertical, 12)
     }
 }
 

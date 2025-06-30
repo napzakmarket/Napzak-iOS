@@ -10,18 +10,18 @@ import SwiftUI
 struct ChatBubble: View {
         
     let message: String
-    let isReceived: Bool
+    let isMessageOwner: Bool
     
     var body: some View {
         Text(message)
             .applyNapzakFont(.body6Regular14)
-            .foregroundStyle(isReceived ? Color.napzakGrayScale(.black) : Color.napzakGrayScale(.white))
+            .foregroundStyle(isMessageOwner ? Color.napzakGrayScale(.white) : Color.napzakGrayScale(.black))
             .padding(.vertical, 12)
             .padding(.horizontal, 16)
-            .background(isReceived ? Color.napzakGrayScale(.gray50) : Color.napzakPrimary(.purple500))
+            .background(isMessageOwner ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray50))
             .clipShape(SelectiveCornerRadius(
-                topLeft: isReceived ? 2 : 16,
-                topRight: isReceived ? 16 : 2,
+                topLeft: isMessageOwner ? 16 : 2,
+                topRight: isMessageOwner ? 2 : 16,
                 bottomLeft: 16,
                 bottomRight: 16
             ))
@@ -33,7 +33,7 @@ struct ChatBubble: View {
         var body: some View {
             ChatBubble(
                 message: "뭐야\n가세요';;;;",
-                isReceived: false
+                isMessageOwner: false
             )
         }
     }

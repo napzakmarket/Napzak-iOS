@@ -131,7 +131,13 @@ extension ChatDetailView {
     }
     
     private var chatSection: some View {
-        emptyView
+        Group {
+            if viewModel.chatMessages.isEmpty {
+                emptyView
+            } else {
+                chatMessagesView
+            }
+        }
     }
     
     private var emptyView: some View {
@@ -149,6 +155,24 @@ extension ChatDetailView {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    private var chatMessagesView: some View {
+        ScrollView(showsIndicators: false) {
+            LazyVStack(spacing: 8) {
+                ForEach(viewModel.chatMessages) { data in
+                    ChatBody(
+                        chatData: data,
+                        storeImage: viewModel.chatDetailInfo.chatStoreInfo.storePhoto
+                    )
+                        .padding(.horizontal, 15)
+                }
+            }
+            .padding(.vertical, 10)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.top, 90)
+        .padding(.bottom, 60)
     }
     
     private var chatInputSection: some View {
