@@ -158,7 +158,7 @@ extension ChatDetailView {
             } label: {
                 Image(.iconGallary)
             }
-            ChatMessageBar (
+            ChatMessageInputBar (
                 text: $viewModel.messageText,
                 onSubmit: { }
             )

@@ -1,5 +1,5 @@
 //
-//  ChatMessageBar.swift
+//  ChatMessageInputBar.swift
 //  Napzak-iOS
 //
 //  Created by 조혜린 on 6/30/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ChatMessageBar: View {
+struct ChatMessageInputBar: View {
         
     @Binding var text: String
     @FocusState var isFocused: Bool
@@ -54,7 +54,7 @@ struct ChatMessageBar: View {
     }
 }
 
-private extension ChatMessageBar {
+private extension ChatMessageInputBar {
     
     //MARK: - private Func
     
@@ -69,7 +69,7 @@ private extension ChatMessageBar {
         @State private var text: String = ""
         
         var body: some View {
-            ChatMessageBar(
+            ChatMessageInputBar(
                 text: $text,
                 onSubmit: { }
             )
