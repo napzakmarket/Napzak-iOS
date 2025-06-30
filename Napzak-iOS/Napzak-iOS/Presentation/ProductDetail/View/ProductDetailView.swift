@@ -585,11 +585,11 @@ private extension ProductDetailView {
     func statusString(status: TradeStatus) -> String {
         switch status {
         case .beforeTrade:
-            return "\(viewModel.product.productDetail.tradeType.title)중"
+            return "\(viewModel.product.productDetail.tradeType.type)중"
         case .reserved:
             return "예약중"
         case .completed:
-            return "\(viewModel.product.productDetail.tradeType.title)완료"
+            return "\(viewModel.product.productDetail.tradeType.type)완료"
         }
     }
 }
