@@ -11,7 +11,7 @@ struct ChatStarter: View {
     
     //MARK: - Properties
     
-    let product: ChatProductInfo
+    let product: ProductMeta
     let isReceived: Bool
     let onProductButtonTapped: () -> Void
     
@@ -91,7 +91,14 @@ extension ChatStarter {
 
 #Preview {
     struct PreviewContainer: View {
-        let product = ChatDetailModel.mock.productInfo
+        let product = ProductMeta(
+            type: .product,
+            tradeType: .sell,
+            productId: 0,
+            genreName: "은혼",
+            title: "은혼 긴토키 히지카타 룩업",
+            price: 123000
+        )
         
         var body: some View {
             ChatStarter(

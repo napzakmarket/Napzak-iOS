@@ -13,7 +13,7 @@ struct ChatImageMessage: View {
     
     //MARK: - Properties
     
-    let imageUrl: String = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOrPQwOTaU_L8EIFpWzLjgiUHc3CcmGEq84A&s"
+    let imageUrl: String
     let onZoomButtonTapped: () -> Void
     
     //MARK: - Main Body
@@ -59,6 +59,7 @@ struct ChatImageMessage: View {
     struct PreviewContainer: View {        
         var body: some View {
             ChatImageMessage(
+                imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOrPQwOTaU_L8EIFpWzLjgiUHc3CcmGEq84A&s",
                 onZoomButtonTapped: { }
             )
         }
