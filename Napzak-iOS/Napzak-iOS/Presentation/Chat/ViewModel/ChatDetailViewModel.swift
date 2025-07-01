@@ -23,7 +23,7 @@ final class ChatDetailViewModel: ObservableObject {
 
     init() {
         fetchChatDetailInfo()
-//        fetchChatMessages()
+        fetchChatMessages()
     }
 }
 
