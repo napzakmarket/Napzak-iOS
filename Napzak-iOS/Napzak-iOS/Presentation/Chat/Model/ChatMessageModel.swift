@@ -117,7 +117,7 @@ extension ChatMessageModel {
             createdAt: "오전 7:30",
             isFirstChat: false,
             isMessageOwner: false,
-            isRead: false
+            isRead: true
         ),
         ChatMessageModel(
             id: 4,
@@ -128,7 +128,7 @@ extension ChatMessageModel {
             createdAt: "오전 7:30",
             isFirstChat: false,
             isMessageOwner: true,
-            isRead: false
+            isRead: true
         ),
         ChatMessageModel(
             id: 5,
@@ -139,7 +139,7 @@ extension ChatMessageModel {
             createdAt: "오전 7:30",
             isFirstChat: false,
             isMessageOwner: true,
-            isRead: false
+            isRead: true
         ),
         ChatMessageModel(
             id: 6,
@@ -184,22 +184,6 @@ extension ChatMessageModel {
             createdAt: "오전 7:30",
             isFirstChat: false,
             isMessageOwner: true,
-            isRead: true
-        ),
-        ChatMessageModel(
-            id: 9,
-            senderId: 4,
-            type: .system,
-            content: nil,
-            metaData: .system(
-                SystemMeta(
-                    type: .reported,
-                    content: ""
-                )
-            ),
-            createdAt: "오전 7:30",
-            isFirstChat: false,
-            isMessageOwner: false,
             isRead: true
         )
     ]

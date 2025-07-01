@@ -46,8 +46,8 @@ struct ChatMessageInputBar: View {
             }
             
             Button {
-                text = ""
                 onSubmit()
+                text = ""
             } label: {
                 Image(!canSendMessage() ? .iconSendDisabled : .iconSendEnabled)
             }
