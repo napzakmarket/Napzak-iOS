@@ -9,6 +9,7 @@ import SwiftUI
 import Combine
 import os
 
+@MainActor
 final class ProfileEditViewModel: ObservableObject {
 
     @Published var nickname: String = ""
@@ -26,9 +27,7 @@ final class ProfileEditViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
     @Published var isSuccess: Bool = false
-    
-    @Published var loadingManager = LoadingViewManager()
-    
+        
     private let storeService: StoreServiceProtocol
     private var cancellables = Set<AnyCancellable>()
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "ProfileEdit")
@@ -38,7 +37,8 @@ final class ProfileEditViewModel: ObservableObject {
     private var initialGenres: [GenreNameModel] = []
     private var initialProfileImageURL: String = ""
     private var initialCoverImageURL: String = ""
-    
+    let loadingManager = LoadingViewManager()
+
     init(storeService: StoreServiceProtocol = StoreService()) {
         self.storeService = storeService
         setupSubscriptions()

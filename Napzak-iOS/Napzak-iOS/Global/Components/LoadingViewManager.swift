@@ -7,8 +7,9 @@
 
 import SwiftUI
 
+@MainActor
 final class LoadingViewManager: ObservableObject {
-    @Published var isLoadingNetwork: Bool = false
+    @Published var isLoadingNetwork: Bool = true
     
     private var loadingCount = 0 {
         didSet {

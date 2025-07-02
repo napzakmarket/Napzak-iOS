@@ -23,8 +23,7 @@ final class HomeViewModel: ObservableObject {
     @Published var recommendedProducts: [ProductItemModel] = []
     @Published var popularSellProducts: [ProductItemModel] = []
     @Published var popularBuyProducts: [ProductItemModel] = []
-    @Published var loadingManager = LoadingViewManager()
-    
+
     private var originalUsername: String = ""
     private var username: String {
         if originalUsername.count > 10 {
@@ -45,6 +44,7 @@ final class HomeViewModel: ObservableObject {
     let popularSellSubtitle = "놓치면 아쉬운 인기 아이템들을 구경해볼까요?"
     let popularBuyTitle = "다른 유저들은\n어떤 아이템을 찾고 있을까요?"
     let popularBuySubtitle = "놓치면 아쉬운 인기 아이템들을 구경해볼까요?"
+    let loadingManager = LoadingViewManager()
     
     init() {
         fetchHomeData()

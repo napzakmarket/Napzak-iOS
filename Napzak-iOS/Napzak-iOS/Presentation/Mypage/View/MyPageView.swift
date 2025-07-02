@@ -13,7 +13,7 @@ struct MyPageView: View {
     @State private var storeInfo: StoreProfileDTO?
     @State private var isLoading = true
     @State private var errorMessage: String?
-    @State var loadingManager = LoadingViewManager()
+    @StateObject var loadingManager = LoadingViewManager()
     
     // StoreService 주입
     private let storeService: StoreServiceProtocol

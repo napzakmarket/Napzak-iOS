@@ -22,7 +22,6 @@ final class SearchViewModel: ObservableObject {
     @Published var buyProductsCount: Int = 0
     @Published var buyProducts: [ProductItemModel] = []
     @Published var showToast: Bool = false
-    @Published var loadingManager = LoadingViewManager()
     
     @ObservedObject private var likeManager = ProductLikeManager.shared
 
@@ -35,6 +34,7 @@ final class SearchViewModel: ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Search")
     
+    let loadingManager = LoadingViewManager()
     var searchWord: String = ""
     
     //MARK: - Init

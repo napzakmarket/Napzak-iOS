@@ -29,7 +29,6 @@ final class MarketViewModel: ObservableObject {
     @Published var productsError: String? = nil
     @Published var productCount: Int = 0
     @Published var showToast: Bool = false
-    @Published var loadingManager = LoadingViewManager()
     
     @ObservedObject private var likeManager = ProductLikeManager.shared
     
@@ -43,6 +42,7 @@ final class MarketViewModel: ObservableObject {
     private let likeSubject = PassthroughSubject<(Int, Bool), Never>()
     
     private let interestService = NetworkService.shared.interestService
+    let loadingManager = LoadingViewManager()
     
     //MARK: - Init
     

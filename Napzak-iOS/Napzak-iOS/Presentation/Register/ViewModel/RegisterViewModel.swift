@@ -20,8 +20,7 @@ final class RegisterViewModel: ObservableObject {
     // MARK: - Instance
     
     @Published var model: RegisterModel = RegisterModel()
-    @Published var imagePickerManager = ImagePickerManager()
-    @Published var loadingManager = LoadingViewManager()
+    let imagePickerManager = ImagePickerManager()
     
     // MARK: - Property Wrappers
     
@@ -41,6 +40,7 @@ final class RegisterViewModel: ObservableObject {
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Register")
     
     let type: RegisterViewType
+    let loadingManager = LoadingViewManager()
     
     init(viewType: RegisterViewType)  {
         self.type = viewType

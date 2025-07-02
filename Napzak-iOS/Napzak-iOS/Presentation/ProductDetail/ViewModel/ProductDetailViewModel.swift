@@ -40,7 +40,6 @@ final class ProductDetailViewModel: ObservableObject {
     
     @Published var showInterestToast: Bool = false
     @Published var showStatusToast = false
-    @Published var loadingManager = LoadingViewManager()
 
     @ObservedObject private var likeManager = ProductLikeManager.shared
 
@@ -52,7 +51,7 @@ final class ProductDetailViewModel: ObservableObject {
     
     private let interestService = NetworkService.shared.interestService
     private let productId: Int
-    
+    let loadingManager = LoadingViewManager()
 
     //MARK: - Init
     
