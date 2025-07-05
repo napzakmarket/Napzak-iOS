@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+import Combine
 import os
 
 enum RegisterViewType: Equatable {
@@ -39,6 +40,8 @@ final class RegisterViewModel: ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Register")
     
+    private var cancellables = Set<AnyCancellable>()
+    
     let type: RegisterViewType
     let loadingManager = LoadingViewManager()
     
@@ -48,6 +51,20 @@ final class RegisterViewModel: ObservableObject {
         imagePickerManager.onImageSelectionCompleted = { [weak self] images in
             self?.model.images = images
         }
+        
+        $genreSearchText
+            .debounce(for: 0.5, scheduler: RunLoop.main)
+            .removeDuplicates()
+            .sink { [weak self] newSearchText in
+                Task {
+                    if newSearchText.isEmpty {
+                        await self?.getAllGenre()
+                    } else {
+                        await self?.getSearchGenre(searchWord: newSearchText)
+                    }
+                }
+            }
+            .store(in: &cancellables)
         
         Task {
             await getAllGenre()
