@@ -12,7 +12,7 @@ struct HomeView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
     @EnvironmentObject private var tabRouter: TabRouter
     @StateObject private var viewModel = HomeViewModel()
-
+    
     @State private var timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
     @State private var scrollToTopTrigger: Bool = false
     
@@ -28,19 +28,19 @@ struct HomeView: View {
                     .padding(.leading, 28)
                     .padding(.bottom, 17)
                 
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Color.clear
-                                .frame(height: 0)
-                                .id("top")
-                            headerView
-                                .padding(.horizontal, 28)
-                            
-                            if viewModel.loadingManager.isLoadingNetwork {
-                                LoadingView()
-                                    .padding(.top, 181)
-                            } else {
+                if viewModel.loadingManager.isLoadingNetwork {
+                    LoadingView()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 0) {
+                                Color.clear
+                                    .frame(height: 0)
+                                    .id("top")
+                                headerView
+                                    .padding(.horizontal, 28)
+                                
                                 topBannerSection
                                     .padding(.top, 21)
                                 
@@ -70,15 +70,16 @@ struct HomeView: View {
                                     .frame(width: UIScreen.main.bounds.width, height: 160)
                                     .background(Color.napzakGrayScale(.gray100))
                                     .padding(.bottom, 54)
+                                
                             }
                         }
-                    }
-                    .scrollIndicators(.hidden)
-                    .onChange(of: scrollToTopTrigger) { _ in
-                        proxy.scrollTo("top", anchor: .top)
+                        .scrollIndicators(.hidden)
+                        .onChange(of: scrollToTopTrigger) { _ in
+                            proxy.scrollTo("top", anchor: .top)
+                        }
                     }
                 }
-                    
+                
             }
             
             if viewModel.showLikeToast {
@@ -288,7 +289,7 @@ extension HomeView {
                     .applyNapzakFont(.caption2Medium12)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
                     .fixedSize(horizontal: false, vertical: true)
-                    
+                
                 
                 Spacer()
                 
@@ -332,7 +333,7 @@ extension HomeView {
         }
     }
 }
-    
+
 #Preview {
     HomeView()
 }
