@@ -7,9 +7,28 @@
 
 import SwiftUI
 
+import Lottie
+
 struct SpinnerLoadingView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Spacer()
+            HStack {
+                Spacer()
+                LottieView(animation: .named("spinner"))
+                    .configure({ lottieAnimationView in
+                        lottieAnimationView.contentMode = .scaleAspectFill
+                        lottieAnimationView.shouldRasterizeWhenIdle = false
+                    })
+                    .playbackMode(.playing(.toProgress(1, loopMode: .loop)))
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 58, height: 73)
+                
+                Spacer()
+            }
+            Spacer()
+        }
+        .background(Color.napzakGrayScale(.gray10))
     }
 }
 
