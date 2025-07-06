@@ -19,17 +19,22 @@ struct BuyRegisterView: View {
     
     var body: some View {
         NavigationStack(path: $registerRouter.path) {
-            VStack(spacing: 0){
-                BuyRegisterHeader()
-                
-                ScrollView {
-                    VStack(spacing: 0) {
-                        BuyRegisterContent
+            ZStack {
+                VStack(spacing: 0){
+                    BuyRegisterHeader()
+                    
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            BuyRegisterContent
+                        }
                     }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    registerButton
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                
-                registerButton
+                if viewModel.loadingManager.isLoadingNetwork {
+                    LoadingView()
+                }
             }
             .ignoresSafeArea()
             .scrollDismissesKeyboard(.immediately)
