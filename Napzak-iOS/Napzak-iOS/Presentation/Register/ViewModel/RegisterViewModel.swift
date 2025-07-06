@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+import Combine
 import os
 
 enum RegisterViewType: Equatable {
@@ -20,7 +21,7 @@ final class RegisterViewModel: ObservableObject {
     // MARK: - Instance
     
     @Published var model: RegisterModel = RegisterModel()
-    @Published var imagePickerManager = ImagePickerManager()
+    let imagePickerManager = ImagePickerManager()
     
     // MARK: - Property Wrappers
     
@@ -39,7 +40,10 @@ final class RegisterViewModel: ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Register")
     
+    private var cancellables = Set<AnyCancellable>()
+    
     let type: RegisterViewType
+    let loadingManager = LoadingViewManager()
     
     init(viewType: RegisterViewType)  {
         self.type = viewType
@@ -47,6 +51,20 @@ final class RegisterViewModel: ObservableObject {
         imagePickerManager.onImageSelectionCompleted = { [weak self] images in
             self?.model.images = images
         }
+        
+        $genreSearchText
+            .debounce(for: 0.5, scheduler: RunLoop.main)
+            .removeDuplicates()
+            .sink { [weak self] newSearchText in
+                Task {
+                    if newSearchText.isEmpty {
+                        await self?.getAllGenre()
+                    } else {
+                        await self?.getSearchGenre(searchWord: newSearchText)
+                    }
+                }
+            }
+            .store(in: &cancellables)
         
         Task {
             await getAllGenre()
@@ -80,6 +98,8 @@ extension RegisterViewModel {
     //MARK: - Get all genre
     
     func getAllGenre() async {
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
         let result = await NetworkService.shared.genreService.getAllGenreName(size: 43)
         
         switch result {
@@ -114,6 +134,8 @@ extension RegisterViewModel {
     }
     
     func getSellProductInfoForEdit(productId: Int) async {
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
         let result = await NetworkService.shared.productService.getSellProductInfoForEdit(productId: productId)
 
         switch result {
@@ -160,6 +182,8 @@ extension RegisterViewModel {
     }
 
     func getBuyProductInfoForEdit(productId: Int) async {
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
         let result = await NetworkService.shared.productService.getBuyProductInfoForEdit(productId: productId)
 
         switch result {
@@ -278,6 +302,8 @@ extension RegisterViewModel {
     // MARK: - POST Register
     
     func sellRegister() async {
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
         // presigned URL 요청
         guard await getPresignedUrl() else { return }
         
@@ -342,6 +368,8 @@ extension RegisterViewModel {
     }
     
     func buyRegister() async {
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
         // presigned URL 요청
         guard await getPresignedUrl() else { return }
         

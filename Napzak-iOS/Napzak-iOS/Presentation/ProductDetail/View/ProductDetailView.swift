@@ -148,6 +148,10 @@ struct ProductDetailView: View {
                 .zIndex(3)
                 .padding(.bottom, 44)
             }
+            
+            if viewModel.loadingManager.isLoadingNetwork {
+                LoadingView()
+            }
         }
         .navigationBarHidden(true)
         .ignoresSafeArea()
