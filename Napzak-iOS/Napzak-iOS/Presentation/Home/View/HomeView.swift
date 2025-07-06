@@ -254,7 +254,6 @@ extension HomeView {
                     }
                 },
                 onTapProduct: { productId in
-                    // TODO: 상품 상세 화면으로 이동
                     print("\(productId)번 상품")
                     navigationRouter.push(next: .productDetailView(productId: productId))
                 }

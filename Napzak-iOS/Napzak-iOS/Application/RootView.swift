@@ -11,7 +11,7 @@ struct RootView: View {
     @StateObject private var authRouter = AuthNavigationRouter()
     @StateObject private var navigationRouter = NavigationRouter()
     @StateObject private var tabRouter = TabRouter()
-    @StateObject private var authManager = AuthManager.shared
+    @StateObject private var authManager = AuthManager()
     @State private var isShowingSplash = true
     
     var body: some View {
