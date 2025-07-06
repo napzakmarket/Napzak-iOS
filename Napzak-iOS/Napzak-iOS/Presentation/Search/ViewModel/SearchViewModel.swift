@@ -22,8 +22,9 @@ final class SearchViewModel: ObservableObject {
     @Published var buyProductsCount: Int = 0
     @Published var buyProducts: [ProductItemModel] = []
     @Published var showToast: Bool = false
-    @ObservedObject private var likeManager = ProductLikeManager.shared
     
+    @ObservedObject private var likeManager = ProductLikeManager.shared
+
     private var cancellables = Set<AnyCancellable>()
     private let likeSubject = PassthroughSubject<(Int, Bool), Never>()
     
@@ -33,6 +34,7 @@ final class SearchViewModel: ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Search")
     
+    let loadingManager = LoadingViewManager()
     var searchWord: String = ""
     
     //MARK: - Init
@@ -51,6 +53,8 @@ final class SearchViewModel: ObservableObject {
         setupProductEventObserver()
         
         Task {
+            loadingManager.startLoading()
+            defer { loadingManager.stopLoading() }
             if searchWord == "" {
                 if initialSelectedTab == 0 {
                     await fetchSellProducts()
@@ -74,6 +78,8 @@ extension SearchViewModel {
     
     func updateProducts() async {
         Task {
+            loadingManager.startLoading()
+            defer { loadingManager.stopLoading() }
             if selectedTabIndex == 0 {
                 if searchWord.isEmpty {
                     await fetchSellProducts()
