@@ -16,11 +16,11 @@ struct LoadingView: View {
             HStack {
                 Spacer()
                 LottieView(animation: .named("ios_loading"))
-                    .configure({ lottieAnimationView in
+                    .configure { lottieAnimationView in
                         lottieAnimationView.contentMode = .scaleAspectFill
                         lottieAnimationView.shouldRasterizeWhenIdle = false
-                    })
-                    .playbackMode(.playing(.toProgress(1, loopMode: .loop)))
+                    }
+                    .playbackMode(.playing(.toProgress(0.85, loopMode: .loop)))
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 58, height: 73)
                 
