@@ -11,10 +11,14 @@ import KakaoSDKAuth
 
 @main
 struct Napzak_iOSApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @StateObject private var pushManager = PushSettingManager()
     
     init() {
         let kakaoAppKey = Bundle.main.infoDictionary?["KAKAO_APP_KEY"] as? String ?? ""
         KakaoSDK.initSDK(appKey: kakaoAppKey)
+        
+        appDelegate.pushManager = pushManager
     }
     
     var body: some Scene {
@@ -25,6 +29,7 @@ struct Napzak_iOSApp: App {
                         _ = AuthController.handleOpenUrl(url: url)
                     }
                 }
+                .environmentObject(pushManager)
         }
     }
 }

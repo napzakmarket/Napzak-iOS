@@ -188,6 +188,9 @@
 		D64561342DC5C875003D2E2B /* AuthNavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561332DC5C875003D2E2B /* AuthNavigationRouter.swift */; };
 		D64561362DC5E15C003D2E2B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561352DC5E15C003D2E2B /* RootView.swift */; };
 		D64922D12D9EF5CB00716740 /* RowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64922D02D9EF5CB00716740 /* RowType.swift */; };
+		D66A3E742E1A5FF3003977AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E732E1A5FF3003977AE /* AppDelegate.swift */; };
+		D66A3E812E1AC2F4003977AE /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = D66A3E802E1AC2F4003977AE /* FirebaseMessaging */; };
+		D66A3E842E1AC4F4003977AE /* PushSettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E832E1AC4F4003977AE /* PushSettingManager.swift */; };
 		D67C17762D9AEDC000CFCDFA /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */; };
 		D67C17772D9AEDC000CFCDFA /* CheckRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17732D9AEDC000CFCDFA /* CheckRow.swift */; };
 		D67C17782D9AEDC000CFCDFA /* OnboardingNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17712D9AEDC000CFCDFA /* OnboardingNavigationBar.swift */; };
@@ -392,6 +395,8 @@
 		D64561332DC5C875003D2E2B /* AuthNavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthNavigationRouter.swift; sourceTree = "<group>"; };
 		D64561352DC5E15C003D2E2B /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		D64922D02D9EF5CB00716740 /* RowType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowType.swift; sourceTree = "<group>"; };
+		D66A3E732E1A5FF3003977AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D66A3E832E1AC4F4003977AE /* PushSettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingManager.swift; sourceTree = "<group>"; };
 		D67C17712D9AEDC000CFCDFA /* OnboardingNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNavigationBar.swift; sourceTree = "<group>"; };
 		D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
 		D67C17732D9AEDC000CFCDFA /* CheckRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckRow.swift; sourceTree = "<group>"; };
@@ -424,6 +429,7 @@
 			files = (
 				D045DECD2D8372D800EB1EB6 /* KakaoSDKUser in Frameworks */,
 				D045DEC12D83725100EB1EB6 /* Kingfisher in Frameworks */,
+				D66A3E812E1AC2F4003977AE /* FirebaseMessaging in Frameworks */,
 				D045DECB2D8372D800EB1EB6 /* KakaoSDKCommon in Frameworks */,
 				D045DED02D83732D00EB1EB6 /* Moya in Frameworks */,
 				D045DEC92D8372D800EB1EB6 /* KakaoSDKAuth in Frameworks */,
@@ -701,6 +707,7 @@
 		D045DED42D83747300EB1EB6 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				D66A3E732E1A5FF3003977AE /* AppDelegate.swift */,
 				D045DEB92D83723A00EB1EB6 /* Napzak_iOSApp.swift */,
 				D64561352DC5E15C003D2E2B /* RootView.swift */,
 				D045DEB62D83723A00EB1EB6 /* Preview Content */,
@@ -824,6 +831,7 @@
 			children = (
 				D64560F32DC33A29003D2E2B /* Auth */,
 				D64561242DC48013003D2E2B /* Onboarding */,
+				D66A3E822E1AC4A8003977AE /* Push */,
 				D06B835A2DDB15C6008A0D14 /* ProductEventManager.swift */,
 				D67F8DB92DD5C11700C0847F /* ProductLikeManager.swift */,
 			);
@@ -1354,6 +1362,14 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		D66A3E822E1AC4A8003977AE /* Push */ = {
+			isa = PBXGroup;
+			children = (
+				D66A3E832E1AC4F4003977AE /* PushSettingManager.swift */,
+			);
+			path = Push;
+			sourceTree = "<group>";
+		};
 		D67C17742D9AEDC000CFCDFA /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -1440,6 +1456,7 @@
 				D045DECC2D8372D800EB1EB6 /* KakaoSDKUser */,
 				D045DECF2D83732D00EB1EB6 /* Moya */,
 				D045DED22D83736600EB1EB6 /* Lottie */,
+				D66A3E802E1AC2F4003977AE /* FirebaseMessaging */,
 			);
 			productName = "Napzak-iOS";
 			productReference = D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */;
@@ -1474,6 +1491,7 @@
 				D045DEC72D8372D800EB1EB6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				D045DECE2D83732D00EB1EB6 /* XCRemoteSwiftPackageReference "Moya" */,
 				D045DED12D83736600EB1EB6 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				D66A3E7F2E1AC2F4003977AE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D045DE9C2D836F0500EB1EB6 /* Products */;
@@ -1600,6 +1618,7 @@
 				D0CBB7012DB87CBC00BE20C3 /* PlainChipContainerView.swift in Sources */,
 				D0310B102DD07B4900C265EC /* SearchRecommendationResponseDTO.swift in Sources */,
 				D63270342DA3AC10002414DA /* GenreCell.swift in Sources */,
+				D66A3E842E1AC4F4003977AE /* PushSettingManager.swift in Sources */,
 				D0310B032DCF87CE00C265EC /* ProductResponseDTO.swift in Sources */,
 				D63270372DA3AC55002414DA /* ToastMessageView.swift in Sources */,
 				D63270352DA3AC10002414DA /* GenreGridView.swift in Sources */,
@@ -1647,6 +1666,7 @@
 				D0F0355D2DBF27F1003D0CBF /* ProductService.swift in Sources */,
 				D0F0355F2DBF27F1003D0CBF /* GenreAPI.swift in Sources */,
 				D64561262DC48028003D2E2B /* OnboardingStep.swift in Sources */,
+				D66A3E742E1A5FF3003977AE /* AppDelegate.swift in Sources */,
 				D0F035612DBF27F1003D0CBF /* StoreAPI.swift in Sources */,
 				D0F035622DBF27F1003D0CBF /* ProductAPI.swift in Sources */,
 				D0F035662DBF27F1003D0CBF /* InterestService.swift in Sources */,
@@ -1960,6 +1980,14 @@
 				minimumVersion = 4.5.1;
 			};
 		};
+		D66A3E7F2E1AC2F4003977AE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.15.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1992,6 +2020,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D045DED12D83736600EB1EB6 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		D66A3E802E1AC2F4003977AE /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D66A3E7F2E1AC2F4003977AE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
