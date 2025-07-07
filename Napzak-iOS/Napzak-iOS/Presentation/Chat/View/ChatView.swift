@@ -91,7 +91,11 @@ extension ChatView {
         ScrollView {
             LazyVStack(spacing: 0) {
                 ForEach(viewModel.chatRooms) { data in
-                    ChatItemView(chatRoom: data)
+                    Button {
+                        //TODO: - 채팅방 상세로 이동
+                    } label: {
+                        ChatItemView(chatRoom: data)
+                    }
                 }
             }
             .padding(.top, 125)
