@@ -28,35 +28,37 @@ struct NZAlertView: View {
         VStack(spacing: 0) {
             Spacer()
             Text(titleMessage)
-                .applyNapzakFont(.title3Bold18)
+                .applyNapzakFont(.body1Bold16)
                 .foregroundStyle(style == .plain ? Color.napzakPrimary(.purple500) : Color.napzakState(.red))
+                .frame(height: 20)
                 .frame(maxWidth: .infinity)
+                .padding(.top, 11)
             
             if let message = subTitleMessage {
                 Text(message)
                     .applyNapzakFont(.caption1SemiBold12)
                     .foregroundStyle(Color.napzakGrayScale(.gray200))
+                    .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
                     .padding(.top, 6)
             }
             Spacer()
             
-            Color.napzakGrayScale(.gray200)
-                .frame(height: 1)
-            
-            HStack(alignment: .center, spacing: 0) {
+            HStack(alignment: .center, spacing: 10) {
                 Button {
                     confirmOnce()
                 } label: {
                     Text(confirmText)
                         .applyNapzakFont(.body5SemiBold14)
-                        .foregroundStyle(Color.napzakGrayScale(.gray300))
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .foregroundStyle(Color.napzakGrayScale(.white))
+                        .frame(height: 37)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.napzakPrimary(.purple500))
+                        )
                 }
                 .disabled(isProcessing)
-                
-                Color.napzakGrayScale(.gray200)
-                    .frame(width: 1)
                 
                 Button{
                     if !isProcessing {
@@ -65,17 +67,22 @@ struct NZAlertView: View {
                 } label: {
                     Text(cancelText)
                         .applyNapzakFont(.body5SemiBold14)
-                        .foregroundStyle(Color.napzakGrayScale(.gray300))
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .foregroundStyle(Color.napzakGrayScale(.gray400))
+                        .frame(height: 37)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            RoundedRectangle(cornerRadius: 12)
+                                .fill(Color.napzakGrayScale(.gray50))
+                        )
                 }
                 .disabled(isProcessing)
-                
             }
-            .frame(height: 50)
+            .padding(.bottom, 24)
         }
-        .frame(height: 150)
+        .padding(.horizontal, 26)
+        .frame(height: 162)
         .background(
-            RoundedRectangle(cornerRadius: 13)
+            RoundedRectangle(cornerRadius: 12)
                 .fill(Color.white)
         )
         .padding(.horizontal, 45)
@@ -91,4 +98,28 @@ struct NZAlertView: View {
             isProcessing = false
         }
     }
+}
+
+#Preview {
+    struct PreviewContainer: View {
+        var body: some View {
+            ZStack {
+                Color.napzakTransparency(.transBlack)
+                    .zIndex(1)
+                
+                NZAlertView(
+                    style: .plain,
+                    titleMessage: "채팅방 나가기",
+                    subTitleMessage: "채팅방에서 나가시겠어요? 나가기를 하면\n더이상 상대방과 대화할 수 없습니다.",
+                    confirmText: "예",
+                    cancelText: "아니요",
+                    onConfirm: { },
+                    onCancel: { }
+                )
+                .zIndex(2)
+            }
+        }
+    }
+    
+    return PreviewContainer()
 }
