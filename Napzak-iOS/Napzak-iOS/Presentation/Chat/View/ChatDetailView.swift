@@ -183,12 +183,10 @@ extension ChatDetailView {
                     }
                 }
                 .rotationEffect(Angle(degrees: 180))
-                .scaleEffect(x: -1.0, y: 1.0 , anchor: .center)
                 .padding(.vertical, 10)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .rotationEffect(Angle(degrees: 180))
-            .scaleEffect(x: -1.0, y: 1.0 , anchor: .center)
             .padding(.top, 90)
             .padding(.bottom, 60)
             .onChange(of: isSent) { _ in
