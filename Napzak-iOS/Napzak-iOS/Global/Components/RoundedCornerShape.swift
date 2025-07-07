@@ -1,5 +1,5 @@
 //
-//  SelectiveCornerRadius.swift
+//  RoundedCornerShape.swift
 //  Napzak-iOS
 //
 //  Created by 조혜린 on 6/30/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SelectiveCornerRadius: Shape {
+struct RoundedCornerShape: Shape {
     var topLeft: CGFloat = 0
     var topRight: CGFloat = 0
     var bottomLeft: CGFloat = 0

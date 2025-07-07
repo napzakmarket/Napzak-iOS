@@ -123,7 +123,7 @@
 		D06D42962E11BE1500EEA82A /* ChatDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D42952E11BE0900EEA82A /* ChatDetailModel.swift */; };
 		D06D42992E11C2E800EEA82A /* ChatDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D42982E11C2E200EEA82A /* ChatDetailViewModel.swift */; };
 		D06D429B2E11C5BD00EEA82A /* Int+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D429A2E11C5B900EEA82A /* Int+.swift */; };
-		D06D429F2E11D24700EEA82A /* SelectiveCornerRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D429E2E11D24600EEA82A /* SelectiveCornerRadius.swift */; };
+		D06D429F2E11D24700EEA82A /* RoundedCornerShape.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D429E2E11D24600EEA82A /* RoundedCornerShape.swift */; };
 		D06D42A12E11D33F00EEA82A /* ChatBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D42A02E11D33600EEA82A /* ChatBubble.swift */; };
 		D06D42A32E11D8F800EEA82A /* ChatStarter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D42A22E11D8D900EEA82A /* ChatStarter.swift */; };
 		D06D42A52E1220CF00EEA82A /* ChatDateDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D42A42E1220C800EEA82A /* ChatDateDivider.swift */; };
@@ -344,7 +344,7 @@
 		D06D42952E11BE0900EEA82A /* ChatDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailModel.swift; sourceTree = "<group>"; };
 		D06D42982E11C2E200EEA82A /* ChatDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailViewModel.swift; sourceTree = "<group>"; };
 		D06D429A2E11C5B900EEA82A /* Int+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+.swift"; sourceTree = "<group>"; };
-		D06D429E2E11D24600EEA82A /* SelectiveCornerRadius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectiveCornerRadius.swift; sourceTree = "<group>"; };
+		D06D429E2E11D24600EEA82A /* RoundedCornerShape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedCornerShape.swift; sourceTree = "<group>"; };
 		D06D42A02E11D33600EEA82A /* ChatBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatBubble.swift; sourceTree = "<group>"; };
 		D06D42A22E11D8D900EEA82A /* ChatStarter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStarter.swift; sourceTree = "<group>"; };
 		D06D42A42E1220C800EEA82A /* ChatDateDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDateDivider.swift; sourceTree = "<group>"; };
@@ -815,7 +815,7 @@
 		D045DEED2D837E3C00EB1EB6 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				D06D429E2E11D24600EEA82A /* SelectiveCornerRadius.swift */,
+				D06D429E2E11D24600EEA82A /* RoundedCornerShape.swift */,
 				D02906052DAF4E01008515FD /* ProductItemView.swift */,
 				D06E5B372DAE2111002E68A1 /* NZSegmentedControl.swift */,
 				D02905FC2DAE3167008515FD /* FilterContainerView.swift */,
@@ -1610,7 +1610,7 @@
 				D06D42A52E1220CF00EEA82A /* ChatDateDivider.swift in Sources */,
 				D06D42A92E122B5300EEA82A /* ChatMessageModel.swift in Sources */,
 				D6055AEC2DBF2022005D32A3 /* HomeViewModel.swift in Sources */,
-				D06D429F2E11D24700EEA82A /* SelectiveCornerRadius.swift in Sources */,
+				D06D429F2E11D24700EEA82A /* RoundedCornerShape.swift in Sources */,
 				D029060F2DAF9978008515FD /* TradeType.swift in Sources */,
 				D045DEF82D8383CC00EB1EB6 /* Encodable+.swift in Sources */,
 				D0CBB6FF2DB8110300BE20C3 /* PlainChip.swift in Sources */,

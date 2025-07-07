@@ -19,7 +19,7 @@ struct ChatBubble: View {
             .padding(.vertical, 12)
             .padding(.horizontal, 16)
             .background(isMessageOwner ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray50))
-            .clipShape(SelectiveCornerRadius(
+            .clipShape(RoundedCornerShape(
                 topLeft: isMessageOwner ? 16 : 2,
                 topRight: isMessageOwner ? 2 : 16,
                 bottomLeft: 16,
