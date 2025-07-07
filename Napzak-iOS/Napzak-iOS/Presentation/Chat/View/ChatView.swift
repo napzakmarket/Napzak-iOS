@@ -99,6 +99,7 @@ extension ChatView {
                 }
             }
             .padding(.top, 125)
+            .padding(.bottom, 115)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
