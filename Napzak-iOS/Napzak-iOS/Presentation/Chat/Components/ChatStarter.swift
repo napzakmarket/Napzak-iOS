@@ -30,7 +30,7 @@ struct ChatStarter: View {
                 Color.napzakGrayScale(.gray50)
             )
         }
-        .clipShape(SelectiveCornerRadius(
+        .clipShape(RoundedCornerShape(
             topLeft: 12,
             topRight: 12,
             bottomLeft: isMessageOwner ? 12 : 0,
