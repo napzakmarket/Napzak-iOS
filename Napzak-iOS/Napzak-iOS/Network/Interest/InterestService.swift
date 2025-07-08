@@ -7,7 +7,6 @@
 
 import Foundation
 import Moya
-import os
 
 protocol InterestServiceProtocol {
     func postInterest(productId: Int) async -> Result<Void, NetworkError>

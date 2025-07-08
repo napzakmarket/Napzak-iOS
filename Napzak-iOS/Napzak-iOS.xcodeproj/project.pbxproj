@@ -191,6 +191,11 @@
 		D66A3E742E1A5FF3003977AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E732E1A5FF3003977AE /* AppDelegate.swift */; };
 		D66A3E812E1AC2F4003977AE /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = D66A3E802E1AC2F4003977AE /* FirebaseMessaging */; };
 		D66A3E842E1AC4F4003977AE /* PushSettingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E832E1AC4F4003977AE /* PushSettingManager.swift */; };
+		D66A3E862E1C190B003977AE /* PushAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E852E1C190B003977AE /* PushAPI.swift */; };
+		D66A3E8A2E1C2CC8003977AE /* PushManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E892E1C2CC8003977AE /* PushManager.swift */; };
+		D66A3E8D2E1C3111003977AE /* PushTokenRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E8C2E1C3111003977AE /* PushTokenRequestDTO.swift */; };
+		D66A3E902E1C3EA0003977AE /* PushService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E8F2E1C3EA0003977AE /* PushService.swift */; };
+		D66A3E922E1C408F003977AE /* PushSettingResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E912E1C408F003977AE /* PushSettingResponseDTO.swift */; };
 		D67C17762D9AEDC000CFCDFA /* PrimaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */; };
 		D67C17772D9AEDC000CFCDFA /* CheckRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17732D9AEDC000CFCDFA /* CheckRow.swift */; };
 		D67C17782D9AEDC000CFCDFA /* OnboardingNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C17712D9AEDC000CFCDFA /* OnboardingNavigationBar.swift */; };
@@ -397,6 +402,11 @@
 		D64922D02D9EF5CB00716740 /* RowType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowType.swift; sourceTree = "<group>"; };
 		D66A3E732E1A5FF3003977AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D66A3E832E1AC4F4003977AE /* PushSettingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingManager.swift; sourceTree = "<group>"; };
+		D66A3E852E1C190B003977AE /* PushAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushAPI.swift; sourceTree = "<group>"; };
+		D66A3E892E1C2CC8003977AE /* PushManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushManager.swift; sourceTree = "<group>"; };
+		D66A3E8C2E1C3111003977AE /* PushTokenRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushTokenRequestDTO.swift; sourceTree = "<group>"; };
+		D66A3E8F2E1C3EA0003977AE /* PushService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushService.swift; sourceTree = "<group>"; };
+		D66A3E912E1C408F003977AE /* PushSettingResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingResponseDTO.swift; sourceTree = "<group>"; };
 		D67C17712D9AEDC000CFCDFA /* OnboardingNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingNavigationBar.swift; sourceTree = "<group>"; };
 		D67C17722D9AEDC000CFCDFA /* PrimaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrimaryButton.swift; sourceTree = "<group>"; };
 		D67C17732D9AEDC000CFCDFA /* CheckRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckRow.swift; sourceTree = "<group>"; };
@@ -843,6 +853,7 @@
 			children = (
 				D0F035252DBF121B003D0CBF /* Base */,
 				D64560FC2DC34059003D2E2B /* Auth */,
+				D66A3E882E1C1929003977AE /* Push */,
 				D6FA34272DCF28B900795A54 /* Home */,
 				D0F0353F2DBF27F1003D0CBF /* Genre */,
 				D0F035422DBF27F1003D0CBF /* Interest */,
@@ -1366,8 +1377,36 @@
 			isa = PBXGroup;
 			children = (
 				D66A3E832E1AC4F4003977AE /* PushSettingManager.swift */,
+				D66A3E892E1C2CC8003977AE /* PushManager.swift */,
 			);
 			path = Push;
+			sourceTree = "<group>";
+		};
+		D66A3E882E1C1929003977AE /* Push */ = {
+			isa = PBXGroup;
+			children = (
+				D66A3E8B2E1C30D2003977AE /* Request */,
+				D66A3E8E2E1C3175003977AE /* Response */,
+				D66A3E852E1C190B003977AE /* PushAPI.swift */,
+				D66A3E8F2E1C3EA0003977AE /* PushService.swift */,
+			);
+			path = Push;
+			sourceTree = "<group>";
+		};
+		D66A3E8B2E1C30D2003977AE /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				D66A3E8C2E1C3111003977AE /* PushTokenRequestDTO.swift */,
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
+		D66A3E8E2E1C3175003977AE /* Response */ = {
+			isa = PBXGroup;
+			children = (
+				D66A3E912E1C408F003977AE /* PushSettingResponseDTO.swift */,
+			);
+			path = Response;
 			sourceTree = "<group>";
 		};
 		D67C17742D9AEDC000CFCDFA /* Components */ = {
@@ -1560,9 +1599,11 @@
 				D02906022DAF4891008515FD /* ProductFetchOption.swift in Sources */,
 				6C0FA8B22DD1CD9000D81065 /* WithDrawConfirmView.swift in Sources */,
 				6CF689452DC67CAC00BC63AD /* ReportService.swift in Sources */,
+				D66A3E8A2E1C2CC8003977AE /* PushManager.swift in Sources */,
 				D0F035762DBF4F09003D0CBF /* GenreNameModel.swift in Sources */,
 				D645610D2DC36514003D2E2B /* KakaoLoginAdapter.swift in Sources */,
 				D64560FA2DC33F2E003D2E2B /* UserRole.swift in Sources */,
+				D66A3E862E1C190B003977AE /* PushAPI.swift in Sources */,
 				D64561342DC5C875003D2E2B /* AuthNavigationRouter.swift in Sources */,
 				6CA3DF6B2DB7D7B400FB00E2 /* StringLiterals.swift in Sources */,
 				6C0FA8B02DD1CD8200D81065 /* WithDrawWriteReasonView.swift in Sources */,
@@ -1658,6 +1699,7 @@
 				D05A03922D91B67200659C74 /* View+.swift in Sources */,
 				D0310B072DCFBDAE00C265EC /* GenreDetailResponseDTO.swift in Sources */,
 				877F406B2DCB5A9500008672 /* ProfileEditViewModel.swift in Sources */,
+				D66A3E902E1C3EA0003977AE /* PushService.swift in Sources */,
 				6CF689412DC67AE800BC63AD /* ReportRequestDTO.swift in Sources */,
 				D0F0355A2DBF27F1003D0CBF /* StoreService.swift in Sources */,
 				D0310B052DCF88F600C265EC /* ProductDTO.swift in Sources */,
@@ -1695,6 +1737,7 @@
 				D67C17772D9AEDC000CFCDFA /* CheckRow.swift in Sources */,
 				D07837B02DB6295A009122F6 /* GenreSelectModalViewModel.swift in Sources */,
 				D0F035302DBF1A96003D0CBF /* BaseService.swift in Sources */,
+				D66A3E8D2E1C3111003977AE /* PushTokenRequestDTO.swift in Sources */,
 				D67C17782D9AEDC000CFCDFA /* OnboardingNavigationBar.swift in Sources */,
 				D632C5402DCCBB34005CD429 /* OnboardingTermsViewModel.swift in Sources */,
 				D0F035292DBF17B3003D0CBF /* BaseTargetType.swift in Sources */,
@@ -1715,6 +1758,7 @@
 				D0F035822DBF6654003D0CBF /* PresignedAPI.swift in Sources */,
 				D0180D602D9F001E006A748F /* RegisterFloatingView.swift in Sources */,
 				6CD972CF2DC7BD41000AE85E /* SellRegisterResponseDTO.swift in Sources */,
+				D66A3E922E1C408F003977AE /* PushSettingResponseDTO.swift in Sources */,
 				6CB2EC072DBFED96003BF298 /* RegisterViewModel.swift in Sources */,
 				D0F035A32DC0A0DC003D0CBF /* GenreDetailView.swift in Sources */,
 				D0310AEE2DCA592E00C265EC /* ProductCondition.swift in Sources */,
