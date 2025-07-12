@@ -11,6 +11,7 @@ import Kingfisher
 struct HomeView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
     @EnvironmentObject private var tabRouter: TabRouter
+    @EnvironmentObject private var pushManager: PushManager
     @StateObject private var viewModel = HomeViewModel()
     @State private var timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
     @State private var scrollToTopTrigger: Bool = false
@@ -61,9 +62,7 @@ struct HomeView: View {
                                 .padding(.horizontal, 28)
                                 .padding(.bottom, 20)
                             
-                            Text("개인정보처리방침")
-                                .frame(width: UIScreen.main.bounds.width, height: 160)
-                                .background(Color.napzakGrayScale(.gray100))
+                            FooterView
                                 .padding(.bottom, 54)
                         }
                     }
@@ -83,6 +82,11 @@ struct HomeView: View {
                 .zIndex(1)
                 .padding(.bottom, 110)
             }
+        }
+        .onAppear {
+          Task {
+            await pushManager.configureNotifications()
+          }
         }
         .animation(.spring(), value: viewModel.showLikeToast)
         .onChange(of: viewModel.externalURLToOpen) { url in
@@ -164,7 +168,6 @@ extension HomeView {
                         )
                         .onTapGesture {
                             navigationRouter.push(next: .productDetailView(productId: viewModel.recommendedProducts[index].id))
-                            print("\(viewModel.recommendedProducts[index].id)번 상품")
                         }
                     }
                 }
@@ -178,7 +181,6 @@ extension HomeView {
             banner: viewModel.banners.middleBanner,
             style: .small(cornerRadius: 16)
         ) {
-            print("middle배너 눌림")
             viewModel.handleBannerTap(viewModel.banners.middleBanner.action)
         }
     }
@@ -222,7 +224,6 @@ extension HomeView {
             banner: viewModel.banners.bottomBanner,
             style: .small(cornerRadius: 16)
         ) {
-            print("bottom배너 눌림")
             viewModel.handleBannerTap(viewModel.banners.bottomBanner.action)
         }
     }
@@ -254,12 +255,75 @@ extension HomeView {
                     }
                 },
                 onTapProduct: { productId in
-                    print("\(productId)번 상품")
                     navigationRouter.push(next: .productDetailView(productId: productId))
                 }
             )
         }
     }
+    
+    private var FooterView: some View {
+        VStack(alignment: .center, spacing: 0) {
+            Text("납작마켓")
+                .applyNapzakFont(.caption1SemiBold12)
+                .foregroundStyle(Color.napzakGrayScale(.gray500))
+                .padding(.top, 20)
+            
+            HStack(spacing: 4) {
+                Image(.iconMessage)
+                Text(verbatim: "napzakmarket@gmail.com")
+                    .applyNapzakFont(.caption5Regular10)
+                    .foregroundStyle(Color.napzakGrayScale(.gray300))
+            }
+            .padding(.top, 8)
+            
+            HStack(spacing: 4) {
+                Image(.iconInstagram)
+                Text(verbatim: "https://www.instagram.com/napzak_official/")
+                    .applyNapzakFont(.caption5Regular10)
+                    .foregroundStyle(Color.napzakGrayScale(.gray300))
+            }
+            .padding(.top, 3)
+            
+            HStack(spacing: 8) {
+                Text("서비스 이용 약관")
+                    .applyNapzakFont(.caption4SemiBold10)
+                    .foregroundStyle(Color.napzakGrayScale(.gray500))
+                
+                Rectangle()
+                    .frame(width: 1, height: 7)
+                    .foregroundStyle(Color.napzakGrayScale(.gray200))
+                
+                Text("개인정보 처리방침")
+                    .applyNapzakFont(.caption4SemiBold10)
+                    .foregroundStyle(Color.napzakGrayScale(.gray500))
+            }
+            .padding(.top, 20)
+            
+            Text("Copyright 2025. NAPZAKmarket All rights reserved.")
+                .applyNapzakFont(.caption5Regular10)
+                .foregroundStyle(Color.napzakGrayScale(.gray300))
+                .padding(.top, 20)
+            
+            HStack(spacing: 8) {
+                Text("대표")
+                    .applyNapzakFont(.caption4SemiBold10)
+                    .foregroundStyle(Color.napzakGrayScale(.gray300))
+                
+                Rectangle()
+                    .frame(width: 1, height: 7)
+                    .foregroundStyle(Color.napzakGrayScale(.gray200))
+                
+                Text("이해인")
+                    .applyNapzakFont(.caption4SemiBold10)
+                    .foregroundStyle(Color.napzakGrayScale(.gray300))
+            }
+            .padding(.top, 8)
+            .padding(.bottom, 15)
+        }
+        .frame(width: UIScreen.main.bounds.width, height: 177)
+        .background(Color.napzakGrayScale(.gray10))
+    }
+
 }
 
 extension HomeView {
@@ -327,5 +391,8 @@ extension HomeView {
     
 #Preview {
     HomeView()
+        .environmentObject(TabRouter())
+        .environmentObject(NavigationRouter())
+        .environmentObject(PushManager(permission: PushPermissionManager()))
 }
 
