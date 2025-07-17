@@ -9,6 +9,7 @@ import SwiftUI
 
 enum AlertStyle {
     case plain
+    case primary
     case warning
 }
 
@@ -21,6 +22,17 @@ struct NZAlertView: View {
     let onConfirm: () async -> Void
     let onCancel: () -> Void
     
+    var titleColor: Color {
+        switch style {
+        case .plain:
+            return Color.napzakGrayScale(.black)
+        case .primary:
+            return Color.napzakPrimary(.purple500)
+        case .warning:
+            return Color.napzakState(.red)
+        }
+    }
+    
     @State private var isProcessing: Bool = false
     @State private var hasConfirmed: Bool = false
     
@@ -29,7 +41,7 @@ struct NZAlertView: View {
             Spacer()
             Text(titleMessage)
                 .applyNapzakFont(.body1Bold16)
-                .foregroundStyle(style == .plain ? Color.napzakPrimary(.purple500) : Color.napzakState(.red))
+                .foregroundStyle(titleColor)
                 .frame(height: 20)
                 .frame(maxWidth: .infinity)
                 .padding(.top, 11)
@@ -108,7 +120,7 @@ struct NZAlertView: View {
                     .zIndex(1)
                 
                 NZAlertView(
-                    style: .plain,
+                    style: .primary,
                     titleMessage: "채팅방 나가기",
                     subTitleMessage: "채팅방에서 나가시겠어요? 나가기를 하면\n더이상 상대방과 대화할 수 없습니다.",
                     confirmText: "예",
