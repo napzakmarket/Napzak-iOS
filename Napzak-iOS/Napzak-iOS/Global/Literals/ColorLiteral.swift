@@ -28,6 +28,7 @@ enum GrayScale: String {
 enum StateColors: String {
     case red = "EF4849"
     case green = "1BD368"
+    case pink = "FF44A5"
 }
 
 enum Transparency: String {
