@@ -22,6 +22,7 @@ struct ChatDetailView: View {
     @State private var isSent = true
     @State private var tempID = 10
     @State private var isViewerOptionsPresented = false
+    @State private var isExitAlertPresented = false
 
     //MARK: - Properties
         
@@ -60,11 +61,43 @@ struct ChatDetailView: View {
                             reportType: .store,
                             isUsedInChat: true,
                             onReportButtonTapped: { },
-                            onExitButtonTapped: { }
+                            onExitButtonTapped: {
+                                isExitAlertPresented = true
+                            }
                         )
                     }
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                     .zIndex(2)
+                }
+                
+                if isExitAlertPresented {
+                    ZStack(alignment: .center) {
+                        Color.napzakTransparency(.transBlack)
+                            .ignoresSafeArea()
+                            .onTapGesture {
+                                withAnimation {
+                                    isExitAlertPresented = false
+                                }
+                            }
+                            .transition(.opacity)
+                            .zIndex(1)
+
+                        NZAlertView(
+                            style: .plain,
+                            titleMessage: "채팅방 나가기",
+                            subTitleMessage: "채팅방에서 나가시겠어요? 나가기를 하면\n더이상 상대방과 대화할 수 없습니다.",
+                            confirmText: "나가기",
+                            cancelText: "취소",
+                            onConfirm: {
+                                isExitAlertPresented = false
+                            },
+                            onCancel: {
+                                isExitAlertPresented = false
+                            }
+                        )
+                        .zIndex(2)
+                    }
+                    .zIndex(3)
                 }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -73,6 +106,7 @@ struct ChatDetailView: View {
         .ignoresSafeArea(edges: [.top])
         .toolbar(.hidden, for: .navigationBar)
         .animation(.easeInOut(duration: 0.3), value: isViewerOptionsPresented)
+        .animation(.easeInOut(duration: 0.3), value: isExitAlertPresented)
         .onTapGesture {
             isFocused = false
         }

@@ -49,7 +49,7 @@ struct ReportModalView: View {
                 Button {
                     withAnimation {
                         isReportModalPresented = false
-                        onReportButtonTapped()
+                        onExitButtonTapped()
                     }
                 } label: {
                     HStack(spacing: 6) {
