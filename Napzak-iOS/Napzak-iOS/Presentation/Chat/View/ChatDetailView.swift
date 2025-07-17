@@ -21,6 +21,7 @@ struct ChatDetailView: View {
 
     @State private var isSent = true
     @State private var tempID = 10
+    @State private var isViewerOptionsPresented = false
 
     //MARK: - Properties
         
@@ -41,12 +42,37 @@ struct ChatDetailView: View {
                     Spacer()
                     chatInputSection
                 }
+                
+                if isViewerOptionsPresented {
+                    Color.napzakTransparency(.transBlack)
+                        .onTapGesture {
+                            withAnimation {
+                                isViewerOptionsPresented = false
+                            }
+                        }
+                        .transition(.opacity)
+                        .zIndex(1)
+                    
+                    VStack {
+                        Spacer()
+                        ReportModalView(
+                            isReportModalPresented: $isViewerOptionsPresented,
+                            reportType: .store,
+                            isUsedInChat: true,
+                            onReportButtonTapped: { },
+                            onExitButtonTapped: { }
+                        )
+                    }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .zIndex(2)
+                }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .contentShape(Rectangle())
         }
         .ignoresSafeArea(edges: [.top])
         .toolbar(.hidden, for: .navigationBar)
+        .animation(.easeInOut(duration: 0.3), value: isViewerOptionsPresented)
         .onTapGesture {
             isFocused = false
         }
@@ -73,8 +99,7 @@ extension ChatDetailView {
                     .foregroundStyle(Color.napzakGrayScale(.black))
                 Spacer()
                 Button {
-                    //TODO: - 모달 띄우기
-                    
+                    isViewerOptionsPresented = true
                 } label: {
                     Image(.iconMoreOptions)
                         .frame(width: 48, height: 48)
