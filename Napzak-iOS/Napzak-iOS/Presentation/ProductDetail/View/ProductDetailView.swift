@@ -66,7 +66,7 @@ struct ProductDetailView: View {
                 ReportModalView(
                     isReportModalPresented: $isReportModalPresented,
                     reportType: .product,
-                    onTapped: {
+                    onReportButtonTapped: {
                         navigationRouter.push(next: .reportView(reportType: .product, id: viewModel.product.productDetail.id))
                     }
                 )
