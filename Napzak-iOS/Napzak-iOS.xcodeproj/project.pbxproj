@@ -69,6 +69,7 @@
 		87E920682DC63C41003C42D5 /* StoreModifyProfileRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E920672DC63C3F003C42D5 /* StoreModifyProfileRequestDTO.swift */; };
 		87E9206A2DC63C63003C42D5 /* StoreModifyProfileResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E920692DC63C62003C42D5 /* StoreModifyProfileResponseDTO.swift */; };
 		D0180D602D9F001E006A748F /* RegisterFloatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0180D5F2D9F0013006A748F /* RegisterFloatingView.swift */; };
+		D023E3B32E2D727C00267150 /* SwiftStomp in Frameworks */ = {isa = PBXBuildFile; productRef = D023E3B22E2D727C00267150 /* SwiftStomp */; };
 		D02905FD2DAE3171008515FD /* FilterContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02905FC2DAE3167008515FD /* FilterContainerView.swift */; };
 		D02906002DAF485C008515FD /* SortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02905FF2DAF4851008515FD /* SortOption.swift */; };
 		D02906022DAF4891008515FD /* ProductFetchOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02906012DAF486E008515FD /* ProductFetchOption.swift */; };
@@ -467,6 +468,7 @@
 				D045DECD2D8372D800EB1EB6 /* KakaoSDKUser in Frameworks */,
 				D045DEC12D83725100EB1EB6 /* Kingfisher in Frameworks */,
 				D045DECB2D8372D800EB1EB6 /* KakaoSDKCommon in Frameworks */,
+				D023E3B32E2D727C00267150 /* SwiftStomp in Frameworks */,
 				D045DED02D83732D00EB1EB6 /* Moya in Frameworks */,
 				D045DEC92D8372D800EB1EB6 /* KakaoSDKAuth in Frameworks */,
 				D045DED32D83736600EB1EB6 /* Lottie in Frameworks */,
@@ -1535,6 +1537,7 @@
 				D045DECC2D8372D800EB1EB6 /* KakaoSDKUser */,
 				D045DECF2D83732D00EB1EB6 /* Moya */,
 				D045DED22D83736600EB1EB6 /* Lottie */,
+				D023E3B22E2D727C00267150 /* SwiftStomp */,
 			);
 			productName = "Napzak-iOS";
 			productReference = D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */;
@@ -1569,6 +1572,7 @@
 				D045DEC72D8372D800EB1EB6 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				D045DECE2D83732D00EB1EB6 /* XCRemoteSwiftPackageReference "Moya" */,
 				D045DED12D83736600EB1EB6 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				D023E3B12E2D727C00267150 /* XCRemoteSwiftPackageReference "SwiftStomp" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D045DE9C2D836F0500EB1EB6 /* Products */;
@@ -2044,6 +2048,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D023E3B12E2D727C00267150 /* XCRemoteSwiftPackageReference "SwiftStomp" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Romixery/SwiftStomp";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.1;
+			};
+		};
 		D045DEBF2D83725100EB1EB6 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
@@ -2079,6 +2091,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D023E3B22E2D727C00267150 /* SwiftStomp */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D023E3B12E2D727C00267150 /* XCRemoteSwiftPackageReference "SwiftStomp" */;
+			productName = SwiftStomp;
+		};
 		D045DEC02D83725100EB1EB6 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D045DEBF2D83725100EB1EB6 /* XCRemoteSwiftPackageReference "Kingfisher" */;
