@@ -10,16 +10,21 @@ import Kingfisher
 
 struct MyPageView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @StateObject var loadingManager = LoadingViewManager()
+
     @State private var storeInfo: StoreProfileDTO?
     @State private var isLoading = true
     @State private var errorMessage: String?
-    @StateObject var loadingManager = LoadingViewManager()
+    
+    @Binding var isTabBarHidden: Bool
+
     
     // StoreService 주입
     private let storeService: StoreServiceProtocol
     
-    init(storeService: StoreServiceProtocol = StoreService()) {
+    init(storeService: StoreServiceProtocol = StoreService(), isTabBarHidden: Binding<Bool>) {
         self.storeService = storeService
+        self._isTabBarHidden = isTabBarHidden
     }
     
     var body: some View {
@@ -52,6 +57,13 @@ struct MyPageView: View {
             
             if loadingManager.isLoadingNetwork {
                 LoadingView()
+            }
+        }
+        .onChange(of: loadingManager.isLoadingNetwork) { _ in
+            if loadingManager.isLoadingNetwork {
+                isTabBarHidden = true
+            } else {
+                isTabBarHidden = false
             }
         }
     }

@@ -45,7 +45,7 @@ struct NZTabBarView: View {
                         ChatView()
                             .tag(NZTab.chat)
                         
-                        MyPageView()
+                        MyPageView(isTabBarHidden: $isTabBarHidden)
                             .tag(NZTab.my)
                     }
                     .toolbar(.hidden, for: .tabBar)
