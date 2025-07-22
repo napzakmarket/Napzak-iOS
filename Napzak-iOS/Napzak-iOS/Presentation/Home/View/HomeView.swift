@@ -90,7 +90,6 @@ struct HomeView: View {
             }
             
             if viewModel.loadingManager.isLoadingNetwork {
-//            if true {
                 LoadingView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }

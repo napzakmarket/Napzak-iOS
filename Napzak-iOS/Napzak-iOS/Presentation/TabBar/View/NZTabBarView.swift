@@ -18,7 +18,7 @@ struct NZTabBarView: View {
     @State private var registerType: TradeType = .sell
     @State private var isGenreSelectModalPresented = false
     @State private var isSortModalPresented = false
-    @State private var isTabBarHidden: Bool = false
+    @State private var isTabBarHidden: Bool = true
         
     //MARK: - Body
         
@@ -35,7 +35,8 @@ struct NZTabBarView: View {
                             sortOption: tabRouter.currentSortOption,
                             selectedTab: tabRouter.currentSelectedTab,
                             isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                            isSortModalPresented: $isSortModalPresented
+                            isSortModalPresented: $isSortModalPresented,
+                            isTabBarHidden: $isTabBarHidden
                         )
                         .id("\(tabRouter.currentSearchWord)-\(tabRouter.currentSortOption)-\(tabRouter.currentSelectedTab)")
                         .tag(NZTab.search)
@@ -118,7 +119,8 @@ struct NZTabBarView: View {
                         sortOption: .recent,
                         selectedTab: 0,
                         isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                        isSortModalPresented: $isSortModalPresented
+                        isSortModalPresented: $isSortModalPresented,
+                        isTabBarHidden: $isTabBarHidden
                     )
                     
                 case .reportView(reportType: let reportType, id: let id):
