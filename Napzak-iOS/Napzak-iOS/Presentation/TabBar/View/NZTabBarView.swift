@@ -18,6 +18,7 @@ struct NZTabBarView: View {
     @State private var registerType: TradeType = .sell
     @State private var isGenreSelectModalPresented = false
     @State private var isSortModalPresented = false
+    @State private var isTabBarHidden: Bool = false
         
     //MARK: - Body
         
@@ -26,7 +27,7 @@ struct NZTabBarView: View {
             ZStack(alignment: .bottom) {
                 TabView(selection: $tabRouter.selectedTab) {
                     Group {
-                        HomeView()
+                        HomeView(isTabBarHidden: $isTabBarHidden)
                             .tag(NZTab.home)
                         
                         SearchView(
@@ -64,7 +65,9 @@ struct NZTabBarView: View {
                             .transition(.move(edge: .bottom).combined(with: .opacity))
                     }
                     if !(isGenreSelectModalPresented || isSortModalPresented){
-                        tabBar
+                        if !isTabBarHidden {
+                            tabBar
+                        }
                     }
                 }
             }
