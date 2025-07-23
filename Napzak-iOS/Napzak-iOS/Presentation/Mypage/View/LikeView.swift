@@ -72,7 +72,7 @@ extension LikeView {
                         .frame(height: 1)
                 }
                 .padding(.horizontal, 28)
-                .frame(height:45)
+                .frame(height:47)
             }
             .background(.white)
             .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
@@ -144,7 +144,7 @@ extension LikeView {
         }
         .frame(maxWidth: .infinity)
         .frame(height: UIScreen.main.bounds.height - 200)
-        .frame(maxHeight: .infinity, alignment: .center) 
+        .frame(maxHeight: .infinity, alignment: .center)
     }
     
     private var productsGrid: some View {
