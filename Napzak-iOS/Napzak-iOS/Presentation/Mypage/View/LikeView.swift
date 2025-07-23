@@ -130,8 +130,6 @@ extension LikeView {
     
     private var emptyStateView: some View {
         VStack(spacing: 20) {
-            Spacer()
-            
             Image("like_none_icn")
             
             VStack(spacing: 8) {
@@ -143,11 +141,10 @@ extension LikeView {
                     .foregroundStyle(Color.napzakGrayScale(.gray200))
                     .applyNapzakFont(.caption1SemiBold12)
             }
-            
-            Spacer()
         }
         .frame(maxWidth: .infinity)
-        .padding(.top, 172)
+        .frame(height: UIScreen.main.bounds.height - 200)
+        .frame(maxHeight: .infinity, alignment: .center) 
     }
     
     private var productsGrid: some View {
