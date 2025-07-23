@@ -225,9 +225,9 @@ struct MyPageView: View {
                                 UIApplication.shared.open(url)
                             }
                         } else if item.title == "설정" {
-                            navigationRouter.push(next: .SettingView)
+                            navigationRouter.push(next: .settingView)
                         }else if item.title == "찜" {
-                            navigationRouter.push(next: .LikeView)
+                            navigationRouter.push(next: .likeView)
                         }else {
                             // TODO: - 다른 메뉴 라우팅
                         }
