@@ -86,13 +86,13 @@ struct NZTabBarView: View {
                     case .searchInputView:
                         SearchInputView()
                         
-                    case .LikeView:
+                    case .likeView:
                         LikeView()
                         
                     case .marketView(let storeId):
                         MarketView(storeId: storeId)
                         
-                    case .ProfileEditView:
+                    case .profileEditView:
                         ProfileEditView()
 
                 case .genreDetailView(genreId: let genreId, genreName: let genreName):
@@ -124,10 +124,10 @@ struct NZTabBarView: View {
                         
                     case .reportView(reportType: let reportType, id: let id):
                         ReportView(reportType: reportType, id: id)
+                    case .chatView:
+                        ChatDetailView(viewModel: ChatDetailViewModel())
                     }
                     
-                case .chatView:
-                    ChatDetailView(viewModel: ChatDetailViewModel())
                     if shouldShowTabBarForRoute(route) {
                         VStack(spacing: 10) {
                             if isRegisterTabSelected {
@@ -151,7 +151,7 @@ struct NZTabBarView: View {
     
     private func shouldShowTabBarForRoute(_ route: Route) -> Bool {
         switch route {
-        case .LikeView:
+        case .likeView:
             return true
         default:
             return false

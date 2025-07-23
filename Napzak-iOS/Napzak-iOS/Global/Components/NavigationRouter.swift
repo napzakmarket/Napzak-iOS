@@ -19,7 +19,7 @@ enum Route: Hashable {
     case productDetailView(productId: Int)
     case searchView(searchWord: String)
     case reportView(reportType: ReportType, id: Int)
-    case LikeView
+    case likeView
     case chatView
 }
 
