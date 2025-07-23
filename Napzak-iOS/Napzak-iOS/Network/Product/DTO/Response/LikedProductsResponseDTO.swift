@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct LikedSellProductsResponseDTO: Codable {
+struct LikedSellProductsResponseDTO: Decodable {
     let interestedSellProductList: [LikedSellProductDTO]
 }
 
-struct LikedSellProductDTO: Codable {
+struct LikedSellProductDTO: Decodable {
     let productId: Int
     let genreName: String
     let productName: String
@@ -26,11 +26,11 @@ struct LikedSellProductDTO: Codable {
     let chatCount: Int
 }
 
-struct LikedBuyProductsResponseDTO: Codable {
+struct LikedBuyProductsResponseDTO: Decodable {
     let interestedBuyProductList: [LikedBuyProductDTO]
 }
 
-struct LikedBuyProductDTO: Codable {
+struct LikedBuyProductDTO: Decodable {
     let productId: Int
     let genreName: String
     let productName: String

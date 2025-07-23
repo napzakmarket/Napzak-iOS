@@ -34,7 +34,7 @@ struct LikeView: View {
             
             if viewModel.showToast {
                 ToastMessageView(
-                    message: "찜한 상품에서 추가되었어요!",
+                    message: "찜한 상품에 추가되었어요!",
                     style: .success
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -59,25 +59,27 @@ extension LikeView {
         
     private var likeHeader: some View {
         VStack(spacing: 0) {
-            headerTitle
+            navigationBar
             ZStack(alignment: .top) {
-                shadowBackground
-                
                 VStack(alignment: .leading, spacing: 0) {
                     NZSegmentedControl(
                         selectedTabIndex: $selectedTabIndex,
                         tabs: ["팔아요", "구해요"],
                         spacing: 16
                     )
+                    Rectangle()
+                        .fill(Color.clear)
+                        .frame(height: 1)
                 }
                 .padding(.horizontal, 28)
-                .frame(height: 47)
-                .padding(.bottom,20)
+                .frame(height:45)
             }
+            .background(.white)
+            .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
         }
     }
     
-    private var headerTitle: some View {
+    private var navigationBar: some View {
         VStack(alignment: .leading) {
             Button {
                 navigationRouter.pop()
@@ -96,21 +98,12 @@ extension LikeView {
             .padding(.top, 58)
             .padding(.leading, 20)
             
-            Divider()
+            Rectangle()
+               .fill(Color.clear)
+               .frame(height: 1)
+
         }
-        .padding(.bottom, 6)
         .background(.white)
-    }
-    
-    private var shadowBackground: some View {
-        ZStack(alignment: .top) {
-            Color.napzakGrayScale(.gray10)
-            Color.napzakGrayScale(.white)
-                .frame(height: 47)
-                .shadow(color: .black.opacity(0.1), radius: 4)
-        }
-        .frame(height: 47)
-        .clipped()
     }
     
     private var productScrollView: some View {
@@ -139,7 +132,7 @@ extension LikeView {
         VStack(spacing: 20) {
             Spacer()
             
-            Image("LikeNone")
+            Image("like_none_icn")
             
             VStack(spacing: 8) {
                 Text("아직 찜한 소장품이 없어요")
@@ -190,7 +183,6 @@ private extension LikeView {
             }
         )
         .onTapGesture {
-            print("\(product.id)번 상품")
             navigationRouter.push(next: .productDetailView(productId: product.id))
         }
     }

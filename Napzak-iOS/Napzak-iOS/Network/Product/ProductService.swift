@@ -25,7 +25,7 @@ protocol ProductServiceProtocol {
     func putSellProduct(productId: Int, requestBody: SellRegisterRequestDTO) async -> Result<SellRegisterResponseDTO, NetworkError>
     func putBuyProduct(productId: Int, requestBody: BuyRegisterRequestDTO) async -> Result<BuyRegisterResponseDTO, NetworkError>
     func getLikedSellProducts() async -> Result<LikedSellProductsResponseDTO, NetworkError>
-       func getLikedBuyProducts() async -> Result<LikedBuyProductsResponseDTO, NetworkError>
+    func getLikedBuyProducts() async -> Result<LikedBuyProductsResponseDTO, NetworkError>
    }
 
 final class ProductService: BaseService, ProductServiceProtocol {
