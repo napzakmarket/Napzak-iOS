@@ -9,6 +9,8 @@ import Foundation
 import os
 
 final class AuthManager: ObservableObject {
+    static let shared = AuthManager()
+    
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Auth")
     private let keychain = KeychainManager.shared
     private let onboardingManager = OnboardingManager.shared
@@ -22,10 +24,10 @@ final class AuthManager: ObservableObject {
         onboardingManager.getLastCheckpoint() != .completed
     }
     
-    init() {
+    private init() {
         #if DEBUG
         keychain.clearTokens()
-        OnboardingManager.shared.clearProgress()
+        onboardingManager.clearProgress()
         logger.info("[DEBUG] Keychain cleared for login testing")
         #endif
         
