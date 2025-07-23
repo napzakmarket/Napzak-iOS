@@ -40,7 +40,7 @@ struct NZTabBarView: View {
                         .tag(NZTab.search)
                         
                         
-                        CView()
+                        ChatView()
                             .tag(NZTab.chat)
                         
                         MyPageView()
@@ -101,7 +101,7 @@ struct NZTabBarView: View {
                 case .productDetailView(productId: let productId):
                     ProductDetailView(viewModel: ProductDetailViewModel(productId: productId))
 
-                case .SettingView:
+                case .settingView:
                     SettingView()
 
                     case .withDrawSelectReasonView:
@@ -126,6 +126,8 @@ struct NZTabBarView: View {
                         ReportView(reportType: reportType, id: id)
                     }
                     
+                case .chatView:
+                    ChatDetailView(viewModel: ChatDetailViewModel())
                     if shouldShowTabBarForRoute(route) {
                         VStack(spacing: 10) {
                             if isRegisterTabSelected {
@@ -262,17 +264,6 @@ private extension NZTabBarView {
     
     func isSelectedTab(_ tab: NZTab) -> Bool {
         return tabRouter.selectedTab == tab && !isRegisterTabSelected
-    }
-}
-
-struct CView: View {
-    @EnvironmentObject private var navigationRouter: NavigationRouter
-    
-    var body: some View {
-        VStack {
-            Text("채팅")
-                .applyNapzakFont(.title1Bold22)
-        }
     }
 }
 

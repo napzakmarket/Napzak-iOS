@@ -116,6 +116,10 @@ struct MarketView: View {
                 .zIndex(3)
                 .padding(.bottom, 110)
             }
+            
+            if viewModel.loadingManager.isLoadingNetwork {
+                LoadingView()
+            }
         }
         .ignoresSafeArea()
         .navigationBarHidden(true)
@@ -240,7 +244,7 @@ struct MarketView: View {
                         // 본인 상점일 경우에만 프로필 편집 버튼 표시
                         if viewModel.storeDetail?.isStoreOwner == true {
                             Button {
-                                navigationRouter.push(next: .ProfileEditView)
+                                navigationRouter.push(next: .profileEditView)
                             } label: {
                                 Text("프로필 편집")
                                     .foregroundColor(Color.napzakGrayScale(.white))
