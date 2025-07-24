@@ -92,7 +92,7 @@ extension ChatView {
             LazyVStack(spacing: 0) {
                 ForEach(viewModel.chatRooms) { data in
                     Button {
-                        //TODO: - 채팅방 상세로 이동
+                        navigationRouter.push(next: .chatDetailView)
                     } label: {
                         ChatItemView(chatRoom: data)
                     }
