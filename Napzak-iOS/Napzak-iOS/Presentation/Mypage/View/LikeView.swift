@@ -76,6 +76,7 @@ extension LikeView {
             }
             .background(.white)
             .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
+            .padding(.bottom, 20)
         }
     }
     
