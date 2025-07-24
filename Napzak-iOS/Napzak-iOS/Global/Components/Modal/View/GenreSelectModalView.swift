@@ -112,8 +112,7 @@ extension GenreSelectModalView {
         ZStack(alignment: .bottom) {
             Color.napzakGrayScale(.gray10)
             
-//            if viewModel.loadingManager.isLoadingNetwork {
-            if true {
+            if viewModel.loadingManager.isLoadingNetwork {
                 SpinnerLoadingView()
             } else {
                 ScrollView(showsIndicators: false) {
