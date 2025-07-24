@@ -126,6 +126,8 @@ struct NZTabBarView: View {
                         ReportView(reportType: reportType, id: id)
                     case .chatView:
                         ChatDetailView(viewModel: ChatDetailViewModel())
+                    case .chatDetailView:
+                           ChatDetailView(viewModel: ChatDetailViewModel())
                     }
                     
                     if shouldShowTabBarForRoute(route) {
