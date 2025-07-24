@@ -19,35 +19,34 @@ struct ChatImageMessage: View {
     //MARK: - Main Body
     
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            Group {
-                if let url = URL(string: imageUrl) {
-                    KFImage(url)
-                        .placeholder {
-                            RoundedRectangle(cornerRadius: 12)
-                                .fill(Color.napzakGrayScale(.gray100))
-                        }
-                        .retry(maxCount: 3, interval: .seconds(5))
-                        .onFailure { error in
-                            print("failure: \(error.localizedDescription)")
-                        }
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } else {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(Color.napzakGrayScale(.gray100))
-                }
-            }
-            .frame(width: 160, height: 160)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.napzakGrayScale(.gray100), lineWidth: 1)
-            )
+        Button {
             
-            Button {
-                
-            } label: {
+        } label: {
+            ZStack(alignment: .bottomTrailing) {
+                Group {
+                    if let url = URL(string: imageUrl) {
+                        KFImage(url)
+                            .placeholder {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .fill(Color.napzakGrayScale(.gray100))
+                            }
+                            .retry(maxCount: 3, interval: .seconds(5))
+                            .onFailure { error in
+                                print("failure: \(error.localizedDescription)")
+                            }
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    } else {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.napzakGrayScale(.gray100))
+                    }
+                }
+                .frame(width: 160, height: 160)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.napzakGrayScale(.gray100), lineWidth: 1)
+                )
                 Image(.imgZoom)
                     .padding([.trailing, .bottom], 10)
             }

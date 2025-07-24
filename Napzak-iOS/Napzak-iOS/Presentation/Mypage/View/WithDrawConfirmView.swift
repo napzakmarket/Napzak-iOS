@@ -38,7 +38,7 @@ struct WithDrawConfirmView: View {
                     .zIndex(1)
                 
                 NZAlertView(
-                    style: .plain,
+                    style: .primary,
                     titleMessage: "정말 탈퇴하시겠어요?",
                     confirmText: "예",
                     cancelText: "아니요",
