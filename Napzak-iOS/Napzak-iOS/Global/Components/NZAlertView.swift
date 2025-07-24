@@ -113,25 +113,19 @@ struct NZAlertView: View {
 }
 
 #Preview {
-    struct PreviewContainer: View {
-        var body: some View {
-            ZStack {
-                Color.napzakTransparency(.transBlack)
-                    .zIndex(1)
-                
-                NZAlertView(
-                    style: .primary,
-                    titleMessage: "채팅방 나가기",
-                    subTitleMessage: "채팅방에서 나가시겠어요? 나가기를 하면\n더이상 상대방과 대화할 수 없습니다.",
-                    confirmText: "예",
-                    cancelText: "아니요",
-                    onConfirm: { },
-                    onCancel: { }
-                )
-                .zIndex(2)
-            }
-        }
+    ZStack {
+        Color.napzakTransparency(.transBlack)
+            .zIndex(1)
+        
+        NZAlertView(
+            style: .primary,
+            titleMessage: "채팅방 나가기",
+            subTitleMessage: "채팅방에서 나가시겠어요? 나가기를 하면\n더이상 상대방과 대화할 수 없습니다.",
+            confirmText: "예",
+            cancelText: "아니요",
+            onConfirm: { },
+            onCancel: { }
+        )
+        .zIndex(2)
     }
-    
-    return PreviewContainer()
 }
