@@ -8,8 +8,8 @@
 import Foundation
 
 import Combine
-import SwiftStomp
 import os
+import SwiftStomp
 
 enum SocketStatus {
     case connected
@@ -28,8 +28,11 @@ final class ChatStompManager {
     private var accessToken: String?
     
     var socketStatus = CurrentValueSubject<SocketStatus, Never>(.disconnected)
-    var onMessageReceived = PassthroughSubject<ChatMessageModel, Never>()
 
+    private var pingTimer: AnyCancellable?
+    private var pongReceivedAt: Date?
+    private let pongTimeout: TimeInterval = 30
+    
     private var cancellables = Set<AnyCancellable>()
 
     //MARK: - Life Cycle
@@ -64,6 +67,8 @@ private extension ChatStompManager {
     //MARK: - Private Func
     
     func subscribeStomp() {
+        stompClient?.subscribe(to: "/topic/pong")
+        
         stompClient?.eventsUpstream
             .receive(on: RunLoop.main)
             .sink { [weak self] event in
@@ -72,8 +77,11 @@ private extension ChatStompManager {
                 case .connected(_):
                     socketStatus.send(.connected)
                     print("✅ WebSocket 연결 완료")
+                    startPing()
                 case .disconnected(_):
+                    print("❎ WebSocket 연결 해제")
                     socketStatus.send(.disconnected)
+                    stopPing()
                 case let .error(error):
                     print("❌ WebSocket 연결 실패")
                     print(error)
@@ -81,6 +89,66 @@ private extension ChatStompManager {
                 }
             }
             .store(in: &cancellables)
+        
+        stompClient?.messagesUpstream
+            .receive(on: RunLoop.main)
+            .sink { [weak self] message in
+                guard let self else { return }
+                
+                print("✅ pong 수신됨")
+                
+                pongReceivedAt = Date()
+            }
+            .store(in: &cancellables)
+    }
+    
+    func monitorPong() {
+        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] timer in
+            guard let self else { return }
+            
+            if let last = pongReceivedAt {
+                let elapsed = Date().timeIntervalSince(last)
+                if elapsed > pongTimeout {
+                    print("⚠️ Pong 응답 지연, 재연결 시도")
+                    stompClient?.disconnect()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        self.stompClient?.connect()
+                    }
+                }
+            }
+        }
+    }
+    
+    func startPing() {
+        pingTimer = Timer
+            .publish(every: 30, on: .main, in: .common) //30초 간격으로 Ping 전송
+            .autoconnect()
+            .sink { [weak self] _ in
+                print("✅ ping 전송")
+                self?.sendPing()
+            }
+    }
+
+    func stopPing() {
+        pingTimer?.cancel()
+        pingTimer = nil
+    }
+
+    func sendPing() {
+        let destination = "/pub/ping"
+
+        let payload: [String: Any] = [
+            "type": "PING",
+            "timestamp": ISO8601DateFormatter().string(from: Date())
+        ]
+
+        guard let data = try? JSONSerialization.data(withJSONObject: payload),
+              let requestBody = String(data: data, encoding: .utf8) else {
+            print("❌ JSON String으로 변환 실패")
+            return
+        }
+
+        stompClient?.send(body: requestBody, to: destination)
     }
 }
 
@@ -99,11 +167,11 @@ extension ChatStompManager {
         }
     }
 
-    func subscribe(roomId: String) {
-        let destination = "/topic/chat.room.\(roomId)"
-        stompClient?.subscribe(
-            to: destination,
-            mode: .client
-        )
-    }
+//    func subscribe(roomId: String) {
+//        let destination = "/topic/chat.room.\(roomId)"
+//        stompClient?.subscribe(
+//            to: destination,
+//            mode: .client
+//        )
+//    }
 }
