@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import Combine
+
 @MainActor
 final class ChatDetailViewModel: ObservableObject {
     
@@ -19,17 +21,37 @@ final class ChatDetailViewModel: ObservableObject {
     @Published var chatMessages: [ChatMessageModel] = []
     @Published var messageText = ""
     
+    //MARK: - Properties
+    
+    private let chatStompManager = ChatStompManager.shared
+    
+    private var cancellables = Set<AnyCancellable>()
+    
     //MARK: - Init
 
     init() {
         fetchChatDetailInfo()
         fetchChatMessages()
+        fetchWebSocket()
     }
 }
 
 extension ChatDetailViewModel {
     func fetchChatDetailInfo() {
         chatDetailInfo = ChatDetailModel.mock
+    }
+    
+    func fetchWebSocket() {
+        chatStompManager.socketStatus
+            .sink { status in
+                switch status {
+                case .connected:
+                    print("✅ 연결됨")
+                case .disconnected:
+                    print("❌ 연결 끊김")
+                }
+            }
+            .store(in: &cancellables)
     }
     
     func fetchChatMessages() {
