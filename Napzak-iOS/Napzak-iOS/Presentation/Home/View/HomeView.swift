@@ -282,6 +282,7 @@ extension HomeView {
                 Text(verbatim: "napzakmarket@gmail.com")
                     .applyNapzakFont(.caption5Regular10)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
+                    .textSelection(.enabled)
             }
             .padding(.top, 8)
             
@@ -290,6 +291,7 @@ extension HomeView {
                 Text(verbatim: "https://www.instagram.com/napzak_official/")
                     .applyNapzakFont(.caption5Regular10)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
+                    .textSelection(.enabled)
             }
             .padding(.top, 3)
             
