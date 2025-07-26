@@ -29,6 +29,7 @@ final class MarketViewModel: ObservableObject {
     @Published var productsError: String? = nil
     @Published var productCount: Int = 0
     @Published var showToast: Bool = false
+    
     @ObservedObject private var likeManager = ProductLikeManager.shared
     
     private let storeId: Int
@@ -41,6 +42,7 @@ final class MarketViewModel: ObservableObject {
     private let likeSubject = PassthroughSubject<(Int, Bool), Never>()
     
     private let interestService = NetworkService.shared.interestService
+    let loadingManager = LoadingViewManager()
     
     //MARK: - Init
     
@@ -58,6 +60,8 @@ final class MarketViewModel: ObservableObject {
     }
     
     func fetchStoreDetail() async {
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
         let result = await NetworkService.shared.storeService.getStoreDetail(storeId: storeId)
         
         switch result {
@@ -75,6 +79,8 @@ final class MarketViewModel: ObservableObject {
     }
     
     func fetchProducts() async {
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
         isLoadingProducts = true
         productsError = nil
         

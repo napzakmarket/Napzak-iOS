@@ -16,20 +16,23 @@ struct ReportModalView: View {
     //MARK: - Properties
     
     let reportType: ReportType
-    let onTapped: () -> Void
+    var isUsedInChat: Bool = false
+    let onReportButtonTapped: () -> Void
+    var onExitButtonTapped: () -> Void = { }
     
     //MARK: - Main Body
     
     var body: some View {
-        VStack(alignment: .center, spacing: 34) {
+        VStack(alignment: .center, spacing: 0) {
             Capsule()
                 .fill(Color.napzakGrayScale(.gray100))
                 .frame(width: 42, height: 2)
-            
+                .padding(.bottom, 34)
+
             Button {
                 withAnimation {
                     isReportModalPresented = false
-                    onTapped()
+                    onReportButtonTapped()
                 }
             } label: {
                 HStack(spacing: 6) {
@@ -40,6 +43,24 @@ struct ReportModalView: View {
                     Spacer()
                 }
                 .padding(.vertical, 10)
+            }
+            
+            if isUsedInChat {
+                Button {
+                    withAnimation {
+                        isReportModalPresented = false
+                        onExitButtonTapped()
+                    }
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(.imgExitModal)
+                        Text("채팅방 나가기")
+                            .applyNapzakFont(.body4Bold14)
+                            .foregroundStyle(Color.napzakState(.red))
+                        Spacer()
+                    }
+                    .padding(.vertical, 10)
+                }
             }
         }
         .padding(.top, 17)
@@ -68,9 +89,9 @@ struct ReportModalView: View {
             ReportModalView(
                 isReportModalPresented: $isViewerOptionsPresented,
                 reportType: .product,
-                onTapped: {
-                    
-                }
+                isUsedInChat: true,
+                onReportButtonTapped: { },
+                onExitButtonTapped: { }
             )
         }
     }

@@ -154,11 +154,11 @@ private extension ProductOwnerOptionsModalView {
     func statusString(status: TradeStatus) -> String {
         switch status {
         case .beforeTrade:
-            return "\(tradeType.title)중"
+            return "\(tradeType.type)중"
         case .reserved:
             return "예약중"
         case .completed:
-            return "\(tradeType.title)완료"
+            return "\(tradeType.type)완료"
         }
     }
 }

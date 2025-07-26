@@ -40,6 +40,7 @@ final class ProductDetailViewModel: ObservableObject {
     
     @Published var showInterestToast: Bool = false
     @Published var showStatusToast = false
+
     @ObservedObject private var likeManager = ProductLikeManager.shared
 
     //MARK: - Properties
@@ -50,6 +51,7 @@ final class ProductDetailViewModel: ObservableObject {
     
     private let interestService = NetworkService.shared.interestService
     private let productId: Int
+    let loadingManager = LoadingViewManager()
 
     //MARK: - Init
     
@@ -81,6 +83,9 @@ final class ProductDetailViewModel: ObservableObject {
 
 extension ProductDetailViewModel {
     func fetchProduct(id: Int) async {
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
+        
         let result = await NetworkService.shared.productService.getProductDetailInfo(productId: id)
         
         switch result {

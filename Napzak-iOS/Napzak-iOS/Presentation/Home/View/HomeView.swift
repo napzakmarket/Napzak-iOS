@@ -13,6 +13,7 @@ struct HomeView: View {
     @EnvironmentObject private var tabRouter: TabRouter
     @EnvironmentObject private var pushManager: PushManager
     @StateObject private var viewModel = HomeViewModel()
+    
     @State private var timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
     @State private var scrollToTopTrigger: Bool = false
     
@@ -27,50 +28,57 @@ struct HomeView: View {
                 Image(.logo)
                     .padding(.leading, 28)
                     .padding(.bottom, 17)
-                    
-                ScrollViewReader { proxy in
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Color.clear
-                                .frame(height: 0)
-                                .id("top")
-                            headerView
-                                .padding(.horizontal, 28)
-                            
-                            topBannerSection
-                                .padding(.top, 21)
-                            
-                            recommendedSection
-                                .padding(.leading, 28)
-                                .padding(.top, 21)
-                            
-                            middleBannerSection
-                                .padding(.leading, 28)
-                                .padding(.vertical, 40)
-                            
-                            popularSellSection
-                                .padding(.horizontal, 28)
-                                .padding(.top, 32)
-                                .padding(.bottom, 20)
-                                .background(Color.napzakGrayScale(.gray10))
-                            
-                            bottomBannerSection
-                                .padding(.leading, 28)
-                                .padding(.vertical, 40)
-                            
-                            popularBuySection
-                                .padding(.horizontal, 28)
-                                .padding(.bottom, 20)
-                            
-                            FooterView
-                                .padding(.bottom, 54)
+                
+                if viewModel.loadingManager.isLoadingNetwork {
+                    LoadingView()
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 0) {
+                                Color.clear
+                                    .frame(height: 0)
+                                    .id("top")
+                                headerView
+                                    .padding(.horizontal, 28)
+                                
+                                topBannerSection
+                                    .padding(.top, 21)
+                                
+                                recommendedSection
+                                    .padding(.leading, 28)
+                                    .padding(.top, 21)
+                                
+                                middleBannerSection
+                                    .padding(.leading, 28)
+                                    .padding(.vertical, 40)
+                                
+                                popularSellSection
+                                    .padding(.horizontal, 28)
+                                    .padding(.top, 32)
+                                    .padding(.bottom, 20)
+                                    .background(Color.napzakGrayScale(.gray10))
+                                
+                                bottomBannerSection
+                                    .padding(.leading, 28)
+                                    .padding(.vertical, 40)
+                                
+                                popularBuySection
+                                    .padding(.horizontal, 28)
+                                    .padding(.bottom, 20)
+                                
+                                FooterView
+                                    .padding(.bottom, 54)
+                                
+                            }
+                        }
+                        .scrollIndicators(.hidden)
+                        .onChange(of: scrollToTopTrigger) { _ in
+                            proxy.scrollTo("top", anchor: .top)
                         }
                     }
-                    .scrollIndicators(.hidden)
-                    .onChange(of: scrollToTopTrigger) { _ in
-                        proxy.scrollTo("top", anchor: .top)
-                    }
                 }
+                
             }
             
             if viewModel.showLikeToast {
@@ -85,6 +93,7 @@ struct HomeView: View {
         }
         .onAppear {
           Task {
+            await pushManager.configureNotifications()
             await pushManager.upsertTokenIfNeeded()
           }
         }
@@ -344,7 +353,7 @@ extension HomeView {
                     .applyNapzakFont(.caption2Medium12)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
                     .fixedSize(horizontal: false, vertical: true)
-                    
+                
                 
                 Spacer()
                 
@@ -388,7 +397,7 @@ extension HomeView {
         }
     }
 }
-    
+
 #Preview {
     HomeView()
         .environmentObject(TabRouter())

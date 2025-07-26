@@ -19,6 +19,10 @@ final class GenreSelectModalViewModel: ObservableObject {
     @Published var isSearchCompleted: Bool = false
     @Published var showToast : Bool = false
     
+    //MARK: - Properties
+
+    let loadingManager = LoadingViewManager()
+    
     //MARK: - Init
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "GenreSelection")
 
@@ -55,6 +59,10 @@ extension GenreSelectModalViewModel {
     //MARK: - Network Func
     
     func fetchAllGenres() async {
+        loadingManager.startLoading()
+        defer {
+            loadingManager.stopLoading()
+        }
         let result = await NetworkService.shared.genreService.getAllGenreName(size: 39)
         
         switch result {

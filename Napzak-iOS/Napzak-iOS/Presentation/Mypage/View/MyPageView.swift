@@ -13,7 +13,8 @@ struct MyPageView: View {
     @State private var storeInfo: StoreProfileDTO?
     @State private var isLoading = true
     @State private var errorMessage: String?
-        
+    @StateObject var loadingManager = LoadingViewManager()
+    
     // StoreService 주입
     private let storeService: StoreServiceProtocol
     
@@ -22,33 +23,43 @@ struct MyPageView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            logoView
-            
-            if let storeInfo = storeInfo {
-                // API 프로필 정보
-                profileCardWithData(storeInfo: storeInfo)
-            } else {
-                // 스켈레톤
-                profileCardPlaceholder
+        ZStack {
+            VStack(spacing: 0) {
+                logoView
+                
+                if let storeInfo = storeInfo {
+                    // API 프로필 정보
+                    profileCardWithData(storeInfo: storeInfo)
+                } else {
+                    // 스켈레톤
+                    profileCardPlaceholder
+                }
+                
+                marketButton
+                menuGrid
+                
+                Spacer()
+                
+                Rectangle()
+                    .fill(Color.napzakGrayScale(.gray10))
+                    .edgesIgnoringSafeArea(.bottom)
             }
+            .background(Color.napzakGrayScale(.white))
+            .task {
+                await fetchMyPageInfo()
+            }
+            .ignoresSafeArea(.all)
             
-            marketButton
-            menuGrid
-
-            Spacer()
-            
-            Rectangle()
-                .fill(Color.napzakGrayScale(.gray10))
-                .edgesIgnoringSafeArea(.bottom)
+            if loadingManager.isLoadingNetwork {
+                LoadingView()
+            }
         }
-        .background(Color.napzakGrayScale(.white))
-        .task {
-            await fetchMyPageInfo()
-        }        .ignoresSafeArea(.all)
     }
     
     private func fetchMyPageInfo() async {
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
+        
         isLoading = true
         
         let result = await storeService.getMyPageInfo()
@@ -161,7 +172,7 @@ struct MyPageView: View {
         .padding(.horizontal, 27)
         .padding(.top, 30)
     }
-
+    
     
     private var marketButton: some View {
         VStack(spacing: 0) {
@@ -214,7 +225,7 @@ struct MyPageView: View {
                                 UIApplication.shared.open(url)
                             }
                         } else if item.title == "설정" {
-                            navigationRouter.push(next: .SettingView)
+                            navigationRouter.push(next: .settingView)
                         } else {
                             // TODO: - 다른 메뉴 라우팅
                         }
@@ -234,7 +245,7 @@ struct MyPageView: View {
         .padding(.top, 20)
         .padding(.bottom, 30)
     }
-
+    
     private func menuItem(title: String, iconName: String) -> some View {
         VStack(spacing: 5) {
             Image(iconName)
@@ -246,9 +257,4 @@ struct MyPageView: View {
                 .foregroundColor(Color.napzakGrayScale(.gray400))
         }
     }
-}
-
-#Preview {
-    MyPageView()
-        .environmentObject(NavigationRouter())
 }

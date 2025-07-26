@@ -112,38 +112,42 @@ extension GenreSelectModalView {
         ZStack(alignment: .bottom) {
             Color.napzakGrayScale(.gray10)
             
-            ScrollView(showsIndicators: false) {
-                LazyVStack(alignment: .leading) {
-                    ForEach(viewModel.genres, id: \.self){ genre in
-                        Button {
-                            viewModel.selectGenre(genre)
-                        } label: {
-                            HStack {
-                                Text("\(genre.name)")
-                                    .applyNapzakFont(viewModel.selectedGenres.contains(genre) ? .body5SemiBold14 : .body6Regular14)
-                                    .foregroundStyle(viewModel.selectedGenres.contains(genre) ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray400))
-                                    .padding(10)
-                                Spacer()
+            if viewModel.loadingManager.isLoadingNetwork {
+                SpinnerLoadingView()
+            } else {
+                ScrollView(showsIndicators: false) {
+                    LazyVStack(alignment: .leading) {
+                        ForEach(viewModel.genres, id: \.self){ genre in
+                            Button {
+                                viewModel.selectGenre(genre)
+                            } label: {
+                                HStack {
+                                    Text("\(genre.name)")
+                                        .applyNapzakFont(viewModel.selectedGenres.contains(genre) ? .body5SemiBold14 : .body6Regular14)
+                                        .foregroundStyle(viewModel.selectedGenres.contains(genre) ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray400))
+                                        .padding(10)
+                                    Spacer()
+                                }
                             }
                         }
                     }
+                    .padding(.top, 15)
+                    .padding(.bottom, 128)
+                    .padding(.leading, 18)
                 }
-                .padding(.top, 15)
-                .padding(.bottom, 128)
-                .padding(.leading, 18)
+                .padding(.top, viewModel.selectedGenres.isEmpty ? 186 : 235 )
+                
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        .white.opacity(0),
+                        .white
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: 270)
+                .allowsHitTesting(false)
             }
-            .padding(.top, viewModel.selectedGenres.isEmpty ? 186 : 235 )
-            
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    .white.opacity(0),
-                    .white
-                ]),
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .frame(height: 270)
-            .allowsHitTesting(false)
         }
     }
     

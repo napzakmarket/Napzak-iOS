@@ -66,7 +66,7 @@ struct ProductDetailView: View {
                 ReportModalView(
                     isReportModalPresented: $isReportModalPresented,
                     reportType: .product,
-                    onTapped: {
+                    onReportButtonTapped: {
                         navigationRouter.push(next: .reportView(reportType: .product, id: viewModel.product.productDetail.id))
                     }
                 )
@@ -147,6 +147,10 @@ struct ProductDetailView: View {
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(3)
                 .padding(.bottom, 44)
+            }
+            
+            if viewModel.loadingManager.isLoadingNetwork {
+                LoadingView()
             }
         }
         .navigationBarHidden(true)
@@ -332,7 +336,7 @@ extension ProductDetailView {
                 .applyNapzakFont(.title6Medium18)
                 .foregroundStyle(Color.napzakGrayScale(.black))
                 .padding(.bottom, 10)
-            Text(formatPrice(price: viewModel.product.productDetail.price))
+            Text(viewModel.product.productDetail.price.convertPriceByTradeType(tradeType: viewModel.product.productDetail.tradeType))
                 .applyNapzakFont(.title3Bold18)
                 .foregroundStyle(Color.napzakGrayScale(.black))
                 .padding(.bottom, 20)
@@ -444,12 +448,12 @@ extension ProductDetailView {
             } else {
                 VStack(alignment: .trailing, spacing: 12) {
                     if viewModel.product.productDetail.standardDeliveryFee != 0 {
-                        Text("일반택배 \(formatPrice(price: viewModel.product.productDetail.standardDeliveryFee))")
+                        Text("일반택배 \(viewModel.product.productDetail.standardDeliveryFee.convertPriceByTradeType(tradeType: viewModel.product.productDetail.tradeType))")
                             .applyNapzakFont(.body4Bold14)
                             .foregroundStyle(Color.napzakGrayScale(.gray300))
                     }
                     if viewModel.product.productDetail.halfDeliveryFee != 0 {
-                        Text("반값/알뜰택배 \(formatPrice(price: viewModel.product.productDetail.halfDeliveryFee))")
+                        Text("반값/알뜰택배 \(viewModel.product.productDetail.halfDeliveryFee.convertPriceByTradeType(tradeType: viewModel.product.productDetail.tradeType))")
                             .applyNapzakFont(.body4Bold14)
                             .foregroundStyle(Color.napzakGrayScale(.gray300))
                    }
@@ -585,11 +589,11 @@ private extension ProductDetailView {
     func statusString(status: TradeStatus) -> String {
         switch status {
         case .beforeTrade:
-            return "\(viewModel.product.productDetail.tradeType.title)중"
+            return "\(viewModel.product.productDetail.tradeType.type)중"
         case .reserved:
             return "예약중"
         case .completed:
-            return "\(viewModel.product.productDetail.tradeType.title)완료"
+            return "\(viewModel.product.productDetail.tradeType.type)완료"
         }
     }
 }

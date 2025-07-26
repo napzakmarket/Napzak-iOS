@@ -40,7 +40,7 @@ struct NZTabBarView: View {
                         .tag(NZTab.search)
                         
                         
-                        CView()
+                        ChatView()
                             .tag(NZTab.chat)
                         
                         MyPageView()
@@ -88,7 +88,7 @@ struct NZTabBarView: View {
                 case .marketView(let storeId):
                     MarketView(storeId: storeId)
                     
-                case .ProfileEditView:
+                case .profileEditView:
                     ProfileEditView()
 
                 case .genreDetailView(genreId: let genreId, genreName: let genreName):
@@ -97,7 +97,7 @@ struct NZTabBarView: View {
                 case .productDetailView(productId: let productId):
                     ProductDetailView(viewModel: ProductDetailViewModel(productId: productId))
 
-                case .SettingView:
+                case .settingView:
                     SettingView()
 
                 case .withDrawSelectReasonView:
@@ -120,6 +120,8 @@ struct NZTabBarView: View {
                     
                 case .reportView(reportType: let reportType, id: let id):
                     ReportView(reportType: reportType, id: id)
+                case .chatDetailView:
+                    ChatDetailView(viewModel: ChatDetailViewModel())
                 }
             }
         }
@@ -230,17 +232,6 @@ private extension NZTabBarView {
     
     func isSelectedTab(_ tab: NZTab) -> Bool {
         return tabRouter.selectedTab == tab && !isRegisterTabSelected
-    }
-}
-
-struct CView: View {
-    @EnvironmentObject private var navigationRouter: NavigationRouter
-    
-    var body: some View {
-        VStack {
-            Text("채팅")
-                .applyNapzakFont(.title1Bold22)
-        }
     }
 }
 
