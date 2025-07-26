@@ -9,7 +9,7 @@ import UIKit
 import UserNotifications
 
 @MainActor
-final class PushPermissionManager: ObservableObject, PushPermissionService {
+final class PushPermissionManager: ObservableObject {
     @Published var isAppPushEnabled: Bool = true
     @Published var isOSPushEnabled: Bool = false
     
@@ -52,6 +52,11 @@ final class PushPermissionManager: ObservableObject, PushPermissionService {
             return isOSPushEnabled
         } else {
             isOSPushEnabled = (settings.authorizationStatus == .authorized)
+            
+            if isOSPushEnabled {
+                UIApplication.shared.registerForRemoteNotifications()
+            }
+            
             return isOSPushEnabled
         }
     }

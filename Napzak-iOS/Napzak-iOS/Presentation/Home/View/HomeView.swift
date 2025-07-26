@@ -85,7 +85,7 @@ struct HomeView: View {
         }
         .onAppear {
           Task {
-            await pushManager.configureNotifications()
+            await pushManager.upsertTokenIfNeeded()
           }
         }
         .animation(.spring(), value: viewModel.showLikeToast)
@@ -96,7 +96,7 @@ struct HomeView: View {
             }
         }
         .onChange(of: tabRouter.selectedTab) { tab in
-            if tab == .home {
+            if tab == .home { 
                 viewModel.fetchHomeData()
                 scrollToTopTrigger.toggle()
             }

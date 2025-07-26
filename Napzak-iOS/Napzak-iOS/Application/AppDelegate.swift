@@ -6,19 +6,17 @@
 //
 
 import UIKit
-
-import Firebase
+import UserNotifications
 import FirebaseMessaging
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     
-    weak var pushManager: PushManager?
+    let pushManager = PushManager(permission: PushPermissionManager())
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        FirebaseApp.configure()
         UNUserNotificationCenter.current().delegate = pushManager
-        Messaging.messaging().delegate = PushManager.shared
+        Messaging.messaging().delegate = pushManager
         
         return true
     }

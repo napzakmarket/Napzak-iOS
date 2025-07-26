@@ -13,23 +13,19 @@ import os
 
 @MainActor
 final class PushManager: NSObject, ObservableObject {
-    static let shared = PushManager(permission: PushPermissionManager())
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "PushManager")
     
     @Published private(set) var currentFCMToken: String?
     
-    private let permission: PushPermissionService
+    let permission: PushPermissionManager
     private let pushService = NetworkService.shared.pushService
     
     private var cancellables = Set<AnyCancellable>()
     
-    init(permission: PushPermissionService) {
+    init(permission: PushPermissionManager) {
         self.permission = permission
         super.init()
-        
-        UNUserNotificationCenter.current().delegate = self
-        Messaging.messaging().delegate = self
         
         observePushToggle()
     }
@@ -38,9 +34,20 @@ final class PushManager: NSObject, ObservableObject {
         guard await permission.requestNotificationPermission() else { return }
     }
     
+    func upsertTokenIfNeeded() async {
+        guard let token = currentFCMToken else { return }
+        guard AuthManager.shared.isAuthenticated else { return }
+        
+        let request = PushTokenRequestDTO(
+            deviceToken: token,
+            isEnabled:   permission.isOSPushEnabled,
+            allowMessage: permission.isAppPushEnabled
+        )
+        Task { await pushService.upsertToken(request: request) }
+    }
+    
     private func observePushToggle() {
-        guard let perm = permission as? PushPermissionManager else { return }
-        perm.$isAppPushEnabled
+        permission.$isAppPushEnabled
             .dropFirst()
             .sink { [weak self] newValue in
                 guard let fcmToken = self?.currentFCMToken else { return }
@@ -50,17 +57,6 @@ final class PushManager: NSObject, ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
-    private func upsertTokenIfNeeded() {
-        guard let token = currentFCMToken else { return }
-        let request = PushTokenRequestDTO(
-            deviceToken: token,
-            isEnabled:   permission.isOSPushEnabled,
-            allowMessage: permission.isAppPushEnabled
-        )
-        Task { await pushService.upsertToken(request: request) }
-    }
-    
 }
 
 extension PushManager: UNUserNotificationCenterDelegate {
@@ -93,10 +89,7 @@ extension PushManager: UNUserNotificationCenterDelegate {
 
 extension PushManager: @preconcurrency MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
-        // TODO: - FCM토큰 서버에 전달해야함
-        logger.error("FCM 토큰 수신: \(fcmToken ?? "없음")")
         currentFCMToken = fcmToken
-        
-        upsertTokenIfNeeded()
+        logger.error("FCM 토큰 수신: \(self.currentFCMToken ?? "없음", privacy: .public)")
     }
 }
