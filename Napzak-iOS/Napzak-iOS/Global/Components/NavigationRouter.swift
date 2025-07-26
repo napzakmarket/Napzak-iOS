@@ -19,7 +19,7 @@ enum Route: Hashable {
     case productDetailView(productId: Int)
     case searchView(searchWord: String)
     case reportView(reportType: ReportType, id: Int)
-    case chatDetailView(productId: Int)
+    case chatDetailView(chatEntry: ChatEntry)
 }
 
 final class NavigationRouter: ObservableObject {

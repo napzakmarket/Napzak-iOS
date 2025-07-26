@@ -125,8 +125,8 @@ struct NZTabBarView: View {
                     
                 case .reportView(reportType: let reportType, id: let id):
                     ReportView(reportType: reportType, id: id)
-                case .chatDetailView(let productId):
-                    ChatDetailView(viewModel: ChatDetailViewModel(productId: productId))
+                case .chatDetailView(let chatEntry):
+                    ChatDetailView(viewModel: ChatDetailViewModel(chatEntry: chatEntry))
                 }
             }
         }

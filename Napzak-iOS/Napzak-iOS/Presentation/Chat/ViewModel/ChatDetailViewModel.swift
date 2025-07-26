@@ -10,6 +10,11 @@ import SwiftUI
 import Combine
 import os
 
+enum ChatEntry: Hashable {
+    case product(id: Int)
+    case room(id: Int)
+}
+
 @MainActor
 final class ChatDetailViewModel: ObservableObject {
     

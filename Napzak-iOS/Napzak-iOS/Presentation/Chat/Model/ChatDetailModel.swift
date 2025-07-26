@@ -8,7 +8,6 @@
 struct ChatDetailModel {
     var productInfo: ChatProductInfo
     var chatStoreInfo: ChatStoreInfo
-    var roomId: Int?
 }
 
 struct ChatProductInfo {

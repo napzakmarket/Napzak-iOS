@@ -110,6 +110,19 @@ struct ChatDetailView: View {
         .onTapGesture {
             isFocused = false
         }
+        .onAppear {
+            if let productId = viewModel.productId {
+                Task {
+                    await viewModel.fetchChatDetailInfo(productId: productId)
+                }
+            }
+            
+            if let roomId = viewModel.roomId {
+                Task {
+                    await viewModel.patchChatRoomEnter(roomId: roomId)
+                }
+            }
+        }
     }
 }
 
