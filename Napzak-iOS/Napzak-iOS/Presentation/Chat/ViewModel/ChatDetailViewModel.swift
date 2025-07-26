@@ -54,6 +54,9 @@ final class ChatDetailViewModel: ObservableObject {
 }
 
 private extension ChatDetailViewModel {
+    
+    //MARK: - Private Func
+    
     func observeRoomId() {
         $roomId
             .sink { [weak self] roomId in
@@ -68,6 +71,9 @@ private extension ChatDetailViewModel {
     }}
 
 extension ChatDetailViewModel {
+    
+    //MARK: - Func
+
     func fetchChatDetailInfo(productId: Int) async {
         let result = await NetworkService.shared.chatService.getChatInfo(productId: productId)
         
