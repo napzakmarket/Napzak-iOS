@@ -56,15 +56,16 @@ final class ChatDetailViewModel: ObservableObject {
 private extension ChatDetailViewModel {
     func observeRoomId() {
         $roomId
-            .compactMap { $0 }
             .sink { [weak self] roomId in
+                guard let self, let roomId else { return }
+                
                 Task {
-                    await self?.patchChatRoomEnter(roomId: roomId)
+                    await self.patchChatRoomEnter(roomId: roomId)
+                    self.chatStompManager.subscribe(roomId: roomId)
                 }
             }
             .store(in: &cancellables)
-    }
-}
+    }}
 
 extension ChatDetailViewModel {
     func fetchChatDetailInfo(productId: Int) async {

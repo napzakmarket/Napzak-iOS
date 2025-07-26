@@ -67,8 +67,6 @@ private extension ChatStompManager {
     //MARK: - Private Func
     
     func subscribeStomp() {
-        stompClient?.subscribe(to: "/topic/pong")
-        
         stompClient?.eventsUpstream
             .receive(on: RunLoop.main)
             .sink { [weak self] event in
@@ -167,11 +165,15 @@ extension ChatStompManager {
         }
     }
 
-//    func subscribe(roomId: String) {
-//        let destination = "/topic/chat.room.\(roomId)"
-//        stompClient?.subscribe(
-//            to: destination,
-//            mode: .client
-//        )
-//    }
+    func subscribe(roomId: Int) {
+        stompClient?.subscribe(to: "/topic/pong")
+        
+        let destination = "/topic/chat.room.\(roomId)"
+        stompClient?.subscribe(
+            to: destination,
+            mode: .client
+        )
+        
+        print("✅ \(roomId)번 채팅방 구독")
+    }
 }
