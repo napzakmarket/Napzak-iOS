@@ -299,6 +299,11 @@ extension ChatDetailView {
                 isFocused: _isFocused,
                 isChatDisabled: viewModel.chatDetailInfo.chatStoreInfo.isWithdrawn,
                 onSubmit: {
+                    if viewModel.chatMessages.isEmpty {
+                        Task {
+                            await viewModel.postChatRoomCreate()
+                        }
+                    }
                     
                     //서버 연결 이후 삭제 예정. UI 확인용!
                     switch viewModel.messageText {
