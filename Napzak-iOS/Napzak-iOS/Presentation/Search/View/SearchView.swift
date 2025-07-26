@@ -20,6 +20,7 @@ struct SearchView: View {
     
     @Binding var isGenreSelectModalPresented: Bool
     @Binding var isSortModalPresented: Bool
+    @Binding var isTabBarHidden: Bool
 
     //MARK: - Properties
     
@@ -31,7 +32,8 @@ struct SearchView: View {
         sortOption: SortOption,
         selectedTab: Int,
         isGenreSelectModalPresented: Binding<Bool>,
-        isSortModalPresented: Binding<Bool>
+        isSortModalPresented: Binding<Bool>,
+        isTabBarHidden: Binding<Bool>
     ) {
         self._viewModel = StateObject(wrappedValue: SearchViewModel(
             searchWord: searchWord,
@@ -40,6 +42,7 @@ struct SearchView: View {
         ))
         self._isGenreSelectModalPresented = isGenreSelectModalPresented
         self._isSortModalPresented = isSortModalPresented
+        self._isTabBarHidden = isTabBarHidden
     }
     
     //MARK: - Body
@@ -49,16 +52,12 @@ struct SearchView: View {
             VStack(spacing: 0) {
                 searchHeader
                     .padding(.top, 75)
-                if viewModel.loadingManager.isLoadingNetwork {
-                    LoadingView()
-                        .padding(.bottom, 180)
-                } else {
-                    productScrollView(
-                        products: viewModel.selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
-                        productsCount: viewModel.selectedTabIndex == 0 ? viewModel.sellProductsCount : viewModel.buyProductsCount
-                    )
-                    Spacer()
-                }
+
+                productScrollView(
+                    products: viewModel.selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
+                    productsCount: viewModel.selectedTabIndex == 0 ? viewModel.sellProductsCount : viewModel.buyProductsCount
+                )
+                Spacer()
             }
             
             if isGenreSelectModalPresented {
@@ -109,6 +108,10 @@ struct SearchView: View {
                 .zIndex(1)
                 .padding(.bottom, 110)
             }
+            
+            if viewModel.loadingManager.isLoadingNetwork {
+                LoadingView()
+            }
         }
         .ignoresSafeArea()
         .toolbar(.hidden, for: .navigationBar)
@@ -132,6 +135,13 @@ struct SearchView: View {
                 viewModel.resetSearchParams()
                 scrollToTopTrigger.toggle()
                 viewModel.selectedTabIndex = 0
+            }
+        }
+        .onChange(of: viewModel.loadingManager.isLoadingNetwork) { _ in
+            if viewModel.loadingManager.isLoadingNetwork {
+                isTabBarHidden = true
+            } else {
+                isTabBarHidden = false
             }
         }
     }
