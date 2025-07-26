@@ -549,7 +549,7 @@ extension ProductDetailView {
                     viewModel.product.isInterested ? Image(.btnHeartSelectedBig) : Image(.btnHeartDefaultBig)
                 }
                 Button {
-                    
+                    navigationRouter.push(next: .chatDetailView(productId: viewModel.product.productDetail.id))
                 } label: {
                     HStack(spacing: 5) {
                         Text("채팅하기")
