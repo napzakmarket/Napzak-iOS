@@ -12,12 +12,16 @@ struct NZTabBarView: View {
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
     @EnvironmentObject private var tabRouter: TabRouter
+    @EnvironmentObject private var permissionManager: PushPermissionManager
     
     @State private var isRegisterTabSelected = false
     @State private var isRegisterViewPresented = false
     @State private var registerType: TradeType = .sell
     @State private var isGenreSelectModalPresented = false
     @State private var isSortModalPresented = false
+    @State private var showPermissionModal: Bool = false
+    @State private var currentPushOffState: PushOffState? = nil
+    @AppStorage("pushModalShownKey") private var pushModalShown: Bool = false
         
     //MARK: - Body
         
@@ -48,6 +52,20 @@ struct NZTabBarView: View {
                     }
                     .toolbar(.hidden, for: .tabBar)
                 }
+                .onChange(of: tabRouter.selectedTab) { newTab in
+                    if permissionManager.pushOffState == nil {
+                        pushModalShown = false
+                    }
+                    
+                    if newTab == .chat,
+                       let state = permissionManager.pushOffState,
+                       !pushModalShown {
+                        
+                        currentPushOffState = state
+                        showPermissionModal = true
+                        pushModalShown = true
+                    }
+                }
                 
                 if isRegisterTabSelected {
                     Color.clear
@@ -67,9 +85,22 @@ struct NZTabBarView: View {
                         tabBar
                     }
                 }
+                
+                if showPermissionModal, let state = currentPushOffState {
+                    Color.black.opacity(0.5)
+                        .ignoresSafeArea()
+                    
+                    PermissionModalView(state: state) {
+                        showPermissionModal = false
+                    }
+                    .frame(width: 284, height: 290)
+                    .transition(.opacity)
+                    .centerInParent()
+                }
             }
-            .edgesIgnoringSafeArea(.bottom)
+            .edgesIgnoringSafeArea([.top, .bottom])
             .animation(.easeInOut(duration: 0.3), value: isRegisterTabSelected)
+            .animation(.easeInOut(duration: 0.3), value: showPermissionModal)
             .fullScreenCover(isPresented: $isRegisterViewPresented) {
                 switch registerType {
                 case .sell:
@@ -128,6 +159,11 @@ struct NZTabBarView: View {
         .onReceive(SearchEventManager.shared.searchCompleted) { searchWord in
             navigationRouter.reset()
             tabRouter.switchToSearch(searchWord: searchWord, sortOption: .recent, searchTabIndex: 0)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+            Task {
+                await permissionManager.refreshOSPushStatus()
+            }
         }
     }
     
@@ -238,4 +274,6 @@ private extension NZTabBarView {
 #Preview {
     NZTabBarView()
         .environmentObject(NavigationRouter())
+        .environmentObject(TabRouter())
+        .environmentObject(PushPermissionManager())
 }

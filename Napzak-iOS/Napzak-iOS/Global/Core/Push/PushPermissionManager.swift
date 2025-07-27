@@ -10,8 +10,23 @@ import UserNotifications
 
 @MainActor
 final class PushPermissionManager: ObservableObject {
-    @Published var isAppPushEnabled: Bool = true
+    
+    // MARK: - Property Wrappers
+    
+    @Published var isAppPushEnabled: Bool {
+        didSet {
+            UserDefaults.standard.set(isAppPushEnabled, forKey: "isAppPushEnabled")
+        }
+    }
     @Published var isOSPushEnabled: Bool = false
+    
+    // MARK: - Init
+    
+    init() {
+        self.isAppPushEnabled = UserDefaults.standard.object(forKey: "isAppPushEnabled") as? Bool ?? true
+    }
+    
+    // MARK: - Properties
     
     var shouldShowPush: Bool {
         isAppPushEnabled && isOSPushEnabled
@@ -30,6 +45,8 @@ final class PushPermissionManager: ObservableObject {
         }
     }
     
+    // MARK: - Func
+    
     func refreshOSPushStatus() async {
         let settings = await UNUserNotificationCenter.current().notificationSettings()
         isOSPushEnabled = (settings.authorizationStatus == .authorized)
@@ -44,8 +61,11 @@ final class PushPermissionManager: ObservableObject {
             
             isOSPushEnabled = granted ?? false
             
-            if granted == true {
+            if granted == true && UserDefaults.standard.object(forKey: "isAppPushEnabled") == nil {
                 isAppPushEnabled = true
+            }
+            
+            if granted == true {
                 UIApplication.shared.registerForRemoteNotifications()
             }
             

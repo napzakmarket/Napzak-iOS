@@ -8,7 +8,18 @@
 import SwiftUI
 
 struct PermissionModalView: View {
+    
+    //MARK: - Property Wrappers
+    
+    @EnvironmentObject var navigationRouter: NavigationRouter
+    @EnvironmentObject var tabRouter: TabRouter
+    
+    //MARK: - Properties
+    
     let state: PushOffState
+    var onDismiss: (() -> Void)? = nil
+    
+    //MARK: - Main Body
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -18,6 +29,8 @@ struct PermissionModalView: View {
                     
                     Button {
                         print("close")
+                        onDismiss?()
+                        
                     } label: {
                         Image(.iconClose)
                     }
@@ -29,7 +42,7 @@ struct PermissionModalView: View {
                     .padding(.top, 31)
             }
             
-            Text("기기 알림이 꺼져있어요!")
+            Text(state.message)
                 .applyNapzakFont(.body1Bold16)
                 .padding(.top, 17)
             
@@ -42,12 +55,18 @@ struct PermissionModalView: View {
                 .frame(height: 40)
                 
             Button {
-                // TODO: - 권한설정에 따라 액션 처리
                 switch state {
                 case .appOnlyOff:
-                    print("앱 알림 설정 화면으로 이동")
+                    onDismiss?()
+                    
+                    tabRouter.switchToMy()
+                    navigationRouter.push(next: .settingView)
                 case .osOnlyOff, .bothOff:
-                    print("OS 설정 화면으로 이동")
+                    onDismiss?()
+                    
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        UIApplication.shared.open(url)
+                    }
                 }
             } label: {
                 Text("알림 켜기")
@@ -71,7 +90,7 @@ struct PermissionModalView: View {
         Color.black.opacity(0.5)
             .ignoresSafeArea()
         
-        PermissionModalView(state: .appOnlyOff)
+        PermissionModalView(state: .bothOff)
             .frame(width: 284, height: 290)
     }
 }

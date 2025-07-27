@@ -11,7 +11,7 @@ import FirebaseMessaging
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     
-    let pushManager = PushManager(permission: PushPermissionManager())
+    var pushManager: PushManager?
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {

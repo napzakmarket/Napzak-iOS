@@ -16,12 +16,18 @@ final class PushManager: NSObject, ObservableObject {
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "PushManager")
     
+    // MARK: - Property Wrapper
+    
     @Published private(set) var currentFCMToken: String?
+    
+    // MARK: - Properties
     
     let permission: PushPermissionManager
     private let pushService = NetworkService.shared.pushService
     
     private var cancellables = Set<AnyCancellable>()
+    
+    // MARK: - Init
     
     init(permission: PushPermissionManager) {
         self.permission = permission
@@ -29,6 +35,8 @@ final class PushManager: NSObject, ObservableObject {
         
         observePushToggle()
     }
+    
+    // MARK: - Func
     
     func configureNotifications() async {
         guard await permission.requestNotificationPermission() else { return }
@@ -46,6 +54,23 @@ final class PushManager: NSObject, ObservableObject {
         Task { await pushService.upsertToken(request: request) }
     }
     
+    func removeToken() async {
+        guard let token = currentFCMToken else {
+            logger.info("FCM 토큰이 없어 삭제 생략")
+            return
+        }
+        
+        let result = await pushService.deleteToken(fcmToken: token)
+        switch result {
+        case .success:
+            logger.info("서버에서 FCM 토큰 삭제 성공")
+        case .failure(let error):
+            logger.error("서버에서 FCM 토큰 삭제 실패: \(error.localizedDescription)")
+        }
+    }
+    
+    // MARK: - Private Func
+    
     private func observePushToggle() {
         permission.$isAppPushEnabled
             .dropFirst()
@@ -58,6 +83,8 @@ final class PushManager: NSObject, ObservableObject {
             .store(in: &cancellables)
     }
 }
+
+// MARK: - UNUserNotificationCenterDelegate
 
 extension PushManager: UNUserNotificationCenterDelegate {
     func userNotificationCenter(
@@ -86,6 +113,8 @@ extension PushManager: UNUserNotificationCenterDelegate {
         print("알림 제목: ", response.notification.request.content.title)
     }
 }
+
+// MARK: - MessagingDelegate
 
 extension PushManager: @preconcurrency MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
