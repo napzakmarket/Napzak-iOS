@@ -28,4 +28,11 @@ extension View {
         UIApplication.shared
             .sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
+    
+    func centerInParent() -> some View {
+        GeometryReader { geometry in
+            self
+                .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
+        }
+    }
 }
