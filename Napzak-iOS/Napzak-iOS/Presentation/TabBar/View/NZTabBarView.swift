@@ -18,6 +18,7 @@ struct NZTabBarView: View {
     @State private var registerType: TradeType = .sell
     @State private var isGenreSelectModalPresented = false
     @State private var isSortModalPresented = false
+    @State private var isTabBarHidden: Bool = true
         
     //MARK: - Body
         
@@ -26,7 +27,7 @@ struct NZTabBarView: View {
             ZStack(alignment: .bottom) {
                 TabView(selection: $tabRouter.selectedTab) {
                     Group {
-                        HomeView()
+                        HomeView(isTabBarHidden: $isTabBarHidden)
                             .tag(NZTab.home)
                         
                         SearchView(
@@ -34,7 +35,8 @@ struct NZTabBarView: View {
                             sortOption: tabRouter.currentSortOption,
                             selectedTab: tabRouter.currentSelectedTab,
                             isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                            isSortModalPresented: $isSortModalPresented
+                            isSortModalPresented: $isSortModalPresented,
+                            isTabBarHidden: $isTabBarHidden
                         )
                         .id("\(tabRouter.currentSearchWord)-\(tabRouter.currentSortOption)-\(tabRouter.currentSelectedTab)")
                         .tag(NZTab.search)
@@ -43,7 +45,7 @@ struct NZTabBarView: View {
                         ChatView()
                             .tag(NZTab.chat)
                         
-                        MyPageView()
+                        MyPageView(isTabBarHidden: $isTabBarHidden)
                             .tag(NZTab.my)
                     }
                     .toolbar(.hidden, for: .tabBar)
@@ -63,8 +65,10 @@ struct NZTabBarView: View {
                         RegisterFloatingView(isRegisterViewPresented: $isRegisterViewPresented, registerType: $registerType)
                             .transition(.move(edge: .bottom).combined(with: .opacity))
                     }
-                    if !(isGenreSelectModalPresented || isSortModalPresented) && navigationRouter.path.isEmpty {
-                        tabBar
+                    if !(isGenreSelectModalPresented || isSortModalPresented){
+                        if !isTabBarHidden {
+                            tabBar
+                        }
                     }
                 }
             }

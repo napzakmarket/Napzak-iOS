@@ -843,10 +843,10 @@
 				6CD0249C2DC522B1005004DB /* ImagePickerManager.swift */,
 				6CDC85DC2DCFC72B001C3921 /* NZAlertView.swift */,
 				6C0AC0062E02B04E00F99FC1 /* LoadingView.swift */,
+				6C5C566C2E194F1B000938A3 /* SpinnerLoadingView.swift */,
 				6CA043112E0DB2D7006125AD /* LoadingViewManager.swift */,
 				D07837AA2DB628FE009122F6 /* Modal */,
 				D63270232DA2C802002414DA /* Chip */,
-				6C5C566C2E194F1B000938A3 /* SpinnerLoadingView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
