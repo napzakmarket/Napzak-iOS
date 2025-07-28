@@ -123,7 +123,8 @@ struct NZTabBarView: View {
                             sortOption: .recent,
                             selectedTab: 0,
                             isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                            isSortModalPresented: $isSortModalPresented
+                            isSortModalPresented: $isSortModalPresented,
+                            isTabBarHidden: $isTabBarHidden
                         )
                         
                     case .reportView(reportType: let reportType, id: let id):
