@@ -16,6 +16,7 @@ struct HomeView: View {
     
     @State private var timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
     @State private var scrollToTopTrigger: Bool = false
+    @Binding var isTabBarHidden: Bool
     
     private let placeholder: String = "어떤 상품을 찾고 계신가요?"
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
@@ -29,53 +30,48 @@ struct HomeView: View {
                     .padding(.leading, 28)
                     .padding(.bottom, 17)
                 
-                if viewModel.loadingManager.isLoadingNetwork {
-                    LoadingView()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else {
-                    ScrollViewReader { proxy in
-                        ScrollView {
-                            VStack(alignment: .leading, spacing: 0) {
-                                Color.clear
-                                    .frame(height: 0)
-                                    .id("top")
-                                headerView
-                                    .padding(.horizontal, 28)
-                                
-                                topBannerSection
-                                    .padding(.top, 21)
-                                
-                                recommendedSection
-                                    .padding(.leading, 28)
-                                    .padding(.top, 21)
-                                
-                                middleBannerSection
-                                    .padding(.leading, 28)
-                                    .padding(.vertical, 40)
-                                
-                                popularSellSection
-                                    .padding(.horizontal, 28)
-                                    .padding(.top, 32)
-                                    .padding(.bottom, 20)
-                                    .background(Color.napzakGrayScale(.gray10))
-                                
-                                bottomBannerSection
-                                    .padding(.leading, 28)
-                                    .padding(.vertical, 40)
-                                
-                                popularBuySection
-                                    .padding(.horizontal, 28)
-                                    .padding(.bottom, 20)
-                                
-                                FooterView
-                                    .padding(.bottom, 54)
-                                
-                            }
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 0) {
+                            Color.clear
+                                .frame(height: 0)
+                                .id("top")
+                            headerView
+                                .padding(.horizontal, 28)
+                            
+                            topBannerSection
+                                .padding(.top, 21)
+                            
+                            recommendedSection
+                                .padding(.leading, 28)
+                                .padding(.top, 21)
+                            
+                            middleBannerSection
+                                .padding(.leading, 28)
+                                .padding(.vertical, 40)
+                            
+                            popularSellSection
+                                .padding(.horizontal, 28)
+                                .padding(.top, 32)
+                                .padding(.bottom, 20)
+                                .background(Color.napzakGrayScale(.gray10))
+                            
+                            bottomBannerSection
+                                .padding(.leading, 28)
+                                .padding(.vertical, 40)
+                            
+                            popularBuySection
+                                .padding(.horizontal, 28)
+                                .padding(.bottom, 20)
+                            
+                            FooterView
+                                .padding(.bottom, 54)
+                        
                         }
-                        .scrollIndicators(.hidden)
-                        .onChange(of: scrollToTopTrigger) { _ in
-                            proxy.scrollTo("top", anchor: .top)
-                        }
+                    }
+                    .scrollIndicators(.hidden)
+                    .onChange(of: scrollToTopTrigger) { _ in
+                        proxy.scrollTo("top", anchor: .top)
                     }
                 }
                 
@@ -89,6 +85,11 @@ struct HomeView: View {
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(1)
                 .padding(.bottom, 110)
+            }
+            
+            if viewModel.loadingManager.isLoadingNetwork {
+                LoadingView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .onAppear {
@@ -108,6 +109,13 @@ struct HomeView: View {
             if tab == .home { 
                 viewModel.fetchHomeData()
                 scrollToTopTrigger.toggle()
+            }
+        }
+        .onChange(of: viewModel.loadingManager.isLoadingNetwork) { _ in
+            if viewModel.loadingManager.isLoadingNetwork {
+                isTabBarHidden = true
+            } else {
+                isTabBarHidden = false
             }
         }
     }
@@ -401,9 +409,8 @@ extension HomeView {
 }
 
 #Preview {
-    HomeView()
+    HomeView(isTabBarHidden: .constant(false))
         .environmentObject(TabRouter())
         .environmentObject(NavigationRouter())
         .environmentObject(PushManager(permission: PushPermissionManager()))
 }
-
