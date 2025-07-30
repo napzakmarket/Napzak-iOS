@@ -190,20 +190,19 @@ extension SettingView {
     }
     
     private var logoutButton: some View {
-        HStack(alignment: .center, spacing: 0) {
-            Button {
+        Button {
                 logoutButtonTapped = true
-            } label: {
+        } label: {
+            HStack(alignment: .center, spacing: 0) {
                 Text("로그아웃")
                     .applyNapzakFont(.body1Bold16)
                     .foregroundStyle(Color.napzakPrimary(.purple500))
                     .frame(height: 20)
+                Spacer()
             }
-            .padding(.leading, 28)
-            .padding(.vertical, 28)
-            
-            Spacer()
         }
+        .padding(.leading, 28)
+        .padding(.vertical, 28)
         .background(.white)
     }
     
@@ -212,7 +211,7 @@ extension SettingView {
             Button {
                 // 탈퇴 뷰 이동
                 print("탈퇴 뷰 이동")
-                navigationRouter.push(next: .withDrawSelectReasonView)
+//                navigationRouter.push(next: .withDrawSelectReasonView)
             } label: {
                 Text("탈퇴하기")
                     .applyNapzakFont(.body1Bold16)
