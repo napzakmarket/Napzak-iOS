@@ -154,15 +154,3 @@ extension RegisterSearchGenre {
     }
     
 }
-
-#Preview {
-    @StateObject var registerRouter = RegisterNavigationRouter()
-    @State var genreSearchText: String = ""
-    @State var isCompleted: Bool = false
-    @State var genreList: [GenreNameModel] = []
-    @State var genre: String = ""
-    @State var genreId: Int?
-
-    
-    RegisterSearchGenre(registerRouter: registerRouter, genreSearchText: $genreSearchText, isCompleted: $isCompleted, genreList: $genreList, genre: $genre, genreId: $genreId)
-}
