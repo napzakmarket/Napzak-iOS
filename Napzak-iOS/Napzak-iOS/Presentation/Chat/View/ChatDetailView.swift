@@ -110,6 +110,19 @@ struct ChatDetailView: View {
         .onTapGesture {
             isFocused = false
         }
+        .onAppear {
+            if let productId = viewModel.productId {
+                Task {
+                    await viewModel.fetchChatDetailInfo(productId: productId)
+                }
+            }
+            
+            if let roomId = viewModel.roomId {
+                Task {
+                    await viewModel.patchChatRoomEnter(roomId: roomId)
+                }
+            }
+        }
     }
 }
 
@@ -286,6 +299,11 @@ extension ChatDetailView {
                 isFocused: _isFocused,
                 isChatDisabled: viewModel.chatDetailInfo.chatStoreInfo.isWithdrawn,
                 onSubmit: {
+                    if viewModel.chatMessages.isEmpty {
+                        Task {
+                            await viewModel.postChatRoomCreate()
+                        }
+                    }
                     
                     //서버 연결 이후 삭제 예정. UI 확인용!
                     switch viewModel.messageText {
