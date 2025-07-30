@@ -191,7 +191,7 @@ extension SettingView {
     
     private var logoutButton: some View {
         Button {
-                logoutButtonTapped = true
+            logoutButtonTapped = true
         } label: {
             HStack(alignment: .center, spacing: 0) {
                 Text("로그아웃")
