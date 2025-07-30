@@ -6,8 +6,8 @@
 //
 
 struct ChatDetailModel {
-    let productInfo: ChatProductInfo
-    let chatStoreInfo: ChatStoreInfo
+    var productInfo: ChatProductInfo
+    var chatStoreInfo: ChatStoreInfo
 }
 
 struct ChatProductInfo {
@@ -18,6 +18,38 @@ struct ChatProductInfo {
     let price: Int
     let isPriceNegotiable: Bool
     let genreName: String
+    
+    //MARK: - Init
+    
+    ///default init
+    init(
+        productId: Int,
+        photo: String,
+        tradeType: TradeType,
+        title: String,
+        price: Int,
+        isPriceNegotiable: Bool,
+        genreName: String
+    ) {
+        self.productId = productId
+        self.photo = photo
+        self.tradeType = tradeType
+        self.title = title
+        self.price = price
+        self.isPriceNegotiable = isPriceNegotiable
+        self.genreName = genreName
+    }
+    
+    ///init for decoding
+    init(dto: ChatProductInfoDTO) {
+        self.productId = dto.productId
+        self.photo = dto.photo
+        self.tradeType = dto.tradeType
+        self.title = dto.title
+        self.price = dto.price
+        self.isPriceNegotiable = dto.isPriceNegotiable
+        self.genreName = dto.genreName
+    }
 }
 
 struct ChatStoreInfo {
@@ -25,24 +57,27 @@ struct ChatStoreInfo {
     let nickname: String
     let isWithdrawn: Bool
     let storePhoto: String
-}
-
-extension ChatDetailModel {
-    static let mock: ChatDetailModel = ChatDetailModel(
-        productInfo: ChatProductInfo(
-            productId: 1,
-            photo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOrPQwOTaU_L8EIFpWzLjgiUHc3CcmGEq84A&s",
-            tradeType: .buy,
-            title: "은혼 긴토키 히지카타 룩업",
-            price: 125000,
-            isPriceNegotiable: true,
-            genreName: "은혼"
-        ),
-        chatStoreInfo: ChatStoreInfo(
-            storeId: 1,
-            nickname: "납자기",
-            isWithdrawn: false,
-            storePhoto: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOrPQwOTaU_L8EIFpWzLjgiUHc3CcmGEq84A&s"
-        )
-    )
+    
+    //MARK: - Init
+    
+    ///default init
+    init(
+        storeId: Int,
+        nickname: String,
+        isWithdrawn: Bool,
+        storePhoto: String
+    ) {
+        self.storeId = storeId
+        self.nickname = nickname
+        self.isWithdrawn = isWithdrawn
+        self.storePhoto = storePhoto
+    }
+    
+    ///init for decoding
+    init(dto: ChatStoreInfoDTO) {
+        self.storeId = dto.storeId
+        self.nickname = dto.nickname
+        self.isWithdrawn = dto.isWithdrawn
+        self.storePhoto = dto.storePhoto
+    }
 }
