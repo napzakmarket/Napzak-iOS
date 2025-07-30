@@ -207,22 +207,19 @@ extension SettingView {
     }
     
     private var withDrawButton: some View {
-        HStack(alignment: .center, spacing: 0) {
-            Button {
-                // 탈퇴 뷰 이동
-                print("탈퇴 뷰 이동")
-//                navigationRouter.push(next: .withDrawSelectReasonView)
-            } label: {
+        Button {
+            navigationRouter.push(next: .withDrawSelectReasonView)
+        } label: {
+            HStack(alignment: .center, spacing: 0) {
                 Text("탈퇴하기")
                     .applyNapzakFont(.body1Bold16)
                     .foregroundStyle(.red)
                     .frame(height: 20)
+                Spacer()
             }
-            .padding(.leading, 28)
-            .padding(.vertical, 28)
-            
-            Spacer()
         }
+        .padding(.leading, 28)
+        .padding(.vertical, 28)
         .background(.white)
     }
 }
