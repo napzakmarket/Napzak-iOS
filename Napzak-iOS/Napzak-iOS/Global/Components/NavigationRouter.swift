@@ -21,7 +21,6 @@ enum Route: Hashable {
     case reportView(reportType: ReportType, id: Int)
     case chatDetailView(chatEntry: ChatEntry)
     case likeView
-    case chatView
 }
 
 final class NavigationRouter: ObservableObject {

@@ -122,10 +122,9 @@ struct NZTabBarView: View {
                     
                 case .reportView(reportType: let reportType, id: let id):
                     ReportView(reportType: reportType, id: id)
-                case .chatDetailView(let chatEntry):
-                    ChatDetailView(viewModel: ChatDetailViewModel(chatEntry: chatEntry))
+                case .chatDetailView:
+                        ChatDetailView(viewModel: ChatDetailViewModel(chatEntry: <#ChatEntry#>))
                     }
-                    case .chatView, .chatDetailView: ChatDetailView(viewModel: ChatDetailViewModel())
                 }
                 .overlay(
                     Group {
