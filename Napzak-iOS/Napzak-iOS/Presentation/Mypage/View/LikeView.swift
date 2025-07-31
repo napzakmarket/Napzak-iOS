@@ -60,7 +60,7 @@ extension LikeView {
     private var likeHeader: some View {
         VStack(spacing: 0) {
             navigationBar
-            ZStack(alignment: .top) {
+            ZStack(alignment: .bottom) {
                 VStack(alignment: .leading, spacing: 0) {
                     NZSegmentedControl(
                         selectedTabIndex: $selectedTabIndex,
@@ -72,10 +72,32 @@ extension LikeView {
                         .frame(height: 1)
                 }
                 .padding(.horizontal, 28)
-                .frame(height:47)
+                .frame(height: 47)
+
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color.gray.opacity(0.1),
+                        Color.clear
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: 5)
+                .padding(.bottom, -3)
             }
             .background(.white)
-            .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
+            .overlay(
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color.gray.opacity(0.1),
+                        Color.clear
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .frame(height: 5),
+                alignment: .top
+            )
             .padding(.bottom, 20)
         }
     }
