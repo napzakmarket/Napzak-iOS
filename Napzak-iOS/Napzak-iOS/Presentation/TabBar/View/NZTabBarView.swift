@@ -26,53 +26,46 @@ struct NZTabBarView: View {
         NavigationStack(path: $navigationRouter.path) {
             ZStack(alignment: .bottom) {
                 TabView(selection: $tabRouter.selectedTab) {
-                    Group {
-                        HomeView(isTabBarHidden: $isTabBarHidden)
-                            .tag(NZTab.home)
-                        
-                        SearchView(
-                            searchWord: tabRouter.currentSearchWord,
-                            sortOption: tabRouter.currentSortOption,
-                            selectedTab: tabRouter.currentSelectedTab,
-                            isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                            isSortModalPresented: $isSortModalPresented,
-                            isTabBarHidden: $isTabBarHidden
-                        )
-                        .id("\(tabRouter.currentSearchWord)-\(tabRouter.currentSortOption)-\(tabRouter.currentSelectedTab)")
-                        .tag(NZTab.search)
-                        
-                        
-                        ChatView()
-                            .tag(NZTab.chat)
-                        
-                        MyPageView(isTabBarHidden: $isTabBarHidden)
-                            .tag(NZTab.my)
-                    }
-                    .toolbar(.hidden, for: .tabBar)
+                    HomeView(isTabBarHidden: $isTabBarHidden).tag(NZTab.home)
+                    SearchView(
+                        searchWord: tabRouter.currentSearchWord,
+                        sortOption: tabRouter.currentSortOption,
+                        selectedTab: tabRouter.currentSelectedTab,
+                        isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                        isSortModalPresented: $isSortModalPresented,
+                        isTabBarHidden: $isTabBarHidden
+                    )
+                    .id("\(tabRouter.currentSearchWord)-\(tabRouter.currentSortOption)-\(tabRouter.currentSelectedTab)")
+                    .tag(NZTab.search)
+                    ChatView().tag(NZTab.chat)
+                    MyPageView(isTabBarHidden: $isTabBarHidden).tag(NZTab.my)
                 }
-                
+                .toolbar(.hidden, for: .tabBar)
+
                 if isRegisterTabSelected {
                     Color.clear
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .contentShape(Rectangle())
-                        .onTapGesture {
-                            isRegisterTabSelected = false
-                        }
+                        .onTapGesture { isRegisterTabSelected = false }
                 }
-                
-                VStack(spacing: 10) {
-                    if  isRegisterTabSelected {
-                        RegisterFloatingView(isRegisterViewPresented: $isRegisterViewPresented, registerType: $registerType)
-                            .transition(.move(edge: .bottom).combined(with: .opacity))
-                    }
-                    if !(isGenreSelectModalPresented || isSortModalPresented){
-                        if !isTabBarHidden {
+            }
+            .overlay(
+                Group {
+                    if !(isGenreSelectModalPresented || isSortModalPresented), !isTabBarHidden {
+                        VStack(spacing: 10) {
+                            if isRegisterTabSelected {
+                                RegisterFloatingView(
+                                    isRegisterViewPresented: $isRegisterViewPresented,
+                                    registerType: $registerType
+                                )
+                                .transition(.move(edge: .bottom).combined(with: .opacity))
+                            }
                             tabBar
                         }
                     }
-                }
-            }
-            .edgesIgnoringSafeArea(.bottom)
+                },
+                alignment: .bottom
+            )
             .animation(.easeInOut(duration: 0.3), value: isRegisterTabSelected)
             .fullScreenCover(isPresented: $isRegisterViewPresented) {
                 switch registerType {
@@ -126,28 +119,30 @@ struct NZTabBarView: View {
                             isSortModalPresented: $isSortModalPresented,
                             isTabBarHidden: $isTabBarHidden
                         )
-                        
-                    case .reportView(reportType: let reportType, id: let id):
-                        ReportView(reportType: reportType, id: id)
-                    case .chatView:
-                        ChatDetailView(viewModel: ChatDetailViewModel())
-                    case .chatDetailView:
-                           ChatDetailView(viewModel: ChatDetailViewModel())
-                    }
-                    
-                    if shouldShowTabBarForRoute(route) {
-                        VStack(spacing: 10) {
-                            if isRegisterTabSelected {
-                                RegisterFloatingView(isRegisterViewPresented: $isRegisterViewPresented, registerType: $registerType)
-                                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                            }
-                            if !(isGenreSelectModalPresented || isSortModalPresented) {
-                                tabBar
-                            }
-                        }
+                    case .reportView(let reportType, let id): ReportView(reportType: reportType, id: id)
+                    case .chatView, .chatDetailView: ChatDetailView(viewModel: ChatDetailViewModel())
                     }
                 }
-                .edgesIgnoringSafeArea(.bottom)
+                .overlay(
+                    Group {
+                        if shouldShowTabBarForRoute(route) {
+                            VStack(spacing: 10) {
+                                if isRegisterTabSelected {
+                                    RegisterFloatingView(
+                                        isRegisterViewPresented: $isRegisterViewPresented,
+                                        registerType: $registerType
+                                    )
+                                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                                }
+                                if !(isGenreSelectModalPresented || isSortModalPresented) {
+                                    tabBar
+                                }
+                            }
+                        }
+                    },
+                    alignment: .bottom
+                )
+                .animation(.easeInOut(duration: 0.3), value: isRegisterTabSelected)
             }
         }
         .onReceive(SearchEventManager.shared.searchCompleted) { searchWord in
@@ -155,14 +150,9 @@ struct NZTabBarView: View {
             tabRouter.switchToSearch(searchWord: searchWord, sortOption: .recent, searchTabIndex: 0)
         }
     }
-    
+
     private func shouldShowTabBarForRoute(_ route: Route) -> Bool {
-        switch route {
-        case .likeView:
-            return true
-        default:
-            return false
-        }
+        route == .likeView
     }
     
     var tabBar: some View {
@@ -172,11 +162,9 @@ struct NZTabBarView: View {
                 tabRouter.switchToHome()
                 isRegisterTabSelected = false
             } label: {
-                VStack(alignment: .center, spacing: 5) {
+                VStack(spacing: 5) {
                     Image(isSelectedTab(.home) ? .iconTabHomeSelected : .iconTabHomeDefault)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 25, height: 25)
+                        .resizable().scaledToFit().frame(width: 25, height: 25)
                     Text("홈")
                         .applyNapzakFont(.caption1SemiBold12)
                         .foregroundStyle(isSelectedTab(.home) ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray200))
@@ -188,11 +176,9 @@ struct NZTabBarView: View {
                 tabRouter.switchToSearch(searchWord: "", sortOption: .recent, searchTabIndex: 0)
                 isRegisterTabSelected = false
             } label: {
-                VStack(alignment: .center, spacing: 5) {
+                VStack(spacing: 5) {
                     Image(isSelectedTab(.search) ? .iconTabSearchSelected : .iconTabSearchDefault)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 25, height: 25)
+                        .resizable().scaledToFit().frame(width: 25, height: 25)
                     Text("탐색")
                         .applyNapzakFont(.caption1SemiBold12)
                         .foregroundStyle(isSelectedTab(.search) ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray200))
@@ -203,16 +189,12 @@ struct NZTabBarView: View {
                 navigationRouter.reset()
                 isRegisterTabSelected.toggle()
             } label: {
-                VStack(alignment: .center, spacing: 5) {
-                    ZStack(alignment: .center){
+                VStack(spacing: 5) {
+                    ZStack {
                         Image(isRegisterTabSelected ? .iconTabRegisterBgSelected : .iconTabRegisterBgDefault)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 25, height: 25)
+                            .resizable().scaledToFit().frame(width: 25, height: 25)
                         Image(.iconTabRegisterPlus)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 13, height: 13)
+                            .resizable().scaledToFit().frame(width: 13, height: 13)
                             .rotationEffect(.degrees(isRegisterTabSelected ? 45 : 0))
                             .animation(.easeInOut(duration: 0.3), value: isRegisterTabSelected)
                     }
@@ -227,11 +209,9 @@ struct NZTabBarView: View {
                 tabRouter.switchToChat()
                 isRegisterTabSelected = false
             } label: {
-                VStack(alignment: .center, spacing: 5) {
+                VStack(spacing: 5) {
                     Image(isSelectedTab(.chat) ? .iconTabChatSelected : .iconTabChatDefault)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 25, height: 25)
+                        .resizable().scaledToFit().frame(width: 25, height: 25)
                     Text("채팅")
                         .applyNapzakFont(.caption1SemiBold12)
                         .foregroundStyle(isSelectedTab(.chat) ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray200))
@@ -243,11 +223,9 @@ struct NZTabBarView: View {
                 tabRouter.switchToMy()
                 isRegisterTabSelected = false
             } label: {
-                VStack(alignment: .center, spacing: 5) {
+                VStack(spacing: 5) {
                     Image(isSelectedTab(.my) ? .iconTabMySelected : .iconTabMyDefault)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 25, height: 25)
+                        .resizable().scaledToFit().frame(width: 25, height: 25)
                     Text("마이")
                         .applyNapzakFont(.caption1SemiBold12)
                         .foregroundStyle(isSelectedTab(.my) ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray200))
@@ -256,25 +234,21 @@ struct NZTabBarView: View {
         }
         .padding(.horizontal, 40)
         .padding(.top, 15)
-        .padding(.bottom, 28)
-        .frame(height: 88)
+        .padding(.bottom, 0)
         .background(
             Color.napzakGrayScale(.white)
                 .shadow(color: .black.opacity(0.4), radius: 0.4)
+                .ignoresSafeArea(.container, edges: .bottom)
         )
     }
-}
 
-private extension NZTabBarView {
-    
-    //MARK: - Private Method
-    
-    func isSelectedTab(_ tab: NZTab) -> Bool {
-        return tabRouter.selectedTab == tab && !isRegisterTabSelected
+    private func isSelectedTab(_ tab: NZTab) -> Bool {
+        tabRouter.selectedTab == tab && !isRegisterTabSelected
     }
 }
 
 #Preview {
     NZTabBarView()
         .environmentObject(NavigationRouter())
+        .environmentObject(TabRouter())
 }
