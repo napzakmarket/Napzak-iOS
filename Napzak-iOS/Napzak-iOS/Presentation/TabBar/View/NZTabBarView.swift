@@ -101,27 +101,31 @@ struct NZTabBarView: View {
                 case .settingView:
                     SettingView()
 
-                    case .withDrawSelectReasonView:
-                        WithDrawSelectReasonView()
-                        
-                    case .withDrawWriteReasonView:
-                        WithDrawWriteReasonView()
-                        
-                    case .withDrawConfirmView:
-                        WithDrawConfirmView()
-                        
-                    case .searchView(searchWord: let searchWord):
-                        SearchView(
-                            searchWord: searchWord,
-                            sortOption: .recent,
-                            selectedTab: 0,
-                            isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                            isSortModalPresented: $isSortModalPresented,
-                            isTabBarHidden: $isTabBarHidden
-                        )
-                    case .reportView(let reportType, let id): ReportView(reportType: reportType, id: id)
-                    case .chatView, .chatDetailView: ChatDetailView(viewModel: ChatDetailViewModel())
+                case .withDrawSelectReasonView:
+                    WithDrawSelectReasonView()
+                    
+                case .withDrawWriteReasonView:
+                    WithDrawWriteReasonView()
+                    
+                case .withDrawConfirmView:
+                    WithDrawConfirmView()
+                    
+                case .searchView(searchWord: let searchWord):
+                    SearchView(
+                        searchWord: searchWord,
+                        sortOption: .recent,
+                        selectedTab: 0,
+                        isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                        isSortModalPresented: $isSortModalPresented,
+                        isTabBarHidden: $isTabBarHidden
+                    )
+                    
+                case .reportView(reportType: let reportType, id: let id):
+                    ReportView(reportType: reportType, id: id)
+                case .chatDetailView(let chatEntry):
+                    ChatDetailView(viewModel: ChatDetailViewModel(chatEntry: chatEntry))
                     }
+                    case .chatView, .chatDetailView: ChatDetailView(viewModel: ChatDetailViewModel())
                 }
                 .overlay(
                     Group {
