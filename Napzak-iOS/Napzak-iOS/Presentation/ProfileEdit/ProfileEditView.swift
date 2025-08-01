@@ -230,12 +230,14 @@ struct ProfileEditView: View {
             UsernameInputField(
                 validationState: $viewModel.validationState,
                 username: $viewModel.nickname,
-                isPrimaryButtonEnabled: $viewModel.isPrimaryButtonEnabled
+                isPrimaryButtonEnabled: $viewModel.isPrimaryButtonEnabled,
+                initialNickname: viewModel.initialNickname  
             ) { validatedUsername in
                 Task {
                     await viewModel.validateUsername(validatedUsername)
                 }
             }
+
             .padding(.bottom,46)
             .focused($isKeyboardActive)
 
