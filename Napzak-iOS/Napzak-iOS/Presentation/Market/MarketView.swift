@@ -127,25 +127,25 @@ struct MarketView: View {
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .onAppear {
-                   Task {
-                       await viewModel.fetchStoreDetail()
-                   }
-               }
-               .onChange(of: viewModel.selectedTabIndex) { _ in
-                   Task {
-                       await viewModel.fetchProducts()
-                       scrollToTopTrigger.toggle()
-                   }
-               }
-               .onChange(of: selectedSortOption) { newValue in
-                   viewModel.productFetchOption.sortOption = newValue
-                   Task {
-                       await viewModel.fetchProducts()
-                       scrollToTopTrigger.toggle()
-                   }
-               }
-           }
-
+            Task {
+                await viewModel.fetchStoreDetail()
+            }
+        }
+        .onChange(of: viewModel.selectedTabIndex) { _ in
+            Task {
+                await viewModel.fetchProducts()
+                scrollToTopTrigger.toggle()
+            }
+        }
+        .onChange(of: selectedSortOption) { newValue in
+            viewModel.productFetchOption.sortOption = newValue
+            Task {
+                await viewModel.fetchProducts()
+                scrollToTopTrigger.toggle()
+            }
+        }
+    }
+    
     private var navigationBarView: some View {
         VStack {
             Spacer()
@@ -271,8 +271,8 @@ struct MarketView: View {
                             if let genres = viewModel.storeDetail?.genrePreferences, !genres.isEmpty {
                                 ForEach(genres, id: \.genreId) { genre in
                                     PlainChip(title: genre.genreName.count > 5
-                                            ? String(genre.genreName.prefix(5)) + "..."
-                                            : genre.genreName)
+                                              ? String(genre.genreName.prefix(5)) + "..."
+                                              : genre.genreName)
                                 }
                             } else if viewModel.isLoadingProfile {
                                 ForEach(["로딩 중..."], id: \.self) { tag in
@@ -289,34 +289,34 @@ struct MarketView: View {
                 .padding(.top, 17)
                 
                 // 본인 상점일 경우에만 프로필 편집 버튼 표시
-                 if viewModel.storeDetail?.isStoreOwner == true {
-                     Button {
-                         navigationRouter.push(next: .profileEditView)
-                     } label: {
-                         HStack(spacing: 8) {
-                             Image("edit_icn")
-                                 .renderingMode(.template)
-                                 .foregroundColor(Color.napzakGrayScale(.gray400))
-                             Text("프로필 편집")
-                                 .foregroundColor(Color.napzakGrayScale(.gray400))
-                                 .applyNapzakFont(.caption2Medium12)
-                         }
-                         .frame(height: 38)
-                         .frame(maxWidth: .infinity)
-                         .background(
-                             RoundedRectangle(cornerRadius: 8)
-                                 .fill(Color.napzakGrayScale(.gray50))
-                         )
-                     }
-                     .padding(.horizontal, 26)
-                     .padding(.top, 5)
-                 }
-                 
-                 Spacer()
-                     .frame(height: 8)
-             }
-         }
-     }
+                if viewModel.storeDetail?.isStoreOwner == true {
+                    Button {
+                        navigationRouter.push(next: .profileEditView)
+                    } label: {
+                        HStack(spacing: 8) {
+                            Image("edit_icn")
+                                .renderingMode(.template)
+                                .foregroundColor(Color.napzakGrayScale(.gray400))
+                            Text("프로필 편집")
+                                .foregroundColor(Color.napzakGrayScale(.gray400))
+                                .applyNapzakFont(.caption2Medium12)
+                        }
+                        .frame(height: 38)
+                        .frame(maxWidth: .infinity)
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(Color.napzakGrayScale(.gray50))
+                        )
+                    }
+                    .padding(.horizontal, 26)
+                    .padding(.top, 5)
+                }
+                
+                Spacer()
+                    .frame(height: 8)
+            }
+        }
+    }
     
     private var tabAndFilterSectionView: some View {
         ZStack(alignment: .top) {
@@ -422,43 +422,54 @@ struct MarketView: View {
             if viewModel.isLoadingProducts {
                 ProgressView()
                     .padding(.top, 40)
-            } else if viewModel.products.isEmpty {
-                VStack {
-                    Spacer()
-                        .frame(height: 40)
-                    Text("상품이 없습니다")
-                        .foregroundColor(Color.napzakGrayScale(.gray300))
-                        .applyNapzakFont(.body1Bold16)
-                    Spacer()
-                }
-                .frame(height: 200)
-            } else {
-                LazyVGrid(columns: columns, spacing: 20) {
-                    ForEach(viewModel.products.indices, id: \.self) { i in
-                        ProductItemView(
-                            product: $viewModel.products[i],
-                            width: productCellWidth,
-                            isHiddenProductSummary: false,
-                            shouldToggleInterestState: {
-                                 viewModel.toggleLike(for: viewModel.products[i].id)
-                            })
-                        .onTapGesture {
-                           navigationRouter.push(next: .productDetailView(productId: viewModel.products[i].id))
-                           print("\(viewModel.products[i].id)번 상품")
-                       }
+             }
+            else if viewModel.products.isEmpty {
+                VStack() {
+                    Image("review_icn")
+                        .padding(.bottom,10)
+                    
+                    VStack(spacing: 8) {
+                        Text("아직 업로드한 소장품이 없어요")
+                            .foregroundColor(Color.napzakGrayScale(.gray300))
+                            .applyNapzakFont(.body1Bold16)
+                        
+                        Text("첫 상품을 등록해보세요")
+                            .foregroundColor(Color.napzakGrayScale(.gray200))
+                            .applyNapzakFont(.caption1SemiBold12)
                     }
                 }
-                .padding(.horizontal, 28)
+                .padding(.top,200)
+                .padding(.bottom,100)
+                .frame(maxWidth: .infinity)
+                .frame(height: 180)
             }
+        else {
+            LazyVGrid(columns: columns, spacing: 20) {
+                ForEach(viewModel.products.indices, id: \.self) { i in
+                    ProductItemView(
+                        product: $viewModel.products[i],
+                        width: productCellWidth,
+                        isHiddenProductSummary: false,
+                        shouldToggleInterestState: {
+                            viewModel.toggleLike(for: viewModel.products[i].id)
+                        })
+                    .onTapGesture {
+                        navigationRouter.push(next: .productDetailView(productId: viewModel.products[i].id))
+                        print("\(viewModel.products[i].id)번 상품")
+                    }
+                }
+            }
+            .padding(.horizontal, 28)
         }
     }
-    
-    private var ReviewView: some View {
-        VStack(spacing: 16) {
-            Spacer()
-                .frame(height: 100)
-            Spacer()
-        }
-        .frame(maxWidth: .infinity)
+}
+
+private var ReviewView: some View {
+    VStack(spacing: 16) {
+        Spacer()
+            .frame(height: 100)
+        Spacer()
     }
+    .frame(maxWidth: .infinity)
+}
 }
