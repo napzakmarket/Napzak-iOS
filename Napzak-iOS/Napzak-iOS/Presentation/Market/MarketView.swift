@@ -126,20 +126,25 @@ struct MarketView: View {
         .animation(.spring(), value: viewModel.showToast)
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
-        .onChange(of: viewModel.selectedTabIndex) { _ in
-            Task {
-                await viewModel.fetchProducts()
-                scrollToTopTrigger.toggle()
-            }
-        }
-        .onChange(of: selectedSortOption) { newValue in
-            viewModel.productFetchOption.sortOption = newValue
-            Task {
-                await viewModel.fetchProducts()
-                scrollToTopTrigger.toggle()
-            }
-        }
-    }
+        .onAppear {
+                   Task {
+                       await viewModel.fetchStoreDetail()
+                   }
+               }
+               .onChange(of: viewModel.selectedTabIndex) { _ in
+                   Task {
+                       await viewModel.fetchProducts()
+                       scrollToTopTrigger.toggle()
+                   }
+               }
+               .onChange(of: selectedSortOption) { newValue in
+                   viewModel.productFetchOption.sortOption = newValue
+                   Task {
+                       await viewModel.fetchProducts()
+                       scrollToTopTrigger.toggle()
+                   }
+               }
+           }
 
     private var navigationBarView: some View {
         VStack {
