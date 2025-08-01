@@ -19,14 +19,16 @@ struct NZTabBarView: View {
     @State private var isGenreSelectModalPresented = false
     @State private var isSortModalPresented = false
     @State private var isTabBarHidden: Bool = true
-        
+    
     //MARK: - Body
-        
+    
     var body: some View {
         NavigationStack(path: $navigationRouter.path) {
             ZStack(alignment: .bottom) {
                 TabView(selection: $tabRouter.selectedTab) {
-                    HomeView(isTabBarHidden: $isTabBarHidden).tag(NZTab.home)
+                    HomeView(isTabBarHidden: $isTabBarHidden)
+                        .tag(NZTab.home)
+                    
                     SearchView(
                         searchWord: tabRouter.currentSearchWord,
                         sortOption: tabRouter.currentSortOption,
@@ -41,7 +43,7 @@ struct NZTabBarView: View {
                     MyPageView(isTabBarHidden: $isTabBarHidden).tag(NZTab.my)
                 }
                 .toolbar(.hidden, for: .tabBar)
-
+                
                 if isRegisterTabSelected {
                     Color.clear
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -91,39 +93,40 @@ struct NZTabBarView: View {
                         
                     case .profileEditView:
                         ProfileEditView()
-
-                case .genreDetailView(genreId: let genreId, genreName: let genreName):
-                    GenreDetailView(genreId: genreId, genreName: genreName)
-                    
-                case .productDetailView(productId: let productId):
-                    ProductDetailView(viewModel: ProductDetailViewModel(productId: productId))
-
-                case .settingView:
-                    SettingView()
-
-                case .withDrawSelectReasonView:
-                    WithDrawSelectReasonView()
-                    
-                case .withDrawWriteReasonView:
-                    WithDrawWriteReasonView()
-                    
-                case .withDrawConfirmView:
-                    WithDrawConfirmView()
-                    
-                case .searchView(searchWord: let searchWord):
-                    SearchView(
-                        searchWord: searchWord,
-                        sortOption: .recent,
-                        selectedTab: 0,
-                        isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                        isSortModalPresented: $isSortModalPresented,
-                        isTabBarHidden: $isTabBarHidden
-                    )
-                    
-                case .reportView(reportType: let reportType, id: let id):
-                    ReportView(reportType: reportType, id: id)
-                case .chatDetailView(let chatEntry):
-                                    ChatDetailView(viewModel: ChatDetailViewModel(chatEntry: chatEntry))
+                        
+                    case .genreDetailView(genreId: let genreId, genreName: let genreName):
+                        GenreDetailView(genreId: genreId, genreName: genreName)
+                        
+                    case .productDetailView(productId: let productId):
+                        ProductDetailView(viewModel: ProductDetailViewModel(productId: productId))
+                        
+                    case .settingView:
+                        SettingView()
+                        
+                    case .withDrawSelectReasonView:
+                        WithDrawSelectReasonView()
+                        
+                    case .withDrawWriteReasonView:
+                        WithDrawWriteReasonView()
+                        
+                    case .withDrawConfirmView:
+                        WithDrawConfirmView()
+                        
+                    case .searchView(searchWord: let searchWord):
+                        SearchView(
+                            searchWord: searchWord,
+                            sortOption: .recent,
+                            selectedTab: 0,
+                            isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                            isSortModalPresented: $isSortModalPresented,
+                            isTabBarHidden: $isTabBarHidden
+                        )
+                        
+                    case .reportView(reportType: let reportType, id: let id):
+                        ReportView(reportType: reportType, id: id)
+                        
+                    case .chatDetailView(let chatEntry):
+                        ChatDetailView(viewModel: ChatDetailViewModel(chatEntry: chatEntry))
                     }
                 }
                 .overlay(
@@ -152,10 +155,6 @@ struct NZTabBarView: View {
             navigationRouter.reset()
             tabRouter.switchToSearch(searchWord: searchWord, sortOption: .recent, searchTabIndex: 0)
         }
-    }
-
-    private func shouldShowTabBarForRoute(_ route: Route) -> Bool {
-        route == .likeView
     }
     
     var tabBar: some View {
@@ -244,9 +243,18 @@ struct NZTabBarView: View {
                 .ignoresSafeArea(.container, edges: .bottom)
         )
     }
+}
 
+private extension NZTabBarView {
+    
+    //MARK: - Private Method
+    
     private func isSelectedTab(_ tab: NZTab) -> Bool {
         tabRouter.selectedTab == tab && !isRegisterTabSelected
+    }
+    
+    private func shouldShowTabBarForRoute(_ route: Route) -> Bool {
+        route == .likeView
     }
 }
 
