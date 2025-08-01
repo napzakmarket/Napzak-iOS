@@ -118,6 +118,10 @@ extension RegisterSearchGenre {
                 .padding(.leading, 18)
             } else {
                 VStack(alignment: .center, spacing: 0){
+                    Image(.iconEmptySearchGenreIos)
+                        .padding(.top, 60)
+                        .padding(.bottom, 20)
+                    
                     Text("죄송해요, 찾으시는 장르가 아직 없네요\n원하시는 장르를 알려주시면 빠르게 추가할게요!")
                         .applyNapzakFont(.body6Regular14)
                         .fixedSize(horizontal: false, vertical: true)
@@ -125,7 +129,6 @@ extension RegisterSearchGenre {
                         .frame(height: 36)
                         .lineLimit(2)
                         .multilineTextAlignment(.center)
-                        .padding(.top, 40)
                         .padding(.horizontal, 57)
                     
                     Button {
@@ -143,7 +146,7 @@ extension RegisterSearchGenre {
                         RoundedRectangle(cornerRadius: 9)
                             .stroke(Color.napzakPrimary(.purple500), lineWidth: 1)
                     }
-                    .padding(.top, 34)
+                    .padding(.top, 19)
                 }
             }
         }

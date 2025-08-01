@@ -128,18 +128,14 @@ extension GenreSelectionView {
                 )
                 .frame(height: 8)
                 
-                if viewModel.isLoading {
-                    SpinnerLoadingView()
-                } else {
-                    GenreGridView(
-                        genres: $viewModel.genres,
-                        selectedGenres: $viewModel.selectedGenres,
-                        onGenreSelected: { genre in
-                            viewModel.toggleGenreSelection(genre)
-                        }
-                    )
-                    .padding(.horizontal, 20)
-                }
+                GenreGridView(
+                    genres: $viewModel.genres,
+                    selectedGenres: $viewModel.selectedGenres,
+                    onGenreSelected: { genre in
+                        viewModel.toggleGenreSelection(genre)
+                    }
+                )
+                .padding(.horizontal, 20)
 
             }
             .padding(.top, 16)
