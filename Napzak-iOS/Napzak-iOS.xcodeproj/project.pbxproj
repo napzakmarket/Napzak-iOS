@@ -59,6 +59,9 @@
 		870C84332DB941D300E70F09 /* ProfileEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870C84322DB941D000E70F09 /* ProfileEditView.swift */; };
 		8740EB562DA8D65C008C035E /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8740EB552DA8D656008C035E /* MyPageView.swift */; };
 		875E35FE2DC1265100660071 /* MarketViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 875E35FD2DC1264F00660071 /* MarketViewModel.swift */; };
+		87669CA12E1148F30051B655 /* LikeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87669CA02E1148ED0051B655 /* LikeView.swift */; };
+		87669CA32E1149000051B655 /* LikeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87669CA22E1148FB0051B655 /* LikeViewModel.swift */; };
+		87669CA52E114E030051B655 /* LikedProductsResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87669CA42E114E010051B655 /* LikedProductsResponseDTO.swift */; };
 		877F405E2DCA72A300008672 /* MarketProductItemDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877F405D2DCA72A100008672 /* MarketProductItemDTO.swift */; };
 		877F40602DCA72FA00008672 /* MarketProductListResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877F405F2DCA72F900008672 /* MarketProductListResponseDTO.swift */; };
 		877F40622DCA73F300008672 /* MarketProductBuyListResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 877F40612DCA73F200008672 /* MarketProductBuyListResponseDTO.swift */; };
@@ -295,6 +298,9 @@
 		870C84322DB941D000E70F09 /* ProfileEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEditView.swift; sourceTree = "<group>"; };
 		8740EB552DA8D656008C035E /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		875E35FD2DC1264F00660071 /* MarketViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketViewModel.swift; sourceTree = "<group>"; };
+		87669CA02E1148ED0051B655 /* LikeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeView.swift; sourceTree = "<group>"; };
+		87669CA22E1148FB0051B655 /* LikeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeViewModel.swift; sourceTree = "<group>"; };
+		87669CA42E114E010051B655 /* LikedProductsResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedProductsResponseDTO.swift; sourceTree = "<group>"; };
 		877F405D2DCA72A100008672 /* MarketProductItemDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketProductItemDTO.swift; sourceTree = "<group>"; };
 		877F405F2DCA72F900008672 /* MarketProductListResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketProductListResponseDTO.swift; sourceTree = "<group>"; };
 		877F40612DCA73F200008672 /* MarketProductBuyListResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketProductBuyListResponseDTO.swift; sourceTree = "<group>"; };
@@ -579,6 +585,7 @@
 		6CDC85D82DCFB701001C3921 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				87669CA22E1148FB0051B655 /* LikeViewModel.swift */,
 				6CDC85DE2DCFC909001C3921 /* SettingViewModel.swift */,
 				6C0FA8AD2DD1CB8600D81065 /* WithDrawViewModel.swift */,
 			);
@@ -588,6 +595,7 @@
 		6CDC85D92DCFB703001C3921 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				87669CA02E1148ED0051B655 /* LikeView.swift */,
 				8740EB552DA8D656008C035E /* MyPageView.swift */,
 				6CDC85DA2DCFB71A001C3921 /* SettingView.swift */,
 				6C0FA8AB2DD1C9C900D81065 /* WithDrawSelectReasonView.swift */,
@@ -1247,6 +1255,7 @@
 		D0F035852DBF6880003D0CBF /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				87669CA42E114E010051B655 /* LikedProductsResponseDTO.swift */,
 				D6FA34362DCF924C00795A54 /* ProductWithCountDTO.swift */,
 				D6FA34302DCF75F100795A54 /* ProductItemResponseDTO.swift */,
 				D6FA34322DCF82D600795A54 /* SellProductListResponseDTO.swift */,
@@ -1723,6 +1732,7 @@
 				D029060D2DAF98A5008515FD /* TradeStatus.swift in Sources */,
 				D63270252DA2C879002414DA /* GenreChip.swift in Sources */,
 				D6055AF22DBF3AE2005D32A3 /* BannerItem.swift in Sources */,
+				87669CA12E1148F30051B655 /* LikeView.swift in Sources */,
 				D06E5B362DAE0A88002E68A1 /* SearchView.swift in Sources */,
 				D0310AEC2DC9297800C265EC /* ProductDetailModel.swift in Sources */,
 				6CC4723B2DA453270086E345 /* RegisterDescription.swift in Sources */,
@@ -1868,6 +1878,7 @@
 				87E920682DC63C41003C42D5 /* StoreModifyProfileRequestDTO.swift in Sources */,
 				6CC472392DA44C5F0086E345 /* RegisterTitle.swift in Sources */,
 				D6920A262DC0C96A00A400CF /* ProductSection.swift in Sources */,
+				87669CA32E1149000051B655 /* LikeViewModel.swift in Sources */,
 				875E35FE2DC1265100660071 /* MarketViewModel.swift in Sources */,
 				D06D42902E118BDD00EEA82A /* ChatDetailView.swift in Sources */,
 				D67C17802D9B085600CFCDFA /* UsernameValidation.swift in Sources */,
@@ -1880,6 +1891,7 @@
 				D045DEBE2D83723A00EB1EB6 /* Napzak_iOSApp.swift in Sources */,
 				6CA043122E0DB2D7006125AD /* LoadingViewManager.swift in Sources */,
 				D0F035802DBF6654003D0CBF /* PresignedService.swift in Sources */,
+				87669CA52E114E030051B655 /* LikedProductsResponseDTO.swift in Sources */,
 				D0F035822DBF6654003D0CBF /* PresignedAPI.swift in Sources */,
 				D0180D602D9F001E006A748F /* RegisterFloatingView.swift in Sources */,
 				6CD972CF2DC7BD41000AE85E /* SellRegisterResponseDTO.swift in Sources */,

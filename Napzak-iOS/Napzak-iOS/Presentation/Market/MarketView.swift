@@ -236,31 +236,6 @@ struct MarketView: View {
                         .foregroundColor(Color.napzakGrayScale(.gray200))
                         .offset(y: 80)
                 }
-                
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
-                        // 본인 상점일 경우에만 프로필 편집 버튼 표시
-                        if viewModel.storeDetail?.isStoreOwner == true {
-                            Button {
-                                navigationRouter.push(next: .profileEditView)
-                            } label: {
-                                Text("프로필 편집")
-                                    .foregroundColor(Color.napzakGrayScale(.white))
-                                    .applyNapzakFont(.caption4SemiBold10)
-                                    .frame(width: 48, height: 12)
-                                    .padding(6)
-                                    .background(
-                                        Capsule()
-                                            .fill(Color.napzakGrayScale(.gray400))
-                                    )
-                            }
-                            .padding(.trailing, 28)
-                        }
-                    }
-                    .padding(.bottom, 8)
-                }
             }
 
             VStack(spacing: 0) {
@@ -307,10 +282,36 @@ struct MarketView: View {
                 }
                 .frame(height: 50)
                 .padding(.top, 17)
-                .padding(.bottom, 17)
-            }
-        }
-    }
+                
+                // 본인 상점일 경우에만 프로필 편집 버튼 표시
+                 if viewModel.storeDetail?.isStoreOwner == true {
+                     Button {
+                         navigationRouter.push(next: .profileEditView)
+                     } label: {
+                         HStack(spacing: 8) {
+                             Image("edit_icn")
+                                 .renderingMode(.template)
+                                 .foregroundColor(Color.napzakGrayScale(.gray400))
+                             Text("프로필 편집")
+                                 .foregroundColor(Color.napzakGrayScale(.gray400))
+                                 .applyNapzakFont(.caption2Medium12)
+                         }
+                         .frame(height: 38)
+                         .frame(maxWidth: .infinity)
+                         .background(
+                             RoundedRectangle(cornerRadius: 8)
+                                 .fill(Color.napzakGrayScale(.gray50))
+                         )
+                     }
+                     .padding(.horizontal, 26)
+                     .padding(.top, 5)
+                 }
+                 
+                 Spacer()
+                     .frame(height: 8)
+             }
+         }
+     }
     
     private var tabAndFilterSectionView: some View {
         ZStack(alignment: .top) {

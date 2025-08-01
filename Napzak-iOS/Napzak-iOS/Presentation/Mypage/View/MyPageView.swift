@@ -236,9 +236,14 @@ struct MyPageView: View {
                                UIApplication.shared.canOpenURL(url) {
                                 UIApplication.shared.open(url)
                             }
-                        } else if item.title == "설정" {
+                        }
+                        else if item.title == "설정" {
                             navigationRouter.push(next: .settingView)
-                        } else {
+                        }
+                        else if item.title == "찜" {
+                            navigationRouter.push(next: .likeView)
+                        }
+                        else {
                             // TODO: - 다른 메뉴 라우팅
                         }
                     } label: {
