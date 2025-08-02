@@ -18,6 +18,7 @@ protocol ChatServiceProtocol {
     func patchExitChatRoom(roomId: Int) async -> Result<Void, NetworkError>
     func getChatRoomIds() async -> Result<ChatRoomIdListResponseDTO, NetworkError>
     func getMyStoreId() async -> Result<StoreIdResponseDTO, NetworkError>
+    func patchChatInfo(roomId: Int, requestBody: ChatInfoRequestDTO) async -> Result<UpdatedProductIdResponseDTO, NetworkError>
 }
 
 final class ChatService: BaseService, ChatServiceProtocol {
@@ -58,5 +59,9 @@ final class ChatService: BaseService, ChatServiceProtocol {
     
     func getMyStoreId() async -> Result<StoreIdResponseDTO, NetworkError> {
         return await requestDecodable(provider, .getMyStoreId)
+    }
+    
+    func patchChatInfo(roomId: Int, requestBody: ChatInfoRequestDTO) async -> Result<UpdatedProductIdResponseDTO, NetworkError> {
+        return await requestDecodable(provider, .patchChatInfo(roomId: roomId, requestBody: requestBody))
     }
 }

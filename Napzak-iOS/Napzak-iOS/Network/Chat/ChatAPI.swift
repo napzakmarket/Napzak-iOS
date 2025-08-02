@@ -23,6 +23,7 @@ enum ChatAPI {
     case patchExitChatRoom(roomId: Int)
     case getChatRoomIds
     case getMyStoreId
+    case patchChatInfo(roomId: Int, requestBody: ChatInfoRequestDTO)
 }
 
 extension ChatAPI: BaseTargetType {
@@ -52,12 +53,14 @@ extension ChatAPI: BaseTargetType {
             return "chat/rooms/ids"
         case .getMyStoreId:
             return "stores/store-id"
+        case .patchChatInfo(let roomId, _):
+            return "chat/rooms/\(roomId)/product-id"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .patchEnterChatRoom, .patchLeaveChatRoom, .patchExitChatRoom:
+        case .patchEnterChatRoom, .patchLeaveChatRoom, .patchExitChatRoom, .patchChatInfo:
             return .patch
         case .postCreateChatRoom:
             return .post
@@ -82,6 +85,8 @@ extension ChatAPI: BaseTargetType {
             } else {
                 return .requestPlain
             }
+        case .patchChatInfo(_, let requestBody):
+            return .requestJSONEncodable(requestBody)
         default:
             return .requestPlain
         }

@@ -284,11 +284,13 @@ extension ChatDetailView {
                 onSubmit: {
                     let messageText = viewModel.messageText
                     
-                    if viewModel.chatMessages.isEmpty && viewModel.roomId == nil  {
+                    if viewModel.chatMessages.isEmpty && viewModel.roomId == nil {
                         Task {
                             await viewModel.postChatRoomCreate()
                             viewModel.sendFirstMessage(firstMessageText: messageText)
                         }
+                    } else if viewModel.shouldUpdateProductInfo {
+                        viewModel.sendProductUpdateMessage(messageText: messageText)
                     } else {
                         Task {
                             await viewModel.sendTextMessage(text: messageText)

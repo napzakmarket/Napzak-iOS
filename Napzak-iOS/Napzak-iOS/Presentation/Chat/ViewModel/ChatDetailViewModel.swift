@@ -31,6 +31,7 @@ final class ChatDetailViewModel: ObservableObject {
     @Published var isChatDisabled: Bool = false
     @Published var isProfileNeeded: Bool = false
     @Published var isReadMyMessage: Bool = false
+    @Published var shouldUpdateProductInfo = false
 
     //MARK: - Properties
     
@@ -86,6 +87,9 @@ private extension ChatDetailViewModel {
                 
                 Task {
                     await self.fetchChatMessages(roomId: roomId)
+                    if !self.chatMessages.isEmpty {
+                        await self.enterChatRoom(roomId: roomId)
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -208,6 +212,7 @@ private extension ChatDetailViewModel {
             
             self.productId = data.productId
             isReadMyMessage = !data.onlineStoreIds.isEmpty
+            shouldUpdateProductInfo = data.productId != chatDetailInfo.productInfo.productId
             
         case .failure(let error):
             logger.error("patchEnterChatRoom failed: \(error.localizedDescription)")
@@ -246,6 +251,23 @@ private extension ChatDetailViewModel {
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    func updateProductInfo(newProductId: Int) async {
+        let result = await NetworkService.shared.chatService.patchChatInfo(roomId: roomId ?? 0, requestBody: ChatInfoRequestDTO(newProductId: newProductId))
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("patchChatInfo: No data received")
+                return
+            }
+            
+            self.productId = data.updatedProductId
+        case .failure(let error):
+            logger.error("patchChatInfo failed: \(error.localizedDescription)")
+        }
+
     }
 }
 
@@ -305,6 +327,16 @@ extension ChatDetailViewModel {
             await sendProductMessage()
             try? await Task.sleep(nanoseconds: 500_000_000)
             await sendTextMessage(text: firstMessageText)
+        }
+    }
+    
+    func sendProductUpdateMessage(messageText: String) {
+        Task {
+            await updateProductInfo(newProductId: chatDetailInfo.productInfo.productId)
+            await sendProductMessage()
+            try? await Task.sleep(nanoseconds: 500_000_000)
+            await sendTextMessage(text: messageText)
+            shouldUpdateProductInfo = false
         }
     }
     
