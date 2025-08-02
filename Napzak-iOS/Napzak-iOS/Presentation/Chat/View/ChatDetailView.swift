@@ -89,7 +89,11 @@ struct ChatDetailView: View {
                             confirmText: "나가기",
                             cancelText: "취소",
                             onConfirm: {
+                                Task {
+                                    await viewModel.exitChatRoom()
+                                }
                                 isExitAlertPresented = false
+                                navigationRouter.pop()
                             },
                             onCancel: {
                                 isExitAlertPresented = false
@@ -110,17 +114,9 @@ struct ChatDetailView: View {
         .onTapGesture {
             isFocused = false
         }
-        .onAppear {
-            if let productId = viewModel.productId {
-                Task {
-                    await viewModel.fetchChatDetailInfo(productId: productId)
-                }
-            }
-            
-            if let roomId = viewModel.roomId {
-                Task {
-                    await viewModel.patchChatRoomEnter(roomId: roomId)
-                }
+        .onDisappear {
+            Task {
+                await viewModel.leaveChatRoom()
             }
         }
     }
@@ -272,137 +268,30 @@ extension ChatDetailView {
             Button {
                 //TODO: - 사진 앱에서 선택하도록 연결
                 
-                //서버 연결 이후 삭제 예정. UI 확인용!
-                viewModel.chatMessages.append(ChatMessageModel(
-                    id: tempID,
-                    senderId: 1,
-                    type: .image,
-                    content: nil,
-                    metaData: .image(
-                        ImageMeta(
-                            type: .image,
-                            imageUrls: ["https://i.pinimg.com/736x/86/e8/c9/86e8c92b974b7d21a84a2af1b2650143.jpg"]
-                        )
-                    ),
-                    createdAt: "오전 7:30",
-                    isFirstChat: !isSent,
-                    isMessageOwner: isSent,
-                    isRead: true
-                ))
-                isSent.toggle()
-                tempID += 1
+                Task {
+                    await viewModel.sendImageMessage(imageUrls: ["https://i.pinimg.com/736x/86/e8/c9/86e8c92b974b7d21a84a2af1b2650143.jpg"])
+                }
+
             } label: {
                 Image(.iconGallary)
             }
             ChatMessageInputBar (
                 text: $viewModel.messageText,
                 isFocused: _isFocused,
-                isChatDisabled: viewModel.chatDetailInfo.chatStoreInfo.isWithdrawn,
+                isChatDisabled: viewModel.isChatDisabled,
                 onSubmit: {
-                    if viewModel.chatMessages.isEmpty {
+                    if viewModel.chatMessages.isEmpty && viewModel.roomId == nil  {
+                        let firstMessage = viewModel.messageText
+                        
                         Task {
                             await viewModel.postChatRoomCreate()
+                            viewModel.sendFirstMessage(firstMessageText: firstMessage)
                         }
                     }
                     
-                    //서버 연결 이후 삭제 예정. UI 확인용!
-                    switch viewModel.messageText {
-                    case "날짜":
-                        viewModel.chatMessages.append(ChatMessageModel(
-                            id: tempID,
-                            senderId: 3,
-                            type: .date,
-                            content: nil,
-                            metaData: .date(
-                                DateMeta(type: .date, date: "2025년 4월 30일")
-                            ),
-                            createdAt: "오전 7:30",
-                            isFirstChat: !isSent,
-                            isMessageOwner: isSent,
-                            isRead: true
-                        ))
-                    case "상품":
-                        viewModel.chatMessages.append(ChatMessageModel(
-                            id: tempID,
-                            senderId: 2,
-                            type: .product,
-                            content: nil,
-                            metaData: .product(
-                                ProductMeta(
-                                    type: .product,
-                                    tradeType: viewModel.chatDetailInfo.productInfo.tradeType,
-                                    productId: 0,
-                                    genreName: viewModel.chatDetailInfo.productInfo.genreName,
-                                    title: viewModel.chatDetailInfo.productInfo.title,
-                                    price: viewModel.chatDetailInfo.productInfo.price
-                                )
-                            ),
-                            createdAt: "오전 7:30",
-                            isFirstChat: !isSent,
-                            isMessageOwner: isSent,
-                            isRead: true
-                        ))
-                        tempID += 1
-                        viewModel.chatMessages.append(ChatMessageModel(
-                            id: tempID,
-                            senderId: 0,
-                            type: .text,
-                            content: "거래합시다",
-                            metaData: nil,
-                            createdAt: "오전 7:30",
-                            isFirstChat: !isSent,
-                            isMessageOwner: isSent,
-                            isRead: false
-                        ))
-                    case "나감":
-                        viewModel.chatMessages.append(ChatMessageModel(
-                            id: tempID,
-                            senderId: 4,
-                            type: .system,
-                            content: nil,
-                            metaData: .system(
-                                SystemMeta(
-                                    type: .leave,
-                                    content: ""
-                                )
-                            ),
-                            createdAt: "오전 7:30",
-                            isFirstChat: !isSent,
-                            isMessageOwner: isSent,
-                            isRead: true
-                        ))
-                    case "신고":
-                        viewModel.chatMessages.append(ChatMessageModel(
-                            id: tempID,
-                            senderId: 4,
-                            type: .system,
-                            content: nil,
-                            metaData: .system(
-                                SystemMeta(
-                                    type: .reported,
-                                    content: ""
-                                )
-                            ),
-                            createdAt: "오전 7:30",
-                            isFirstChat: !isSent,
-                            isMessageOwner: isSent,
-                            isRead: true
-                        ))
-                    default:
-                        viewModel.chatMessages.append(ChatMessageModel(
-                            id: tempID,
-                            senderId: 0,
-                            type: .text,
-                            content: viewModel.messageText,
-                            metaData: nil,
-                            createdAt: "오전 7:30",
-                            isFirstChat: !isSent,
-                            isMessageOwner: isSent,
-                            isRead: false
-                        ))
+                    Task {
+                        await viewModel.sendTextMessage()
                     }
-                    isSent.toggle()
-                    tempID += 1
                 }
             )
         }

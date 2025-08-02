@@ -27,13 +27,19 @@ final class ChatDetailViewModel: ObservableObject {
     @Published var chatMessages: [ChatMessageModel] = []
     @Published var messageText = ""
     @Published var roomId: Int?
-    
+    @Published var productId: Int?
+    @Published var isChatDisabled: Bool = false
+
     //MARK: - Properties
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "ChatDetail")
-    var productId: Int?
 
     private let chatStompManager = ChatStompManager.shared
+    private let chatEventManager = ChatEventManager.shared
+
+    private var didRecieveStompMessage = false
+    
+    private var didUpdateProductIdSubject = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
     
     //MARK: - Init
@@ -43,13 +49,28 @@ final class ChatDetailViewModel: ObservableObject {
         case .product(let productId):
             self.productId = productId
             self.roomId = nil
+            
+            Task {
+                await fetchChatDetailInfo(productId: productId)
+            }
+            observeRoomId()
         case .room(let roomId):
             self.roomId = roomId
             self.productId = nil
+            
+            Task {
+                await patchChatRoomEnter(roomId: roomId)
+                await fetchChatMessages(roomId: roomId)
+            }
+            observeProductId()
         }
-
         fetchWebSocket()
-        observeRoomId()
+        observeChatMessage()
+        chatEventManager.chatStatus = .active
+    }
+    
+    deinit {
+        chatEventManager.chatStatus = .inactive
     }
 }
 
@@ -64,18 +85,46 @@ private extension ChatDetailViewModel {
                 
                 Task {
                     await self.patchChatRoomEnter(roomId: roomId)
-                    self.chatStompManager.subscribe(roomId: roomId)
+                    await self.fetchChatMessages(roomId: roomId)
                 }
             }
             .store(in: &cancellables)
-    }}
+    }
+    
+    func observeProductId() {
+        $productId
+            .sink { [weak self] productId in
+                guard let self, let productId else { return }
+                
+                Task {
+                    await self.fetchChatDetailInfo(productId: productId)
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    func observeChatMessage() {
+        chatStompManager.receivedMessageSubject
+            .receive(on: RunLoop.main)
+            .sink { [weak self] data in
+                guard let self else { return }
+
+                self.chatMessages.append(data)
+                if data.type == .system {
+                    isChatDisabled = true
+                }
+                self.didRecieveStompMessage = true
+            }
+            .store(in: &cancellables)
+    }
+}
 
 extension ChatDetailViewModel {
     
     //MARK: - Func
 
     func fetchChatDetailInfo(productId: Int) async {
-        let result = await NetworkService.shared.chatService.getChatInfo(productId: productId)
+        let result = await NetworkService.shared.chatService.getChatInfo(productId: productId, roomId: roomId)
         
         switch result {
         case .success(let response):
@@ -84,10 +133,10 @@ extension ChatDetailViewModel {
                 return
             }
             
-            self.chatDetailInfo.productInfo = ChatProductInfo(dto: data.productInfo)
-            self.chatDetailInfo.chatStoreInfo = ChatStoreInfo(dto: data.storeInfo)
-            self.roomId = data.roomId ?? nil
-            
+            chatDetailInfo.productInfo = ChatProductInfo(dto: data.productInfo)
+            chatDetailInfo.chatStoreInfo = ChatStoreInfo(dto: data.storeInfo)
+            roomId = data.roomId ?? nil
+            isChatDisabled = chatDetailInfo.chatStoreInfo.isWithdrawn
         case .failure(let error):
             logger.error("getChatInfo failed: \(error.localizedDescription)")
         }
@@ -109,6 +158,8 @@ extension ChatDetailViewModel {
             }
             
             self.roomId = data.roomId
+            chatStompManager.subscribe(roomId: data.roomId)
+            chatEventManager.didUpdateChatRoomsSubject.send()
             
         case .failure(let error):
             logger.error("postCreateChatRoom failed: \(error.localizedDescription)")
@@ -131,13 +182,55 @@ extension ChatDetailViewModel {
             logger.error("patchEnterChatRoom failed: \(error.localizedDescription)")
         }
     }
+    
+    func leaveChatRoom() async {
+        guard let roomId else { return }
+        let result = await NetworkService.shared.chatService.patchLeaveChatRoom(roomId: roomId)
         
-    func fetchChatMessages() {
-        chatMessages = ChatMessageModel.mock
+        switch result {
+        case .success:
+            if didRecieveStompMessage {
+                chatEventManager.didUpdateChatRoomsSubject.send()
+            }
+        case .failure(let error):
+            logger.error("patchLeaveChatRoom failed: \(error.localizedDescription)")
+        }
+    }
+    
+    func exitChatRoom() async {
+        guard let roomId else { return }
+        let result = await NetworkService.shared.chatService.patchExitChatRoom(roomId: roomId)
+        
+        switch result {
+        case .success:
+            chatEventManager.didUpdateChatRoomsSubject.send()
+        case .failure(let error):
+            logger.error("patchLeaveChatRoom failed: \(error.localizedDescription)")
+        }
+    }
+
+        
+    func fetchChatMessages(roomId: Int) async {
+        let result = await NetworkService.shared.chatService.getChatMessages(roomId: roomId)
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getChatMessages: No data received")
+                return
+            }
+            
+            self.chatMessages = data.messages.reversed().map { ChatMessageModel(dto: $0) }
+            if !data.messages.isEmpty && data.messages[0].type == .system {
+                isChatDisabled = true
+            }
+        case .failure(let error):
+            logger.error("getChatMessages failed: \(error.localizedDescription)")
+        }
     }
     
     func fetchWebSocket() {
-        chatStompManager.socketStatus
+        chatStompManager.socketStatusSubject
             .sink { status in
                 switch status {
                 case .connected:
@@ -147,5 +240,62 @@ extension ChatDetailViewModel {
                 }
             }
             .store(in: &cancellables)
+    }
+    
+    func sendFirstMessage(firstMessageText: String) {
+        Task {
+            await sendProductMessage()
+            await sendTextMessage(text: firstMessageText)
+        }
+    }
+    
+    func sendProductMessage() async {
+        guard let roomId else { return }
+        
+        let message = ChatMessageRequestDTO(
+            roomId: roomId,
+            type: .product,
+            content: nil,
+            metadata:
+                    .product(
+                        ProductMeta(
+                            type: .product,
+                            tradeType: chatDetailInfo.productInfo.tradeType,
+                            productId: chatDetailInfo.productInfo.productId,
+                            genreName: chatDetailInfo.productInfo.genreName,
+                            title: chatDetailInfo.productInfo.title,
+                            price: chatDetailInfo.productInfo.price
+                        )
+                    )
+        )
+        
+        chatStompManager.sendChat(message: message)
+    }
+    
+    func sendTextMessage(text: String? = nil) async {
+        guard let roomId else { return }
+        
+        let message = ChatMessageRequestDTO(
+            roomId: roomId,
+            type: .text,
+            content: text == nil ? messageText : text,
+            metadata: nil
+        )
+        
+        chatStompManager.sendChat(message: message)
+    }
+
+    func sendImageMessage(imageUrls: [String]) async {
+        guard let roomId else { return }
+        
+        let imageMeta = ImageMeta(type: .image, imageUrls: imageUrls)
+        let message = ChatMessageRequestDTO(
+            roomId: roomId,
+            type: .image,
+            content: nil,
+            metadata: .image(imageMeta)
+        )
+
+        chatStompManager.sendChat(message: message)
     }
 }
