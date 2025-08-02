@@ -129,6 +129,7 @@
 		D05A03922D91B67200659C74 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05A03912D91B67200659C74 /* View+.swift */; };
 		D061C2702E00088700734834 /* SearchEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D061C26F2E00088000734834 /* SearchEventManager.swift */; };
 		D061C2902E0993F100734834 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D061C28F2E0993E600734834 /* ChatView.swift */; };
+		D06943102E3E9CC700FE012D /* StoreIdResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D069430F2E3E9CC700FE012D /* StoreIdResponseDTO.swift */; };
 		D06B835B2DDB15D1008A0D14 /* ProductEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06B835A2DDB15C6008A0D14 /* ProductEventManager.swift */; };
 		D06D42902E118BDD00EEA82A /* ChatDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D428F2E118BD600EEA82A /* ChatDetailView.swift */; };
 		D06D42932E11910100EEA82A /* ChatMessageInputBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D06D42922E1190DB00EEA82A /* ChatMessageInputBar.swift */; };
@@ -370,6 +371,7 @@
 		D05A03912D91B67200659C74 /* View+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+.swift"; sourceTree = "<group>"; };
 		D061C26F2E00088000734834 /* SearchEventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEventManager.swift; sourceTree = "<group>"; };
 		D061C28F2E0993E600734834 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		D069430F2E3E9CC700FE012D /* StoreIdResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreIdResponseDTO.swift; sourceTree = "<group>"; };
 		D06B835A2DDB15C6008A0D14 /* ProductEventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductEventManager.swift; sourceTree = "<group>"; };
 		D06D428F2E118BD600EEA82A /* ChatDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailView.swift; sourceTree = "<group>"; };
 		D06D42922E1190DB00EEA82A /* ChatMessageInputBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageInputBar.swift; sourceTree = "<group>"; };
@@ -1177,6 +1179,7 @@
 			isa = PBXGroup;
 			children = (
 				D03079EE2E3744FB000D2144 /* ChatRoomIdListResponseDTO.swift */,
+				D069430F2E3E9CC700FE012D /* StoreIdResponseDTO.swift */,
 				D03079EA2E36CAFE000D2144 /* ChatRoomResponseDTO.swift */,
 				D03079E42E36956C000D2144 /* ChatMessageResponseDTO.swift */,
 				D07B039B2E35584700D9D985 /* ChatRoomCreateResponseDTO.swift */,
@@ -1824,6 +1827,7 @@
 				D045DEEA2D837B9D00EB1EB6 /* FontLiteral.swift in Sources */,
 				D0310AF62DCBAD9200C265EC /* ProductDetailToastView.swift in Sources */,
 				D06D429B2E11C5BD00EEA82A /* Int+.swift in Sources */,
+				D06943102E3E9CC700FE012D /* StoreIdResponseDTO.swift in Sources */,
 				D06E5B382DAE2121002E68A1 /* NZSegmentedControl.swift in Sources */,
 				6CF689432DC67AF500BC63AD /* ReportResponseDTO.swift in Sources */,
 				D6FA34442DD08E8D00795A54 /* NZTab.swift in Sources */,
