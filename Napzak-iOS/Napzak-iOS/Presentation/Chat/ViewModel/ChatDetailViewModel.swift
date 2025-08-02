@@ -32,6 +32,7 @@ final class ChatDetailViewModel: ObservableObject {
     @Published var isProfileNeeded: Bool = false
     @Published var isReadMyMessage: Bool = false
     @Published var shouldUpdateProductInfo = false
+    @Published var selectedImage: UIImage? = nil
 
     //MARK: - Properties
     
@@ -195,6 +196,8 @@ private extension ChatDetailViewModel {
             chatDetailInfo.chatStoreInfo = ChatStoreInfo(dto: data.storeInfo)
             roomId = data.roomId ?? nil
             isChatDisabled = chatDetailInfo.chatStoreInfo.isWithdrawn
+            shouldUpdateProductInfo = data.productInfo.productId != self.productId
+            
         case .failure(let error):
             logger.error("getChatInfo failed: \(error.localizedDescription)")
         }
@@ -388,5 +391,37 @@ extension ChatDetailViewModel {
         )
 
         chatStompManager.sendChat(message: message)
+    }
+    
+    func uploadImage() async {
+        if let selectedImage = selectedImage {
+            let imageName = UUID().uuidString + ".jpg"
+            let presignedResult = await NetworkService.shared.presignedService.getPresignedURL(imageNameList: [imageName])
+
+            switch presignedResult {
+            case .success(let response):
+                guard let uploadURL = response.data?.productPresignedUrls[imageName],
+                      let imageData = selectedImage.jpegData(compressionQuality: 0.8) else {
+                    logger.error("이미지 데이터 생성 혹은 Presigned URL 파싱 실패")
+                    return
+                }
+
+                let uploadResult = await NetworkService.shared.presignedService.putPresignedURL(url: uploadURL, imageData: imageData)
+
+                switch uploadResult {
+                case .success:
+                    logger.info("✅ 커버 이미지 업로드 성공")
+                    
+                    let imageURL = uploadURL.components(separatedBy: "?").first ?? uploadURL
+                    await sendImageMessage(imageUrls: [imageURL])
+                    
+                case .failure(let error):
+                    logger.error("❌이미지 업로드 실패: \(error.localizedDescription)")
+                }
+
+            case .failure(let error):
+                logger.error("❌ Presigned URL 요청 실패: \(error.localizedDescription)")
+            }
+        }
     }
 }

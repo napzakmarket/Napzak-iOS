@@ -16,6 +16,7 @@ struct ChatDetailView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
     
     @StateObject var viewModel: ChatDetailViewModel
+    @StateObject private var chatImagePickerManager = ImagePickerManager()
     
     @FocusState private var isFocused: Bool
 
@@ -113,6 +114,18 @@ struct ChatDetailView: View {
         .animation(.easeInOut(duration: 0.3), value: isExitAlertPresented)
         .onTapGesture {
             isFocused = false
+        }
+        .onChange(of: chatImagePickerManager.selectedImages) { images in
+            if let firstImage = images.first {
+                viewModel.selectedImage = firstImage
+                Task {
+                    await viewModel.uploadImage()
+                }
+                chatImagePickerManager.selectedImages = []
+            }
+        }
+        .onAppear {
+            chatImagePickerManager.setOverrideMaxCount(1)
         }
         .onDisappear {
             Task {
@@ -265,17 +278,10 @@ extension ChatDetailView {
     
     private var chatInputSection: some View {
         HStack(alignment: .center, spacing: 12) {
-            Button {
-                //TODO: - 사진 앱에서 선택하도록 연결
-                
-                Task {
-                    await viewModel.sendImageMessage(imageUrls: ["https://i.pinimg.com/736x/86/e8/c9/86e8c92b974b7d21a84a2af1b2650143.jpg"])
-                }
-
-            } label: {
+            chatImagePickerManager.photoPickerView(maxCount: 1) {
                 Image(.iconGallary)
             }
-            .disabled(viewModel.isChatDisabled)
+            .disabled(viewModel.isChatDisabled || viewModel.chatMessages.isEmpty)
             
             ChatMessageInputBar (
                 text: $viewModel.messageText,
