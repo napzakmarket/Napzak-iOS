@@ -31,6 +31,7 @@ final class ChatStompManager: ObservableObject {
     var receivedMessageDTOSubject = PassthroughSubject<WebSocketRedeivedChatMessageDTO, Never>()
     var receivedStatusDTOSubject = PassthroughSubject<WebSocketRedeivedChatStatusDTO, Never>()
     var receivedRoomIdsSubject = PassthroughSubject<[Int], Never>()
+    var receivedMyStoreIdSubject = PassthroughSubject<Int, Never>()
     
     private var chatEventManager = ChatEventManager.shared
     
@@ -38,6 +39,7 @@ final class ChatStompManager: ObservableObject {
     private var pongReceivedAt: Date?
     private let pongTimeout: TimeInterval = 30
     private var subscribedChatRoomIds: [Int] = []
+    private var subscribedMyStoreId: Int = 0
     
     private var cancellables = Set<AnyCancellable>()
 
@@ -45,6 +47,7 @@ final class ChatStompManager: ObservableObject {
     
     private init() {
         observeSubscribedChatRoomIds()
+        observeSubscribedMyStoreId()
         
         switch KeychainManager.shared.getAccessToken() {
         case .success(let token):
@@ -83,6 +86,16 @@ private extension ChatStompManager {
             .store(in: &cancellables)
     }
     
+    func observeSubscribedMyStoreId() {
+        receivedMyStoreIdSubject
+            .sink { [weak self] storeId in
+                guard let self else { return }
+                
+                self.subscribedMyStoreId = storeId
+            }
+            .store(in: &cancellables)
+    }
+    
     func subscribeStomp() {
         stompClient?.eventsUpstream
             .receive(on: RunLoop.main)
@@ -95,7 +108,10 @@ private extension ChatStompManager {
                     startPing()
 
                     stompClient?.subscribe(to: "/topic/pong")
-                    initialSubscribe(roomIds: subscribedChatRoomIds)
+                    subscribeChatRooms(roomIds: subscribedChatRoomIds)
+                    if !subscribedChatRoomIds.contains(subscribedMyStoreId) {
+                        subscribeMyStoreChannel(storeId: subscribedMyStoreId)
+                    }
                 case .disconnected(_):
                     print("❎ WebSocket 연결 해제")
                     socketStatusSubject.send(.disconnected)
@@ -114,22 +130,30 @@ private extension ChatStompManager {
                 guard let self = self else { return }
                 
                 switch message {
-                case .text(let messageString, _, _, _):
-                    if chatEventManager.chatStatus == .inactive {
+                case .text(let messageString, _, let destination, _):
+                    if destination == "/queue/chat.room-created.\(subscribedMyStoreId)" {
+                        print("💬 생성된 채팅방 ID: \(messageString)")
+                        if let roomId = Int(messageString) {
+                            subscribeChatRoom(roomId: roomId)
+                        }
                         chatEventManager.didUpdateChatRoomsSubject.send()
-                    }
-                    
-                    if let jsonData = messageString.data(using: .utf8) {
-                        do {
-                            let chatMessage = try JSONDecoder().decode(WebSocketRedeivedChatMessageDTO.self, from: jsonData)
-                            receivedMessageDTOSubject.send(chatMessage)
-                        } catch {
+                    } else {
+                        if chatEventManager.chatStatus == .inactive {
+                            chatEventManager.didUpdateChatRoomsSubject.send()
+                        }
+                        
+                        if let jsonData = messageString.data(using: .utf8) {
                             do {
-                                let statusData = try JSONDecoder().decode(WebSocketRedeivedChatStatusDTO.self, from: jsonData)
-                                
-                                receivedStatusDTOSubject.send(statusData)
+                                let chatMessage = try JSONDecoder().decode(WebSocketRedeivedChatMessageDTO.self, from: jsonData)
+                                receivedMessageDTOSubject.send(chatMessage)
                             } catch {
-                                logger.error("JSON 디코딩 오류: \(error)")
+                                do {
+                                    let statusData = try JSONDecoder().decode(WebSocketRedeivedChatStatusDTO.self, from: jsonData)
+                                    
+                                    receivedStatusDTOSubject.send(statusData)
+                                } catch {
+                                    logger.error("JSON 디코딩 오류: \(error)")
+                                }
                             }
                         }
                     }
@@ -141,6 +165,7 @@ private extension ChatStompManager {
             .store(in: &cancellables)
     }
     
+//    당장은 활용x 추후 활용 가능성 있음
 //    func monitorPong() {
 //        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] timer in
 //            guard let self else { return }
@@ -190,16 +215,30 @@ private extension ChatStompManager {
         stompClient?.send(body: requestBody, to: destination)
     }
 
-    func initialSubscribe(roomIds: [Int]) {
+    func subscribeChatRooms(roomIds: [Int]) {
         for id in roomIds {
-            let destination = "/topic/chat.room.\(id)"
-            stompClient?.subscribe(
-                to: destination,
-                mode: .auto
-            )
-            
-            print("✅ \(id)번 채팅방 구독")
+            subscribeChatRoom(roomId: id)
         }
+    }
+    
+    func subscribeChatRoom(roomId: Int) {
+        let destination = "/topic/chat.room.\(roomId)"
+        stompClient?.subscribe(
+            to: destination,
+            mode: .auto
+        )
+        
+        print("✅ \(roomId)번 채팅방 구독")
+    }
+    
+    func subscribeMyStoreChannel(storeId: Int) {
+        let destination = "/queue/chat.room-created.\(storeId)"
+        stompClient?.subscribe(
+            to: destination,
+            mode: .auto
+        )
+        
+        print("✅ \(storeId) 채널 구독")
     }
 }
 

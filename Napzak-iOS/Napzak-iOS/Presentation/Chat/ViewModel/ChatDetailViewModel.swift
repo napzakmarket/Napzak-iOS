@@ -85,7 +85,6 @@ private extension ChatDetailViewModel {
                 guard let self, let roomId else { return }
                 
                 Task {
-                    await self.enterChatRoom(roomId: roomId)
                     await self.fetchChatMessages(roomId: roomId)
                 }
             }
@@ -270,7 +269,6 @@ extension ChatDetailViewModel {
             }
             
             self.roomId = data.roomId
-            chatStompManager.subscribe(roomId: data.roomId)
             chatEventManager.didUpdateChatRoomsSubject.send()
             
         case .failure(let error):
