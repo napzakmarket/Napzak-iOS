@@ -28,7 +28,7 @@ final class ChatViewModel: ObservableObject {
 
     init() {
         Task {
-            await fetchChatMessages()
+            await fetchChatRooms()
         }
 
         observeChatEvent()
@@ -45,15 +45,13 @@ private extension ChatViewModel {
                 guard let self = self else { return }
                 
                 Task {
-                    await self.fetchChatMessages()
+                    await self.fetchChatRooms()
                 }
             }
             .store(in: &cancellables)
     }
-}
-
-extension ChatViewModel {
-    func fetchChatMessages() async {
+    
+    func fetchChatRooms() async {
         let result = await NetworkService.shared.chatService.getChatRooms(deviceToken: nil)
         
         switch result {
