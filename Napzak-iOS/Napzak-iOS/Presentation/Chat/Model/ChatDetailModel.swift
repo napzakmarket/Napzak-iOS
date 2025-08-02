@@ -18,6 +18,8 @@ struct ChatProductInfo {
     let price: Int
     let isPriceNegotiable: Bool
     let genreName: String
+    let productOwnerId: Int
+    let isMyProduct: Bool
     
     //MARK: - Init
     
@@ -29,7 +31,9 @@ struct ChatProductInfo {
         title: String,
         price: Int,
         isPriceNegotiable: Bool,
-        genreName: String
+        genreName: String,
+        productOwnerId: Int,
+        isMyProduct: Bool
     ) {
         self.productId = productId
         self.photo = photo
@@ -38,6 +42,8 @@ struct ChatProductInfo {
         self.price = price
         self.isPriceNegotiable = isPriceNegotiable
         self.genreName = genreName
+        self.productOwnerId = productOwnerId
+        self.isMyProduct = isMyProduct
     }
     
     ///init for decoding
@@ -49,6 +55,8 @@ struct ChatProductInfo {
         self.price = dto.price
         self.isPriceNegotiable = dto.isPriceNegotiable
         self.genreName = dto.genreName
+        self.productOwnerId = dto.productOwnerId
+        self.isMyProduct = dto.isMyProduct
     }
 }
 
