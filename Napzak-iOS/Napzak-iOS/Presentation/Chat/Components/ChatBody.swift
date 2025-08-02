@@ -129,12 +129,12 @@ extension ChatBody {
     
     private var timeLabel: some View {
         VStack(alignment: .trailing, spacing: 0) {
-            if chatData.isMessageOwner && !chatData.isRead {
+            if chatData.isMessageOwner && !(chatData.isRead ?? false) {
                 Text("1")
                     .applyNapzakFont(.caption5Regular10)
                     .foregroundStyle(Color.napzakGrayScale(.gray200))
             }
-            Text(chatData.createdAt)
+            Text(chatData.createdAt ?? "")
                 .applyNapzakFont(.caption5Regular10)
                 .foregroundStyle(Color.napzakGrayScale(.gray200))
         }

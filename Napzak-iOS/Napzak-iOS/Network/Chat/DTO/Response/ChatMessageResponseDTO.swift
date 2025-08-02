@@ -23,13 +23,19 @@ struct ChatMessageNormalDTO: Codable {
     let isRead: Bool
 }
 
-struct WebSocketRedeivedChatMessageDTO: Codable {
+struct WebSocketRedeivedChatMessageDTO: Decodable {
     let messageId: Int
     let roomId: Int
     let senderId: Int?
     let type: ChatMessageType
     let content: String?
     let metadata: ChatMetaDataType?
-    let createdAt: String
-    let isRead: Bool
+    let createdAt: String?
+    let isRead: Bool?
+}
+
+struct WebSocketRedeivedChatStatusDTO: Decodable {
+    let roomId: Int
+    let senderId: Int?
+    let type: ChatStatusType
 }

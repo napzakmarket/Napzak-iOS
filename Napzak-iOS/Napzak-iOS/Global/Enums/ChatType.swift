@@ -13,6 +13,11 @@ enum ChatMessageType: String, Codable {
     case date = "DATE"
 }
 
+enum ChatStatusType: String, Decodable {
+    case join = "JOIN"
+    case leave = "LEAVE"
+}
+
 enum ChatMetaDataType: Codable {
     case image(ImageMeta)
     case product(ProductMeta)

@@ -275,22 +275,24 @@ extension ChatDetailView {
             } label: {
                 Image(.iconGallary)
             }
+            .disabled(viewModel.isChatDisabled)
+            
             ChatMessageInputBar (
                 text: $viewModel.messageText,
                 isFocused: _isFocused,
                 isChatDisabled: viewModel.isChatDisabled,
                 onSubmit: {
+                    let messageText = viewModel.messageText
+                    
                     if viewModel.chatMessages.isEmpty && viewModel.roomId == nil  {
-                        let firstMessage = viewModel.messageText
-                        
                         Task {
                             await viewModel.postChatRoomCreate()
-                            viewModel.sendFirstMessage(firstMessageText: firstMessage)
+                            viewModel.sendFirstMessage(firstMessageText: messageText)
                         }
-                    }
-                    
-                    Task {
-                        await viewModel.sendTextMessage()
+                    } else {
+                        Task {
+                            await viewModel.sendTextMessage(text: messageText)
+                        }
                     }
                 }
             )

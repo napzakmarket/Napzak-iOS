@@ -28,7 +28,8 @@ final class ChatStompManager: ObservableObject {
     private var accessToken: String?
     
     var socketStatusSubject = CurrentValueSubject<SocketStatus, Never>(.disconnected)
-    var receivedMessageSubject = PassthroughSubject<ChatMessageModel, Never>()
+    var receivedMessageDTOSubject = PassthroughSubject<WebSocketRedeivedChatMessageDTO, Never>()
+    var receivedStatusDTOSubject = PassthroughSubject<WebSocketRedeivedChatStatusDTO, Never>()
     var receivedRoomIdsSubject = PassthroughSubject<[Int], Never>()
     
     private var chatEventManager = ChatEventManager.shared
@@ -121,62 +122,41 @@ private extension ChatStompManager {
                     if let jsonData = messageString.data(using: .utf8) {
                         do {
                             let chatMessage = try JSONDecoder().decode(WebSocketRedeivedChatMessageDTO.self, from: jsonData)
-                            
-                            switch chatMessage.type {
-                            case .text:
-                                receivedMessageSubject.send(ChatMessageModel(
-                                    id: chatMessage.messageId,
-                                    senderId: chatMessage.senderId,
-                                    type: chatMessage.type,
-                                    content: chatMessage.content,
-                                    metaData: nil,
-                                    createdAt: chatMessage.createdAt,
-                                    isProfileNeeded: true,
-                                    isMessageOwner: true,
-                                    isRead: chatMessage.isRead
-                                ))
-                            default:
-                                print(chatMessage)
-                                receivedMessageSubject.send(ChatMessageModel(
-                                    id: chatMessage.messageId,
-                                    senderId: chatMessage.senderId,
-                                    type: chatMessage.type,
-                                    content: nil,
-                                    metaData: chatMessage.metadata,
-                                    createdAt: chatMessage.createdAt,
-                                    isProfileNeeded: true,
-                                    isMessageOwner: true,
-                                    isRead: chatMessage.isRead
-                                ))
-                            }
+                            receivedMessageDTOSubject.send(chatMessage)
                         } catch {
-                            print("JSON 디코딩 오류:", error)
+                            do {
+                                let statusData = try JSONDecoder().decode(WebSocketRedeivedChatStatusDTO.self, from: jsonData)
+                                
+                                receivedStatusDTOSubject.send(statusData)
+                            } catch {
+                                logger.error("JSON 디코딩 오류: \(error)")
+                            }
                         }
                     }
                     
                 case .data:
-                    print("✅ pong 수신")
+                    print("📥 하트비트 수신, 연결 정상")
                 }
             }
             .store(in: &cancellables)
     }
     
-    func monitorPong() {
-        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] timer in
-            guard let self else { return }
-            
-            if let last = pongReceivedAt {
-                let elapsed = Date().timeIntervalSince(last)
-                if elapsed > pongTimeout {
-                    print("⚠️ Pong 응답 지연, 재연결 시도")
-                    stompClient?.disconnect()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        self.stompClient?.connect()
-                    }
-                }
-            }
-        }
-    }
+//    func monitorPong() {
+//        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] timer in
+//            guard let self else { return }
+//            
+//            if let last = pongReceivedAt {
+//                let elapsed = Date().timeIntervalSince(last)
+//                if elapsed > pongTimeout {
+//                    print("⚠️ Pong 응답 지연, 재연결 시도")
+//                    stompClient?.disconnect()
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//                        self.stompClient?.connect()
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     func startPing() {
         pingTimer = Timer

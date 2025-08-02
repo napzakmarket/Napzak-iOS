@@ -11,13 +11,13 @@ struct ChatMessageModel: Identifiable {
     let type: ChatMessageType
     let content: String?
     let metadata: ChatMetaDataType?
-    let createdAt: String
+    let createdAt: String?
     let isProfileNeeded: Bool
     let isMessageOwner: Bool
-    let isRead: Bool
+    var isRead: Bool?
     
     ///default init
-    init(id: Int, senderId: Int?, type: ChatMessageType, content: String?, metaData: ChatMetaDataType?, createdAt: String, isProfileNeeded: Bool, isMessageOwner: Bool, isRead: Bool) {
+    init(id: Int, senderId: Int?, type: ChatMessageType, content: String?, metaData: ChatMetaDataType?, createdAt: String?, isProfileNeeded: Bool, isMessageOwner: Bool, isRead: Bool?) {
         self.id = id
         self.senderId = senderId
         self.type = type
