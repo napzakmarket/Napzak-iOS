@@ -25,32 +25,7 @@ enum ChatAPI {
 }
 
 extension ChatAPI: BaseTargetType {
-    var baseURLType: BaseURLType {
-        switch self {
-        case .getChatInfo:
-            return .defaultUrl
-        default:
-            return .chatUrl
-        }
-    }
     
-    var baseURL: URL {
-        let urlString: String?
-
-        switch baseURLType {
-        case .defaultUrl:
-            urlString = Bundle.main.infoDictionary?["BASE_URL"] as? String
-        case .chatUrl:
-            urlString = Bundle.main.infoDictionary?["CHAT_BASE_URL"] as? String
-        }
-        
-        guard let urlString, let url = URL(string: urlString) else {
-            fatalError("🚨Base URL을 찾을 수 없습니다🚨")
-        }
-        
-        return url
-    }
-
     var headerType: HeaderType {
         switch self {
         default:
@@ -63,17 +38,17 @@ extension ChatAPI: BaseTargetType {
         case .getChatInfo(productId: let productId, _):
             return "products/chat/\(productId)"
         case .postCreateChatRoom, .getChatRooms:
-            return "rooms"
+            return "chat/rooms"
         case .patchEnterChatRoom(let roomId):
-            return "rooms/\(roomId)/enter"
+            return "chat/rooms/\(roomId)/enter"
         case .getChatMessages(let roomId):
-            return "rooms/\(roomId)/messages"
+            return "chat/rooms/\(roomId)/messages"
         case .patchLeaveChatRoom(let roomId):
-            return "rooms/\(roomId)/leave"
+            return "chat/rooms/\(roomId)/leave"
         case .patchExitChatRoom(let roomId):
-            return "rooms/\(roomId)/exit"
+            return "chat/rooms/\(roomId)/exit"
         case .getChatRoomIds:
-            return "rooms/ids"
+            return "chat/rooms/ids"
         }
     }
     
