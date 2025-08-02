@@ -35,32 +35,32 @@ struct ChatBody: View {
             switch chatData.type {
             case .text:
                 HStack(alignment: .top, spacing: 0) {
-                    if chatData.isFirstChat && !chatData.isMessageOwner {
+                    if chatData.isProfileNeeded && !chatData.isMessageOwner {
                         profileImage
                     }
                     ChatBubble(
                         message: chatData.content ?? "",
                         isMessageOwner: chatData.isMessageOwner
                     )
-                    .padding(.top, chatData.isFirstChat ? 20 : 0)
-                    .padding(.leading, !chatData.isFirstChat && !chatData.isMessageOwner ? 44 : 0)
+                    .padding(.top, chatData.isProfileNeeded ? 20 : 0)
+                    .padding(.leading, !chatData.isProfileNeeded && !chatData.isMessageOwner ? 44 : 0)
                 }
             case .image:
-                if case let .image(image) = chatData.metaData {
+                if case let .image(image) = chatData.metadata {
                     HStack(alignment: .top, spacing: 0) {
-                        if chatData.isFirstChat && !chatData.isMessageOwner {
+                        if chatData.isProfileNeeded && !chatData.isMessageOwner {
                             profileImage
                         }
                         ChatImageMessage(
                             imageUrl: image.imageUrls[0],
                             onZoomButtonTapped: { }
                         )
-                        .padding(.top, chatData.isFirstChat ? 20 : 0)
-                        .padding(.leading, !chatData.isFirstChat && !chatData.isMessageOwner ? 44 : 0)
+                        .padding(.top, chatData.isProfileNeeded ? 20 : 0)
+                        .padding(.leading, !chatData.isProfileNeeded && !chatData.isMessageOwner ? 44 : 0)
                     }
                 }
             case .product:
-                if case let .product(product) = chatData.metaData {
+                if case let .product(product) = chatData.metadata {
                     ChatStarter(
                         product: product,
                         isMessageOwner: chatData.isMessageOwner,
@@ -69,9 +69,9 @@ struct ChatBody: View {
                     .frame(width: screenWidth - 140)
                 }
             case .system:
-                if case let .system(system) = chatData.metaData {
+                if case let .system(system) = chatData.metadata {
                     switch system.type {
-                    case .leave:
+                    case .exit:
                         userLeavingDivider
                             .padding(.vertical, 17)
                     case .reported:
@@ -82,7 +82,7 @@ struct ChatBody: View {
                     }
                 }
             case .date:
-                if case let .date(date) = chatData.metaData {
+                if case let .date(date) = chatData.metadata {
                     ChatDateDivider(date: date.date)
                 }
             }
@@ -154,20 +154,4 @@ extension ChatBody {
         }
         .padding(.horizontal, 24)
     }
-}
-
-#Preview {
-    struct PreviewContainer: View {
-        let chatMessage = ChatMessageModel.mock
-        
-        var body: some View {
-            ChatBody(
-                chatData: chatMessage[2],
-                storeImage: ""
-            )
-        }
-    }
-    
-    return PreviewContainer()
-        .padding(.horizontal, 20)
 }
