@@ -22,6 +22,7 @@ enum ChatAPI {
     case patchLeaveChatRoom(roomId: Int)
     case patchExitChatRoom(roomId: Int)
     case getChatRoomIds
+    case getMyStoreId
 }
 
 extension ChatAPI: BaseTargetType {
@@ -49,6 +50,8 @@ extension ChatAPI: BaseTargetType {
             return "chat/rooms/\(roomId)/exit"
         case .getChatRoomIds:
             return "chat/rooms/ids"
+        case .getMyStoreId:
+            return "stores/store-id"
         }
     }
     
