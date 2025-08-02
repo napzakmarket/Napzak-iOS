@@ -92,7 +92,7 @@ extension ChatView {
             LazyVStack(spacing: 0) {
                 ForEach(viewModel.chatRooms) { data in
                     Button {
-//                        navigationRouter.push(next: .chatDetailView)
+                        navigationRouter.push(next: .chatDetailView(chatEntry: .room(id: data.id)))
                     } label: {
                         ChatItemView(chatRoom: data)
                     }
