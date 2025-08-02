@@ -11,6 +11,10 @@ import Kingfisher
 
 struct ChatBody: View {
     
+    //MARK: - Property Wrappers
+    
+    @EnvironmentObject private var navigationRouter: NavigationRouter
+    
     //MARK: - Properties
     
     let chatData: ChatMessageModel
@@ -64,7 +68,10 @@ struct ChatBody: View {
                     ChatStarter(
                         product: product,
                         isMessageOwner: chatData.isMessageOwner,
-                        onProductButtonTapped: { }
+                        onProductButtonTapped: {
+                            print("이동 해")
+                            navigationRouter.push(next: .productDetailView(productId: product.productId))
+                        }
                     )
                     .frame(width: screenWidth - 140)
                 }

@@ -217,6 +217,9 @@ extension ChatDetailView {
                 .shadow(color: .black.opacity(0.1), radius: 2)
         )
         .padding(.top, 100)
+        .onTapGesture {
+            navigationRouter.push(next: .productDetailView(productId: viewModel.chatDetailInfo.productInfo.productId))
+        }
     }
     
     private var chatSection: some View {

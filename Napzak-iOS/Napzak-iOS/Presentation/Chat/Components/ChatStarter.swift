@@ -74,7 +74,7 @@ extension ChatStarter {
     
     private var productButton: some View {
         Button {
-            
+            onProductButtonTapped()
         } label: {
             Text("상품 보러 가기")
                 .applyNapzakFont(.caption4SemiBold10)
