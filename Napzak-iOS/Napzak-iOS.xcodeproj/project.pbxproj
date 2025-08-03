@@ -208,7 +208,7 @@
 		D64561342DC5C875003D2E2B /* AuthNavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561332DC5C875003D2E2B /* AuthNavigationRouter.swift */; };
 		D64561362DC5E15C003D2E2B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561352DC5E15C003D2E2B /* RootView.swift */; };
 		D64922D12D9EF5CB00716740 /* RowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64922D02D9EF5CB00716740 /* RowType.swift */; };
-		D65FEDA72E242967005D4AAB /* PermissionModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65FEDA62E242967005D4AAB /* PermissionModalView.swift */; };
+		D65FEDA72E242967005D4AAB /* PermissionAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65FEDA62E242967005D4AAB /* PermissionAlertView.swift */; };
 		D65FEDA92E25284E005D4AAB /* PushOffState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65FEDA82E25284E005D4AAB /* PushOffState.swift */; };
 		D66A3E742E1A5FF3003977AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E732E1A5FF3003977AE /* AppDelegate.swift */; };
 		D66A3E812E1AC2F4003977AE /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = D66A3E802E1AC2F4003977AE /* FirebaseMessaging */; };
@@ -445,7 +445,7 @@
 		D64561332DC5C875003D2E2B /* AuthNavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthNavigationRouter.swift; sourceTree = "<group>"; };
 		D64561352DC5E15C003D2E2B /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		D64922D02D9EF5CB00716740 /* RowType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowType.swift; sourceTree = "<group>"; };
-		D65FEDA62E242967005D4AAB /* PermissionModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionModalView.swift; sourceTree = "<group>"; };
+		D65FEDA62E242967005D4AAB /* PermissionAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionAlertView.swift; sourceTree = "<group>"; };
 		D65FEDA82E25284E005D4AAB /* PushOffState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushOffState.swift; sourceTree = "<group>"; };
 		D66A3E732E1A5FF3003977AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D66A3E832E1AC4F4003977AE /* PushPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPermissionManager.swift; sourceTree = "<group>"; };
@@ -1103,7 +1103,7 @@
 				D0310AF22DCB2F1400C265EC /* ReportModalView.swift */,
 				D07837A82DB571F6009122F6 /* GenreSelectModalView.swift */,
 				D07837B12DB6C156009122F6 /* SortModalView.swift */,
-				D65FEDA62E242967005D4AAB /* PermissionModalView.swift */,
+				D65FEDA62E242967005D4AAB /* PermissionAlertView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1837,7 +1837,7 @@
 				D645612C2DC4B35F003D2E2B /* LoginViewModel.swift in Sources */,
 				D0F0355D2DBF27F1003D0CBF /* ProductService.swift in Sources */,
 				D0F0355F2DBF27F1003D0CBF /* GenreAPI.swift in Sources */,
-				D65FEDA72E242967005D4AAB /* PermissionModalView.swift in Sources */,
+				D65FEDA72E242967005D4AAB /* PermissionAlertView.swift in Sources */,
 				D64561262DC48028003D2E2B /* OnboardingStep.swift in Sources */,
 				D66A3E742E1A5FF3003977AE /* AppDelegate.swift in Sources */,
 				D0F035612DBF27F1003D0CBF /* StoreAPI.swift in Sources */,

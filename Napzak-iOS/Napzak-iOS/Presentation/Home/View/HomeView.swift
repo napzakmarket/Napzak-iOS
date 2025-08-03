@@ -93,10 +93,10 @@ struct HomeView: View {
             }
         }
         .onAppear {
-          Task {
-            await pushManager.configureNotifications()
-            await pushManager.upsertTokenIfNeeded()
-          }
+            Task {
+                await pushManager.configureNotifications()
+                await pushManager.upsertTokenIfNeeded()
+            }
         }
         .animation(.spring(), value: viewModel.showLikeToast)
         .onChange(of: viewModel.externalURLToOpen) { url in

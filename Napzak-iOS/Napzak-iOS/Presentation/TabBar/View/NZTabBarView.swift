@@ -94,7 +94,7 @@ struct NZTabBarView: View {
                     Color.black.opacity(0.5)
                         .ignoresSafeArea()
                     
-                    PermissionModalView(state: state) {
+                    PermissionAlertView(state: state) {
                         showPermissionModal = false
                     }
                     .frame(width: 284, height: 290)

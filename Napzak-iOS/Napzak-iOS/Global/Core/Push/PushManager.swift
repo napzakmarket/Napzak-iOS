@@ -5,7 +5,6 @@
 //  Created by 조호근 on 7/8/25.
 //
 
-import UIKit
 import UserNotifications
 import FirebaseMessaging
 import Combine

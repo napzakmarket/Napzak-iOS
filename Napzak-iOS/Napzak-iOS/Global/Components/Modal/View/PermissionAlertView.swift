@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct PermissionModalView: View {
+struct PermissionAlertView: View {
     
     //MARK: - Property Wrappers
     
@@ -28,9 +28,7 @@ struct PermissionModalView: View {
                     Spacer()
                     
                     Button {
-                        print("close")
                         onDismiss?()
-                        
                     } label: {
                         Image(.iconClose)
                     }
@@ -90,7 +88,7 @@ struct PermissionModalView: View {
         Color.black.opacity(0.5)
             .ignoresSafeArea()
         
-        PermissionModalView(state: .bothOff)
+        PermissionAlertView(state: .bothOff)
             .frame(width: 284, height: 290)
     }
 }
