@@ -149,7 +149,11 @@ private extension ChatDetailViewModel {
                     )
                 }
                 
-                self.chatMessages.append(messageData)
+                if let currentRoomId = roomId {
+                    if data.roomId == currentRoomId {
+                        self.chatMessages.append(messageData)
+                    }
+                }
 
                 isProfileNeeded = isMessageOwner
                 
