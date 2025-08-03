@@ -1,6 +1,4 @@
-<svg width="5" height="8" viewBox="0 0 5 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="Group 1000004839">
-<rect id="Rectangle 10305" x="0.824516" y="7.86133" width="1.1659" height="5.5497" rx="0.582952" transform="rotate(-135 0.824516 7.86133)" fill="#7F7F7F"/>
-<rect id="Rectangle 10306" y="0.824219" width="1.1659" height="5.55124" rx="0.582952" transform="rotate(-45 0 0.824219)" fill="#7F7F7F"/>
-</g>
+<svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="1.8584" y="11.4307" width="1.61083" height="7.66754" rx="0.805414" transform="rotate(-135 1.8584 11.4307)" fill="#7F7F7F"/>
+<rect x="0.71875" y="1.70837" width="1.61083" height="7.66966" rx="0.805414" transform="rotate(-45 0.71875 1.70837)" fill="#7F7F7F"/>
 </svg>
