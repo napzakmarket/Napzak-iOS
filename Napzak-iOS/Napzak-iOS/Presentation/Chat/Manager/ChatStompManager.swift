@@ -119,6 +119,7 @@ private extension ChatStompManager {
                 case let .error(error):
                     logger.error("❌ WebSocket 연결 실패: \(error)")
                     socketStatusSubject.send(.disconnected)
+                    connect()
                 }
             }
             .store(in: &cancellables)
@@ -245,14 +246,18 @@ private extension ChatStompManager {
 
 extension ChatStompManager {
     func connect() {
-        if !(stompClient?.isConnected ?? Bool()) {
-            stompClient?.connect()
+        if let isConnected = stompClient?.isConnected {
+            if !isConnected {
+                stompClient?.connect()
+            }
         }
     }
 
     func disconnect() {
-        if stompClient?.isConnected ?? Bool() {
-            stompClient?.disconnect()
+        if let isConnected = stompClient?.isConnected {
+            if isConnected {
+                stompClient?.disconnect()
+            }
         }
     }
     
