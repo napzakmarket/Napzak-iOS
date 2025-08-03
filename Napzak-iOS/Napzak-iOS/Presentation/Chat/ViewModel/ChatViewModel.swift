@@ -50,7 +50,12 @@ private extension ChatViewModel {
             }
             .store(in: &cancellables)
     }
+}
+
+extension ChatViewModel {
     
+    //MARK: - Func
+
     func fetchChatRooms() async {
         let result = await NetworkService.shared.chatService.getChatRooms(deviceToken: nil)
         

@@ -113,52 +113,51 @@ private extension ChatDetailViewModel {
             .receive(on: RunLoop.main)
             .sink { [weak self] data in
                 guard let self else { return }
-
-                var messageData: ChatMessageModel
-                let isMessageOwner: Bool = {
-                    guard let senderId = data.senderId else { return false }
+                
+                if let currentRoomId = roomId, data.roomId == currentRoomId {
                     
-                    let ownerId = self.chatDetailInfo.productInfo.productOwnerId
-                    return self.chatDetailInfo.productInfo.isMyProduct ? senderId == ownerId : senderId != ownerId
-                }()
-                
-                switch data.type {
-                case .text:
-                    messageData = ChatMessageModel(
-                        id: data.messageId,
-                        senderId: data.senderId,
-                        type: data.type,
-                        content: data.content,
-                        metaData: nil,
-                        createdAt: data.createdAt,
-                        isProfileNeeded: !isMessageOwner && isProfileNeeded,
-                        isMessageOwner: isMessageOwner,
-                        isRead: isReadMyMessage
-                    )
-                default:
-                    messageData = ChatMessageModel(
-                        id: data.messageId,
-                        senderId: data.senderId,
-                        type: data.type,
-                        content: nil,
-                        metaData: data.metadata,
-                        createdAt: data.createdAt,
-                        isProfileNeeded: !isMessageOwner && isProfileNeeded,
-                        isMessageOwner: isMessageOwner,
-                        isRead: isReadMyMessage
-                    )
-                }
-                
-                if let currentRoomId = roomId {
-                    if data.roomId == currentRoomId {
-                        self.chatMessages.append(messageData)
+                    var messageData: ChatMessageModel
+                    let isMessageOwner: Bool = {
+                        guard let senderId = data.senderId else { return false }
+                        
+                        let ownerId = self.chatDetailInfo.productInfo.productOwnerId
+                        return self.chatDetailInfo.productInfo.isMyProduct ? senderId == ownerId : senderId != ownerId
+                    }()
+                    
+                    switch data.type {
+                    case .text:
+                        messageData = ChatMessageModel(
+                            id: data.messageId,
+                            senderId: data.senderId,
+                            type: data.type,
+                            content: data.content,
+                            metaData: nil,
+                            createdAt: data.createdAt,
+                            isProfileNeeded: !isMessageOwner && isProfileNeeded,
+                            isMessageOwner: isMessageOwner,
+                            isRead: isReadMyMessage
+                        )
+                    default:
+                        messageData = ChatMessageModel(
+                            id: data.messageId,
+                            senderId: data.senderId,
+                            type: data.type,
+                            content: nil,
+                            metaData: data.metadata,
+                            createdAt: data.createdAt,
+                            isProfileNeeded: !isMessageOwner && isProfileNeeded,
+                            isMessageOwner: isMessageOwner,
+                            isRead: isReadMyMessage
+                        )
                     }
-                }
-
-                isProfileNeeded = isMessageOwner
-                
-                if data.type == .system {
-                    isChatDisabled = true
+                    
+                    self.chatMessages.append(messageData)
+                    
+                    isProfileNeeded = isMessageOwner
+                    
+                    if data.type == .system {
+                        isChatDisabled = true
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -170,28 +169,30 @@ private extension ChatDetailViewModel {
             .sink { [weak self] data in
                 guard let self else { return }
                 
-                let isMyStatus: Bool = {
-                    guard let senderId = data.senderId else { return false }
+                if let roomId, data.roomId == roomId {
+                    let isMyStatus: Bool = {
+                        guard let senderId = data.senderId else { return false }
+                        
+                        let ownerId = self.chatDetailInfo.productInfo.productOwnerId
+                        return self.chatDetailInfo.productInfo.isMyProduct ? senderId == ownerId : senderId != ownerId
+                    }()
                     
-                    let ownerId = self.chatDetailInfo.productInfo.productOwnerId
-                    return self.chatDetailInfo.productInfo.isMyProduct ? senderId == ownerId : senderId != ownerId
-                }()
-                
-                switch data.type {
-                case .join:
-                    if !isMyStatus {
-                        chatMessages = chatMessages.map { message in
-                            var updatedMessage = message
-                            updatedMessage.isRead = true
-                            
-                            return updatedMessage
+                    switch data.type {
+                    case .join:
+                        if !isMyStatus {
+                            chatMessages = chatMessages.map { message in
+                                var updatedMessage = message
+                                updatedMessage.isRead = true
+                                
+                                return updatedMessage
+                            }
+                            isReadMyMessage = true
+                        } else {
+                            isReadMyMessage = false
                         }
-                        isReadMyMessage = true
-                    } else {
+                    case .leave:
                         isReadMyMessage = false
                     }
-                case .leave:
-                    isReadMyMessage = false
                 }
             }
             .store(in: &cancellables)
@@ -217,46 +218,6 @@ private extension ChatDetailViewModel {
             
         case .failure(let error):
             logger.error("getChatInfo failed: \(error.localizedDescription)")
-        }
-    }
-    
-    func enterChatRoom(roomId: Int) async {
-        let result = await NetworkService.shared.chatService.patchEnterChatRoom(roomId: roomId)
-        
-        switch result {
-        case .success(let response):
-            guard let data = response.data else {
-                logger.error("patchEnterChatRoom: No data received")
-                return
-            }
-            
-            self.productId = data.productId
-            isReadMyMessage = !data.onlineStoreIds.isEmpty
-            shouldUpdateProductInfo = data.productId != chatDetailInfo.productInfo.productId
-            
-        case .failure(let error):
-            logger.error("patchEnterChatRoom failed: \(error.localizedDescription)")
-        }
-    }
-    
-    func fetchChatMessages(roomId: Int) async {
-        let result = await NetworkService.shared.chatService.getChatMessages(roomId: roomId)
-        
-        switch result {
-        case .success(let response):
-            guard let data = response.data else {
-                logger.error("getChatMessages: No data received")
-                return
-            }
-            
-            self.chatMessages = data.messages.reversed().map { ChatMessageModel(dto: $0) }
-            if !data.messages.isEmpty && data.messages[0].type == .system {
-                isChatDisabled = true
-            } else if !data.messages.isEmpty && data.messages[0].isMessageOwner {
-                isProfileNeeded = true
-            }
-        case .failure(let error):
-            logger.error("getChatMessages failed: \(error.localizedDescription)")
         }
     }
     
@@ -319,7 +280,47 @@ extension ChatDetailViewModel {
             logger.error("postCreateChatRoom failed: \(error.localizedDescription)")
         }
     }
+    
+    func fetchChatMessages(roomId: Int) async {
+        let result = await NetworkService.shared.chatService.getChatMessages(roomId: roomId)
         
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getChatMessages: No data received")
+                return
+            }
+            
+            self.chatMessages = data.messages.reversed().map { ChatMessageModel(dto: $0) }
+            if !data.messages.isEmpty && data.messages[0].type == .system {
+                isChatDisabled = true
+            } else if !data.messages.isEmpty && data.messages[0].isMessageOwner {
+                isProfileNeeded = true
+            }
+        case .failure(let error):
+            logger.error("getChatMessages failed: \(error.localizedDescription)")
+        }
+    }
+       
+    func enterChatRoom(roomId: Int) async {
+        let result = await NetworkService.shared.chatService.patchEnterChatRoom(roomId: roomId)
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("patchEnterChatRoom: No data received")
+                return
+            }
+            
+            self.productId = data.productId
+            isReadMyMessage = !data.onlineStoreIds.isEmpty
+            shouldUpdateProductInfo = data.productId != chatDetailInfo.productInfo.productId
+            
+        case .failure(let error):
+            logger.error("patchEnterChatRoom failed: \(error.localizedDescription)")
+        }
+    }
+    
     func leaveChatRoom() async {
         guard let roomId else { return }
         let result = await NetworkService.shared.chatService.patchLeaveChatRoom(roomId: roomId)
