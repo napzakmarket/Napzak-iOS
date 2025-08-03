@@ -187,8 +187,10 @@ private extension ChatStompManager {
             .publish(every: 30, on: .main, in: .common) //30초 간격으로 Ping 전송
             .autoconnect()
             .sink { [weak self] _ in
-                logger.debug("✅ ping 전송")
-                self?.sendPing()
+                guard let self else { return }
+                
+                self.logger.debug("✅ ping 전송")
+                self.sendPing()
             }
     }
 
