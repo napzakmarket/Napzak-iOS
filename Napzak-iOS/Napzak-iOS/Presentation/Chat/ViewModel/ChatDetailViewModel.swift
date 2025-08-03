@@ -166,15 +166,26 @@ private extension ChatDetailViewModel {
             .sink { [weak self] data in
                 guard let self else { return }
                 
+                let isMyStatus: Bool = {
+                    guard let senderId = data.senderId else { return false }
+                    
+                    let ownerId = self.chatDetailInfo.productInfo.productOwnerId
+                    return self.chatDetailInfo.productInfo.isMyProduct ? senderId == ownerId : senderId != ownerId
+                }()
+                
                 switch data.type {
                 case .join:
-                    chatMessages = chatMessages.map { message in
-                        var updatedMessage = message
-                        updatedMessage.isRead = true
-                        
-                        return updatedMessage
+                    if !isMyStatus {
+                        chatMessages = chatMessages.map { message in
+                            var updatedMessage = message
+                            updatedMessage.isRead = true
+                            
+                            return updatedMessage
+                        }
+                        isReadMyMessage = true
+                    } else {
+                        isReadMyMessage = false
                     }
-                    isReadMyMessage = true
                 case .leave:
                     isReadMyMessage = false
                 }
@@ -195,7 +206,9 @@ private extension ChatDetailViewModel {
             chatDetailInfo.productInfo = ChatProductInfo(dto: data.productInfo)
             chatDetailInfo.chatStoreInfo = ChatStoreInfo(dto: data.storeInfo)
             roomId = data.roomId ?? nil
-            isChatDisabled = chatDetailInfo.chatStoreInfo.isWithdrawn
+            if chatDetailInfo.chatStoreInfo.isWithdrawn {
+                isChatDisabled = chatDetailInfo.chatStoreInfo.isWithdrawn
+            }
             shouldUpdateProductInfo = data.productInfo.productId != self.productId
             
         case .failure(let error):
@@ -245,7 +258,9 @@ private extension ChatDetailViewModel {
     
     func fetchWebSocket() {
         chatStompManager.socketStatusSubject
-            .sink { status in
+            .sink { [weak self] status in
+                guard let self else { return }
+                
                 switch status {
                 case .connected:
                     self.logger.debug("✅ 연결됨")
