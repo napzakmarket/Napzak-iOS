@@ -22,5 +22,6 @@ final class NetworkService {
     let interestService: InterestServiceProtocol = InterestService()
     let reportService: ReportServiceProtocol = ReportService()
     let homeService: HomeServiceProtocol = HomeService()
+    let pushService: PushServiceProtocol = PushService()
     let chatService: ChatServiceProtocol = ChatService()
 }
