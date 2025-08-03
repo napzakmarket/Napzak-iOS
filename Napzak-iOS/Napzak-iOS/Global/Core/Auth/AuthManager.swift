@@ -8,7 +8,8 @@
 import Foundation
 import os
 
-final class AuthManager: ObservableObject {
+final class AuthManager {
+    
     static let shared = AuthManager()
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Auth")
