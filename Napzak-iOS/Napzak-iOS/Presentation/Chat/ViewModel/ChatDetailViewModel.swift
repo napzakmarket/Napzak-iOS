@@ -248,9 +248,9 @@ private extension ChatDetailViewModel {
             .sink { status in
                 switch status {
                 case .connected:
-                    print("✅ 연결됨")
+                    logger.debug("✅ 연결됨")
                 case .disconnected:
-                    print("❌ 연결 끊김")
+                    logger.error("❌ 연결 끊김")
                 }
             }
             .store(in: &cancellables)

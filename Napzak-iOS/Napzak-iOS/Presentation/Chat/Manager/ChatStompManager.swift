@@ -104,7 +104,7 @@ private extension ChatStompManager {
                 switch event {
                 case .connected(_):
                     socketStatusSubject.send(.connected)
-                    print("✅ WebSocket 연결 완료")
+                    logger.debug("✅ WebSocket 연결 완료")
                     startPing()
 
                     stompClient?.subscribe(to: "/topic/pong")
@@ -113,12 +113,11 @@ private extension ChatStompManager {
                         subscribeMyStoreChannel(storeId: subscribedMyStoreId)
                     }
                 case .disconnected(_):
-                    print("❎ WebSocket 연결 해제")
+                    logger.debug("❎ WebSocket 연결 해제")
                     socketStatusSubject.send(.disconnected)
                     stopPing()
                 case let .error(error):
-                    print("❌ WebSocket 연결 실패")
-                    print(error)
+                    logger.error("❌ WebSocket 연결 실패: \(error)")
                     socketStatusSubject.send(.disconnected)
                 }
             }
@@ -132,7 +131,7 @@ private extension ChatStompManager {
                 switch message {
                 case .text(let messageString, _, let destination, _):
                     if destination == "/queue/chat.room-created.\(subscribedMyStoreId)" {
-                        print("💬 생성된 채팅방 ID: \(messageString)")
+                        logger.debug("💬 생성된 채팅방 ID: \(messageString)")
                         if let roomId = Int(messageString) {
                             subscribeChatRoom(roomId: roomId)
                         }
@@ -159,7 +158,7 @@ private extension ChatStompManager {
                     }
                     
                 case .data:
-                    print("📥 하트비트 수신, 연결 정상")
+                    logger.debug("📥 하트비트 수신, 연결 정상")
                 }
             }
             .store(in: &cancellables)
@@ -188,7 +187,7 @@ private extension ChatStompManager {
             .publish(every: 30, on: .main, in: .common) //30초 간격으로 Ping 전송
             .autoconnect()
             .sink { [weak self] _ in
-                print("✅ ping 전송")
+                logger.debug("✅ ping 전송")
                 self?.sendPing()
             }
     }
@@ -208,7 +207,7 @@ private extension ChatStompManager {
 
         guard let data = try? JSONSerialization.data(withJSONObject: payload),
               let requestBody = String(data: data, encoding: .utf8) else {
-            print("❌ JSON String으로 변환 실패")
+            logger.error("❌ JSON String으로 변환 실패")
             return
         }
 
@@ -228,7 +227,7 @@ private extension ChatStompManager {
             mode: .auto
         )
         
-        print("✅ \(roomId)번 채팅방 구독")
+        logger.debug("✅ \(roomId)번 채팅방 구독")
     }
     
     func subscribeMyStoreChannel(storeId: Int) {
@@ -238,7 +237,7 @@ private extension ChatStompManager {
             mode: .auto
         )
         
-        print("✅ \(storeId) 채널 구독")
+        logger.debug("✅ \(storeId) 채널 구독")
     }
 }
 
@@ -262,7 +261,7 @@ extension ChatStompManager {
             mode: .auto
         )
         
-        print("✅ \(roomId)번 채팅방 구독")
+        logger.debug("✅ \(roomId)번 채팅방 구독")
     }
     
     func sendChat(message: ChatMessageRequestDTO) {
@@ -272,11 +271,11 @@ extension ChatStompManager {
         encoder.outputFormatting = .prettyPrinted
         guard let data = try? encoder.encode(message),
               let requestBody = String(data: data, encoding: .utf8) else {
-            print("❌ JSON 인코딩 실패")
+            logger.error("❌ JSON 인코딩 실패")
             return
         }
         
         stompClient?.send(body: requestBody, to: destination, headers: ["content-type": "application/json"])
-        print("✉️ 메시지 전송: \(requestBody)")
+        logger.debug("✉️ 메시지 전송: \(requestBody)")
     }
 }
