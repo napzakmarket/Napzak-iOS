@@ -66,7 +66,7 @@ struct HomeView: View {
                             
                             FooterView
                                 .padding(.bottom, 54)
-                        
+                            
                         }
                     }
                     .scrollIndicators(.hidden)
@@ -106,7 +106,7 @@ struct HomeView: View {
             }
         }
         .onChange(of: tabRouter.selectedTab) { tab in
-            if tab == .home { 
+            if tab == .home {
                 viewModel.fetchHomeData()
                 scrollToTopTrigger.toggle()
             }
@@ -342,7 +342,7 @@ extension HomeView {
         .frame(width: UIScreen.main.bounds.width, height: 177)
         .background(Color.napzakGrayScale(.gray10))
     }
-
+    
 }
 
 extension HomeView {
