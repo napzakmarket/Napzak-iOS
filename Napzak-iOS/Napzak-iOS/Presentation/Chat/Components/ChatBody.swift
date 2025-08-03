@@ -69,7 +69,6 @@ struct ChatBody: View {
                         product: product,
                         isMessageOwner: chatData.isMessageOwner,
                         onProductButtonTapped: {
-                            print("이동 해")
                             navigationRouter.push(next: .productDetailView(productId: product.productId))
                         }
                     )
