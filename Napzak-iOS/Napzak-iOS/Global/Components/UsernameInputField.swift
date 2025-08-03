@@ -11,13 +11,15 @@ struct UsernameInputField: View {
     @Binding var validationState: UsernameValidation
     @Binding var username: String
     @Binding var isPrimaryButtonEnabled: Bool
+    var initialNickname: String? = nil
     
     var onCheckButtonTapped: (String) -> Void
     
     private let maxLength = 20
     
     private var isCheckButtonEnabled: Bool {
-        validateInput(username) == .empty && username.count >= 2 && username.count <= maxLength
+        let isChanged = (initialNickname == nil) || (username != initialNickname!)
+        return isChanged && validateInput(username) == .empty && username.count >= 2 && username.count <= maxLength
     }
     
     private var shouldShowValidationMessage: Bool {

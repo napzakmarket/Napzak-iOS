@@ -40,7 +40,12 @@ struct MyPageView: View {
                     profileCardPlaceholder
                 }
                 
-                marketButton
+                Rectangle()
+                    .fill(Color.napzakGrayScale(.gray10))
+                    .frame(height: 4)
+                    .padding(.top, 30)
+                    .padding(.bottom, 10)
+                
                 menuGrid
                 
                 Spacer()
@@ -135,7 +140,6 @@ struct MyPageView: View {
         .padding(.top, 30)
     }
     
-    // API 프로필 정보
     private func profileCardWithData(storeInfo: StoreProfileDTO) -> some View {
         HStack(spacing: 14) {
             KFImage(URL(string: storeInfo.storePhoto ?? ""))
@@ -177,40 +181,15 @@ struct MyPageView: View {
             }
             
             Spacer()
+            Image("arrow_right")
         }
         .padding(20)
         .background(Color.napzakGrayScale(.gray10))
         .clipShape(RoundedRectangle(cornerRadius: 25))
         .padding(.horizontal, 27)
         .padding(.top, 30)
-    }
-    
-    
-    private var marketButton: some View {
-        VStack(spacing: 0) {
-            Button {
-                navigationRouter.push(next: .marketView(storeId: storeInfo?.storeId ?? 0))
-            } label: {
-                HStack {
-                    Spacer()
-                    Text("내 마켓 보기")
-                        .applyNapzakFont(.caption1SemiBold12)
-                        .foregroundColor(Color.napzakGrayScale(.gray300))
-                    
-                    Image("arrow_right")
-                    Spacer()
-                }
-                .padding()
-                .background(Color.napzakGrayScale(.gray10))
-                .clipShape(RoundedRectangle(cornerRadius: 17))
-            }
-            .padding(.horizontal, 27)
-            .padding(.top, 20)
-            
-            Rectangle()
-                .fill(Color.napzakGrayScale(.gray10))
-                .frame(height: 4)
-                .padding(.top, 20)
+        .onTapGesture {
+            navigationRouter.push(next: .marketView(storeId: storeInfo.storeId))
         }
     }
     
