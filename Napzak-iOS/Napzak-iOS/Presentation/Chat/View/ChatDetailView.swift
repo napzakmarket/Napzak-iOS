@@ -14,6 +14,7 @@ struct ChatDetailView: View {
     //MARK: - Property Wrappers
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @Environment(\.scenePhase) var scenePhase
     
     @StateObject var viewModel: ChatDetailViewModel
     @StateObject private var chatImagePickerManager = ImagePickerManager()
@@ -122,6 +123,20 @@ struct ChatDetailView: View {
                     await viewModel.uploadImage()
                 }
                 chatImagePickerManager.selectedImages = []
+            }
+        }
+        .onChange(of: scenePhase) { phase in
+            if phase == .inactive {
+                Task {
+                    await viewModel.leaveChatRoom()
+                }
+            } else if phase == .active {
+                if let roomId = viewModel.roomId {
+                    Task {
+                        await viewModel.enterChatRoom(roomId: roomId)
+                        await viewModel.fetchChatMessages(roomId: roomId)
+                    }
+                }
             }
         }
         .onAppear {
