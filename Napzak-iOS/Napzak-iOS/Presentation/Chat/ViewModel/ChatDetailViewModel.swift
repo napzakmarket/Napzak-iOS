@@ -348,12 +348,30 @@ extension ChatDetailViewModel {
         }
     }
     
+    func sendFirstImageMessage(firstImageUrls: [String]) {
+        Task {
+            await sendProductMessage()
+            try? await Task.sleep(nanoseconds: 500_000_000)
+            await sendImageMessage(imageUrls: firstImageUrls)
+        }
+    }
+    
     func sendProductUpdateMessage(messageText: String) {
         Task {
             await updateProductInfo(newProductId: chatDetailInfo.productInfo.productId)
             await sendProductMessage()
             try? await Task.sleep(nanoseconds: 500_000_000)
             await sendTextMessage(text: messageText)
+            shouldUpdateProductInfo = false
+        }
+    }
+    
+    func sendProductUpdateImageMessage(imageUrls: [String]) {
+        Task {
+            await updateProductInfo(newProductId: chatDetailInfo.productInfo.productId)
+            await sendProductMessage()
+            try? await Task.sleep(nanoseconds: 500_000_000)
+            await sendImageMessage(imageUrls: imageUrls)
             shouldUpdateProductInfo = false
         }
     }
@@ -428,8 +446,16 @@ extension ChatDetailViewModel {
                     logger.info("✅ 커버 이미지 업로드 성공")
                     
                     let imageURL = uploadURL.components(separatedBy: "?").first ?? uploadURL
-                    await sendImageMessage(imageUrls: [imageURL])
                     
+                    if chatMessages.isEmpty && roomId == nil {
+                        await postChatRoomCreate()
+                        sendFirstImageMessage(firstImageUrls: [imageURL])
+                    } else if shouldUpdateProductInfo {
+                        sendProductUpdateImageMessage(imageUrls: [imageURL])
+                    } else {
+                        await sendImageMessage(imageUrls: [imageURL])
+                    }
+                                        
                 case .failure(let error):
                     logger.error("❌이미지 업로드 실패: \(error.localizedDescription)")
                 }

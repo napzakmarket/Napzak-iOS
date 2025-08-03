@@ -284,7 +284,7 @@ extension ChatDetailView {
             chatImagePickerManager.photoPickerView(maxCount: 1) {
                 Image(.iconGallary)
             }
-            .disabled(viewModel.isChatDisabled || viewModel.chatMessages.isEmpty)
+            .disabled(viewModel.isChatDisabled)
             
             ChatMessageInputBar (
                 text: $viewModel.messageText,
