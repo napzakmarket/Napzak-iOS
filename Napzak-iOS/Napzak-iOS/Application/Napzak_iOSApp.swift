@@ -17,7 +17,8 @@ struct Napzak_iOSApp: App {
 
     @StateObject private var permission: PushPermissionManager
     @StateObject private var pushManager: PushManager
-    @StateObject private var chatStompManager = ChatStompManager.shared
+    
+    private let chatStompManager = ChatStompManager.shared
 
     init() {
         FirebaseApp.configure()
