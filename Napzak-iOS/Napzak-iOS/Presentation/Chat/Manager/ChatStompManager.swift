@@ -16,7 +16,7 @@ enum SocketStatus {
     case disconnected
 }
 
-final class ChatStompManager {
+final class ChatStompManager: ObservableObject {
     
     //MARK: - Properties
     
@@ -27,21 +27,44 @@ final class ChatStompManager {
     private var stompClient: SwiftStomp?
     private var accessToken: String?
     
-    var socketStatus = CurrentValueSubject<SocketStatus, Never>(.disconnected)
-
+    var socketStatusSubject = CurrentValueSubject<SocketStatus, Never>(.disconnected)
+    var receivedMessageDTOSubject = PassthroughSubject<WebSocketRedeivedChatMessageDTO, Never>()
+    var receivedStatusDTOSubject = PassthroughSubject<WebSocketRedeivedChatStatusDTO, Never>()
+    var receivedMyStoreIdSubject = PassthroughSubject<Int, Never>()
+    var receivedRoomIdsSubject = PassthroughSubject<[Int], Never>()
+    
+    private var chatEventManager = ChatEventManager.shared
+    
     private var pingTimer: AnyCancellable?
     private var pongReceivedAt: Date?
     private let pongTimeout: TimeInterval = 30
+    private var subscribedChatRoomIds: [Int]?
+    private var subscribedMyStoreId: Int?
     
     private var cancellables = Set<AnyCancellable>()
 
     //MARK: - Life Cycle
     
-    init() {
+    private init() {
+        observeInitialIds()
+    }
+}
+
+private extension ChatStompManager {
+    
+    //MARK: - Private Func
+    
+    func initializeWebSocket() {
+        guard stompClient == nil else {
+            if socketStatusSubject.value == .disconnected {
+                connect()
+            }
+            return
+        }
+        
         switch KeychainManager.shared.getAccessToken() {
         case .success(let token):
-            logger.info("Existing accessToken in Keychain: \(token, privacy: .private)")
-            
+            logger.info("WebSocket 초기화 시작...")
             self.accessToken = token
             
             guard let urlString = Bundle.main.infoDictionary?["WEBSOCKET_URL"] as? String,
@@ -53,18 +76,28 @@ final class ChatStompManager {
             )
             
             stompClient?.autoReconnect = true
-            stompClient?.connect()
             subscribeStomp()
+            connect()
             
         case .failure:
-            logger.info("No accessToken found in Keychain at startup")
+            logger.info("토큰이 없어 WebSocket을 초기화할 수 없습니다.")
         }
     }
-}
-
-private extension ChatStompManager {
     
-    //MARK: - Private Func
+    func observeInitialIds() {
+        Publishers.CombineLatest(receivedMyStoreIdSubject, receivedRoomIdsSubject)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] (storeId, roomIds) in
+                guard let self else { return }
+                
+                self.logger.debug("📡 내 상점 ID(\(storeId)) 확보, 참여 중인 채팅방 IDs(\(roomIds)) 확보")
+                
+                subscribedMyStoreId = storeId
+                subscribedChatRoomIds = roomIds
+                initializeWebSocket()
+            }
+            .store(in: &cancellables)
+    }
     
     func subscribeStomp() {
         stompClient?.eventsUpstream
@@ -73,17 +106,26 @@ private extension ChatStompManager {
                 guard let self else { return }
                 switch event {
                 case .connected(_):
-                    socketStatus.send(.connected)
-                    print("✅ WebSocket 연결 완료")
+                    logger.debug("✅ WebSocket 연결 완료")
+                    socketStatusSubject.send(.connected)
+                    stompClient?.subscribe(to: "/topic/pong")
                     startPing()
+
+                    if let subscribedMyStoreId {
+                        subscribeMyStoreChannel(storeId: subscribedMyStoreId)
+                    }
+                    if let subscribedChatRoomIds {
+                        subscribeChatRooms(roomIds: subscribedChatRoomIds)
+                    }
                 case .disconnected(_):
-                    print("❎ WebSocket 연결 해제")
-                    socketStatus.send(.disconnected)
+                    logger.debug("❎ WebSocket 연결 해제")
                     stopPing()
+                    socketStatusSubject.send(.disconnected)
                 case let .error(error):
-                    print("❌ WebSocket 연결 실패")
-                    print(error)
-                    socketStatus.send(.disconnected)
+                    logger.error("❌ WebSocket 연결 실패: \(error)")
+                    socketStatusSubject.send(.disconnected)
+                    logger.debug("🔌 WebSocket 재연결")
+                    connect()
                 }
             }
             .store(in: &cancellables)
@@ -91,39 +133,74 @@ private extension ChatStompManager {
         stompClient?.messagesUpstream
             .receive(on: RunLoop.main)
             .sink { [weak self] message in
-                guard let self else { return }
+                guard let self = self else { return }
                 
-                print("✅ pong 수신됨")
-                
-                pongReceivedAt = Date()
+                switch message {
+                case .text(let messageString, _, let destination, _):
+                    print(messageString)
+                    
+                    if destination == "/queue/chat.room-created.\(subscribedMyStoreId!)" {
+                        logger.debug("💬 생성된 채팅방 ID: \(messageString)")
+                        if let roomId = Int(messageString) {
+                            subscribeChatRoom(roomId: roomId)
+                        }
+                        chatEventManager.didUpdateChatRoomsSubject.send()
+                        
+                    } else {
+                        if chatEventManager.chatStatus == .inactive {
+                            chatEventManager.didUpdateChatRoomsSubject.send()
+                        }
+                        
+                        if let jsonData = messageString.data(using: .utf8) {
+                            do {
+                                let chatMessage = try JSONDecoder().decode(WebSocketRedeivedChatMessageDTO.self, from: jsonData)
+                                receivedMessageDTOSubject.send(chatMessage)
+                            } catch {
+                                do {
+                                    let statusData = try JSONDecoder().decode(WebSocketRedeivedChatStatusDTO.self, from: jsonData)
+                                    
+                                    receivedStatusDTOSubject.send(statusData)
+                                } catch {
+                                    logger.error("JSON 디코딩 오류: \(error)")
+                                }
+                            }
+                        }
+                    }
+                    
+                case .data:
+                    logger.debug("📥 하트비트 수신, 연결 정상")
+                }
             }
             .store(in: &cancellables)
     }
     
-    func monitorPong() {
-        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] timer in
-            guard let self else { return }
-            
-            if let last = pongReceivedAt {
-                let elapsed = Date().timeIntervalSince(last)
-                if elapsed > pongTimeout {
-                    print("⚠️ Pong 응답 지연, 재연결 시도")
-                    stompClient?.disconnect()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                        self.stompClient?.connect()
-                    }
-                }
-            }
-        }
-    }
+//    당장은 활용x 추후 활용 가능성 있음
+//    func monitorPong() {
+//        Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] timer in
+//            guard let self else { return }
+//            
+//            if let last = pongReceivedAt {
+//                let elapsed = Date().timeIntervalSince(last)
+//                if elapsed > pongTimeout {
+//                    print("⚠️ Pong 응답 지연, 재연결 시도")
+//                    stompClient?.disconnect()
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+//                        self.stompClient?.connect()
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     func startPing() {
         pingTimer = Timer
-            .publish(every: 30, on: .main, in: .common) //30초 간격으로 Ping 전송
+            .publish(every: 20, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
-                print("✅ ping 전송")
-                self?.sendPing()
+                guard let self else { return }
+                
+                self.logger.debug("✅ ping 전송")
+                self.sendPing()
             }
     }
 
@@ -142,38 +219,79 @@ private extension ChatStompManager {
 
         guard let data = try? JSONSerialization.data(withJSONObject: payload),
               let requestBody = String(data: data, encoding: .utf8) else {
-            print("❌ JSON String으로 변환 실패")
+            logger.error("❌ JSON String으로 변환 실패")
             return
         }
 
         stompClient?.send(body: requestBody, to: destination)
     }
+
+    func subscribeChatRooms(roomIds: [Int]) {
+        for id in roomIds {
+            subscribeChatRoom(roomId: id)
+        }
+    }
+    
+    func subscribeChatRoom(roomId: Int) {
+        let destination = "/topic/chat.room.\(roomId)"
+        stompClient?.subscribe(
+            to: destination,
+            mode: .auto
+        )
+        
+        logger.debug("✅ \(roomId)번 채팅방 구독")
+    }
+    
+    func subscribeMyStoreChannel(storeId: Int) {
+        let destination = "/queue/chat.room-created.\(storeId)"
+        stompClient?.subscribe(
+            to: destination,
+            mode: .auto
+        )
+        
+        logger.debug("✅ \(storeId) 채널 구독")
+    }
 }
 
 extension ChatStompManager {
     func connect() {
-        if !(stompClient?.isConnected ?? Bool()) {
-            socketStatus.send(.connected)
-            stompClient?.connect()
+        if let isConnected = stompClient?.isConnected {
+            if !isConnected {
+                stompClient?.connect()
+            }
         }
     }
 
     func disconnect() {
-        if stompClient?.isConnected ?? Bool() {
-            stompClient?.disconnect()
-            socketStatus.send(.disconnected)
+        if let isConnected = stompClient?.isConnected {
+            if isConnected {
+                stompClient?.disconnect()
+            }
         }
     }
-
+    
     func subscribe(roomId: Int) {
-        stompClient?.subscribe(to: "/topic/pong")
-        
         let destination = "/topic/chat.room.\(roomId)"
         stompClient?.subscribe(
             to: destination,
-            mode: .client
+            mode: .auto
         )
         
-        print("✅ \(roomId)번 채팅방 구독")
+        logger.debug("✅ \(roomId)번 채팅방 구독")
+    }
+    
+    func sendChat(message: ChatMessageRequestDTO) {
+        let destination = "/pub/chat/send"
+        
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        guard let data = try? encoder.encode(message),
+              let requestBody = String(data: data, encoding: .utf8) else {
+            logger.error("❌ JSON 인코딩 실패")
+            return
+        }
+        
+        stompClient?.send(body: requestBody, to: destination, headers: ["content-type": "application/json"])
+        logger.debug("✉️ 메시지 전송: \(requestBody)")
     }
 }

@@ -13,9 +13,12 @@ import FirebaseCore
 @main
 struct Napzak_iOSApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
+    @Environment(\.scenePhase) private var scenePhase
+
     @StateObject private var permission: PushPermissionManager
     @StateObject private var pushManager: PushManager
+    
+    private let chatStompManager = ChatStompManager.shared
 
     init() {
         FirebaseApp.configure()
@@ -41,6 +44,11 @@ struct Napzak_iOSApp: App {
                 }
                 .environmentObject(pushManager)
                 .environmentObject(permission)
+        }
+        .onChange(of: scenePhase) { phase in
+            if phase == .active {
+                chatStompManager.connect()
+            }
         }
     }
 }

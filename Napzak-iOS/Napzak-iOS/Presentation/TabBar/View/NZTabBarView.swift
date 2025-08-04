@@ -179,7 +179,6 @@ struct NZTabBarView: View {
                     },
                     alignment: .bottom
                 )
-                .edgesIgnoringSafeArea([.top, .bottom])
                 .animation(.easeInOut(duration: 0.3), value: isRegisterTabSelected)
             }
         }
