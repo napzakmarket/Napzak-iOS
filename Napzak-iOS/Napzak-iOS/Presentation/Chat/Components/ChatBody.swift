@@ -15,6 +15,9 @@ struct ChatBody: View {
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
     
+    @State private var isImageDetailViewPresent: Bool = false
+    @State private var imageUrl = ""
+    
     //MARK: - Properties
     
     let chatData: ChatMessageModel
@@ -57,12 +60,20 @@ struct ChatBody: View {
                         }
                         ChatImageMessage(
                             imageUrl: image.imageUrls[0],
-                            onZoomButtonTapped: { }
+                            onZoomButtonTapped: {
+                                isImageDetailViewPresent = true
+                            }
                         )
                         .padding(.top, chatData.isProfileNeeded ? 20 : 0)
                         .padding(.leading, !chatData.isProfileNeeded && !chatData.isMessageOwner ? 44 : 0)
                     }
-                }
+                    .fullScreenCover(isPresented: $isImageDetailViewPresent) {
+                        ImageDetailView(
+                            isImageDetailViewPresent: $isImageDetailViewPresent,
+                            imageUrl: image.imageUrls[0]
+                        )
+                    }
+               }
             case .product:
                 if case let .product(product) = chatData.metadata {
                     ChatStarter(
