@@ -8,7 +8,8 @@
 import Foundation
 import os
 
-final class AuthManager: ObservableObject {
+final class AuthManager {
+    
     static let shared = AuthManager()
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Auth")
@@ -40,6 +41,12 @@ final class AuthManager: ObservableObject {
         switch keychain.getAccessToken() {
         case .success(let token):
             logger.info("Existing accessToken in Keychain: \(token, privacy: .private)")
+            
+            Task {
+                await fetchMyStoreId()
+                await fetchChatRoomIdsToWebSocket()
+            }
+            
         case .failure:
             logger.info("No accessToken found in Keychain at startup")
         }
@@ -85,6 +92,9 @@ final class AuthManager: ObservableObject {
                     return .failure(error)
                 }
                 
+                await fetchMyStoreId()
+                await fetchChatRoomIdsToWebSocket()
+
                 return .success(onboardingStep)
                 
             case .failure(let error):
@@ -137,4 +147,46 @@ final class AuthManager: ObservableObject {
     func completeOnboarding() {
         onboardingManager.saveCheckpoint(.completed)
     }
+}
+
+private extension AuthManager {
+    
+    //MARK: - Private Func (WebSocket 연결 목적)
+    
+    func fetchChatRoomIdsToWebSocket() async {
+        let result = await NetworkService.shared.chatService.getChatRoomIds()
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getChatRoomIds: No data received")
+                return
+            }
+            
+            let roomIds: [Int] = data.chatRoomIds
+            ChatStompManager.shared.receivedRoomIdsSubject.send(roomIds)
+            
+        case .failure(let error):
+            logger.error("getChatRoomIds failed: \(error.localizedDescription)")
+        }
+    }
+    
+    func fetchMyStoreId() async {
+        let result = await NetworkService.shared.chatService.getMyStoreId()
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getMyStoreId: No data received")
+                return
+            }
+            
+            let storeId: Int = data.storeId
+            ChatStompManager.shared.receivedMyStoreIdSubject.send(storeId)
+            
+        case .failure(let error):
+            logger.error("getMyStoreId failed: \(error.localizedDescription)")
+        }
+    }
+
 }

@@ -14,8 +14,10 @@ struct ChatDetailView: View {
     //MARK: - Property Wrappers
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @Environment(\.scenePhase) var scenePhase
     
     @StateObject var viewModel: ChatDetailViewModel
+    @StateObject private var chatImagePickerManager = ImagePickerManager()
     
     @FocusState private var isFocused: Bool
 
@@ -89,7 +91,11 @@ struct ChatDetailView: View {
                             confirmText: "나가기",
                             cancelText: "취소",
                             onConfirm: {
+                                Task {
+                                    await viewModel.exitChatRoom()
+                                }
                                 isExitAlertPresented = false
+                                navigationRouter.pop()
                             },
                             onCancel: {
                                 isExitAlertPresented = false
@@ -110,17 +116,35 @@ struct ChatDetailView: View {
         .onTapGesture {
             isFocused = false
         }
-        .onAppear {
-            if let productId = viewModel.productId {
+        .onChange(of: chatImagePickerManager.selectedImages) { images in
+            if let firstImage = images.first {
+                viewModel.selectedImage = firstImage
                 Task {
-                    await viewModel.fetchChatDetailInfo(productId: productId)
+                    await viewModel.uploadImage()
+                }
+                chatImagePickerManager.selectedImages = []
+            }
+        }
+        .onChange(of: scenePhase) { phase in
+            if phase == .inactive {
+                Task {
+                    await viewModel.leaveChatRoom()
+                }
+            } else if phase == .active {
+                if let roomId = viewModel.roomId {
+                    Task {
+                        await viewModel.enterChatRoom(roomId: roomId)
+                        await viewModel.fetchChatMessages(roomId: roomId)
+                    }
                 }
             }
-            
-            if let roomId = viewModel.roomId {
-                Task {
-                    await viewModel.patchChatRoomEnter(roomId: roomId)
-                }
+        }
+        .onAppear {
+            chatImagePickerManager.setOverrideMaxCount(1)
+        }
+        .onDisappear {
+            Task {
+                await viewModel.leaveChatRoom()
             }
         }
     }
@@ -154,52 +178,57 @@ extension ChatDetailView {
             }
         }
         .frame(height: 100)
+        .padding(.horizontal, 9)
     }
     
     private var productInfo: some View {
-        HStack(alignment: .center, spacing: 12) {
-            Group {
-                if let url = URL(string: viewModel.chatDetailInfo.productInfo.photo) {
-                    KFImage(url)
-                        .placeholder {
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.napzakGrayScale(.gray100))
-                        }
-                        .retry(maxCount: 3, interval: .seconds(5))
-                        .onFailure { error in
-                            print("failure: \(error.localizedDescription)")
-                        }
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } else {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(Color.napzakGrayScale(.gray100))
-                }
-            }
-            .frame(width: 70, height: 70)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            
-            VStack(alignment: .leading, spacing: 0) {
-                HStack(alignment: .center, spacing: 8) {
-                    Image(viewModel.chatDetailInfo.productInfo.tradeType == .sell ? .imgChatSellTag : .imgChatBuyTag)
-                    if viewModel.chatDetailInfo.productInfo.isPriceNegotiable {
-                        Image(.imgChatBiddingTag)
+        Button {
+            navigationRouter.push(next: .productDetailView(productId: viewModel.chatDetailInfo.productInfo.productId))
+        } label: {
+            HStack(alignment: .center, spacing: 12) {
+                Group {
+                    if let url = URL(string: viewModel.chatDetailInfo.productInfo.photo) {
+                        KFImage(url)
+                            .placeholder {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color.napzakGrayScale(.gray100))
+                            }
+                            .retry(maxCount: 3, interval: .seconds(5))
+                            .onFailure { error in
+                                print("failure: \(error.localizedDescription)")
+                            }
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    } else {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.napzakGrayScale(.gray100))
                     }
                 }
-                .padding(.bottom, 5)
+                .frame(width: 70, height: 70)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                
+                VStack(alignment: .leading, spacing: 0) {
+                    HStack(alignment: .center, spacing: 8) {
+                        Image(viewModel.chatDetailInfo.productInfo.tradeType == .sell ? .imgChatSellTag : .imgChatBuyTag)
+                        if viewModel.chatDetailInfo.productInfo.isPriceNegotiable {
+                            Image(.imgChatBiddingTag)
+                        }
+                    }
+                    .padding(.bottom, 5)
 
-                Text(viewModel.chatDetailInfo.productInfo.title)
-                    .applyNapzakFont(.body5SemiBold14)
+                    Text(viewModel.chatDetailInfo.productInfo.title)
+                        .applyNapzakFont(.body5SemiBold14)
+                        .foregroundStyle(Color.napzakGrayScale(.black))
+                        .frame(height: 18)
+                    Text(viewModel.chatDetailInfo.productInfo.price.convertPriceByTradeType(
+                        tradeType: viewModel.chatDetailInfo.productInfo.tradeType)
+                    )
+                    .applyNapzakFont(.body2SemiBold16)
                     .foregroundStyle(Color.napzakGrayScale(.black))
-                    .frame(height: 18)
-                Text(viewModel.chatDetailInfo.productInfo.price.convertPriceByTradeType(
-                    tradeType: viewModel.chatDetailInfo.productInfo.tradeType)
-                )
-                .applyNapzakFont(.body2SemiBold16)
-                .foregroundStyle(Color.napzakGrayScale(.black))
-                .frame(height: 20)
+                    .frame(height: 20)
+                }
+                Spacer()
             }
-            Spacer()
         }
         .padding(.vertical, 15)
         .padding(.horizontal, 20)
@@ -269,140 +298,30 @@ extension ChatDetailView {
     
     private var chatInputSection: some View {
         HStack(alignment: .center, spacing: 12) {
-            Button {
-                //TODO: - 사진 앱에서 선택하도록 연결
-                
-                //서버 연결 이후 삭제 예정. UI 확인용!
-                viewModel.chatMessages.append(ChatMessageModel(
-                    id: tempID,
-                    senderId: 1,
-                    type: .image,
-                    content: nil,
-                    metaData: .image(
-                        ImageMeta(
-                            type: .image,
-                            imageUrls: ["https://i.pinimg.com/736x/86/e8/c9/86e8c92b974b7d21a84a2af1b2650143.jpg"]
-                        )
-                    ),
-                    createdAt: "오전 7:30",
-                    isFirstChat: !isSent,
-                    isMessageOwner: isSent,
-                    isRead: true
-                ))
-                isSent.toggle()
-                tempID += 1
-            } label: {
+            chatImagePickerManager.photoPickerView(maxCount: 1) {
                 Image(.iconGallary)
             }
+            .disabled(viewModel.isChatDisabled)
+            
             ChatMessageInputBar (
                 text: $viewModel.messageText,
                 isFocused: _isFocused,
-                isChatDisabled: viewModel.chatDetailInfo.chatStoreInfo.isWithdrawn,
+                isChatDisabled: viewModel.isChatDisabled,
                 onSubmit: {
-                    if viewModel.chatMessages.isEmpty {
+                    let messageText = viewModel.messageText
+                    
+                    if viewModel.chatMessages.isEmpty && viewModel.roomId == nil {
                         Task {
                             await viewModel.postChatRoomCreate()
+                            viewModel.sendFirstMessage(firstMessageText: messageText)
+                        }
+                    } else if viewModel.shouldUpdateProductInfo {
+                        viewModel.sendProductUpdateMessage(messageText: messageText)
+                    } else {
+                        Task {
+                            await viewModel.sendTextMessage(text: messageText)
                         }
                     }
-                    
-                    //서버 연결 이후 삭제 예정. UI 확인용!
-                    switch viewModel.messageText {
-                    case "날짜":
-                        viewModel.chatMessages.append(ChatMessageModel(
-                            id: tempID,
-                            senderId: 3,
-                            type: .date,
-                            content: nil,
-                            metaData: .date(
-                                DateMeta(type: .date, date: "2025년 4월 30일")
-                            ),
-                            createdAt: "오전 7:30",
-                            isFirstChat: !isSent,
-                            isMessageOwner: isSent,
-                            isRead: true
-                        ))
-                    case "상품":
-                        viewModel.chatMessages.append(ChatMessageModel(
-                            id: tempID,
-                            senderId: 2,
-                            type: .product,
-                            content: nil,
-                            metaData: .product(
-                                ProductMeta(
-                                    type: .product,
-                                    tradeType: viewModel.chatDetailInfo.productInfo.tradeType,
-                                    productId: 0,
-                                    genreName: viewModel.chatDetailInfo.productInfo.genreName,
-                                    title: viewModel.chatDetailInfo.productInfo.title,
-                                    price: viewModel.chatDetailInfo.productInfo.price
-                                )
-                            ),
-                            createdAt: "오전 7:30",
-                            isFirstChat: !isSent,
-                            isMessageOwner: isSent,
-                            isRead: true
-                        ))
-                        tempID += 1
-                        viewModel.chatMessages.append(ChatMessageModel(
-                            id: tempID,
-                            senderId: 0,
-                            type: .text,
-                            content: "거래합시다",
-                            metaData: nil,
-                            createdAt: "오전 7:30",
-                            isFirstChat: !isSent,
-                            isMessageOwner: isSent,
-                            isRead: false
-                        ))
-                    case "나감":
-                        viewModel.chatMessages.append(ChatMessageModel(
-                            id: tempID,
-                            senderId: 4,
-                            type: .system,
-                            content: nil,
-                            metaData: .system(
-                                SystemMeta(
-                                    type: .leave,
-                                    content: ""
-                                )
-                            ),
-                            createdAt: "오전 7:30",
-                            isFirstChat: !isSent,
-                            isMessageOwner: isSent,
-                            isRead: true
-                        ))
-                    case "신고":
-                        viewModel.chatMessages.append(ChatMessageModel(
-                            id: tempID,
-                            senderId: 4,
-                            type: .system,
-                            content: nil,
-                            metaData: .system(
-                                SystemMeta(
-                                    type: .reported,
-                                    content: ""
-                                )
-                            ),
-                            createdAt: "오전 7:30",
-                            isFirstChat: !isSent,
-                            isMessageOwner: isSent,
-                            isRead: true
-                        ))
-                    default:
-                        viewModel.chatMessages.append(ChatMessageModel(
-                            id: tempID,
-                            senderId: 0,
-                            type: .text,
-                            content: viewModel.messageText,
-                            metaData: nil,
-                            createdAt: "오전 7:30",
-                            isFirstChat: !isSent,
-                            isMessageOwner: isSent,
-                            isRead: false
-                        ))
-                    }
-                    isSent.toggle()
-                    tempID += 1
                 }
             )
         }

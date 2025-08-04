@@ -9,4 +9,5 @@ typealias ChatRoomEnterResponseDTO = BaseResponseDTO<ChatRoomEnterDTO>
 
 struct ChatRoomEnterDTO: Decodable {
     let productId: Int
+    let onlineStoreIds: [Int]
 }

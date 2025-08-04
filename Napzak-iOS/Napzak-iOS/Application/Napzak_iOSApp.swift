@@ -8,15 +8,32 @@
 import SwiftUI
 import KakaoSDKCommon
 import KakaoSDKAuth
+import FirebaseCore
 
 @main
 struct Napzak_iOSApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    @Environment(\.scenePhase) private var scenePhase
+
+    @StateObject private var permission: PushPermissionManager
+    @StateObject private var pushManager: PushManager
     
+    private let chatStompManager = ChatStompManager.shared
+
     init() {
+        FirebaseApp.configure()
         let kakaoAppKey = Bundle.main.infoDictionary?["KAKAO_APP_KEY"] as? String ?? ""
         KakaoSDK.initSDK(appKey: kakaoAppKey)
+
+        let permission = PushPermissionManager()
+        let pushManager = PushManager(permission: permission)
+        
+        self._permission = StateObject(wrappedValue: permission)
+        self._pushManager = StateObject(wrappedValue: pushManager)
+
+        appDelegate.pushManager = pushManager
     }
-    
+
     var body: some Scene {
         WindowGroup {
             RootView()
@@ -25,6 +42,13 @@ struct Napzak_iOSApp: App {
                         _ = AuthController.handleOpenUrl(url: url)
                     }
                 }
+                .environmentObject(pushManager)
+                .environmentObject(permission)
+        }
+        .onChange(of: scenePhase) { phase in
+            if phase == .active {
+                chatStompManager.connect()
+            }
         }
     }
 }

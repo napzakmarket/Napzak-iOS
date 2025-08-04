@@ -12,7 +12,8 @@ struct ChatView: View {
     //MARK: - Property Wrappers
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
-    
+    @Environment(\.scenePhase) var scenePhase
+
     @StateObject var viewModel: ChatViewModel
     
     //MARK: - Init
@@ -33,6 +34,13 @@ struct ChatView: View {
             }
         }
         .ignoresSafeArea(edges: [.vertical])
+        .onChange(of: scenePhase) { phase in
+            if phase == .active {
+                Task {
+                    await viewModel.fetchChatRooms()
+                }
+            }
+        }
     }
 }
 
@@ -92,7 +100,7 @@ extension ChatView {
             LazyVStack(spacing: 0) {
                 ForEach(viewModel.chatRooms) { data in
                     Button {
-//                        navigationRouter.push(next: .chatDetailView)
+                        navigationRouter.push(next: .chatDetailView(chatEntry: .room(id: data.id)))
                     } label: {
                         ChatItemView(chatRoom: data)
                     }

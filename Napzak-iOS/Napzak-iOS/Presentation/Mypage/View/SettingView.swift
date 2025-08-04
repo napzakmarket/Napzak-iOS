@@ -10,6 +10,8 @@ import SwiftUI
 struct SettingView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
     @EnvironmentObject private var tabRouter: TabRouter
+    @EnvironmentObject private var pushManger: PushManager
+    @EnvironmentObject private var permissionManager: PushPermissionManager
     
     @Environment(\.openURL) var openURL
     
@@ -24,6 +26,8 @@ struct SettingView: View {
         ZStack {
             VStack(spacing: 0){
                 settingViewHeader
+                appPushToggleView
+                separator
                 serviceInfo
                 separator
                 logoutButton
@@ -49,6 +53,7 @@ struct SettingView: View {
                     cancelText: "아니요",
                     onConfirm: {
                         Task {
+                            await pushManger.removeToken()
                             await viewModel.logout()
                             navigationRouter.reset()
                             tabRouter.switchToHome()
@@ -63,7 +68,6 @@ struct SettingView: View {
                 
             }
         }
-        .ignoresSafeArea()
         .background(Color.napzakGrayScale(.gray10))
         .navigationBarHidden(true)
         .onAppear {
@@ -88,22 +92,19 @@ extension SettingView {
                         .frame(height: 20)
                 }
             }
-            .padding(.top, 58)
             .padding(.bottom, 18)
             .padding(.leading, 20)
             
             Divider()
         }
-        .frame(height: 100)
-        .padding(.bottom, 28)
         .background(.white)
     }
     
     private var serviceInfo: some View {
         VStack(alignment: .leading, spacing: 0){
             Text("서비스 정보")
-                .applyNapzakFont(.body6Regular14)
-                .foregroundStyle(Color.napzakGrayScale(.gray400))
+                .applyNapzakFont(.body5SemiBold14)
+                .foregroundStyle(Color.napzakGrayScale(.gray200))
                 .frame(height: 18)
                 .padding(.leading, 28)
                 .padding(.bottom, 28)
@@ -115,7 +116,7 @@ extension SettingView {
             } label: {
                 HStack {
                     Text("공지사항")
-                        .applyNapzakFont(.body1Bold16)
+                        .applyNapzakFont(.body7Medium16)
                         .foregroundStyle(Color.napzakGrayScale(.gray400))
                         .frame(height: 20)
                     Spacer()
@@ -134,7 +135,7 @@ extension SettingView {
             } label: {
                 HStack {
                     Text("이용약관")
-                        .applyNapzakFont(.body1Bold16)
+                        .applyNapzakFont(.body7Medium16)
                         .foregroundStyle(Color.napzakGrayScale(.gray400))
                         .frame(height: 20)
                     Spacer()
@@ -153,7 +154,7 @@ extension SettingView {
             } label: {
                 HStack {
                     Text("개인정보 처리방침")
-                        .applyNapzakFont(.body1Bold16)
+                        .applyNapzakFont(.body7Medium16)
                         .foregroundStyle(Color.napzakGrayScale(.gray400))
                         .frame(height: 20)
                     Spacer()
@@ -167,12 +168,12 @@ extension SettingView {
             
             HStack {
                 Text("버전 정보")
-                    .applyNapzakFont(.body1Bold16)
+                    .applyNapzakFont(.body7Medium16)
                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                     .frame(height: 20)
                 Spacer()
                 Text(appVersion ?? "버전 정보가 없습니다")
-                    .applyNapzakFont(.body2SemiBold16)
+                    .applyNapzakFont(.body7Medium16)
                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                     .frame(height: 20)
                 
@@ -222,8 +223,32 @@ extension SettingView {
         .padding(.vertical, 28)
         .background(.white)
     }
+    
+    private var appPushToggleView: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("알림")
+                .applyNapzakFont(.body5SemiBold14)
+                .foregroundStyle(Color.napzakGrayScale(.gray200))
+                .frame(height: 18)
+                .padding(.vertical, 24)
+            
+            HStack {
+                Toggle(isOn: $permissionManager.isAppPushEnabled) {
+                    Text(permissionManager.isAppPushEnabled ? "앱 알림" : "기기 알림이 꺼져있어요.")
+                        .applyNapzakFont(.body7Medium16)
+                        .foregroundStyle(permissionManager.isAppPushEnabled ? Color.napzakGrayScale(.gray400) : Color.napzakState(.red))
+                        .frame(height: 20)
+                }
+                .toggleStyle(CustomToggleStyle())
+            }
+        }
+        .padding(.horizontal, 28)
+        .padding(.bottom, 24)
+        .background(.white)
+    }
 }
 
 #Preview {
     SettingView()
+        .environmentObject(PushPermissionManager())
 }

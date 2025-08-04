@@ -32,7 +32,7 @@ final class ProfileEditViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "ProfileEdit")
     
-    private var initialNickname: String = ""
+    private(set) var initialNickname: String = ""
     private var initialProfileDescription: String = ""
     private var initialGenres: [GenreNameModel] = []
     private var initialProfileImageURL: String = ""

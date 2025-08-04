@@ -27,10 +27,18 @@ struct ProfileEditView: View {
                         marketNameView
                         marketDescriptionSection
                         genreSelectionSection
-                        confirmButton
+                            .padding(.bottom, 120)
                     }
                 }
             }
+
+            VStack(spacing: 0) {
+                Rectangle()
+                    .fill(Color.white)
+                    .frame(height: 25)
+                confirmButton
+            }
+            .background(Color.white)
 
             if isGenreSelectModalPresented {
                 Color.black.opacity(0.3)
@@ -230,12 +238,14 @@ struct ProfileEditView: View {
             UsernameInputField(
                 validationState: $viewModel.validationState,
                 username: $viewModel.nickname,
-                isPrimaryButtonEnabled: $viewModel.isPrimaryButtonEnabled
+                isPrimaryButtonEnabled: $viewModel.isPrimaryButtonEnabled,
+                initialNickname: viewModel.initialNickname  
             ) { validatedUsername in
                 Task {
                     await viewModel.validateUsername(validatedUsername)
                 }
             }
+
             .padding(.bottom,46)
             .focused($isKeyboardActive)
 
@@ -364,13 +374,14 @@ struct ProfileEditView: View {
                 .foregroundColor(Color.napzakGrayScale(.white))
                 .frame(maxWidth: .infinity)
                 .frame(height: 50)
-                .background(viewModel.isPrimaryButtonEnabled ? Color.napzakPrimary(.purple500) : Color.napzakPrimary(.purple500).opacity(0.5))
+                .background(viewModel.isPrimaryButtonEnabled
+                            ? Color.napzakPrimary(.purple500)
+                            : Color.napzakPrimary(.purple500).opacity(0.5))
                 .cornerRadius(14)
+                .padding(.horizontal, 27)
+                .padding(.bottom, 60)
         }
         .disabled(!viewModel.isPrimaryButtonEnabled)
-        .padding(.bottom, 63)
-        .padding(.horizontal, 27)
-        .padding(.top, 5)
     }
 }
 

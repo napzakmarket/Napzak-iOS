@@ -6,6 +6,7 @@
 //
 
 typealias ChatDetailResponseDTO = BaseResponseDTO<ChatDetailInfoDTO>
+typealias UpdatedProductIdResponseDTO = BaseResponseDTO<UpdatedProductIdDTO>
 
 struct ChatDetailInfoDTO: Decodable {
     let productInfo: ChatProductInfoDTO
@@ -21,6 +22,8 @@ struct ChatProductInfoDTO: Decodable {
     let price: Int
     let isPriceNegotiable: Bool
     let genreName: String
+    let productOwnerId: Int
+    let isMyProduct: Bool
 }
 
 struct ChatStoreInfoDTO: Decodable {
@@ -28,4 +31,8 @@ struct ChatStoreInfoDTO: Decodable {
     let nickname: String
     let isWithdrawn: Bool
     let storePhoto: String
+}
+
+struct UpdatedProductIdDTO: Decodable {
+    let updatedProductId: Int
 }
