@@ -109,7 +109,7 @@ extension SearchInputView {
     private var typingContentView: some View {
         LazyVStack(spacing: 0) {
             Button {
-                navigationRouter.push(next: .searchView(searchWord: viewModel.searchInputText))
+                SearchEventManager.shared.searchCompleted.send(viewModel.searchInputText)
             } label: {
                 HStack(alignment: .center, spacing: 6) {
                     Image(.imgSearchInput)
