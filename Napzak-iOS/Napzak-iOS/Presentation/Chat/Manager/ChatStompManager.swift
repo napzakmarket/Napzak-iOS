@@ -30,29 +30,41 @@ final class ChatStompManager: ObservableObject {
     var socketStatusSubject = CurrentValueSubject<SocketStatus, Never>(.disconnected)
     var receivedMessageDTOSubject = PassthroughSubject<WebSocketRedeivedChatMessageDTO, Never>()
     var receivedStatusDTOSubject = PassthroughSubject<WebSocketRedeivedChatStatusDTO, Never>()
-    var receivedRoomIdsSubject = PassthroughSubject<[Int], Never>()
     var receivedMyStoreIdSubject = PassthroughSubject<Int, Never>()
+    var receivedRoomIdsSubject = PassthroughSubject<[Int], Never>()
     
     private var chatEventManager = ChatEventManager.shared
     
     private var pingTimer: AnyCancellable?
     private var pongReceivedAt: Date?
     private let pongTimeout: TimeInterval = 30
-    private var subscribedChatRoomIds: [Int] = []
-    private var subscribedMyStoreId: Int = 0
+    private var subscribedChatRoomIds: [Int]?
+    private var subscribedMyStoreId: Int?
     
     private var cancellables = Set<AnyCancellable>()
 
     //MARK: - Life Cycle
     
     private init() {
-        observeSubscribedChatRoomIds()
-        observeSubscribedMyStoreId()
+        observeInitialIds()
+    }
+}
+
+private extension ChatStompManager {
+    
+    //MARK: - Private Func
+    
+    func initializeWebSocket() {
+        guard stompClient == nil else {
+            if socketStatusSubject.value == .disconnected {
+                connect()
+            }
+            return
+        }
         
         switch KeychainManager.shared.getAccessToken() {
         case .success(let token):
-            logger.info("Existing accessToken in Keychain: \(token, privacy: .private)")
-            
+            logger.info("WebSocket 초기화 시작...")
             self.accessToken = token
             
             guard let urlString = Bundle.main.infoDictionary?["WEBSOCKET_URL"] as? String,
@@ -64,34 +76,25 @@ final class ChatStompManager: ObservableObject {
             )
             
             stompClient?.autoReconnect = true
-            connect()
             subscribeStomp()
+            connect()
+            
         case .failure:
-            logger.info("No accessToken found in Keychain at startup")
+            logger.info("토큰이 없어 WebSocket을 초기화할 수 없습니다.")
         }
     }
-}
-
-private extension ChatStompManager {
     
-    //MARK: - Private Func
-    
-    func observeSubscribedChatRoomIds() {
-        receivedRoomIdsSubject
-            .sink { [weak self] roomIds in
+    func observeInitialIds() {
+        Publishers.CombineLatest(receivedMyStoreIdSubject, receivedRoomIdsSubject)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] (storeId, roomIds) in
                 guard let self else { return }
                 
-                self.subscribedChatRoomIds =  roomIds
-            }
-            .store(in: &cancellables)
-    }
-    
-    func observeSubscribedMyStoreId() {
-        receivedMyStoreIdSubject
-            .sink { [weak self] storeId in
-                guard let self else { return }
+                self.logger.debug("📡 내 상점 ID(\(storeId)) 확보, 참여 중인 채팅방 IDs(\(roomIds)) 확보")
                 
-                self.subscribedMyStoreId = storeId
+                subscribedMyStoreId = storeId
+                subscribedChatRoomIds = roomIds
+                initializeWebSocket()
             }
             .store(in: &cancellables)
     }
@@ -103,22 +106,25 @@ private extension ChatStompManager {
                 guard let self else { return }
                 switch event {
                 case .connected(_):
-                    socketStatusSubject.send(.connected)
                     logger.debug("✅ WebSocket 연결 완료")
+                    socketStatusSubject.send(.connected)
+                    stompClient?.subscribe(to: "/topic/pong")
                     startPing()
 
-                    stompClient?.subscribe(to: "/topic/pong")
-                    subscribeChatRooms(roomIds: subscribedChatRoomIds)
-                    if !subscribedChatRoomIds.contains(subscribedMyStoreId) {
+                    if let subscribedMyStoreId {
                         subscribeMyStoreChannel(storeId: subscribedMyStoreId)
+                    }
+                    if let subscribedChatRoomIds {
+                        subscribeChatRooms(roomIds: subscribedChatRoomIds)
                     }
                 case .disconnected(_):
                     logger.debug("❎ WebSocket 연결 해제")
-                    socketStatusSubject.send(.disconnected)
                     stopPing()
+                    socketStatusSubject.send(.disconnected)
                 case let .error(error):
                     logger.error("❌ WebSocket 연결 실패: \(error)")
                     socketStatusSubject.send(.disconnected)
+                    logger.debug("🔌 WebSocket 재연결")
                     connect()
                 }
             }
@@ -131,12 +137,15 @@ private extension ChatStompManager {
                 
                 switch message {
                 case .text(let messageString, _, let destination, _):
-                    if destination == "/queue/chat.room-created.\(subscribedMyStoreId)" {
+                    print(messageString)
+                    
+                    if destination == "/queue/chat.room-created.\(subscribedMyStoreId!)" {
                         logger.debug("💬 생성된 채팅방 ID: \(messageString)")
                         if let roomId = Int(messageString) {
                             subscribeChatRoom(roomId: roomId)
                         }
                         chatEventManager.didUpdateChatRoomsSubject.send()
+                        
                     } else {
                         if chatEventManager.chatStatus == .inactive {
                             chatEventManager.didUpdateChatRoomsSubject.send()
@@ -185,7 +194,7 @@ private extension ChatStompManager {
     
     func startPing() {
         pingTimer = Timer
-            .publish(every: 30, on: .main, in: .common) //30초 간격으로 Ping 전송
+            .publish(every: 20, on: .main, in: .common)
             .autoconnect()
             .sink { [weak self] _ in
                 guard let self else { return }
