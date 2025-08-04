@@ -15,8 +15,11 @@ struct Napzak_iOSApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @Environment(\.scenePhase) private var scenePhase
 
+    @StateObject private var activeChatState = ActiveChatState()
     @StateObject private var permission: PushPermissionManager
     @StateObject private var pushManager: PushManager
+    @StateObject private var navigationRouter = NavigationRouter()
+    @StateObject private var tabRouter = TabRouter()
     
     private let chatStompManager = ChatStompManager.shared
 
@@ -30,7 +33,7 @@ struct Napzak_iOSApp: App {
         
         self._permission = StateObject(wrappedValue: permission)
         self._pushManager = StateObject(wrappedValue: pushManager)
-
+        
         appDelegate.pushManager = pushManager
     }
 
@@ -44,6 +47,14 @@ struct Napzak_iOSApp: App {
                 }
                 .environmentObject(pushManager)
                 .environmentObject(permission)
+                .environmentObject(navigationRouter)
+                .environmentObject(tabRouter)
+                .environmentObject(activeChatState)
+                .onAppear {
+                    pushManager.navigationRouter = navigationRouter
+                    pushManager.tabRouter = tabRouter
+                    pushManager.activeChatState = activeChatState
+                }
         }
         .onChange(of: scenePhase) { phase in
             if phase == .active {

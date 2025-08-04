@@ -9,11 +9,9 @@ import SwiftUI
 
 struct RootView: View {
     @StateObject private var authRouter = AuthNavigationRouter()
-    @StateObject private var navigationRouter = NavigationRouter()
-    @StateObject private var tabRouter = TabRouter()
+    
     private let authManager = AuthManager.shared
     @State private var isShowingSplash = true
-    
     
     var body: some View {
         Group {
@@ -22,8 +20,6 @@ struct RootView: View {
                     .transition(.opacity)
             } else if authManager.isAuthenticated && !authManager.needsOnboarding {
                 NZTabBarView()
-                    .environmentObject(navigationRouter)
-                    .environmentObject(tabRouter)
             } else {
                 LoginView()
                     .environmentObject(authRouter)
