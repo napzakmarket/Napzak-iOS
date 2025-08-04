@@ -178,52 +178,57 @@ extension ChatDetailView {
             }
         }
         .frame(height: 100)
+        .padding(.horizontal, 9)
     }
     
     private var productInfo: some View {
-        HStack(alignment: .center, spacing: 12) {
-            Group {
-                if let url = URL(string: viewModel.chatDetailInfo.productInfo.photo) {
-                    KFImage(url)
-                        .placeholder {
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.napzakGrayScale(.gray100))
-                        }
-                        .retry(maxCount: 3, interval: .seconds(5))
-                        .onFailure { error in
-                            print("failure: \(error.localizedDescription)")
-                        }
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } else {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(Color.napzakGrayScale(.gray100))
-                }
-            }
-            .frame(width: 70, height: 70)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            
-            VStack(alignment: .leading, spacing: 0) {
-                HStack(alignment: .center, spacing: 8) {
-                    Image(viewModel.chatDetailInfo.productInfo.tradeType == .sell ? .imgChatSellTag : .imgChatBuyTag)
-                    if viewModel.chatDetailInfo.productInfo.isPriceNegotiable {
-                        Image(.imgChatBiddingTag)
+        Button {
+            navigationRouter.push(next: .productDetailView(productId: viewModel.chatDetailInfo.productInfo.productId))
+        } label: {
+            HStack(alignment: .center, spacing: 12) {
+                Group {
+                    if let url = URL(string: viewModel.chatDetailInfo.productInfo.photo) {
+                        KFImage(url)
+                            .placeholder {
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color.napzakGrayScale(.gray100))
+                            }
+                            .retry(maxCount: 3, interval: .seconds(5))
+                            .onFailure { error in
+                                print("failure: \(error.localizedDescription)")
+                            }
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    } else {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.napzakGrayScale(.gray100))
                     }
                 }
-                .padding(.bottom, 5)
+                .frame(width: 70, height: 70)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                
+                VStack(alignment: .leading, spacing: 0) {
+                    HStack(alignment: .center, spacing: 8) {
+                        Image(viewModel.chatDetailInfo.productInfo.tradeType == .sell ? .imgChatSellTag : .imgChatBuyTag)
+                        if viewModel.chatDetailInfo.productInfo.isPriceNegotiable {
+                            Image(.imgChatBiddingTag)
+                        }
+                    }
+                    .padding(.bottom, 5)
 
-                Text(viewModel.chatDetailInfo.productInfo.title)
-                    .applyNapzakFont(.body5SemiBold14)
+                    Text(viewModel.chatDetailInfo.productInfo.title)
+                        .applyNapzakFont(.body5SemiBold14)
+                        .foregroundStyle(Color.napzakGrayScale(.black))
+                        .frame(height: 18)
+                    Text(viewModel.chatDetailInfo.productInfo.price.convertPriceByTradeType(
+                        tradeType: viewModel.chatDetailInfo.productInfo.tradeType)
+                    )
+                    .applyNapzakFont(.body2SemiBold16)
                     .foregroundStyle(Color.napzakGrayScale(.black))
-                    .frame(height: 18)
-                Text(viewModel.chatDetailInfo.productInfo.price.convertPriceByTradeType(
-                    tradeType: viewModel.chatDetailInfo.productInfo.tradeType)
-                )
-                .applyNapzakFont(.body2SemiBold16)
-                .foregroundStyle(Color.napzakGrayScale(.black))
-                .frame(height: 20)
+                    .frame(height: 20)
+                }
+                Spacer()
             }
-            Spacer()
         }
         .padding(.vertical, 15)
         .padding(.horizontal, 20)
@@ -232,9 +237,6 @@ extension ChatDetailView {
                 .shadow(color: .black.opacity(0.1), radius: 2)
         )
         .padding(.top, 100)
-        .onTapGesture {
-            navigationRouter.push(next: .productDetailView(productId: viewModel.chatDetailInfo.productInfo.productId))
-        }
     }
     
     private var chatSection: some View {
