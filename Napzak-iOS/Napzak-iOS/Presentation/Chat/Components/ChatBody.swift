@@ -49,7 +49,7 @@ struct ChatBody: View {
                         message: chatData.content ?? "",
                         isMessageOwner: chatData.isMessageOwner
                     )
-                    .padding(.top, chatData.isProfileNeeded ? 20 : 0)
+                    .padding(.top, chatData.isProfileNeeded && !chatData.isMessageOwner ? 20 : 0)
                     .padding(.leading, !chatData.isProfileNeeded && !chatData.isMessageOwner ? 44 : 0)
                 }
             case .image:
