@@ -22,8 +22,10 @@ final class ChatViewModel: ObservableObject {
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Chat")
     
     private let chatEventManager = ChatEventManager.shared
-    private var cancellables = Set<AnyCancellable>()
+    let loadingManager = LoadingViewManager()
     
+    private var cancellables = Set<AnyCancellable>()
+
     //MARK: - Init
 
     init() {
@@ -57,6 +59,9 @@ extension ChatViewModel {
     //MARK: - Func
 
     func fetchChatRooms() async {
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
+
         let result = await NetworkService.shared.chatService.getChatRooms(deviceToken: nil)
         
         switch result {

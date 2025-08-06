@@ -10,11 +10,12 @@ import SwiftUI
 enum StatusToastStyle {
     case statusChanged
     case deleteProduct
+    case editCompleted
     
     var icon: Image {
         switch self {
-        case .statusChanged: return Image(.iconStatusToast)
         case .deleteProduct: return Image(.iconDeleteToast)
+        default: return Image(.iconStatusToast)
         }
     }
     
@@ -22,6 +23,7 @@ enum StatusToastStyle {
         switch self {
         case .statusChanged: return "상품 상태를 \"\(tradeStatus ?? "")\"으로 변경하였습니다."
         case .deleteProduct: return "상품이 삭제되었습니다."
+        case .editCompleted: return "수정이 완료되었습니다."
         }
 
     }

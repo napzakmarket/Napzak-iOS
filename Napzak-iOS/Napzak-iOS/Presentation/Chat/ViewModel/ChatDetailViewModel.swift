@@ -40,7 +40,8 @@ final class ChatDetailViewModel: ObservableObject {
 
     private let chatStompManager = ChatStompManager.shared
     private let chatEventManager = ChatEventManager.shared
-    
+    let loadingManager = LoadingViewManager()
+
     private var didUpdateProductIdSubject = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
     
@@ -199,6 +200,9 @@ private extension ChatDetailViewModel {
     }
     
     func fetchChatDetailInfo(productId: Int) async {
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
+
         let result = await NetworkService.shared.chatService.getChatInfo(productId: productId, roomId: roomId)
         
         switch result {
@@ -282,6 +286,9 @@ extension ChatDetailViewModel {
     }
     
     func fetchChatMessages(roomId: Int) async {
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
+
         let result = await NetworkService.shared.chatService.getChatMessages(roomId: roomId)
         
         switch result {
