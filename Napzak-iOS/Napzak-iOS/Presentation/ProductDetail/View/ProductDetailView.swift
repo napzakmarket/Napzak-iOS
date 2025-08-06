@@ -23,6 +23,7 @@ struct ProductDetailView: View {
     @State private var isDeleteAlertPresented = false
     @State private var statusToastStyle: StatusToastStyle = .statusChanged
     @State private var isRegisterViewPresented = false
+    @State private var isEditCompleted = false
 
     //MARK: - Properties
     
@@ -165,13 +166,15 @@ struct ProductDetailView: View {
                 SellRegisterView(
                     viewModel: RegisterViewModel(viewType: .editProduct(productID: viewModel.product.productDetail.id,
                                                                         tradeType: viewModel.product.productDetail.tradeType)),
-                    isRegisterTabSelected: .constant(false)
+                    isRegisterTabSelected: .constant(false),
+                    isEditCompleted: $isEditCompleted
                 )
             case .buy:
                 BuyRegisterView(
                     viewModel: RegisterViewModel(viewType: .editProduct(productID: viewModel.product.productDetail.id,
                                                                         tradeType: viewModel.product.productDetail.tradeType)),
-                    isRegisterTabSelected: .constant(false)
+                    isRegisterTabSelected: .constant(false),
+                    isEditCompleted: $isEditCompleted
                 )
             }
         }
@@ -179,6 +182,14 @@ struct ProductDetailView: View {
             if !value {
                 Task {
                     await viewModel.fetchProduct(id: viewModel.product.productDetail.id)
+                }
+                if isEditCompleted {
+                    statusToastStyle = .editCompleted
+                    Task {
+                        viewModel.showStatusToast = true
+                        try? await Task.sleep(for: .seconds(1.5))
+                        viewModel.showStatusToast = false
+                    }
                 }
             }
         }

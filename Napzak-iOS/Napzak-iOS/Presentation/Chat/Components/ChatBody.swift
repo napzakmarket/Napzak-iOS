@@ -15,6 +15,9 @@ struct ChatBody: View {
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
     
+    @State private var isImageDetailViewPresented: Bool = false
+    @State private var imageUrl = ""
+    
     //MARK: - Properties
     
     let chatData: ChatMessageModel
@@ -46,7 +49,7 @@ struct ChatBody: View {
                         message: chatData.content ?? "",
                         isMessageOwner: chatData.isMessageOwner
                     )
-                    .padding(.top, chatData.isProfileNeeded ? 20 : 0)
+                    .padding(.top, chatData.isProfileNeeded && !chatData.isMessageOwner ? 20 : 0)
                     .padding(.leading, !chatData.isProfileNeeded && !chatData.isMessageOwner ? 44 : 0)
                 }
             case .image:
@@ -55,14 +58,26 @@ struct ChatBody: View {
                         if chatData.isProfileNeeded && !chatData.isMessageOwner {
                             profileImage
                         }
-                        ChatImageMessage(
-                            imageUrl: image.imageUrls[0],
-                            onZoomButtonTapped: { }
-                        )
-                        .padding(.top, chatData.isProfileNeeded ? 20 : 0)
-                        .padding(.leading, !chatData.isProfileNeeded && !chatData.isMessageOwner ? 44 : 0)
+                        if let imageUrl = image.imageUrls[0] {
+                            ChatImageMessage(
+                                imageUrl: imageUrl,
+                                onZoomButtonTapped: {
+                                    isImageDetailViewPresented = true
+                                }
+                            )
+                            .padding(.top, chatData.isProfileNeeded ? 20 : 0)
+                            .padding(.leading, !chatData.isProfileNeeded && !chatData.isMessageOwner ? 44 : 0)
+                        }
                     }
-                }
+                    .fullScreenCover(isPresented: $isImageDetailViewPresented) {
+                        if let imageUrl = image.imageUrls[0] {
+                            ImageDetailView(
+                                isImageDetailViewPresent: $isImageDetailViewPresented,
+                                imageUrl: imageUrl
+                            )
+                        }
+                    }
+               }
             case .product:
                 if case let .product(product) = chatData.metadata {
                     ChatStarter(

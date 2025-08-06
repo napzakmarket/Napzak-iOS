@@ -20,7 +20,7 @@ struct ChatImageMessage: View {
     
     var body: some View {
         Button {
-            
+            onZoomButtonTapped()
         } label: {
             ZStack(alignment: .bottomTrailing) {
                 Group {

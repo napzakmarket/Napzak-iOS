@@ -22,6 +22,7 @@ struct SellRegisterView: View {
     @State private var isProcessing: Bool = false
     
     @Binding var isRegisterTabSelected: Bool
+    @Binding var isEditCompleted: Bool
     
     var body: some View {
         NavigationStack(path: $registerRouter.path) {
@@ -177,6 +178,8 @@ extension SellRegisterView {
                         dismiss()
                         if viewModel.type == .initialRegister {
                             navigationRouter.push(next: .productDetailView(productId: productId))
+                        } else {
+                            isEditCompleted = true
                         }
                     }
                     isProcessing = false

@@ -16,10 +16,13 @@ struct ChatView: View {
 
     @StateObject var viewModel: ChatViewModel
     
+    @Binding var isTabBarHidden: Bool
+    
     //MARK: - Init
     
-    init() {
+    init(isTabBarHidden: Binding<Bool>) {
         self._viewModel = StateObject(wrappedValue: ChatViewModel())
+        self._isTabBarHidden = isTabBarHidden
     }
     
     //MARK: - Main Body
@@ -32,6 +35,10 @@ struct ChatView: View {
                 navigationBar
                 Spacer()
             }
+            
+            if viewModel.loadingManager.isLoadingNetwork {
+                LoadingView()
+            }
         }
         .ignoresSafeArea(edges: [.vertical])
         .onChange(of: scenePhase) { phase in
@@ -39,6 +46,13 @@ struct ChatView: View {
                 Task {
                     await viewModel.fetchChatRooms()
                 }
+            }
+        }
+        .onChange(of: viewModel.loadingManager.isLoadingNetwork) { _ in
+            if viewModel.loadingManager.isLoadingNetwork {
+                isTabBarHidden = true
+            } else {
+                isTabBarHidden = false
             }
         }
     }

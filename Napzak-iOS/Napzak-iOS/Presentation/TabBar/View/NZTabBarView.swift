@@ -43,8 +43,12 @@ struct NZTabBarView: View {
                     )
                     .id("\(tabRouter.currentSearchWord)-\(tabRouter.currentSortOption)-\(tabRouter.currentSelectedTab)")
                     .tag(NZTab.search)
-                    ChatView().tag(NZTab.chat)
-                    MyPageView(isTabBarHidden: $isTabBarHidden).tag(NZTab.my)
+                    
+                    ChatView(isTabBarHidden: $isTabBarHidden)
+                        .tag(NZTab.chat)
+                    
+                    MyPageView(isTabBarHidden: $isTabBarHidden)
+                        .tag(NZTab.my)
                 }
                 .onChange(of: tabRouter.selectedTab) { newTab in
                     if permissionManager.pushOffState == nil {
@@ -104,10 +108,12 @@ struct NZTabBarView: View {
                 switch registerType {
                 case .sell:
                     SellRegisterView(viewModel: RegisterViewModel(viewType: .initialRegister),
-                                     isRegisterTabSelected: $isRegisterTabSelected)
+                                     isRegisterTabSelected: $isRegisterTabSelected,
+                                     isEditCompleted: .constant(false))
                 case .buy:
                     BuyRegisterView(viewModel: RegisterViewModel(viewType: .initialRegister),
-                                    isRegisterTabSelected: $isRegisterTabSelected)
+                                    isRegisterTabSelected: $isRegisterTabSelected,
+                                    isEditCompleted: .constant(false))
                 }
             }
             .navigationDestination(for: Route.self) { route in
