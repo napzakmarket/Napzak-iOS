@@ -15,7 +15,7 @@ struct ChatBody: View {
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
     
-    @State private var isImageDetailViewPresent: Bool = false
+    @State private var isImageDetailViewPresented: Bool = false
     @State private var imageUrl = ""
     
     //MARK: - Properties
@@ -58,20 +58,24 @@ struct ChatBody: View {
                         if chatData.isProfileNeeded && !chatData.isMessageOwner {
                             profileImage
                         }
-                        ChatImageMessage(
-                            imageUrl: image.imageUrls[0],
-                            onZoomButtonTapped: {
-                                isImageDetailViewPresent = true
-                            }
-                        )
-                        .padding(.top, chatData.isProfileNeeded ? 20 : 0)
-                        .padding(.leading, !chatData.isProfileNeeded && !chatData.isMessageOwner ? 44 : 0)
+                        if let imageUrl = image.imageUrls[0] {
+                            ChatImageMessage(
+                                imageUrl: imageUrl,
+                                onZoomButtonTapped: {
+                                    isImageDetailViewPresented = true
+                                }
+                            )
+                            .padding(.top, chatData.isProfileNeeded ? 20 : 0)
+                            .padding(.leading, !chatData.isProfileNeeded && !chatData.isMessageOwner ? 44 : 0)
+                        }
                     }
-                    .fullScreenCover(isPresented: $isImageDetailViewPresent) {
-                        ImageDetailView(
-                            isImageDetailViewPresent: $isImageDetailViewPresent,
-                            imageUrl: image.imageUrls[0]
-                        )
+                    .fullScreenCover(isPresented: $isImageDetailViewPresented) {
+                        if let imageUrl = image.imageUrls[0] {
+                            ImageDetailView(
+                                isImageDetailViewPresent: $isImageDetailViewPresented,
+                                imageUrl: imageUrl
+                            )
+                        }
                     }
                }
             case .product:

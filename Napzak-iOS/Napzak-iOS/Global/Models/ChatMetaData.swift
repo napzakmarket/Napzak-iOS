@@ -7,7 +7,7 @@
 
 struct ImageMeta: Codable {
     let type: ChatMessageType
-    let imageUrls: [String]
+    let imageUrls: [String?]
 }
 
 struct ProductMeta: Codable {
