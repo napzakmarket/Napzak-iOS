@@ -46,6 +46,10 @@ struct ChatDetailView: View {
                     chatInputSection
                 }
                 
+                if viewModel.loadingManager.isLoadingNetwork {
+                    LoadingView()
+                }
+                
                 if isViewerOptionsPresented {
                     Color.napzakTransparency(.transBlack)
                         .onTapGesture {

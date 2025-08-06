@@ -43,8 +43,12 @@ struct NZTabBarView: View {
                     )
                     .id("\(tabRouter.currentSearchWord)-\(tabRouter.currentSortOption)-\(tabRouter.currentSelectedTab)")
                     .tag(NZTab.search)
-                    ChatView().tag(NZTab.chat)
-                    MyPageView(isTabBarHidden: $isTabBarHidden).tag(NZTab.my)
+                    
+                    ChatView(isTabBarHidden: $isTabBarHidden)
+                        .tag(NZTab.chat)
+                    
+                    MyPageView(isTabBarHidden: $isTabBarHidden)
+                        .tag(NZTab.my)
                 }
                 .onChange(of: tabRouter.selectedTab) { newTab in
                     if permissionManager.pushOffState == nil {
