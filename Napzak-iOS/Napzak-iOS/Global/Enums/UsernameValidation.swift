@@ -35,7 +35,7 @@ enum UsernameValidation: Equatable {
         case .invalidMaxLength:
             return "최대 20자까지 입력할 수 있어요."
         case .invalidIncompleteHangul:
-            return "이름은 ‘가’, ‘나’처럼 완성된 글자로만 입력해 주세요."
+            return "초성은 입력할 수 없어요."
         case .serverError(let message):
             return message
         }

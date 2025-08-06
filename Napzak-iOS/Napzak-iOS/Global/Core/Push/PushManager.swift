@@ -24,6 +24,10 @@ final class PushManager: NSObject, ObservableObject {
     let permission: PushPermissionManager
     private let pushService = NetworkService.shared.pushService
     
+    weak var tabRouter: TabRouter?
+    weak var navigationRouter: NavigationRouter?
+    var activeChatState: ActiveChatState?
+    
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Init
@@ -81,6 +85,16 @@ final class PushManager: NSObject, ObservableObject {
             }
             .store(in: &cancellables)
     }
+    
+    
+    private func extractRoomID(from userInfo: [AnyHashable: Any]) -> String? {
+        if let roomIdString = userInfo["roomId"] as? String {
+            return roomIdString
+        } else if let roomIdInt = userInfo["roomId"] as? Int {
+            return String(roomIdInt)
+        }
+        return nil
+    }
 }
 
 // MARK: - UNUserNotificationCenterDelegate
@@ -92,11 +106,16 @@ extension PushManager: UNUserNotificationCenterDelegate {
     ) async -> UNNotificationPresentationOptions {
         
         guard permission.shouldShowPush else {
-            print("앱/OS 알림꺼짐 -> 알림 무시")
+            logger.info("앱/OS 알림꺼짐 -> 알림 무시")
             return []
         }
         
-        // TODO: - 채팅방일 때 알림 안 받도록
+        let userInfo = notification.request.content.userInfo
+        let roomID = extractRoomID(from: userInfo)
+        if let activeRoomID = activeChatState?.activeRoomID, activeRoomID == roomID {
+            logger.info("현재 활성 채팅방(\(activeRoomID))에서 받은 채팅 알림 무시")
+            return []
+        }
         
         return [.banner, .list, .sound, .badge]
     }
@@ -105,11 +124,22 @@ extension PushManager: UNUserNotificationCenterDelegate {
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse
     ) async {
-        // TODO: - deep link 처리 or Chat 이동 로직
         
         let userInfo = response.notification.request.content.userInfo
-        print("받은 푸시 데이터: ", userInfo)
-        print("알림 제목: ", response.notification.request.content.title)
+        logger.error("받은 푸시 데이터: \(userInfo)")
+        logger.error("알림 제목: \(response.notification.request.content.title)")
+        
+        
+        if let type = userInfo["type"] as? String, type == "chat",
+           let roomID = extractRoomID(from: userInfo) {
+            if let activeRoomID = activeChatState?.activeRoomID, activeRoomID == roomID {
+                logger.info("현재 활성 채팅방(\(activeRoomID))에서 받은 채팅 알림 클릭, 이동 처리 생략")
+                return
+            } else if let roomIntID = Int(roomID) {
+                tabRouter?.switchToChat()
+                navigationRouter?.push(next: .chatDetailView(chatEntry: .room(id: roomIntID)))
+            }
+        }
     }
 }
 

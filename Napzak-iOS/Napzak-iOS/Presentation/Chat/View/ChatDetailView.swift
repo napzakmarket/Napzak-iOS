@@ -14,6 +14,7 @@ struct ChatDetailView: View {
     //MARK: - Property Wrappers
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @EnvironmentObject private var activeChatState: ActiveChatState
     @Environment(\.scenePhase) var scenePhase
     
     @StateObject var viewModel: ChatDetailViewModel
@@ -145,11 +146,17 @@ struct ChatDetailView: View {
         }
         .onAppear {
             chatImagePickerManager.setOverrideMaxCount(1)
+            
+            if let roomId = viewModel.roomId {
+                activeChatState.activeRoomID = String(roomId)
+            }
         }
         .onDisappear {
             Task {
                 await viewModel.leaveChatRoom()
             }
+            
+            activeChatState.activeRoomID = nil
         }
     }
 }

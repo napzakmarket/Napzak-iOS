@@ -251,6 +251,7 @@
 		D67F8DBA2DD5C11700C0847F /* ProductLikeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67F8DB92DD5C11700C0847F /* ProductLikeManager.swift */; };
 		D682B50E2DD8EAD7001B5F6B /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B50D2DD8EAD7001B5F6B /* SplashView.swift */; };
 		D6920A262DC0C96A00A400CF /* ProductSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6920A252DC0C96A00A400CF /* ProductSection.swift */; };
+		D6A3A6652E409EDB0075FE48 /* ActiveChatState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A3A6642E409EDB0075FE48 /* ActiveChatState.swift */; };
 		D6BB9E1F2DC16A1D009D9E01 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BB9E1E2DC16A1D009D9E01 /* NetworkError.swift */; };
 		D6F5CA762E312D840065F192 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6F5CA752E312D840065F192 /* GoogleService-Info.plist */; };
 		D6F5CAB02E354DB40065F192 /* CustomToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F5CAAF2E354DB30065F192 /* CustomToggleStyle.swift */; };
@@ -509,6 +510,7 @@
 		D67F8DB92DD5C11700C0847F /* ProductLikeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductLikeManager.swift; sourceTree = "<group>"; };
 		D682B50D2DD8EAD7001B5F6B /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		D6920A252DC0C96A00A400CF /* ProductSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductSection.swift; sourceTree = "<group>"; };
+		D6A3A6642E409EDB0075FE48 /* ActiveChatState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveChatState.swift; sourceTree = "<group>"; };
 		D6BB9E1E2DC16A1D009D9E01 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		D6F5CA752E312D840065F192 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D6F5CAAF2E354DB30065F192 /* CustomToggleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomToggleStyle.swift; sourceTree = "<group>"; };
@@ -719,6 +721,7 @@
 			children = (
 				D03079EC2E370ECA000D2144 /* ChatEventManager.swift */,
 				D023E3B62E2DDFBE00267150 /* ChatStompManager.swift */,
+				D6A3A6642E409EDB0075FE48 /* ActiveChatState.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -2015,6 +2018,7 @@
 				D64561012DC3411C003D2E2B /* AuthResponseDTO.swift in Sources */,
 				6C6CBDF92DA574A300763CBA /* SellRegisterDelivery.swift in Sources */,
 				D0CBB7032DB893F600BE20C3 /* SearchInputViewModel.swift in Sources */,
+				D6A3A6652E409EDB0075FE48 /* ActiveChatState.swift in Sources */,
 				877F40622DCA73F300008672 /* MarketProductBuyListResponseDTO.swift in Sources */,
 				6C4886BD2DC0CA07009352ED /* RegisterSearchGenre.swift in Sources */,
 				D045DEBE2D83723A00EB1EB6 /* Napzak_iOSApp.swift in Sources */,
