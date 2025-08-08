@@ -67,7 +67,9 @@ struct ChatDetailView: View {
                             isReportModalPresented: $isViewerOptionsPresented,
                             reportType: .store,
                             isUsedInChat: true,
-                            onReportButtonTapped: { },
+                            onReportButtonTapped: {
+                                navigationRouter.push(next: .reportView(reportType: .store, id: viewModel.chatDetailInfo.chatStoreInfo.storeId))
+                            },
                             onExitButtonTapped: {
                                 isExitAlertPresented = true
                             }
