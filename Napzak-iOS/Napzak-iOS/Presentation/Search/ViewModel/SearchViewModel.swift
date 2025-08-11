@@ -22,6 +22,7 @@ final class SearchViewModel: ObservableObject {
     @Published var buyProductsCount: Int = 0
     @Published var buyProducts: [ProductItemModel] = []
     @Published var showToast: Bool = false
+    @Published var showEmptyView = false
     
     @ObservedObject private var likeManager = ProductLikeManager.shared
 
@@ -158,7 +159,12 @@ extension SearchViewModel {
             }
             
             self.sellProductsCount = data.productCount
-            self.sellProducts = data.productSellList.map { ProductItemModel(dto: $0) }
+            
+            if data.productSellList.isEmpty {
+                showEmptyView = true
+            } else {
+                self.sellProducts = data.productSellList.map { ProductItemModel(dto: $0) }
+            }
             
         case .failure(let error):
             logger.error("getSellProduct failed: \(error.localizedDescription)")
@@ -176,7 +182,12 @@ extension SearchViewModel {
             }
             
             self.buyProductsCount = data.productCount
-            self.buyProducts = data.productBuyList.map { ProductItemModel(dto: $0) }
+            
+            if data.productBuyList.isEmpty {
+                showEmptyView = true
+            } else {
+                self.buyProducts = data.productBuyList.map { ProductItemModel(dto: $0) }
+            }
             
         case .failure(let error):
             logger.error("getBuyProduct failed: \(error.localizedDescription)")
