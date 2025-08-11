@@ -29,10 +29,10 @@ struct NZTabBarView: View {
     var body: some View {
         NavigationStack(path: $navigationRouter.path) {
             ZStack(alignment: .bottom) {
-                TabView(selection: $tabRouter.selectedTab) {
+                switch tabRouter.selectedTab {
+                case .home:
                     HomeView(isTabBarHidden: $isTabBarHidden)
-                        .tag(NZTab.home)
-                    
+                case .search:
                     SearchView(
                         searchWord: tabRouter.currentSearchWord,
                         sortOption: tabRouter.currentSortOption,
@@ -42,29 +42,11 @@ struct NZTabBarView: View {
                         isTabBarHidden: $isTabBarHidden
                     )
                     .id("\(tabRouter.currentSearchWord)-\(tabRouter.currentSortOption)-\(tabRouter.currentSelectedTab)")
-                    .tag(NZTab.search)
-                    
+                case .chat:
                     ChatView(isTabBarHidden: $isTabBarHidden)
-                        .tag(NZTab.chat)
-                    
+                case .my:
                     MyPageView(isTabBarHidden: $isTabBarHidden)
-                        .tag(NZTab.my)
                 }
-                .onChange(of: tabRouter.selectedTab) { newTab in
-                    if permissionManager.pushOffState == nil {
-                        pushModalShown = false
-                    }
-                    
-                    if newTab == .chat,
-                       let state = permissionManager.pushOffState,
-                       !pushModalShown {
-                        
-                        currentPushOffState = state
-                        showPermissionModal = true
-                        pushModalShown = true
-                    }
-                }
-                .toolbar(.hidden, for: .tabBar)
                 
                 if isRegisterTabSelected {
                     Color.clear
@@ -186,6 +168,20 @@ struct NZTabBarView: View {
                     alignment: .bottom
                 )
                 .animation(.easeInOut(duration: 0.3), value: isRegisterTabSelected)
+            }
+        }
+        .onChange(of: tabRouter.selectedTab) { newTab in
+            if permissionManager.pushOffState == nil {
+                pushModalShown = false
+            }
+            
+            if newTab == .chat,
+               let state = permissionManager.pushOffState,
+               !pushModalShown {
+                
+                currentPushOffState = state
+                showPermissionModal = true
+                pushModalShown = true
             }
         }
         .onReceive(SearchEventManager.shared.searchCompleted) { searchWord in
