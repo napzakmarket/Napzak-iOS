@@ -190,17 +190,6 @@ private extension GenreDetailView {
                 Rectangle()
                     .fill(Color.napzakGrayScale(.gray100))
             }
-            
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color.napzakGrayScale(.black),
-                    Color.napzakGrayScale(.black).opacity(0)
-                ]),
-                startPoint: .bottom,
-                endPoint: .top
-            )
-            .frame(height: screenWidth / 3)
-            .allowsHitTesting(false)
         }
         .frame(width: screenWidth, height: screenWidth / 9 * 10)
     }
