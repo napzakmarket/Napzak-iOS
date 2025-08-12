@@ -99,75 +99,69 @@ struct NZTabBarView: View {
                 }
             }
             .navigationDestination(for: Route.self) { route in
-                ZStack(alignment: .bottom) {
-                    switch route {
-                    case .searchInputView:
-                        SearchInputView()
-                        
-                    case .likeView:
+                switch route {
+                case .searchInputView:
+                    SearchInputView()
+                    
+                case .likeView:
+                    VStack {
                         LikeView()
-                        
-                    case .marketView(let storeId):
-                        MarketView(storeId: storeId)
-                        
-                    case .profileEditView:
-                        ProfileEditView()
-                        
-                    case .genreDetailView(genreId: let genreId, genreName: let genreName):
-                        GenreDetailView(genreId: genreId, genreName: genreName)
-                        
-                    case .productDetailView(productId: let productId):
-                        ProductDetailView(viewModel: ProductDetailViewModel(productId: productId))
-                        
-                    case .settingView:
-                        SettingView()
-                        
-                    case .withDrawSelectReasonView:
-                        WithDrawSelectReasonView()
-                        
-                    case .withDrawWriteReasonView:
-                        WithDrawWriteReasonView()
-                        
-                    case .withDrawConfirmView:
-                        WithDrawConfirmView()
-                        
-                    case .searchView(searchWord: let searchWord):
-                        SearchView(
-                            searchWord: searchWord,
-                            sortOption: .recent,
-                            selectedTab: 0,
-                            isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                            isSortModalPresented: $isSortModalPresented,
-                            isTabBarHidden: $isTabBarHidden
-                        )
-                        
-                    case .reportView(reportType: let reportType, id: let id):
-                        ReportView(reportType: reportType, id: id)
-                        
-                    case .chatDetailView(let chatEntry):
-                        ChatDetailView(viewModel: ChatDetailViewModel(chatEntry: chatEntry))
-                    }
-                }
-                .overlay(
-                    Group {
                         if shouldShowTabBarForRoute(route) {
-                            VStack(spacing: 10) {
-                                if isRegisterTabSelected {
-                                    RegisterFloatingView(
-                                        isRegisterViewPresented: $isRegisterViewPresented,
-                                        registerType: $registerType
-                                    )
-                                    .transition(.move(edge: .bottom).combined(with: .opacity))
-                                }
-                                if !(isGenreSelectModalPresented || isSortModalPresented) {
-                                    tabBar
-                                }
+                            if isRegisterTabSelected {
+                                RegisterFloatingView(
+                                    isRegisterViewPresented: $isRegisterViewPresented,
+                                    registerType: $registerType
+                                )
+                                .transition(.move(edge: .bottom).combined(with: .opacity))
+                            }
+
+                            if !(isGenreSelectModalPresented || isSortModalPresented) {
+                                tabBar
                             }
                         }
-                    },
-                    alignment: .bottom
-                )
-                .animation(.easeInOut(duration: 0.3), value: isRegisterTabSelected)
+                    }
+                    .animation(.easeInOut(duration: 0.3), value: isRegisterTabSelected)
+                    
+                case .marketView(let storeId):
+                    MarketView(storeId: storeId)
+                    
+                case .profileEditView:
+                    ProfileEditView()
+                    
+                case .genreDetailView(genreId: let genreId, genreName: let genreName):
+                    GenreDetailView(genreId: genreId, genreName: genreName)
+                    
+                case .productDetailView(productId: let productId):
+                    ProductDetailView(viewModel: ProductDetailViewModel(productId: productId))
+                    
+                case .settingView:
+                    SettingView()
+                    
+                case .withDrawSelectReasonView:
+                    WithDrawSelectReasonView()
+                    
+                case .withDrawWriteReasonView:
+                    WithDrawWriteReasonView()
+                    
+                case .withDrawConfirmView:
+                    WithDrawConfirmView()
+                    
+                case .searchView(searchWord: let searchWord):
+                    SearchView(
+                        searchWord: searchWord,
+                        sortOption: .recent,
+                        selectedTab: 0,
+                        isGenreSelectModalPresented: $isGenreSelectModalPresented,
+                        isSortModalPresented: $isSortModalPresented,
+                        isTabBarHidden: $isTabBarHidden
+                    )
+                    
+                case .reportView(reportType: let reportType, id: let id):
+                    ReportView(reportType: reportType, id: id)
+                    
+                case .chatDetailView(let chatEntry):
+                    ChatDetailView(viewModel: ChatDetailViewModel(chatEntry: chatEntry))
+                }
             }
         }
         .onChange(of: tabRouter.selectedTab) { newTab in
@@ -226,7 +220,7 @@ struct NZTabBarView: View {
             }
             Spacer()
             Button {
-                navigationRouter.reset()
+//                navigationRouter.reset()
                 isRegisterTabSelected.toggle()
             } label: {
                 VStack(spacing: 5) {
