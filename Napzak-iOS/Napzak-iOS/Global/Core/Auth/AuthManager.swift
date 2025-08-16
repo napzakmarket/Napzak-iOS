@@ -94,8 +94,8 @@ final class AuthManager: ObservableObject {
                     logger.info("Successfully saved tokens to Keychain.")
                 }
                 
-                await fetchMyStoreId()
-                await fetchChatRoomIdsToWebSocket()
+//                await fetchMyStoreId()
+//                await fetchChatRoomIdsToWebSocket()
                 
                 Task { @MainActor in
                     self.isAuthenticated = true
@@ -162,7 +162,7 @@ final class AuthManager: ObservableObject {
     }
 }
 
-private extension AuthManager {
+extension AuthManager {
     
     //MARK: - Private Func (WebSocket 연결 목적)
     

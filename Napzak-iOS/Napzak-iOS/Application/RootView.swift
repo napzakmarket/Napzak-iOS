@@ -37,6 +37,14 @@ struct RootView: View {
                 }
             }
         }
+        .onChange(of: authManager.isAuthenticated) { isAuthenticated in
+            if isAuthenticated {
+                Task {
+                    await authManager.fetchMyStoreId()
+                    await authManager.fetchChatRoomIdsToWebSocket()
+                }
+            }
+        }
     }
 }
 
