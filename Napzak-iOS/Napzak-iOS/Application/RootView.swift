@@ -10,7 +10,7 @@ import SwiftUI
 struct RootView: View {
     @StateObject private var authRouter = AuthNavigationRouter()
     
-    private let authManager = AuthManager.shared
+    @ObservedObject private var authManager = AuthManager.shared
     @State private var isShowingSplash = true
     
     var body: some View {

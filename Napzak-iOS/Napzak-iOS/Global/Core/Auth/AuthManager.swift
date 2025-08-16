@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import Combine
 import os
 
-final class AuthManager {
+final class AuthManager: ObservableObject {
     
     static let shared = AuthManager()
     
@@ -17,9 +18,7 @@ final class AuthManager {
     private let onboardingManager = OnboardingManager.shared
     private let authService = NetworkService.shared.authService
     
-    var isAuthenticated: Bool {
-        (try? keychain.getAccessToken().get()) != nil
-    }
+    @Published var isAuthenticated: Bool
     
     var needsOnboarding: Bool {
         onboardingManager.getLastCheckpoint() != .completed
@@ -31,6 +30,7 @@ final class AuthManager {
 //        OnboardingManager.shared.clearProgress()
 //        logger.info("[DEBUG] Keychain cleared for login testing")
 //        #endif
+        self.isAuthenticated = (try? keychain.getAccessToken().get()) != nil
         
         if let checkpoint = onboardingManager.getLastCheckpoint() {
             logger.info("Current onboarding checkpoint: \(checkpoint.rawValue)")
@@ -86,14 +86,20 @@ final class AuthManager {
                     logger.info("Existing user - onboarding completed")
                     onboardingStep = .completed
                     onboardingManager.saveCheckpoint(.completed)
-                }
+                } 
                 
                 if case .failure(let error) = keychain.saveTokens(access: data.accessToken, refresh: data.refreshToken) {
                     return .failure(error)
+                } else {
+                    logger.info("Successfully saved tokens to Keychain.")
                 }
                 
                 await fetchMyStoreId()
                 await fetchChatRoomIdsToWebSocket()
+                
+                Task { @MainActor in
+                    self.isAuthenticated = true
+                }
 
                 return .success(onboardingStep)
                 
@@ -130,8 +136,15 @@ final class AuthManager {
         if case .failure(let error) = keychain.clearTokens() {
             logger.error("Keychain clear tokens failed: \(error)")
             return .failure(error)
+        } else {
+            logger.info("Successfully cleared tokens from Keychain.")
         }
         logger.info("logout success")
+        
+        Task { @MainActor in
+            self.isAuthenticated = false
+        }
+        
         return .success(())
     }
     
