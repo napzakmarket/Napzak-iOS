@@ -393,76 +393,81 @@ struct MarketView: View {
     
     private var productListView: some View {
         VStack(spacing: 0) {
-            HStack(alignment: .center, spacing: 3) {
-                Text("상품")
-                    .foregroundStyle(Color.napzakGrayScale(.gray500))
-                    .applyNapzakFont(.body5SemiBold14)
-                Text("\(viewModel.getProductCount())개")
-                    .foregroundStyle(Color.napzakPrimary(.purple500))
-                    .applyNapzakFont(.body5SemiBold14)
-                Spacer()
-                Button {
-                    withAnimation {
-                        isSortModalPresented = true
-                    }
-                } label: {
-                    HStack(alignment: .center, spacing: 4) {
-                        Text(selectedSortOption.title)
-                            .foregroundStyle(Color.napzakGrayScale(.gray200))
-                            .applyNapzakFont(.caption1SemiBold12)
-                        Image(.iconArrowDown)
-                            .renderingMode(.template)
-                            .foregroundColor(Color.napzakGrayScale(.gray200))
+            if !viewModel.products.isEmpty {
+                HStack(alignment: .center, spacing: 3) {
+                    Text("상품")
+                        .foregroundStyle(Color.napzakGrayScale(.gray500))
+                        .applyNapzakFont(.body5SemiBold14)
+                    Text("\(viewModel.getProductCount())개")
+                        .foregroundStyle(Color.napzakPrimary(.purple500))
+                        .applyNapzakFont(.body5SemiBold14)
+                    Spacer()
+                    Button {
+                        withAnimation {
+                            isSortModalPresented = true
+                        }
+                    } label: {
+                        HStack(alignment: .center, spacing: 4) {
+                            Text(selectedSortOption.title)
+                                .foregroundStyle(Color.napzakGrayScale(.gray200))
+                                .applyNapzakFont(.caption1SemiBold12)
+                            Image(.iconArrowDown)
+                                .renderingMode(.template)
+                                .foregroundColor(Color.napzakGrayScale(.gray200))
+                        }
                     }
                 }
+                .padding(.horizontal, 28)
+                .frame(height: 58)
             }
-            .padding(.horizontal, 28)
-            .frame(height: 58)
 
             if viewModel.isLoadingProducts {
                 ProgressView()
                     .padding(.top, 40)
              }
             else if viewModel.products.isEmpty {
-                VStack() {
+                VStack {
                     Image("review_icn")
-                        .padding(.bottom,10)
+                        .padding(.bottom, 10)
                     
-                    VStack(spacing: 8) {
-                        Text("아직 업로드한 소장품이 없어요")
-                            .foregroundColor(Color.napzakGrayScale(.gray300))
-                            .applyNapzakFont(.body1Bold16)
-                        
-                        Text("첫 상품을 등록해보세요")
-                            .foregroundColor(Color.napzakGrayScale(.gray200))
-                            .applyNapzakFont(.caption1SemiBold12)
+                    if viewModel.storeDetail?.isStoreOwner == true {
+                        VStack(spacing: 5) {
+                            Text("아직 업로드한 소장품이 없어요")
+                                .foregroundColor(Color.napzakGrayScale(.gray300))
+                                .applyNapzakFont(.body1Bold16)
+                            
+                            Text("첫 상품을 등록해보세요")
+                                .foregroundColor(Color.napzakGrayScale(.gray200))
+                                .applyNapzakFont(.caption1SemiBold12)
+                        }
                     }
                 }
-                .padding(.top,200)
-                .padding(.bottom,100)
+                .padding(.top, 700)
+                .padding(.bottom, 600)
                 .frame(maxWidth: .infinity)
-                .frame(height: 180)
+                .frame(height: 380)
             }
-        else {
-            LazyVGrid(columns: columns, spacing: 20) {
-                ForEach(viewModel.products.indices, id: \.self) { i in
-                    ProductItemView(
-                        product: $viewModel.products[i],
-                        width: productCellWidth,
-                        isHiddenProductSummary: false,
-                        shouldToggleInterestState: {
-                            viewModel.toggleLike(for: viewModel.products[i].id)
-                        })
-                    .onTapGesture {
-                        navigationRouter.push(next: .productDetailView(productId: viewModel.products[i].id))
-                        print("\(viewModel.products[i].id)번 상품")
+            else {
+                LazyVGrid(columns: columns, spacing: 20) {
+                    ForEach(viewModel.products.indices, id: \.self) { i in
+                        ProductItemView(
+                            product: $viewModel.products[i],
+                            width: productCellWidth,
+                            isHiddenProductSummary: false,
+                            shouldToggleInterestState: {
+                                viewModel.toggleLike(for: viewModel.products[i].id)
+                            })
+                        .onTapGesture {
+                            navigationRouter.push(next: .productDetailView(productId: viewModel.products[i].id))
+                            print("\(viewModel.products[i].id)번 상품")
+                        }
                     }
                 }
+                .padding(.horizontal, 28)
             }
-            .padding(.horizontal, 28)
         }
     }
-}
+
 
 private var ReviewView: some View {
     VStack(spacing: 16) {
