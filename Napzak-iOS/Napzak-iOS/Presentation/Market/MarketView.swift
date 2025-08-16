@@ -349,10 +349,11 @@ struct MarketView: View {
 
                 if viewModel.selectedTabIndex != 2 {
                     FilterContainerView(
+                        style: .market,
                         isGenreSelectModalPresented: $isGenreSelectModalPresented,
                         selectedTabIndex: $viewModel.selectedTabIndex,
                         selectedGenres: $viewModel.productFetchOption.genres,
-                        isUnopened: $viewModel.productFetchOption.isUnopened,
+                        isUnopened: .constant(false),
                         isOnSale: $viewModel.productFetchOption.isOnSale
                     )
                     .frame(height: 54)

@@ -9,6 +9,9 @@ import SwiftUI
 
 struct FilterContainerView: View {
     
+    enum Style { case standard, market }
+    var style: Style = .standard
+    
     //MARK: - Property Wrappers
     
     @Binding var isGenreSelectModalPresented: Bool
@@ -20,19 +23,26 @@ struct FilterContainerView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 6) {
             genreFilterChip
-            if selectedTabIndex == 0 {
-                unopenedFilterChip
+
+            if style == .market {
+                activeStatusFilterChip
+            } else {
+                if selectedTabIndex == 0 {
+                    unopenedFilterChip
+                }
+                onSaleFilterChip
+
+                if selectedTabIndex == 1 {
+                    Color.clear.frame(width: 60)
+                }
             }
-            onSaleFilterChip
-            if selectedTabIndex == 1 {
-                Color.clear
-                    .frame(width: 60)
-            }
+
             Spacer()
         }
         .frame(height: 28)
         .frame(maxWidth: 270)
     }
+
     
     var genreFilterChip: some View {
         Button {
@@ -83,6 +93,20 @@ struct FilterContainerView: View {
             Image(isOnSale ? .btnFilterOnSaleSelected : .btnFilterOnSale)
         }
     }
+    
+    var activeStatusFilterChip: some View {
+        Button {
+            isOnSale.toggle()
+        } label: {
+            Image(
+                selectedTabIndex == 0
+                ? (isOnSale ? "onsale_purple_icn" : "onsale_icn")
+                : (isOnSale ? "getting_purple_icn" : "getting_icn")
+            )
+            .renderingMode(.original)
+        }
+    }
+
 }
 
 #Preview {
