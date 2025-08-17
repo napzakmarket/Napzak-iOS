@@ -65,7 +65,6 @@ struct HomeView: View {
                                 .padding(.bottom, 20)
                             
                             FooterView
-                                .padding(.bottom, 54)
                             
                         }
                     }
@@ -283,7 +282,6 @@ extension HomeView {
             Text("납작마켓")
                 .applyNapzakFont(.caption1SemiBold12)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
-                .padding(.top, 20)
             
             HStack(spacing: 4) {
                 Image(.iconMessage)
@@ -337,9 +335,9 @@ extension HomeView {
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
             }
             .padding(.top, 8)
-            .padding(.bottom, 15)
         }
         .frame(width: UIScreen.main.bounds.width, height: 177)
+        .padding(.bottom, 15)
         .background(Color.napzakGrayScale(.gray10))
     }
     
