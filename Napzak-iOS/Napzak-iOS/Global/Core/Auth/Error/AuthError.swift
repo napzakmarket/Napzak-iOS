@@ -15,6 +15,7 @@ enum AuthError: Error {
     case keychainError
     case invalidResponse
     case networkError
+    case reportedUser
     
     var message: String {
         switch self {
@@ -32,6 +33,8 @@ enum AuthError: Error {
             return "서버 응답이 올바르지 않습니다"
         case .networkError:
             return "네트워크 오류가 발생했습니다"
+        case .reportedUser:
+            return "신고된 사용자입니다."
         }
     }
 }

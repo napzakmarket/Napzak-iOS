@@ -75,6 +75,12 @@ final class AuthManager: ObservableObject {
                     return .failure(.invalidResponse)
                 }
                 
+                if data.role == .reported {
+                    logger.error("Reported user login attempt blocked.")
+                    // 신고된 유저인 경우, 토큰을 저장하지 않고 .reportedUser 에러 반환
+                    return .failure(.reportedUser)
+                }
+                
                 logger.debug("Server response valid - saving tokens")
                 
                 let onboardingStep: OnboardingStep
@@ -94,9 +100,6 @@ final class AuthManager: ObservableObject {
                     logger.info("Successfully saved tokens to Keychain.")
                 }
                 
-//                await fetchMyStoreId()
-//                await fetchChatRoomIdsToWebSocket()
-                
                 Task { @MainActor in
                     self.isAuthenticated = true
                 }
@@ -104,8 +107,15 @@ final class AuthManager: ObservableObject {
                 return .success(onboardingStep)
                 
             case .failure(let error):
-                logger.error("Server login failed: \(error)")
-                return .failure(.networkError)
+                switch error {
+                case .reportedUser:
+                    logger.error("Reported user login attempt blocked.")
+                    return .failure(.reportedUser)
+                    
+                default:
+                    logger.error("Server login failed: \(error)")
+                    return .failure(.networkError)
+                }
             }
             
         case .failure(let error):

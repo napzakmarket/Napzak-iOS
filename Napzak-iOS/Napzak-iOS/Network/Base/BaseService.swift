@@ -71,6 +71,13 @@ class BaseService {
                         
                     case 401:
                         continuation.resume(returning: .failure(.unauthorized))
+                    case 403:
+                        if let errorResponse = try? JSONDecoder().decode(ErrorResponseDTO.self, from: response.data),
+                           errorResponse.message.contains("신고 처리된 계정") {
+                            continuation.resume(returning: .failure(.reportedUser))
+                        } else {
+                            continuation.resume(returning: .failure(.forbidden))
+                        }
                     case 404:
                         continuation.resume(returning: .failure(.notFound))
                     case 500...599:

@@ -15,6 +15,8 @@ enum NetworkError: LocalizedError {
     case internalServerError
     case decodingError
     case networkFail
+    case forbidden
+    case reportedUser
     
     var errorDescription: String? {
         switch self {
@@ -32,6 +34,10 @@ enum NetworkError: LocalizedError {
             return "데이터 변환 중 오류가 발생했습니다"
         case .networkFail:
             return "네트워크 연결에 실패했습니다"
+        case .forbidden:
+            return "접근이 제한되었습니다"
+        case .reportedUser:
+            return "신고된 계정으로 로그인할 수 없습니다"
         }
     }
 }

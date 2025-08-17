@@ -11,18 +11,20 @@ enum UserRole: String, Decodable {
     case store = "STORE"
     case onboarding = "ONBOARDING"
     case withdrawn = "WITHDRAWN"
+    case reported = "REPORTED"
     
     var description: String {
         switch self {
         case .store: return "스토어"
         case .onboarding: return "온보딩 미완료"
         case .withdrawn: return "탈퇴 후 온보딩 미완료"
+        case .reported: return "신고된 유저"
         }
     }
     
     var needsOnboarding: Bool {
         switch self {
-        case .store:
+        case .store, .reported:
             return false
         case .onboarding, .withdrawn:
             return true
