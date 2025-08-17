@@ -77,7 +77,6 @@ final class AuthManager: ObservableObject {
                 
                 if data.role == .reported {
                     logger.error("Reported user login attempt blocked.")
-                    // 신고된 유저인 경우, 토큰을 저장하지 않고 .reportedUser 에러 반환
                     return .failure(.reportedUser)
                 }
                 
@@ -170,11 +169,18 @@ final class AuthManager: ObservableObject {
     func completeOnboarding() {
         onboardingManager.saveCheckpoint(.completed)
     }
+    
+    @MainActor
+    func forceLogout() {
+        keychain.clearTokens()
+        onboardingManager.clearProgress()
+        self.isAuthenticated = false
+    }
 }
 
 extension AuthManager {
     
-    //MARK: - Private Func (WebSocket 연결 목적)
+    //MARK: - Func (WebSocket 연결 목적)
     
     func fetchChatRoomIdsToWebSocket() async {
         let result = await NetworkService.shared.chatService.getChatRoomIds()
