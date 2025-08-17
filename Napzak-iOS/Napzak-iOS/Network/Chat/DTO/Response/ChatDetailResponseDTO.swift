@@ -30,6 +30,7 @@ struct ChatStoreInfoDTO: Decodable {
     let storeId: Int
     let nickname: String
     let isWithdrawn: Bool
+    let isReported: Bool
     let storePhoto: String
 }
 

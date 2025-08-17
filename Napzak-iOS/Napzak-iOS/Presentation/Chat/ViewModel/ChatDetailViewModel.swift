@@ -22,7 +22,7 @@ final class ChatDetailViewModel: ObservableObject {
 
     @Published var chatDetailInfo = ChatDetailModel(
         productInfo: ChatProductInfo(productId: 0, photo: "", tradeType: .buy, title: "", price: 0, isPriceNegotiable: false, genreName: "", productOwnerId: 0, isMyProduct: false),
-        chatStoreInfo: ChatStoreInfo(storeId: 0, nickname: "", isWithdrawn: false, storePhoto: "")
+        chatStoreInfo: ChatStoreInfo(storeId: 0, nickname: "", isWithdrawn: false, isReported: false, storePhoto: "")
     )
     @Published var chatMessages: [ChatMessageModel] = []
     @Published var messageText = ""
@@ -215,9 +215,7 @@ private extension ChatDetailViewModel {
             chatDetailInfo.productInfo = ChatProductInfo(dto: data.productInfo)
             chatDetailInfo.chatStoreInfo = ChatStoreInfo(dto: data.storeInfo)
             roomId = data.roomId ?? nil
-            if chatDetailInfo.chatStoreInfo.isWithdrawn {
-                isChatDisabled = chatDetailInfo.chatStoreInfo.isWithdrawn
-            }
+            isChatDisabled = chatDetailInfo.chatStoreInfo.isWithdrawn || chatDetailInfo.chatStoreInfo.isReported
             shouldUpdateProductInfo = data.productInfo.productId != self.productId
             
         case .failure(let error):
