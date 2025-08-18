@@ -8,6 +8,7 @@
 import SwiftUI
 
 import Kingfisher
+import Zoomable
 
 struct ImageDetailView: View {
     
@@ -24,7 +25,16 @@ struct ImageDetailView: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Color.napzakGrayScale(.black)
-            ZoomableImageView(imageUrl: URL(string: imageUrl)!)
+            VStack {
+                Spacer()
+                if let url = URL(string: imageUrl) {
+                    KFImage(url)
+                        .resizable()
+                        .zoomable()
+                        .aspectRatio(contentMode: .fit)
+                }
+                Spacer()
+            }
             closeButton
         }
         .ignoresSafeArea()
