@@ -73,11 +73,11 @@ extension ChatItemView {
     
     private var profileImage: some View {
         Group {
-            if let url = URL(string: chatRoom.opponentStorePhoto) {
+            if let url = URL(string: "https://example.com/photo1.jpg") {
                 KFImage(url)
                     .placeholder {
-                        Circle()
-                            .fill(Color.napzakGrayScale(.gray100))
+                        Image(.imgChatProfileDefault)
+                            .resizable()
                     }
                     .retry(maxCount: 3, interval: .seconds(5))
                     .onFailure { error in

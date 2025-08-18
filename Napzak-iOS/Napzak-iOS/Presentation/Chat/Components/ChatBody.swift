@@ -130,8 +130,7 @@ extension ChatBody {
             if let url = URL(string: storeImage) {
                 KFImage(url)
                     .placeholder {
-                        Circle()
-                            .fill(Color.napzakGrayScale(.gray100))
+                        Image(.imgChatProfileDefault)
                     }
                     .retry(maxCount: 3, interval: .seconds(5))
                     .onFailure { error in
