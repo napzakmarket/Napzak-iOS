@@ -432,11 +432,11 @@ extension ChatDetailViewModel {
     func uploadImage() async {
         if let selectedImage = selectedImage {
             let imageName = UUID().uuidString + ".jpg"
-            let presignedResult = await NetworkService.shared.presignedService.getPresignedURL(imageNameList: [imageName])
+            let presignedResult = await NetworkService.shared.presignedService.getChatPresignedURL(imageNameList: [imageName])
 
             switch presignedResult {
             case .success(let response):
-                guard let uploadURL = response.data?.productPresignedUrls[imageName],
+                guard let uploadURL = response.data?.chatPresignedUrls[imageName],
                       let imageData = selectedImage.jpegData(compressionQuality: 0.8) else {
                     logger.error("이미지 데이터 생성 혹은 Presigned URL 파싱 실패")
                     return
@@ -446,7 +446,7 @@ extension ChatDetailViewModel {
 
                 switch uploadResult {
                 case .success:
-                    logger.info("✅ 커버 이미지 업로드 성공")
+                    logger.info("✅ 이미지 업로드 성공")
                     
                     let imageURL = uploadURL.components(separatedBy: "?").first ?? uploadURL
                     

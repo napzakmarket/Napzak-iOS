@@ -228,7 +228,7 @@ extension RegisterViewModel {
     
     func getPresignedUrl() async -> Bool {
         let result = await NetworkService.shared.presignedService
-            .getPresignedURL(imageNameList: imagePickerManager.imageNameList)
+            .getProductPresignedURL(imageNameList: imagePickerManager.imageNameList)
         
         switch result {
         case .success(let response):
