@@ -154,20 +154,20 @@ extension ProductItemView {
     private var productSummary: some View {
         HStack(alignment: .bottom, spacing: 2) {
             Text(product.uploadTime)
-                .applyNapzakFont(.caption5Regular10)
-                .foregroundStyle(Color.napzakGrayScale(.gray100))
-                .frame(height: 13)
+                .applyNapzakFont(.caption3Regular12)
+                .foregroundStyle(Color.napzakGrayScale(.gray200))
+                .frame(height: 15)
             Spacer()
             Image(.icnChatCount)
             Text("\(product.chatCount)")
                 .applyNapzakFont(.caption5Regular10)
-                .foregroundStyle(Color.napzakGrayScale(.gray100))
+                .foregroundStyle(Color.napzakGrayScale(.gray200))
                 .frame(height: 13)
             Image(.icnHeartCount)
                 .padding([.leading, .bottom], 1)
             Text("\(product.interestCount)")
                 .applyNapzakFont(.caption5Regular10)
-                .foregroundStyle(Color.napzakGrayScale(.gray100))
+                .foregroundStyle(Color.napzakGrayScale(.gray200))
                 .frame(height: 13)
         }
     }

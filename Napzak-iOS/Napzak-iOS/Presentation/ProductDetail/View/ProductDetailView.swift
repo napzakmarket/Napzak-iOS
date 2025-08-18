@@ -367,18 +367,19 @@ extension ProductDetailView {
                     .padding(.leading, 4)
             }
             Spacer()
-            HStack(alignment: .bottom, spacing: 2) {
-                Image(.icnChatCount)
+            HStack(alignment: .bottom, spacing: 4) {
+                Image(.icnChatCountBig)
+                    .padding(.bottom, 1)
                 Text("\(viewModel.product.productDetail.chatCount)")
-                    .applyNapzakFont(.caption5Regular10)
-                    .foregroundStyle(Color.napzakGrayScale(.gray100))
-                    .frame(height: 13)
-                Image(.icnHeartCount)
-                    .padding([.leading, .bottom], 1)
+                    .applyNapzakFont(.body6Regular14)
+                    .foregroundStyle(Color.napzakGrayScale(.gray200))
+                    .frame(height: 18)
+                Image(.icnHeartCountBig)
+                    .padding(.bottom, 2)
                 Text("\(viewModel.product.productDetail.interestCount)")
-                    .applyNapzakFont(.caption5Regular10)
-                    .foregroundStyle(Color.napzakGrayScale(.gray100))
-                    .frame(height: 13)
+                    .applyNapzakFont(.body6Regular14)
+                    .foregroundStyle(Color.napzakGrayScale(.gray200))
+                    .frame(height: 18)
             }
         }
         .padding(.bottom, 16)
