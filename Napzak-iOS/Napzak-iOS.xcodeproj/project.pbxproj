@@ -128,6 +128,7 @@
 		D045DEF92D8383CC00EB1EB6 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEF62D8383CC00EB1EB6 /* String+.swift */; };
 		D045DEFA2D8383CC00EB1EB6 /* TextEditor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEF42D8383CC00EB1EB6 /* TextEditor+.swift */; };
 		D045DEFC2D8383CC00EB1EB6 /* TextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D045DEF32D8383CC00EB1EB6 /* TextField+.swift */; };
+		D04BB46F2E534B4F00B81698 /* Zoomable in Frameworks */ = {isa = PBXBuildFile; productRef = D04BB46E2E534B4F00B81698 /* Zoomable */; };
 		D05A03922D91B67200659C74 /* View+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D05A03912D91B67200659C74 /* View+.swift */; };
 		D061C2702E00088700734834 /* SearchEventManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D061C26F2E00088000734834 /* SearchEventManager.swift */; };
 		D061C2902E0993F100734834 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D061C28F2E0993E600734834 /* ChatView.swift */; };
@@ -538,6 +539,7 @@
 				D66A3E812E1AC2F4003977AE /* FirebaseMessaging in Frameworks */,
 				D045DECB2D8372D800EB1EB6 /* KakaoSDKCommon in Frameworks */,
 				D023E3B32E2D727C00267150 /* SwiftStomp in Frameworks */,
+				D04BB46F2E534B4F00B81698 /* Zoomable in Frameworks */,
 				D045DED02D83732D00EB1EB6 /* Moya in Frameworks */,
 				D045DEC92D8372D800EB1EB6 /* KakaoSDKAuth in Frameworks */,
 				D045DED32D83736600EB1EB6 /* Lottie in Frameworks */,
@@ -1722,6 +1724,7 @@
 				D045DED22D83736600EB1EB6 /* Lottie */,
 				D66A3E802E1AC2F4003977AE /* FirebaseMessaging */,
 				D023E3B22E2D727C00267150 /* SwiftStomp */,
+				D04BB46E2E534B4F00B81698 /* Zoomable */,
 			);
 			productName = "Napzak-iOS";
 			productReference = D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */;
@@ -1758,6 +1761,7 @@
 				D045DED12D83736600EB1EB6 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				D66A3E7F2E1AC2F4003977AE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				D023E3B12E2D727C00267150 /* XCRemoteSwiftPackageReference "SwiftStomp" */,
+				D04BB46D2E534B4E00B81698 /* XCRemoteSwiftPackageReference "Zoomable" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D045DE9C2D836F0500EB1EB6 /* Products */;
@@ -2304,6 +2308,14 @@
 				minimumVersion = 4.5.1;
 			};
 		};
+		D04BB46D2E534B4E00B81698 /* XCRemoteSwiftPackageReference "Zoomable" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ryohey/Zoomable.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		D66A3E7F2E1AC2F4003977AE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -2349,6 +2361,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D045DED12D83736600EB1EB6 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		D04BB46E2E534B4F00B81698 /* Zoomable */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D04BB46D2E534B4E00B81698 /* XCRemoteSwiftPackageReference "Zoomable" */;
+			productName = Zoomable;
 		};
 		D66A3E802E1AC2F4003977AE /* FirebaseMessaging */ = {
 			isa = XCSwiftPackageProductDependency;
