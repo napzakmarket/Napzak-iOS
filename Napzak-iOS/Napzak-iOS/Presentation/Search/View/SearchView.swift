@@ -35,11 +35,7 @@ struct SearchView: View {
         isSortModalPresented: Binding<Bool>,
         isTabBarHidden: Binding<Bool>
     ) {
-        self._viewModel = StateObject(wrappedValue: SearchViewModel(
-            searchWord: searchWord,
-            initialSortOption: sortOption,
-            initialSelectedTab: selectedTab
-        ))
+        self._viewModel = StateObject(wrappedValue: SearchViewModel())
         self._isGenreSelectModalPresented = isGenreSelectModalPresented
         self._isSortModalPresented = isSortModalPresented
         self._isTabBarHidden = isTabBarHidden
@@ -118,6 +114,35 @@ struct SearchView: View {
         .animation(.spring(), value: viewModel.showToast)
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
+        .onAppear {
+            Task {
+                await viewModel.fetchProducts(
+                    searchWord: tabRouter.currentSearchWord,
+                    sortOption: tabRouter.currentSortOption,
+                    selectedTab: tabRouter.currentSelectedTab
+                )
+            }
+        }
+        .onChange(of: tabRouter.searchParams.sortOption) { newValue in
+            Task {
+                await viewModel.fetchProducts(
+                    searchWord: tabRouter.currentSearchWord,
+                    sortOption: newValue,
+                    selectedTab: viewModel.selectedTabIndex
+                )
+            }
+            scrollToTopTrigger.toggle()
+        }
+        .onChange(of: tabRouter.searchParams.selectedTab) { newValue in
+            Task {
+                await viewModel.fetchProducts(
+                    searchWord: tabRouter.currentSearchWord,
+                    sortOption: viewModel.productFetchOption.sortOption,
+                    selectedTab: newValue
+                )
+            }
+            scrollToTopTrigger.toggle()
+        }
         .onChange(of: viewModel.selectedTabIndex) { _ in
             Task {
                 await viewModel.updateProducts()
