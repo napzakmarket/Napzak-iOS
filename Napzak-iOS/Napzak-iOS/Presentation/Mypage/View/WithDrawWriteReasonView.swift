@@ -10,7 +10,7 @@ import SwiftUI
 struct WithDrawWriteReasonView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
     @FocusState private var isSearchBarFocused: Bool
-    @StateObject var viewModel = WithDrawViewModel.shared
+    @ObservedObject var viewModel = WithDrawViewModel.shared
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {

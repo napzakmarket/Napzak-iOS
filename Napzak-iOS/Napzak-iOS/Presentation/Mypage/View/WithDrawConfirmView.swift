@@ -12,7 +12,7 @@ struct WithDrawConfirmView: View {
     @EnvironmentObject private var tabRouter: TabRouter
     
     
-    @StateObject var viewModel = WithDrawViewModel.shared
+    @ObservedObject var viewModel = WithDrawViewModel.shared
 
     @State private var withDrawButtonTapped: Bool = false
 
