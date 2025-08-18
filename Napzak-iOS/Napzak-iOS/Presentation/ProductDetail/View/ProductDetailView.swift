@@ -23,6 +23,7 @@ struct ProductDetailView: View {
     @State private var isDeleteAlertPresented = false
     @State private var statusToastStyle: StatusToastStyle = .statusChanged
     @State private var isRegisterViewPresented = false
+    @State private var isImageDetailViewPresented: Bool = false
     @State private var isEditCompleted = false
 
     //MARK: - Properties
@@ -178,6 +179,12 @@ struct ProductDetailView: View {
                 )
             }
         }
+        .fullScreenCover(isPresented: $isImageDetailViewPresented) {
+            ImageDetailView(
+                isImageDetailViewPresent: $isImageDetailViewPresented,
+                imageUrl: viewModel.product.productPhotoList[currentPage].photoUrl
+            )
+        }
         .onChange(of: isRegisterViewPresented) { value in
             if !value {
                 Task {
@@ -257,21 +264,25 @@ extension ProductDetailView {
         ZStack(alignment: .bottomTrailing) {
             TabView(selection: $currentPage) {
                 ForEach(Array(viewModel.product.productPhotoList.enumerated()), id: \.1.id) { index, photo in
-                    Group {
-                        if let url = URL(string: photo.photoUrl) {
-                            KFImage(url)
-                                .placeholder {
-                                    Rectangle()
-                                        .fill(Color.napzakGrayScale(.gray300))
-                                }.retry(maxCount: 3, interval: .seconds(3))
-                                .onFailure { error  in
-                                    print("failure: \(error.localizedDescription)")
-                                }
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        } else {
-                            Rectangle()
-                                .fill(Color.napzakGrayScale(.gray300))
+                    Button {
+                        isImageDetailViewPresented = true
+                    } label: {
+                        Group {
+                            if let url = URL(string: photo.photoUrl) {
+                                KFImage(url)
+                                    .placeholder {
+                                        Rectangle()
+                                            .fill(Color.napzakGrayScale(.gray300))
+                                    }.retry(maxCount: 3, interval: .seconds(3))
+                                    .onFailure { error  in
+                                        print("failure: \(error.localizedDescription)")
+                                    }
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                            } else {
+                                Rectangle()
+                                    .fill(Color.napzakGrayScale(.gray300))
+                            }
                         }
                     }
                     .tag(index)
