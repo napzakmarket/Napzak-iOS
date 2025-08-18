@@ -136,13 +136,16 @@ extension HomeView {
                     Spacer()
                     
                     Image(.iconSearch)
-                        .padding(.vertical, 8)
-                        .padding(.trailing, 16)
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                        .padding(.trailing, 10)
                 }
+                .frame(height: 39)
                 .background(Color.napzakGrayScale(.gray50))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .clipShape(RoundedRectangle(cornerRadius: 14))
             }
         }
+        
     }
     
     private var topBannerSection: some View {
