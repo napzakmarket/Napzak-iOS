@@ -20,10 +20,8 @@ extension StoreAPI: BaseTargetType {
     
     var headerType: HeaderType {
         switch self {
-        case .getMyPageInfo, .getStoreDetail, .modifyProfile, .validateNickname, .registerNickname:
+        case .getMyPageInfo, .getStoreDetail, .modifyProfile, .validateNickname, .registerNickname, .getTerms:
             return .accessTokenHeader
-        case .getTerms:
-            return .noneHeader
         }
     }
     
