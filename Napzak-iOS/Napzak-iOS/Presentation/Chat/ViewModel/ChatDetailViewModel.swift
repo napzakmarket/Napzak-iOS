@@ -118,12 +118,9 @@ private extension ChatDetailViewModel {
                 if let currentRoomId = roomId, data.roomId == currentRoomId {
                     
                     var messageData: ChatMessageModel
-                    let isMessageOwner: Bool = {
-                        guard let senderId = data.senderId else { return false }
-                        
-                        let ownerId = self.chatDetailInfo.productInfo.productOwnerId
-                        return self.chatDetailInfo.productInfo.isMyProduct ? senderId == ownerId : senderId != ownerId
-                    }()
+                    
+                    guard let senderId = data.senderId else { return }
+                    let isMessageOwner: Bool = self.chatDetailInfo.chatStoreInfo.storeId != senderId
                     
                     switch data.type {
                     case .text:
@@ -171,12 +168,8 @@ private extension ChatDetailViewModel {
                 guard let self else { return }
                 
                 if let roomId, data.roomId == roomId {
-                    let isMyStatus: Bool = {
-                        guard let senderId = data.senderId else { return false }
-                        
-                        let ownerId = self.chatDetailInfo.productInfo.productOwnerId
-                        return self.chatDetailInfo.productInfo.isMyProduct ? senderId == ownerId : senderId != ownerId
-                    }()
+                    guard let senderId = data.senderId else { return }
+                    let isMyStatus: Bool = self.chatDetailInfo.chatStoreInfo.storeId != senderId
                     
                     switch data.type {
                     case .join:

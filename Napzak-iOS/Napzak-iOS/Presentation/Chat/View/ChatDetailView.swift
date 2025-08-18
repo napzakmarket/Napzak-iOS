@@ -250,6 +250,7 @@ extension ChatDetailView {
                 .shadow(color: .black.opacity(0.1), radius: 2)
         )
         .padding(.top, 100)
+        .disabled(!viewModel.chatDetailInfo.productInfo.isMyProduct && viewModel.isChatDisabled)
     }
     
     private var chatSection: some View {
@@ -294,6 +295,7 @@ extension ChatDetailView {
                             storeImage: viewModel.chatDetailInfo.chatStoreInfo.storePhoto
                         )
                         .padding(.horizontal, 15)
+                        .disabled(viewModel.chatDetailInfo.chatStoreInfo.storeId != data.senderId && viewModel.isChatDisabled)
                     }
                 }
                 .rotationEffect(Angle(degrees: 180))
