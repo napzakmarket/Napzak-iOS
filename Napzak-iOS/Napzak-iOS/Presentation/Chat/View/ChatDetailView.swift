@@ -180,7 +180,7 @@ extension ChatDetailView {
                 Spacer()
                 Text(viewModel.chatDetailInfo.chatStoreInfo.nickname)
                     .applyNapzakFont(.body1Bold16)
-                    .foregroundStyle(Color.napzakGrayScale(.black))
+                    .foregroundStyle(Color.napzakGrayScale(.gray400))
                 Spacer()
                 Button {
                     isViewerOptionsPresented = true
