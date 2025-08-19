@@ -118,26 +118,7 @@ private extension ChatDetailViewModel {
                 if let currentRoomId = roomId, data.roomId == currentRoomId {
                          
                     var messageData: ChatMessageModel
-
-                    if data.type == .system {
-                        isChatDisabled = true
-                        
-                        messageData = ChatMessageModel(
-                            id: data.messageId,
-                            senderId: data.senderId,
-                            type: data.type,
-                            content: nil,
-                            metaData: data.metadata,
-                            createdAt: data.createdAt,
-                            isProfileNeeded: false,
-                            isMessageOwner: false,
-                            isRead: false
-                        )
-                        chatMessages.append(messageData)
-                    }
-
-                    guard let senderId = data.senderId else { return }
-                    let isMessageOwner: Bool = chatDetailInfo.chatStoreInfo.storeId != senderId
+                    let isMessageOwner = chatDetailInfo.chatStoreInfo.storeId != data.senderId
                     
                     switch data.type {
                     case .text:
@@ -151,6 +132,20 @@ private extension ChatDetailViewModel {
                             isProfileNeeded: !isMessageOwner && isProfileNeeded,
                             isMessageOwner: isMessageOwner,
                             isRead: isReadMyMessage
+                        )
+                    case .system:
+                        isChatDisabled = true
+                        
+                        messageData = ChatMessageModel(
+                            id: data.messageId,
+                            senderId: data.senderId,
+                            type: data.type,
+                            content: nil,
+                            metaData: data.metadata,
+                            createdAt: data.createdAt,
+                            isProfileNeeded: false,
+                            isMessageOwner: false,
+                            isRead: false
                         )
                     default:
                         messageData = ChatMessageModel(
@@ -166,7 +161,12 @@ private extension ChatDetailViewModel {
                         )
                     }
                     
-                    isProfileNeeded = isMessageOwner
+                    if data.type == .product {
+                        isProfileNeeded = true
+                    } else {
+                        isProfileNeeded = isMessageOwner
+                    }
+                    
                     chatMessages.append(messageData)
                 }
             }
