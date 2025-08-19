@@ -183,6 +183,7 @@ extension ChatDetailView {
                     .foregroundStyle(Color.napzakGrayScale(.gray400))
                 Spacer()
                 Button {
+                    isFocused = false
                     isViewerOptionsPresented = true
                 } label: {
                     Image(.iconMoreOptions)
