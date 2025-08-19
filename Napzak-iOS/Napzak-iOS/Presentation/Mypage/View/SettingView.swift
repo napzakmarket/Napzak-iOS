@@ -109,7 +109,7 @@ extension SettingView {
                 .foregroundStyle(Color.napzakGrayScale(.gray200))
                 .frame(height: 18)
                 .padding(.leading, 28)
-                .padding(.bottom, 28)
+                .padding(.vertical, 28)
             
             Button {
                 guard let url = URL(string: Bundle.main.infoDictionary?["NOTICE_URL"] as! String) else {return}
