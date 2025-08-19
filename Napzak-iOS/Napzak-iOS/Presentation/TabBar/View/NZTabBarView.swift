@@ -41,7 +41,6 @@ struct NZTabBarView: View {
                         isSortModalPresented: $isSortModalPresented,
                         isTabBarHidden: $isTabBarHidden
                     )
-                    .id("\(tabRouter.currentSearchWord)-\(tabRouter.currentSortOption)-\(tabRouter.currentSelectedTab)")
                 case .chat:
                     ChatView(isTabBarHidden: $isTabBarHidden)
                 case .my:

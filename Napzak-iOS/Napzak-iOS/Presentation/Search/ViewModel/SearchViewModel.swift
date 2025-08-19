@@ -40,42 +40,43 @@ final class SearchViewModel: ObservableObject {
     
     //MARK: - Init
     
-    init(
-        searchWord: String,
-        initialSortOption: SortOption = .recent,
-        initialSelectedTab: Int = 0
-    ) {
-        self.searchWord = searchWord
-        self.productFetchOption.sortOption = initialSortOption
-        self.selectedTabIndex = initialSelectedTab
-        
+    init() {
         setupLikeObserver()
         setupLikePublisher()
         setupProductEventObserver()
-        
-        Task {
-            loadingManager.startLoading()
-            defer { loadingManager.stopLoading() }
-            if searchWord == "" {
-                if initialSelectedTab == 0 {
-                    await fetchSellProducts()
-                } else {
-                    await fetchBuyProducts()
-                }
-            } else {
-                if initialSelectedTab == 0 {
-                    await fetchSellProductsForSearch()
-                } else {
-                    await fetchBuyProductsForSearch()
-                }
-            }
-        }
     }
 }
 
 extension SearchViewModel {
     
     //MARK: - Func
+    
+    func fetchProducts(
+        searchWord: String,
+        sortOption: SortOption,
+        selectedTab: Int
+    ) async {
+        self.searchWord = searchWord
+        self.productFetchOption.sortOption = sortOption
+        self.selectedTabIndex = selectedTab
+        
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
+        
+        if searchWord == "" {
+            if selectedTabIndex == 0 {
+                await fetchSellProducts()
+            } else {
+                await fetchBuyProducts()
+            }
+        } else {
+            if selectedTabIndex == 0 {
+                await fetchSellProductsForSearch()
+            } else {
+                await fetchBuyProductsForSearch()
+            }
+        }
+    }
     
     func updateProducts() async {
         Task {

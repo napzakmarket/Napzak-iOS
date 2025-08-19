@@ -23,6 +23,8 @@ final class HomeViewModel: ObservableObject {
     @Published var recommendedProducts: [ProductItemModel] = []
     @Published var popularSellProducts: [ProductItemModel] = []
     @Published var popularBuyProducts: [ProductItemModel] = []
+    @Published var termsUrl: String = ""
+    @Published var privacyUrl: String = ""
 
     private var originalUsername: String = ""
     private var username: String {
@@ -37,6 +39,7 @@ final class HomeViewModel: ObservableObject {
     
     private let homeService = NetworkService.shared.homeService
     private let interestService = NetworkService.shared.interestService
+    private let storeService = NetworkService.shared.storeService
     
     var recommendedTitle: String { "\(username)님을 위한 맞춤 PICK!" }
     var recommendedSubtitle: String { "\(username)님의 취향에 딱 맞는 아이템들을 모아봤어요."}
@@ -47,16 +50,30 @@ final class HomeViewModel: ObservableObject {
     let loadingManager = LoadingViewManager()
     
     init() {
-        fetchHomeData()
+        Task {
+            await fetchAllInitialData()
+        }
         setupLikeObserver()
         setupLikePublisher()
     }
     
-    func fetchHomeData() {
-        fetchBanners()
-        fetchRecommendations()
-        fetchPopularSell()
-        fetchPopularBuy()
+    func fetchAllInitialData() async {
+        loadingManager.startLoading()
+        defer { loadingManager.stopLoading() }
+        
+        async let bannersResult = homeService.getBannerList()
+        async let recommendationsResult = homeService.getHomeRecommendations()
+        async let popularSellResult = homeService.getHomePopularSell()
+        async let popularBuyResult = homeService.getHomePopularBuy()
+        async let termsResult = storeService.getTerms()
+        
+        let (bannersResponse, recommendationsResponse, popularSellResponse, popularBuyResponse, termsResponse) = await (bannersResult, recommendationsResult, popularSellResult, popularBuyResult, termsResult)
+        
+        handleBanners(result: bannersResponse)
+        handleRecommendations(result: recommendationsResponse)
+        handlePopularSell(result: popularSellResponse)
+        handlePopularBuy(result: popularBuyResponse)
+        handleTerms(result: termsResponse)
     }
     
     func handleBannerTap(_ action: BannerAction) {
@@ -131,6 +148,7 @@ final class HomeViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
+    
 }
 
 extension HomeViewModel {
@@ -184,11 +202,7 @@ extension HomeViewModel {
         }
     }
     
-    private func fetchBanners() {
-        Task {
-            loadingManager.startLoading()
-            defer { loadingManager.stopLoading() }
-            let result = await homeService.getBannerList()
+    private func handleBanners(result: Result<BannerResponseDTO, NetworkError>) {
             switch result {
             case .success(let response):
                 if let dto = response.data,
@@ -197,18 +211,12 @@ extension HomeViewModel {
                 } else {
                     logger.error("배너 데이터 없음 또는 변환 실패")
                 }
-                
             case .failure(let error):
-                logger.error("fetchBanners failed: \(error.errorDescription ?? "Unknown error")")
+                logger.error("배너 데이터 로드 실패: \(error.localizedDescription)")
             }
         }
-    }
-    
-    private func fetchRecommendations() {
-        Task {
-            loadingManager.startLoading()
-            defer { loadingManager.stopLoading() }
-            let result = await homeService.getHomeRecommendations()
+        
+        private func handleRecommendations(result: Result<ProductItemResponseDTO, NetworkError>) {
             switch result {
             case .success(let response):
                 if let dtoList = response.data?.productRecommendList,
@@ -217,43 +225,43 @@ extension HomeViewModel {
                     self.recommendedProducts = dtoList.map { ProductItemModel(dto: $0) }
                 }
             case .failure(let error):
-                logger.error("fetchRecommendations failed: \(error.errorDescription ?? "Unknown error")")
+                logger.error("추천 상품 로드 실패: \(error.localizedDescription)")
             }
         }
-    }
-    
-    private func fetchPopularSell() {
-        Task {
-            loadingManager.startLoading()
-            defer { loadingManager.stopLoading() }
-            let result = await homeService.getHomePopularSell()
+        
+        private func handlePopularSell(result: Result<SellProductListResponseDTO, NetworkError>) {
             switch result {
             case .success(let response):
                 if let dtoList = response.data?.productSellList {
                     self.popularSellProducts = dtoList.map { ProductItemModel(dto: $0) }
                 }
             case .failure(let error):
-                logger.error("fetchPopularSell failed: \(error.errorDescription ?? "Unknown error")")
+                logger.error("인기 판매 상품 로드 실패: \(error.localizedDescription)")
             }
         }
-    }
-    
-    private func fetchPopularBuy() {
-        Task {
-            loadingManager.startLoading()
-            defer { loadingManager.stopLoading() }
-            let result = await homeService.getHomePopularBuy()
+        
+        private func handlePopularBuy(result: Result<BuyProductListResponseDTO, NetworkError>) {
             switch result {
             case .success(let response):
                 if let dtoList = response.data?.productBuyList {
                     self.popularBuyProducts = dtoList.map { ProductItemModel(dto: $0) }
                 }
             case .failure(let error):
-                logger.error("fetchPopularBuy failed: \(error.errorDescription ?? "Unknown error")")
+                logger.error("인기 구매 상품 로드 실패: \(error.localizedDescription)")
             }
         }
-    }
-}
+        
+        private func handleTerms(result: Result<TermsResponseDTO, NetworkError>) {
+            switch result {
+            case .success(let response):
+                if let termList = response.data?.termList, termList.count >= 2 {
+                    self.termsUrl = termList[0].termsUrl
+                    self.privacyUrl = termList[1].termsUrl
+                }
+            case .failure(let error):
+                logger.error("약관 URL 로드 실패: \(error.localizedDescription)")
+            }
+        }}
 
 // MARK: - Banner
 extension HomeViewModel {

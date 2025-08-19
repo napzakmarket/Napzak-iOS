@@ -16,7 +16,7 @@ struct SettingView: View {
     @Environment(\.openURL) var openURL
     
     @StateObject private var viewModel = SettingViewModel()
-    @StateObject private var withDrawViewModel = WithDrawViewModel.shared
+    @ObservedObject private var withDrawViewModel = WithDrawViewModel.shared
     
     @State var logoutButtonTapped: Bool = false
     
@@ -55,10 +55,12 @@ struct SettingView: View {
                         Task {
                             await pushManger.removeToken()
                             await viewModel.logout()
+                            
                             navigationRouter.reset()
                             tabRouter.switchToHome()
+                            
+                            logoutButtonTapped = false
                         }
-                        logoutButtonTapped = false
                     },
                     onCancel: {
                         logoutButtonTapped = false
@@ -107,7 +109,7 @@ extension SettingView {
                 .foregroundStyle(Color.napzakGrayScale(.gray200))
                 .frame(height: 18)
                 .padding(.leading, 28)
-                .padding(.bottom, 28)
+                .padding(.vertical, 28)
             
             Button {
                 guard let url = URL(string: Bundle.main.infoDictionary?["NOTICE_URL"] as! String) else {return}

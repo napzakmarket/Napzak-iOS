@@ -98,7 +98,6 @@ extension LikeView {
                 .frame(height: 5),
                 alignment: .top
             )
-            .padding(.bottom, 20)
         }
     }
     
@@ -132,7 +131,7 @@ extension LikeView {
     private var productScrollView: some View {
         ScrollViewReader { proxy in
             ScrollView {
-                VStack(spacing: 0) {
+                VStack(spacing: 20) {
                     Color.clear
                         .frame(height: 0)
                         .id("top")

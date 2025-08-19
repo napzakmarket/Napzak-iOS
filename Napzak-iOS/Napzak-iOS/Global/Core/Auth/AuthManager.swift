@@ -6,9 +6,10 @@
 //
 
 import Foundation
+import Combine
 import os
 
-final class AuthManager {
+final class AuthManager: ObservableObject {
     
     static let shared = AuthManager()
     
@@ -17,9 +18,7 @@ final class AuthManager {
     private let onboardingManager = OnboardingManager.shared
     private let authService = NetworkService.shared.authService
     
-    var isAuthenticated: Bool {
-        (try? keychain.getAccessToken().get()) != nil
-    }
+    @Published var isAuthenticated: Bool
     
     var needsOnboarding: Bool {
         onboardingManager.getLastCheckpoint() != .completed
@@ -31,6 +30,7 @@ final class AuthManager {
 //        OnboardingManager.shared.clearProgress()
 //        logger.info("[DEBUG] Keychain cleared for login testing")
 //        #endif
+        self.isAuthenticated = (try? keychain.getAccessToken().get()) != nil
         
         if let checkpoint = onboardingManager.getLastCheckpoint() {
             logger.info("Current onboarding checkpoint: \(checkpoint.rawValue)")
@@ -75,6 +75,11 @@ final class AuthManager {
                     return .failure(.invalidResponse)
                 }
                 
+                if data.role == .reported {
+                    logger.error("Reported user login attempt blocked.")
+                    return .failure(.reportedUser)
+                }
+                
                 logger.debug("Server response valid - saving tokens")
                 
                 let onboardingStep: OnboardingStep
@@ -86,20 +91,30 @@ final class AuthManager {
                     logger.info("Existing user - onboarding completed")
                     onboardingStep = .completed
                     onboardingManager.saveCheckpoint(.completed)
-                }
+                } 
                 
                 if case .failure(let error) = keychain.saveTokens(access: data.accessToken, refresh: data.refreshToken) {
                     return .failure(error)
+                } else {
+                    logger.info("Successfully saved tokens to Keychain.")
                 }
                 
-                await fetchMyStoreId()
-                await fetchChatRoomIdsToWebSocket()
+                Task { @MainActor in
+                    self.isAuthenticated = true
+                }
 
                 return .success(onboardingStep)
                 
             case .failure(let error):
-                logger.error("Server login failed: \(error)")
-                return .failure(.networkError)
+                switch error {
+                case .reportedUser:
+                    logger.error("Reported user login attempt blocked.")
+                    return .failure(.reportedUser)
+                    
+                default:
+                    logger.error("Server login failed: \(error)")
+                    return .failure(.networkError)
+                }
             }
             
         case .failure(let error):
@@ -130,8 +145,15 @@ final class AuthManager {
         if case .failure(let error) = keychain.clearTokens() {
             logger.error("Keychain clear tokens failed: \(error)")
             return .failure(error)
+        } else {
+            logger.info("Successfully cleared tokens from Keychain.")
         }
         logger.info("logout success")
+        
+        Task { @MainActor in
+            self.isAuthenticated = false
+        }
+        
         return .success(())
     }
     
@@ -146,12 +168,24 @@ final class AuthManager {
     @MainActor
     func completeOnboarding() {
         onboardingManager.saveCheckpoint(.completed)
+        
+        Task {
+            await fetchMyStoreId()
+            await fetchChatRoomIdsToWebSocket()
+        }
+    }
+    
+    @MainActor
+    func forceLogout() {
+        keychain.clearTokens()
+        onboardingManager.clearProgress()
+        self.isAuthenticated = false
     }
 }
 
-private extension AuthManager {
+extension AuthManager {
     
-    //MARK: - Private Func (WebSocket 연결 목적)
+    //MARK: - Func (WebSocket 연결 목적)
     
     func fetchChatRoomIdsToWebSocket() async {
         let result = await NetworkService.shared.chatService.getChatRoomIds()

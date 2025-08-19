@@ -496,7 +496,7 @@ extension RegisterViewModel {
         let trimmedStandardFee = model.standardDeliveryFee.trimmingCharacters(in: .whitespaces)
         let trimmedHalfFee = model.halfDeliveryFee.trimmingCharacters(in: .whitespaces)
         let isNormalValid = normalDelivery && trimmedStandardFee.convertInt() > 99
-        let isHalfValid = halfDelivery && !trimmedHalfFee.isEmpty
+        let isHalfValid = halfDelivery && trimmedHalfFee.convertInt() > 99
         let isAtLeastOneChecked = normalDelivery || halfDelivery
         let allCheckedConditionsValid = (
             (!normalDelivery || isNormalValid) &&

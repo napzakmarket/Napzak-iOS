@@ -13,7 +13,6 @@ final class WithDrawViewModel: ObservableObject {
     static let shared = WithDrawViewModel()
     
     private let keychain = KeychainManager.shared
-    private let onboardingManager = OnboardingManager.shared
     
     private init() { }
     
@@ -54,7 +53,7 @@ extension WithDrawViewModel {
             logger.info("✅ 탈퇴 사유: \(response.data!.withdrawTitle)")
             logger.info("✅ 탈퇴 설명: \(response.data!.withdrawDescription ?? "없음")")
             
-            onboardingManager.clearProgress()
+            await AuthManager.shared.forceLogout()
             if case .failure(let error) = keychain.clearTokens() {
                 logger.error("❌ 토큰 삭제 실패: \(error)")
             }

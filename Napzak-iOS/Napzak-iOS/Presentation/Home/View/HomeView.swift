@@ -12,6 +12,7 @@ struct HomeView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
     @EnvironmentObject private var tabRouter: TabRouter
     @EnvironmentObject private var pushManager: PushManager
+    @Environment(\.openURL) private var openURL
     @StateObject private var viewModel = HomeViewModel()
     
     @State private var timer = Timer.publish(every: 3, on: .main, in: .common).autoconnect()
@@ -65,7 +66,6 @@ struct HomeView: View {
                                 .padding(.bottom, 20)
                             
                             FooterView
-                                .padding(.bottom, 54)
                             
                         }
                     }
@@ -84,7 +84,7 @@ struct HomeView: View {
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(1)
-                .padding(.bottom, 110)
+                .padding(.bottom, 32)
             }
             
             if viewModel.loadingManager.isLoadingNetwork {
@@ -92,11 +92,9 @@ struct HomeView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .onAppear {
-            Task {
-                await pushManager.configureNotifications()
-                await pushManager.upsertTokenIfNeeded()
-            }
+        .task {
+            await pushManager.configureNotifications()
+            await pushManager.upsertTokenIfNeeded()
         }
         .animation(.spring(), value: viewModel.showLikeToast)
         .onChange(of: viewModel.externalURLToOpen) { url in
@@ -107,7 +105,9 @@ struct HomeView: View {
         }
         .onChange(of: tabRouter.selectedTab) { tab in
             if tab == .home {
-                viewModel.fetchHomeData()
+                Task {
+                    await viewModel.fetchAllInitialData()
+                }
                 scrollToTopTrigger.toggle()
             }
         }
@@ -136,13 +136,16 @@ extension HomeView {
                     Spacer()
                     
                     Image(.iconSearch)
-                        .padding(.vertical, 8)
-                        .padding(.trailing, 16)
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                        .padding(.trailing, 10)
                 }
+                .frame(height: 39)
                 .background(Color.napzakGrayScale(.gray50))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .clipShape(RoundedRectangle(cornerRadius: 14))
             }
         }
+        
     }
     
     private var topBannerSection: some View {
@@ -283,7 +286,6 @@ extension HomeView {
             Text("납작마켓")
                 .applyNapzakFont(.caption1SemiBold12)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
-                .padding(.top, 20)
             
             HStack(spacing: 4) {
                 Image(.iconMessage)
@@ -304,17 +306,32 @@ extension HomeView {
             .padding(.top, 3)
             
             HStack(spacing: 8) {
-                Text("서비스 이용 약관")
-                    .applyNapzakFont(.caption4SemiBold10)
-                    .foregroundStyle(Color.napzakGrayScale(.gray500))
+                Button {
+                    if let url = URL(string: viewModel.termsUrl) {
+                        openURL(url)
+                    }
+                    print("서비스 이용 약관 Tapped")
+                } label: {
+                    Text("서비스 이용 약관")
+                        .applyNapzakFont(.caption4SemiBold10)
+                        .foregroundStyle(Color.napzakGrayScale(.gray500))
+                }
                 
                 Rectangle()
                     .frame(width: 1, height: 7)
                     .foregroundStyle(Color.napzakGrayScale(.gray200))
                 
-                Text("개인정보 처리방침")
-                    .applyNapzakFont(.caption4SemiBold10)
-                    .foregroundStyle(Color.napzakGrayScale(.gray500))
+                Button {
+                    if let url = URL(string: viewModel.privacyUrl) {
+                        openURL(url)
+                    }
+                    print("개인정보 처리방침 Tapped")
+                } label: {
+                    Text("개인정보 처리방침")
+                        .applyNapzakFont(.caption4SemiBold10)
+                        .foregroundStyle(Color.napzakGrayScale(.gray500))
+                }
+                
             }
             .padding(.top, 20)
             
@@ -337,9 +354,9 @@ extension HomeView {
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
             }
             .padding(.top, 8)
-            .padding(.bottom, 15)
         }
         .frame(width: UIScreen.main.bounds.width, height: 177)
+        .padding(.bottom, 15)
         .background(Color.napzakGrayScale(.gray10))
     }
     

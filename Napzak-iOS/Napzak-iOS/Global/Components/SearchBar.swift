@@ -10,7 +10,7 @@ import SwiftUI
 struct SearchBar: View {
     
     let placeholder: String
-    var cornerRadius: CGFloat = 10
+    var cornerRadius: CGFloat = 14
     
     @Binding var text: String
     @Binding var isCompleted: Bool
@@ -62,7 +62,7 @@ struct SearchBar: View {
         }
         .padding(.leading, 16)
         .padding(.trailing, 10)
-        .frame(height: 38)
+        .frame(height: 39)
         .background(Color.napzakGrayScale(.gray50))
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
         .animation(.easeInOut(duration: 0.3), value: text.isEmpty)
