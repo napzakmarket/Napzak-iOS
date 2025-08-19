@@ -84,7 +84,7 @@ struct HomeView: View {
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(1)
-                .padding(.bottom, 32)
+                .padding(.bottom, 110)
             }
             
             if viewModel.loadingManager.isLoadingNetwork {
@@ -92,6 +92,7 @@ struct HomeView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
+        .ignoresSafeArea(edges: .bottom)
         .task {
             await pushManager.configureNotifications()
             await pushManager.upsertTokenIfNeeded()
@@ -356,7 +357,7 @@ extension HomeView {
             .padding(.top, 8)
         }
         .frame(width: UIScreen.main.bounds.width, height: 177)
-        .padding(.bottom, 15)
+        .padding(.bottom, 108)
         .background(Color.napzakGrayScale(.gray10))
     }
     
