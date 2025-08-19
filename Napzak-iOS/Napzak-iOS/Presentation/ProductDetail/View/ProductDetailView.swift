@@ -23,6 +23,7 @@ struct ProductDetailView: View {
     @State private var isDeleteAlertPresented = false
     @State private var statusToastStyle: StatusToastStyle = .statusChanged
     @State private var isRegisterViewPresented = false
+    @State private var isImageDetailViewPresented: Bool = false
     @State private var isEditCompleted = false
 
     //MARK: - Properties
@@ -178,6 +179,12 @@ struct ProductDetailView: View {
                 )
             }
         }
+        .fullScreenCover(isPresented: $isImageDetailViewPresented) {
+            ImageDetailView(
+                isImageDetailViewPresent: $isImageDetailViewPresented,
+                imageUrl: viewModel.product.productPhotoList[currentPage].photoUrl
+            )
+        }
         .onChange(of: isRegisterViewPresented) { value in
             if !value {
                 Task {
@@ -257,21 +264,25 @@ extension ProductDetailView {
         ZStack(alignment: .bottomTrailing) {
             TabView(selection: $currentPage) {
                 ForEach(Array(viewModel.product.productPhotoList.enumerated()), id: \.1.id) { index, photo in
-                    Group {
-                        if let url = URL(string: photo.photoUrl) {
-                            KFImage(url)
-                                .placeholder {
-                                    Rectangle()
-                                        .fill(Color.napzakGrayScale(.gray300))
-                                }.retry(maxCount: 3, interval: .seconds(3))
-                                .onFailure { error  in
-                                    print("failure: \(error.localizedDescription)")
-                                }
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        } else {
-                            Rectangle()
-                                .fill(Color.napzakGrayScale(.gray300))
+                    Button {
+                        isImageDetailViewPresented = true
+                    } label: {
+                        Group {
+                            if let url = URL(string: photo.photoUrl) {
+                                KFImage(url)
+                                    .placeholder {
+                                        Rectangle()
+                                            .fill(Color.napzakGrayScale(.gray300))
+                                    }.retry(maxCount: 3, interval: .seconds(3))
+                                    .onFailure { error  in
+                                        print("failure: \(error.localizedDescription)")
+                                    }
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                            } else {
+                                Rectangle()
+                                    .fill(Color.napzakGrayScale(.gray300))
+                            }
                         }
                     }
                     .tag(index)
@@ -344,11 +355,11 @@ extension ProductDetailView {
                 .foregroundStyle(Color.napzakGrayScale(.black))
                 .padding(.bottom, 10)
             Text("\(viewModel.product.productDetail.productName)")
-                .applyNapzakFont(.title6Medium18)
+                .applyNapzakFont(.title4SemiBold20)
                 .foregroundStyle(Color.napzakGrayScale(.black))
                 .padding(.bottom, 10)
             Text(viewModel.product.productDetail.price.convertPriceByTradeType(tradeType: viewModel.product.productDetail.tradeType))
-                .applyNapzakFont(.title3Bold18)
+                .applyNapzakFont(.title1Bold22)
                 .foregroundStyle(Color.napzakGrayScale(.black))
                 .padding(.bottom, 20)
             Text(viewModel.product.productDetail.uploadTime)
@@ -367,18 +378,19 @@ extension ProductDetailView {
                     .padding(.leading, 4)
             }
             Spacer()
-            HStack(alignment: .bottom, spacing: 2) {
-                Image(.icnChatCount)
+            HStack(alignment: .bottom, spacing: 4) {
+                Image(.icnChatCountBig)
+                    .padding(.bottom, 1)
                 Text("\(viewModel.product.productDetail.chatCount)")
-                    .applyNapzakFont(.caption5Regular10)
-                    .foregroundStyle(Color.napzakGrayScale(.gray100))
-                    .frame(height: 13)
-                Image(.icnHeartCount)
-                    .padding([.leading, .bottom], 1)
+                    .applyNapzakFont(.body6Regular14)
+                    .foregroundStyle(Color.napzakGrayScale(.gray200))
+                    .frame(height: 18)
+                Image(.icnHeartCountBig)
+                    .padding(.bottom, 2)
                 Text("\(viewModel.product.productDetail.interestCount)")
-                    .applyNapzakFont(.caption5Regular10)
-                    .foregroundStyle(Color.napzakGrayScale(.gray100))
-                    .frame(height: 13)
+                    .applyNapzakFont(.body6Regular14)
+                    .foregroundStyle(Color.napzakGrayScale(.gray200))
+                    .frame(height: 18)
             }
         }
         .padding(.bottom, 16)
@@ -388,7 +400,7 @@ extension ProductDetailView {
         ZStack(alignment: .top) {
             Color.napzakGrayScale(.white)
             Text("\(viewModel.product.productDetail.description)".forceCharWrapping)
-                .applyNapzakFont(.caption3Regular12)
+                .applyNapzakFont(.body6Regular14)
                 .foregroundStyle(Color.napzakGrayScale(.black))
                 .multilineTextAlignment(.leading)
                 .padding(.horizontal, 28)

@@ -17,6 +17,7 @@ struct SearchView: View {
     @StateObject var viewModel: SearchViewModel
     
     @State private var scrollToTopTrigger: Bool = false
+    @State private var isSearchResultEmpty: Bool = false
     
     @Binding var isGenreSelectModalPresented: Bool
     @Binding var isSortModalPresented: Bool
@@ -45,14 +46,19 @@ struct SearchView: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
+            if viewModel.showEmptyView {
+                emptyView
+            }
+            
             VStack(spacing: 0) {
                 searchHeader
                     .padding(.top, 75)
-
-                productScrollView(
-                    products: viewModel.selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
-                    productsCount: viewModel.selectedTabIndex == 0 ? viewModel.sellProductsCount : viewModel.buyProductsCount
-                )
+                if !viewModel.showEmptyView {
+                    productScrollView(
+                        products: viewModel.selectedTabIndex == 0 ? $viewModel.sellProducts : $viewModel.buyProducts,
+                        productsCount: viewModel.selectedTabIndex == 0 ? viewModel.sellProductsCount : viewModel.buyProductsCount
+                    )
+                }
                 Spacer()
             }
             
@@ -188,7 +194,7 @@ extension SearchView {
                 VStack(alignment: .leading, spacing: 0) {
                     NZSegmentedControl(selectedTabIndex: $viewModel.selectedTabIndex, tabs: ["팔아요", "구해요"],  spacing: 16)
                     
-                    if !viewModel.loadingManager.isLoadingNetwork {
+                    if !viewModel.loadingManager.isLoadingNetwork && !viewModel.showEmptyView {
                         FilterContainerView(
                             isGenreSelectModalPresented: $isGenreSelectModalPresented,
                             selectedTabIndex: $viewModel.selectedTabIndex,
@@ -229,7 +235,7 @@ extension SearchView {
     
     private var shadowBackground: some View {
         ZStack(alignment: .top) {
-            Color.napzakGrayScale(viewModel.loadingManager.isLoadingNetwork ? .white : .gray10)
+            Color.napzakGrayScale(viewModel.loadingManager.isLoadingNetwork || viewModel.showEmptyView ? .white : .gray10)
             Color.napzakGrayScale(.white)
                 .frame(height: 47)
                 .shadow(color: .black.opacity(0.1), radius: 4)
@@ -255,6 +261,21 @@ extension SearchView {
                 Color.napzakGrayScale(.gray10)
                     .frame(height: 4)
             }
+        }
+    }
+    
+    private var emptyView: some View {
+        VStack(alignment: .center, spacing: 6) {
+            Spacer()
+            Image(.imgSearchEmpty)
+                .padding(.bottom, 14)
+            Text("검색 결과가 없어요")
+                .applyNapzakFont(.body2SemiBold16)
+                .foregroundStyle(Color.napzakGrayScale(.gray300))
+            Text("다른 키워드로 다시 검색해보세요")
+                .applyNapzakFont(.caption1SemiBold12)
+                .foregroundStyle(Color.napzakGrayScale(.gray200))
+            Spacer()
         }
     }
 }

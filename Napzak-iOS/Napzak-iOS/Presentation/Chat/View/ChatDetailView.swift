@@ -180,9 +180,10 @@ extension ChatDetailView {
                 Spacer()
                 Text(viewModel.chatDetailInfo.chatStoreInfo.nickname)
                     .applyNapzakFont(.body1Bold16)
-                    .foregroundStyle(Color.napzakGrayScale(.black))
+                    .foregroundStyle(Color.napzakGrayScale(.gray400))
                 Spacer()
                 Button {
+                    isFocused = false
                     isViewerOptionsPresented = true
                 } label: {
                     Image(.iconMoreOptions)
@@ -250,6 +251,7 @@ extension ChatDetailView {
                 .shadow(color: .black.opacity(0.1), radius: 2)
         )
         .padding(.top, 100)
+        .disabled(!viewModel.chatDetailInfo.productInfo.isMyProduct && viewModel.isChatDisabled)
     }
     
     private var chatSection: some View {
@@ -294,6 +296,7 @@ extension ChatDetailView {
                             storeImage: viewModel.chatDetailInfo.chatStoreInfo.storePhoto
                         )
                         .padding(.horizontal, 15)
+                        .disabled(viewModel.chatDetailInfo.chatStoreInfo.storeId != data.senderId && viewModel.isChatDisabled)
                     }
                 }
                 .rotationEffect(Angle(degrees: 180))

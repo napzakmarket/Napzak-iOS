@@ -138,11 +138,11 @@ final class ProfileEditViewModel: ObservableObject {
             
             if let selectedImage = selectedProfileImage {
                 let imageName = UUID().uuidString + ".jpg"
-                let presignedResult = await NetworkService.shared.presignedService.getPresignedURL(imageNameList: [imageName])
+                let presignedResult = await NetworkService.shared.presignedService.getStorePresignedURL(imageNameList: [imageName])
 
                 switch presignedResult {
                 case .success(let response):
-                    guard let uploadURL = response.data?.productPresignedUrls[imageName],
+                    guard let uploadURL = response.data?.profilePresignedUrls[imageName],
                           let imageData = selectedImage.jpegData(compressionQuality: 0.8) else {
                         self.errorMessage = "이미지 데이터 생성 혹은 Presigned URL 파싱 실패"
                         self.isLoading = false
@@ -178,11 +178,11 @@ final class ProfileEditViewModel: ObservableObject {
     private func uploadCoverImageIfNeeded() async {
         if let selectedCoverImage = selectedCoverImage {
             let imageName = UUID().uuidString + ".jpg"
-            let presignedResult = await NetworkService.shared.presignedService.getPresignedURL(imageNameList: [imageName])
+            let presignedResult = await NetworkService.shared.presignedService.getStorePresignedURL(imageNameList: [imageName])
 
             switch presignedResult {
             case .success(let response):
-                guard let uploadURL = response.data?.productPresignedUrls[imageName],
+                guard let uploadURL = response.data?.profilePresignedUrls[imageName],
                       let imageData = selectedCoverImage.jpegData(compressionQuality: 0.8) else {
                     self.errorMessage = "커버 이미지 데이터 생성 혹은 Presigned URL 파싱 실패"
                     self.isLoading = false

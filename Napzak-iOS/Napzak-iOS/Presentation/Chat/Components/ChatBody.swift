@@ -65,7 +65,7 @@ struct ChatBody: View {
                                     isImageDetailViewPresented = true
                                 }
                             )
-                            .padding(.top, chatData.isProfileNeeded ? 20 : 0)
+                            .padding(.top, chatData.isProfileNeeded && !chatData.isMessageOwner ? 20 : 0)
                             .padding(.leading, !chatData.isProfileNeeded && !chatData.isMessageOwner ? 44 : 0)
                         }
                     }
@@ -130,8 +130,7 @@ extension ChatBody {
             if let url = URL(string: storeImage) {
                 KFImage(url)
                     .placeholder {
-                        Circle()
-                            .fill(Color.napzakGrayScale(.gray100))
+                        Image(.imgChatProfileDefault)
                     }
                     .retry(maxCount: 3, interval: .seconds(5))
                     .onFailure { error in
@@ -150,7 +149,7 @@ extension ChatBody {
     
     private var timeLabel: some View {
         VStack(alignment: .trailing, spacing: 0) {
-            if chatData.isMessageOwner && !(chatData.isRead ?? false) {
+            if chatData.isMessageOwner && chatData.type != .product && !(chatData.isRead ?? false) {
                 Text("1")
                     .applyNapzakFont(.caption5Regular10)
                     .foregroundStyle(Color.napzakGrayScale(.gray200))

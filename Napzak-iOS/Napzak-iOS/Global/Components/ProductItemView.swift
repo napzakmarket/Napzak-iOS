@@ -145,29 +145,29 @@ extension ProductItemView {
             Image(product.isInterested ? .btnHeartSelected : .btnHeartDefault)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 14, height: 13)
+                .frame(width: isHiddenProductSummary ? 14 : 16, height: isHiddenProductSummary ? 13 : 15)
         }
-        .padding(.bottom, width == 150 ? 9 : 6)
-        .padding(.trailing, width == 150 ? 9 : 5)
+        .padding(.bottom, isHiddenProductSummary ? 6 : 9)
+        .padding(.trailing, isHiddenProductSummary ? 5 :9)
     }
     
     private var productSummary: some View {
         HStack(alignment: .bottom, spacing: 2) {
             Text(product.uploadTime)
-                .applyNapzakFont(.caption5Regular10)
-                .foregroundStyle(Color.napzakGrayScale(.gray100))
-                .frame(height: 13)
+                .applyNapzakFont(.caption3Regular12)
+                .foregroundStyle(Color.napzakGrayScale(.gray200))
+                .frame(height: 15)
             Spacer()
             Image(.icnChatCount)
             Text("\(product.chatCount)")
                 .applyNapzakFont(.caption5Regular10)
-                .foregroundStyle(Color.napzakGrayScale(.gray100))
+                .foregroundStyle(Color.napzakGrayScale(.gray200))
                 .frame(height: 13)
             Image(.icnHeartCount)
                 .padding([.leading, .bottom], 1)
             Text("\(product.interestCount)")
                 .applyNapzakFont(.caption5Regular10)
-                .foregroundStyle(Color.napzakGrayScale(.gray100))
+                .foregroundStyle(Color.napzakGrayScale(.gray200))
                 .frame(height: 13)
         }
     }

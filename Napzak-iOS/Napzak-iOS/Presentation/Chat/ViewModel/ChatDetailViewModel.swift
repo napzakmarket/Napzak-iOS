@@ -22,7 +22,7 @@ final class ChatDetailViewModel: ObservableObject {
 
     @Published var chatDetailInfo = ChatDetailModel(
         productInfo: ChatProductInfo(productId: 0, photo: "", tradeType: .buy, title: "", price: 0, isPriceNegotiable: false, genreName: "", productOwnerId: 0, isMyProduct: false),
-        chatStoreInfo: ChatStoreInfo(storeId: 0, nickname: "", isWithdrawn: false, storePhoto: "")
+        chatStoreInfo: ChatStoreInfo(storeId: 0, nickname: "", isWithdrawn: false, isReported: false, storePhoto: "")
     )
     @Published var chatMessages: [ChatMessageModel] = []
     @Published var messageText = ""
@@ -116,14 +116,9 @@ private extension ChatDetailViewModel {
                 guard let self else { return }
                 
                 if let currentRoomId = roomId, data.roomId == currentRoomId {
-                    
+                         
                     var messageData: ChatMessageModel
-                    let isMessageOwner: Bool = {
-                        guard let senderId = data.senderId else { return false }
-                        
-                        let ownerId = self.chatDetailInfo.productInfo.productOwnerId
-                        return self.chatDetailInfo.productInfo.isMyProduct ? senderId == ownerId : senderId != ownerId
-                    }()
+                    let isMessageOwner = chatDetailInfo.chatStoreInfo.storeId != data.senderId
                     
                     switch data.type {
                     case .text:
@@ -137,6 +132,20 @@ private extension ChatDetailViewModel {
                             isProfileNeeded: !isMessageOwner && isProfileNeeded,
                             isMessageOwner: isMessageOwner,
                             isRead: isReadMyMessage
+                        )
+                    case .system:
+                        isChatDisabled = true
+                        
+                        messageData = ChatMessageModel(
+                            id: data.messageId,
+                            senderId: data.senderId,
+                            type: data.type,
+                            content: nil,
+                            metaData: data.metadata,
+                            createdAt: data.createdAt,
+                            isProfileNeeded: false,
+                            isMessageOwner: false,
+                            isRead: false
                         )
                     default:
                         messageData = ChatMessageModel(
@@ -152,13 +161,13 @@ private extension ChatDetailViewModel {
                         )
                     }
                     
-                    self.chatMessages.append(messageData)
-                    
-                    isProfileNeeded = isMessageOwner
-                    
-                    if data.type == .system {
-                        isChatDisabled = true
+                    if data.type == .product {
+                        isProfileNeeded = true
+                    } else {
+                        isProfileNeeded = isMessageOwner
                     }
+                    
+                    chatMessages.append(messageData)
                 }
             }
             .store(in: &cancellables)
@@ -171,12 +180,8 @@ private extension ChatDetailViewModel {
                 guard let self else { return }
                 
                 if let roomId, data.roomId == roomId {
-                    let isMyStatus: Bool = {
-                        guard let senderId = data.senderId else { return false }
-                        
-                        let ownerId = self.chatDetailInfo.productInfo.productOwnerId
-                        return self.chatDetailInfo.productInfo.isMyProduct ? senderId == ownerId : senderId != ownerId
-                    }()
+                    guard let senderId = data.senderId else { return }
+                    let isMyStatus: Bool = self.chatDetailInfo.chatStoreInfo.storeId != senderId
                     
                     switch data.type {
                     case .join:
@@ -215,8 +220,8 @@ private extension ChatDetailViewModel {
             chatDetailInfo.productInfo = ChatProductInfo(dto: data.productInfo)
             chatDetailInfo.chatStoreInfo = ChatStoreInfo(dto: data.storeInfo)
             roomId = data.roomId ?? nil
-            if chatDetailInfo.chatStoreInfo.isWithdrawn {
-                isChatDisabled = chatDetailInfo.chatStoreInfo.isWithdrawn
+            if chatDetailInfo.chatStoreInfo.isWithdrawn || chatDetailInfo.chatStoreInfo.isReported {
+                isChatDisabled = true
             }
             shouldUpdateProductInfo = data.productInfo.productId != self.productId
             
@@ -441,11 +446,11 @@ extension ChatDetailViewModel {
     func uploadImage() async {
         if let selectedImage = selectedImage {
             let imageName = UUID().uuidString + ".jpg"
-            let presignedResult = await NetworkService.shared.presignedService.getPresignedURL(imageNameList: [imageName])
+            let presignedResult = await NetworkService.shared.presignedService.getChatPresignedURL(imageNameList: [imageName])
 
             switch presignedResult {
             case .success(let response):
-                guard let uploadURL = response.data?.productPresignedUrls[imageName],
+                guard let uploadURL = response.data?.chatPresignedUrls[imageName],
                       let imageData = selectedImage.jpegData(compressionQuality: 0.8) else {
                     logger.error("이미지 데이터 생성 혹은 Presigned URL 파싱 실패")
                     return
@@ -455,7 +460,7 @@ extension ChatDetailViewModel {
 
                 switch uploadResult {
                 case .success:
-                    logger.info("✅ 커버 이미지 업로드 성공")
+                    logger.info("✅ 이미지 업로드 성공")
                     
                     let imageURL = uploadURL.components(separatedBy: "?").first ?? uploadURL
                     

@@ -89,12 +89,13 @@ class BaseService {
                             }
                             continuation.resume(returning: .failure(.reportedUser))
                             
-                        } else {
-                            DispatchQueue.main.async {
-                                AuthManager.shared.forceLogout()
-                            }
-                            continuation.resume(returning: .failure(.internalServerError))
                         }
+//                        else {
+//                            DispatchQueue.main.async {
+//                                AuthManager.shared.forceLogout()
+//                            }
+//                            continuation.resume(returning: .failure(.internalServerError))
+//                        }
                         
                     default:
                         continuation.resume(returning: .failure(.networkFail))

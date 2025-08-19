@@ -64,6 +64,7 @@ struct ChatStoreInfo {
     let storeId: Int
     let nickname: String
     let isWithdrawn: Bool
+    let isReported: Bool
     let storePhoto: String
     
     //MARK: - Init
@@ -73,11 +74,13 @@ struct ChatStoreInfo {
         storeId: Int,
         nickname: String,
         isWithdrawn: Bool,
+        isReported: Bool,
         storePhoto: String
     ) {
         self.storeId = storeId
         self.nickname = nickname
         self.isWithdrawn = isWithdrawn
+        self.isReported = isReported
         self.storePhoto = storePhoto
     }
     
@@ -86,6 +89,7 @@ struct ChatStoreInfo {
         self.storeId = dto.storeId
         self.nickname = dto.nickname
         self.isWithdrawn = dto.isWithdrawn
+        self.isReported = dto.isReported
         self.storePhoto = dto.storePhoto
     }
 }

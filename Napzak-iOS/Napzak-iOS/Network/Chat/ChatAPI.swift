@@ -8,11 +8,6 @@
 import Foundation
 import Moya
 
-enum BaseURLType {
-    case defaultUrl
-    case chatUrl
-}
-
 enum ChatAPI {
     case getChatInfo(productId: Int, roomId: Int?)
     case postCreateChatRoom(requestBody: ChatRoomCreateRequestDTO)
