@@ -46,24 +46,31 @@ struct ToastMessageView: View {
     let style: Style
 
     var body: some View {
-        HStack(spacing: 6) {
-            style.icon
-            Text(message)
-                .applyNapzakFont(.caption1SemiBold12)
-                .foregroundStyle(style.textColor)
-        }
-        .padding(.horizontal, 15)
-        .padding(.vertical, 7)
-        .background(style.backgroundColor)
-        .clipShape(Capsule())
-        .overlay(
-            Group {
-                if let border = style.borderColor {
-                    Capsule().stroke(border, lineWidth: 1)
-                }
+        switch style {
+        case .warning:
+            HStack(spacing: 6) {
+                style.icon
+                Text(message)
+                    .applyNapzakFont(.caption1SemiBold12)
+                    .foregroundStyle(style.textColor)
             }
-        )
-        .frame(height: 29)
+            .padding(.horizontal, 15)
+            .padding(.vertical, 7)
+            .background(style.backgroundColor)
+            .clipShape(Capsule())
+            .overlay(
+                Group {
+                    if let border = style.borderColor {
+                        Capsule().stroke(border, lineWidth: 1)
+                    }
+                }
+            )
+            .frame(height: 29)
+            
+        case .success:
+            Image(.toastLike)
+        }
+        
     }
 }
 

@@ -84,7 +84,7 @@ struct HomeView: View {
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(1)
-                .padding(.bottom, 110)
+                .padding(.bottom, 32)
             }
             
             if viewModel.loadingManager.isLoadingNetwork {
