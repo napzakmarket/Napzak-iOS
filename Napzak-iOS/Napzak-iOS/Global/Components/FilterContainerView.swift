@@ -9,6 +9,9 @@ import SwiftUI
 
 struct FilterContainerView: View {
     
+    enum Style { case standard, market }
+    var style: Style = .standard
+    
     //MARK: - Property Wrappers
     
     @Binding var isGenreSelectModalPresented: Bool
@@ -17,22 +20,40 @@ struct FilterContainerView: View {
     @Binding var isUnopened: Bool
     @Binding var isOnSale: Bool
     
+    enum AppImage: String {
+        case btnOnSale = "btn_onsale"
+        case btnOnSalePurple = "btn_onsale_purple"
+        case btnGetting = "btn_getting"
+        case btnGettingPurple = "btn_getting_purple"
+        
+        var image: Image {
+            Image(self.rawValue)
+        }
+    }
+    
     var body: some View {
         HStack(alignment: .center, spacing: 6) {
             genreFilterChip
-            if selectedTabIndex == 0 {
-                unopenedFilterChip
+
+            if style == .market {
+                activeStatusFilterChip
+            } else {
+                if selectedTabIndex == 0 {
+                    unopenedFilterChip
+                }
+                onSaleFilterChip
+
+                if selectedTabIndex == 1 {
+                    Color.clear.frame(width: 60)
+                }
             }
-            onSaleFilterChip
-            if selectedTabIndex == 1 {
-                Color.clear
-                    .frame(width: 60)
-            }
+
             Spacer()
         }
         .frame(height: 28)
         .frame(maxWidth: 270)
     }
+
     
     var genreFilterChip: some View {
         Button {
@@ -83,6 +104,20 @@ struct FilterContainerView: View {
             Image(isOnSale ? .btnFilterOnSaleSelected : .btnFilterOnSale)
         }
     }
+    
+    var activeStatusFilterChip: some View {
+        Button {
+            isOnSale.toggle()
+        } label: {
+            Image(
+                selectedTabIndex == 0
+                ? (isOnSale ? AppImage.btnOnSalePurple.rawValue : AppImage.btnOnSale.rawValue)
+                : (isOnSale ? AppImage.btnGettingPurple.rawValue : AppImage.btnGetting.rawValue)
+            )
+            .renderingMode(.original)
+        }
+    }
+
 }
 
 #Preview {
