@@ -90,7 +90,7 @@ class BaseService {
                             continuation.resume(returning: .failure(.reportedUser))
                             
                         } else {
-                            Task { @MainActor in
+                            DispatchQueue.main.async {
                                 AuthManager.shared.forceLogout()
                             }
                             continuation.resume(returning: .failure(.internalServerError))
