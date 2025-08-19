@@ -71,10 +71,31 @@ class BaseService {
                         
                     case 401:
                         continuation.resume(returning: .failure(.unauthorized))
+                    case 403:
+                        if let errorResponse = try? JSONDecoder().decode(ErrorResponseDTO.self, from: response.data),
+                           errorResponse.message.contains("신고 처리된 계정") {
+                            continuation.resume(returning: .failure(.reportedUser))
+                        } else {
+                            continuation.resume(returning: .failure(.forbidden))
+                        }
                     case 404:
                         continuation.resume(returning: .failure(.notFound))
                     case 500...599:
-                        continuation.resume(returning: .failure(.internalServerError))
+                        if let errorResponse = try? JSONDecoder().decode(ErrorResponseDTO.self, from: response.data),
+                           errorResponse.message.contains("[REPORTED]") {
+                            Self.logger.error("🚨 신고된 유저 감지! 강제 로그아웃을 실행합니다.")
+                            DispatchQueue.main.async {
+                                AuthManager.shared.forceLogout()
+                            }
+                            continuation.resume(returning: .failure(.reportedUser))
+                            
+                        } else {
+                            Task { @MainActor in
+                                AuthManager.shared.forceLogout()
+                            }
+                            continuation.resume(returning: .failure(.internalServerError))
+                        }
+                        
                     default:
                         continuation.resume(returning: .failure(.networkFail))
                     }
@@ -139,7 +160,15 @@ class BaseService {
                         }
                         
                     case 401:
-                        continuation.resume(returning: .failure(.unauthorized)) 
+                        continuation.resume(returning: .failure(.unauthorized))
+                    case 403:
+                        if let errorResponse = try? JSONDecoder().decode(ErrorResponseDTO.self, from: response.data),
+                           errorResponse.message.contains("신고 처리된 계정") {
+                            continuation.resume(returning: .failure(.reportedUser))
+                        } else {
+                            continuation.resume(returning: .failure(.forbidden))
+                        }
+                        
                     case 404:
                         continuation.resume(returning: .failure(.notFound))
                     case 409:
@@ -150,7 +179,17 @@ class BaseService {
                             continuation.resume(returning: .failure(.badRequest))
                         }
                     case 500...599:
-                        continuation.resume(returning: .failure(.internalServerError))
+                        if let errorResponse = try? JSONDecoder().decode(ErrorResponseDTO.self, from: response.data),
+                           errorResponse.message.contains("[REPORTED]") {
+                            Self.logger.error("🚨 신고된 유저 감지! 강제 로그아웃을 실행합니다.")
+                            DispatchQueue.main.async {
+                                AuthManager.shared.forceLogout()
+                            }
+                            continuation.resume(returning: .failure(.reportedUser))
+                            
+                        } else {
+                            continuation.resume(returning: .failure(.internalServerError))
+                        }
                     default:
                         continuation.resume(returning: .failure(.networkFail))
                     }

@@ -34,11 +34,11 @@ class TabRouter: ObservableObject {
     }
     
     func switchToSearch(searchWord: String, sortOption: SortOption, searchTabIndex: Int) -> Void {
-        selectedTab = .search
-        
         searchParams.searchWord = searchWord
         searchParams.sortOption = sortOption
         searchParams.selectedTab = searchTabIndex
+        
+        selectedTab = .search
     }
     
     func switchToHome() {

@@ -10,7 +10,7 @@ import SwiftUI
 struct RootView: View {
     @StateObject private var authRouter = AuthNavigationRouter()
     
-    private let authManager = AuthManager.shared
+    @ObservedObject private var authManager = AuthManager.shared
     @State private var isShowingSplash = true
     
     var body: some View {
@@ -34,6 +34,14 @@ struct RootView: View {
                     withAnimation(.easeInOut(duration: 0.3)) {
                         isShowingSplash = false
                     }
+                }
+            }
+        }
+        .onChange(of: authManager.isAuthenticated) { isAuthenticated in
+            if isAuthenticated {
+                Task {
+                    await authManager.fetchMyStoreId()
+                    await authManager.fetchChatRoomIdsToWebSocket()
                 }
             }
         }

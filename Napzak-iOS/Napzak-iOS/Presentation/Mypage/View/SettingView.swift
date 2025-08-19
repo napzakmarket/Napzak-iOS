@@ -16,7 +16,7 @@ struct SettingView: View {
     @Environment(\.openURL) var openURL
     
     @StateObject private var viewModel = SettingViewModel()
-    @StateObject private var withDrawViewModel = WithDrawViewModel.shared
+    @ObservedObject private var withDrawViewModel = WithDrawViewModel.shared
     
     @State var logoutButtonTapped: Bool = false
     
@@ -55,10 +55,12 @@ struct SettingView: View {
                         Task {
                             await pushManger.removeToken()
                             await viewModel.logout()
+                            
                             navigationRouter.reset()
                             tabRouter.switchToHome()
+                            
+                            logoutButtonTapped = false
                         }
-                        logoutButtonTapped = false
                     },
                     onCancel: {
                         logoutButtonTapped = false
