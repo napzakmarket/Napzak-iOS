@@ -168,6 +168,11 @@ final class AuthManager: ObservableObject {
     @MainActor
     func completeOnboarding() {
         onboardingManager.saveCheckpoint(.completed)
+        
+        Task {
+            await fetchMyStoreId()
+            await fetchChatRoomIdsToWebSocket()
+        }
     }
     
     @MainActor
