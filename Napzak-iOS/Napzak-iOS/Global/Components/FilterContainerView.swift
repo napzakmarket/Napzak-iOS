@@ -20,6 +20,17 @@ struct FilterContainerView: View {
     @Binding var isUnopened: Bool
     @Binding var isOnSale: Bool
     
+    enum AppImage: String {
+        case btnOnSale = "btn_onsale"
+        case btnOnSalePurple = "btn_onsale_purple"
+        case btnGetting = "btn_getting"
+        case btnGettingPurple = "btn_getting_purple"
+        
+        var image: Image {
+            Image(self.rawValue)
+        }
+    }
+    
     var body: some View {
         HStack(alignment: .center, spacing: 6) {
             genreFilterChip
@@ -100,8 +111,8 @@ struct FilterContainerView: View {
         } label: {
             Image(
                 selectedTabIndex == 0
-                ? (isOnSale ? "onsale_purple_icn" : "onsale_icn")
-                : (isOnSale ? "getting_purple_icn" : "getting_icn")
+                ? (isOnSale ? AppImage.btnOnSalePurple.rawValue : AppImage.btnOnSale.rawValue)
+                : (isOnSale ? AppImage.btnGettingPurple.rawValue : AppImage.btnGetting.rawValue)
             )
             .renderingMode(.original)
         }
