@@ -116,11 +116,28 @@ private extension ChatDetailViewModel {
                 guard let self else { return }
                 
                 if let currentRoomId = roomId, data.roomId == currentRoomId {
-                    
+                         
                     var messageData: ChatMessageModel
-                    
+
+                    if data.type == .system {
+                        isChatDisabled = true
+                        
+                        messageData = ChatMessageModel(
+                            id: data.messageId,
+                            senderId: data.senderId,
+                            type: data.type,
+                            content: nil,
+                            metaData: data.metadata,
+                            createdAt: data.createdAt,
+                            isProfileNeeded: false,
+                            isMessageOwner: false,
+                            isRead: false
+                        )
+                        chatMessages.append(messageData)
+                    }
+
                     guard let senderId = data.senderId else { return }
-                    let isMessageOwner: Bool = self.chatDetailInfo.chatStoreInfo.storeId != senderId
+                    let isMessageOwner: Bool = chatDetailInfo.chatStoreInfo.storeId != senderId
                     
                     switch data.type {
                     case .text:
@@ -149,13 +166,8 @@ private extension ChatDetailViewModel {
                         )
                     }
                     
-                    self.chatMessages.append(messageData)
-                    
                     isProfileNeeded = isMessageOwner
-                    
-                    if data.type == .system {
-                        isChatDisabled = true
-                    }
+                    chatMessages.append(messageData)
                 }
             }
             .store(in: &cancellables)
@@ -208,7 +220,9 @@ private extension ChatDetailViewModel {
             chatDetailInfo.productInfo = ChatProductInfo(dto: data.productInfo)
             chatDetailInfo.chatStoreInfo = ChatStoreInfo(dto: data.storeInfo)
             roomId = data.roomId ?? nil
-            isChatDisabled = chatDetailInfo.chatStoreInfo.isWithdrawn || chatDetailInfo.chatStoreInfo.isReported
+            if chatDetailInfo.chatStoreInfo.isWithdrawn || chatDetailInfo.chatStoreInfo.isReported {
+                isChatDisabled = true
+            }
             shouldUpdateProductInfo = data.productInfo.productId != self.productId
             
         case .failure(let error):
