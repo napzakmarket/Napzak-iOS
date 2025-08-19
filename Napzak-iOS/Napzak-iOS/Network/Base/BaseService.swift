@@ -90,6 +90,9 @@ class BaseService {
                             continuation.resume(returning: .failure(.reportedUser))
                             
                         } else {
+                            Task { @MainActor in
+                                AuthManager.shared.forceLogout()
+                            }
                             continuation.resume(returning: .failure(.internalServerError))
                         }
                         
