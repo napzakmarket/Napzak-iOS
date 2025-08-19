@@ -211,7 +211,7 @@ struct ProfileEditView: View {
                 
                 ZStack {
                     profileImagePickerManager.photoPickerView(maxCount: 1) {
-                        Image("edit")
+                        Image("imagedit_icn")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 24, height: 24)
