@@ -73,7 +73,7 @@ extension ChatItemView {
     
     private var profileImage: some View {
         Group {
-            if let url = URL(string: "https://example.com/photo1.jpg") {
+            if let url = URL(string: chatRoom.opponentStorePhoto) {
                 KFImage(url)
                     .placeholder {
                         Image(.imgChatProfileDefault)
