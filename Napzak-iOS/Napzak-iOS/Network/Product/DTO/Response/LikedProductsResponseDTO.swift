@@ -43,6 +43,7 @@ struct LikedBuyProductDTO: Decodable {
     let tradeStatus: String
     let interestCount: Int
     let chatCount: Int
+    let isPriceNegotiable: Bool
 }
 
 extension LikedSellProductDTO {
@@ -57,7 +58,7 @@ extension LikedSellProductDTO {
             isInterested: self.isInterested,
             tradeType: TradeType(rawValue: self.tradeType) ?? .sell,
             tradeStatus: TradeStatus(rawValue: self.tradeStatus) ?? .beforeTrade,
-            isPriceNegotiable: nil, // 서버 응답에 없으므로 nil
+            isPriceNegotiable: nil,
             isOwnedByCurrentUser: self.isOwnedByCurrentUser,
             interestCount: self.interestCount,
             chatCount: self.chatCount
@@ -77,7 +78,7 @@ extension LikedBuyProductDTO {
             isInterested: self.isInterested,
             tradeType: TradeType(rawValue: self.tradeType) ?? .buy,
             tradeStatus: TradeStatus(rawValue: self.tradeStatus) ?? .beforeTrade,
-            isPriceNegotiable: nil, // 서버 응답에 없으므로 nil
+            isPriceNegotiable: isPriceNegotiable,
             isOwnedByCurrentUser: self.isOwnedByCurrentUser,
             interestCount: self.interestCount,
             chatCount: self.chatCount
