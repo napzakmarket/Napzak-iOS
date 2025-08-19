@@ -458,12 +458,12 @@ extension ProductDetailView {
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
             } else {
                 VStack(alignment: .trailing, spacing: 12) {
-                    if !viewModel.product.productDetail.standardDeliveryFee.description.isEmpty {
+                    if viewModel.product.productDetail.standardDeliveryFee != 0 {
                         Text("일반택배 \(viewModel.product.productDetail.standardDeliveryFee.convertPriceByTradeType(tradeType: viewModel.product.productDetail.tradeType))")
                             .applyNapzakFont(.body4Bold14)
                             .foregroundStyle(Color.napzakGrayScale(.gray300))
                     }
-                    if !viewModel.product.productDetail.halfDeliveryFee.description.isEmpty {
+                    if viewModel.product.productDetail.halfDeliveryFee != 0 {
                         Text("반값/알뜰택배 \(viewModel.product.productDetail.halfDeliveryFee.convertPriceByTradeType(tradeType: viewModel.product.productDetail.tradeType))")
                             .applyNapzakFont(.body4Bold14)
                             .foregroundStyle(Color.napzakGrayScale(.gray300))

@@ -98,7 +98,7 @@ struct SellRegisterDelivery: View {
                             Spacer()
                             
                             HStack(spacing: 0){
-                                TextField("0~5,000", text: $halfDeliveryFee)
+                                TextField("100~5,000", text: $halfDeliveryFee)
                                     .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
                                     .onChange(of: halfDeliveryFee) { newValue in
