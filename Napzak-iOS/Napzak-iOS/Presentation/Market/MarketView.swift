@@ -23,6 +23,9 @@ struct MarketView: View {
     @State private var isReportModalPresented = false
     @State private var scrollToTopTrigger: Bool = false
     
+    @State private var isOnSaleSell: Bool = false
+    @State private var isOnSaleBuy: Bool  = false
+    
     //MARK: - Properties
 
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
@@ -132,6 +135,7 @@ struct MarketView: View {
             }
         }
         .onChange(of: viewModel.selectedTabIndex) { _ in
+            viewModel.productFetchOption.isOnSale = (viewModel.selectedTabIndex == 0) ? isOnSaleSell : isOnSaleBuy
             Task {
                 await viewModel.fetchProducts()
                 scrollToTopTrigger.toggle()
@@ -354,7 +358,19 @@ struct MarketView: View {
                         selectedTabIndex: $viewModel.selectedTabIndex,
                         selectedGenres: $viewModel.productFetchOption.genres,
                         isUnopened: .constant(false),
-                        isOnSale: $viewModel.productFetchOption.isOnSale
+                        isOnSale: Binding(
+                            get: {
+                                viewModel.selectedTabIndex == 0 ? isOnSaleSell : isOnSaleBuy
+                            },
+                            set: { newValue in
+                                if viewModel.selectedTabIndex == 0 {
+                                    isOnSaleSell = newValue
+                                } else {
+                                    isOnSaleBuy = newValue
+                                }
+                                viewModel.productFetchOption.isOnSale = newValue
+                            }
+                        )
                     )
                     .frame(height: 54)
                     .onChange(of: viewModel.productFetchOption) { _ in
