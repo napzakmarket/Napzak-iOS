@@ -145,10 +145,10 @@ extension ProductItemView {
             Image(product.isInterested ? .btnHeartSelected : .btnHeartDefault)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 14, height: 13)
+                .frame(width: isHiddenProductSummary ? 14 : 16, height: isHiddenProductSummary ? 13 : 15)
         }
-        .padding(.bottom, width == 150 ? 9 : 6)
-        .padding(.trailing, width == 150 ? 9 : 5)
+        .padding(.bottom, isHiddenProductSummary ? 6 : 9)
+        .padding(.trailing, isHiddenProductSummary ? 5 :9)
     }
     
     private var productSummary: some View {
