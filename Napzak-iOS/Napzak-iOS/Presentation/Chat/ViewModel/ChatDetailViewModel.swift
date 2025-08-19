@@ -359,8 +359,8 @@ extension ChatDetailViewModel {
 
     func sendFirstMessage(firstMessageText: String) {
         Task {
-            try? await Task.sleep(nanoseconds: 500_000_000)
             await sendProductMessage()
+            try? await Task.sleep(nanoseconds: 500_000_000)
             await sendTextMessage(text: firstMessageText)
         }
     }

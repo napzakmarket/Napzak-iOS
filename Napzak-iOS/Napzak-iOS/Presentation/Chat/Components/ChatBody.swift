@@ -65,7 +65,7 @@ struct ChatBody: View {
                                     isImageDetailViewPresented = true
                                 }
                             )
-                            .padding(.top, chatData.isProfileNeeded ? 20 : 0)
+                            .padding(.top, chatData.isProfileNeeded && !chatData.isMessageOwner ? 20 : 0)
                             .padding(.leading, !chatData.isProfileNeeded && !chatData.isMessageOwner ? 44 : 0)
                         }
                     }
