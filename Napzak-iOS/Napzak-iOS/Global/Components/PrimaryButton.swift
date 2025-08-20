@@ -36,6 +36,7 @@ struct PrimaryButton: View {
         }
         .background(isEnabled ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray100))
         .clipShape(RoundedRectangle(cornerRadius: 14))
+        .disabled(!isEnabled)
     }
 }
 

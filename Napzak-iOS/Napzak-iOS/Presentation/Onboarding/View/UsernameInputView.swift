@@ -48,12 +48,9 @@ struct UsernameInputView: View {
                     title: "다음으로",
                     isEnabled: viewModel.isPrimaryButtonEnabled
                 ) {
-                    Task {
-                        if await viewModel.registerUsername() {
-                            authRouter.push(next: .genre)
-                            print("다음으로")
-                        }
-                    }
+                    authRouter.temporaryUsername = viewModel.username
+                    authRouter.push(next: .genre)
+                    print("다음으로")
                 }
                 .padding(.bottom, 75)
             }

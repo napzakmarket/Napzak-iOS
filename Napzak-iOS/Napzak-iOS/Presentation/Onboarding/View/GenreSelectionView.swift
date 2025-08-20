@@ -154,11 +154,12 @@ extension GenreSelectionView {
             
             Button {
                 Task {
-                    if await viewModel.registerSelectedGenres() {
+                    let username = authRouter.temporaryUsername ?? ""
+                    
+                    if await viewModel.registerUser(username: username) {
                         authRouter.push(next: .completed)
                     }
                 }
-                print("납작마켓 시작하기")
             } label: {
                 Text("납작마켓 시작하기")
                     .applyNapzakFont(.body4Bold14)
@@ -171,7 +172,13 @@ extension GenreSelectionView {
             .disabled(viewModel.selectedGenres.isEmpty)
             
             Button {
-                authRouter.push(next: .completed)
+                Task {
+                    let username = authRouter.temporaryUsername ?? ""
+                    
+                    if await viewModel.registerOnlyUsername(username: username) {
+                        authRouter.push(next: .completed)
+                    }
+                }
                 print("건너뛰기")
             } label: {
                 Text("건너뛰기")
