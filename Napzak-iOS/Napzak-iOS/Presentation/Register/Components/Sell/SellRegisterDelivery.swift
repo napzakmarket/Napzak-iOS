@@ -65,10 +65,12 @@ struct SellRegisterDelivery: View {
                                     .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
                                     .onChange(of: standardDeliveryFee) { newValue in
+                                        if !standardDeliveryFee.isEmpty {
+                                            normalDelivery = true
+                                        }
                                         standardDeliveryFee = newValue.convertPrice(maxPrice: normalMaxDeliveryCharge)
                                     }
                                     .foregroundStyle(Color.napzakGrayScale(.gray400))
-                                    .disabled(!normalDelivery)
                                     .focused(normalDeliveryFocused)
                                 
                                 Text(" 원")
@@ -102,11 +104,13 @@ struct SellRegisterDelivery: View {
                                     .keyboardType(.decimalPad)
                                     .multilineTextAlignment(.trailing)
                                     .onChange(of: halfDeliveryFee) { newValue in
+                                        if !halfDeliveryFee.isEmpty {
+                                            halfDelivery = true
+                                        }
                                         halfDeliveryFee = newValue
                                             .convertPrice(maxPrice: halfMaxDeliveryCharge)
                                     }
                                     .foregroundStyle(Color.napzakGrayScale(.gray400))
-                                    .disabled(!halfDelivery)
                                     .focused(halfDeliveryFocused)
                                 
                                 Text(" 원")
