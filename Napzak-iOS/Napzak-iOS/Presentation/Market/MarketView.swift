@@ -347,7 +347,7 @@ struct MarketView: View {
             VStack(alignment: .leading, spacing: 0) {
                 NZSegmentedControl(
                     selectedTabIndex: $viewModel.selectedTabIndex,
-                    tabs: ["팔아요", "구해요", "리뷰"],
+                    tabs: ["팔아요", "구해요"],
                     spacing: 16
                 )
 

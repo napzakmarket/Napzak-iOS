@@ -195,9 +195,6 @@ struct MyPageView: View {
     
     private var menuGrid: some View {
         let menuItems: [(title: String, icon: String)] = [
-            ("판매 내역", "group1_icn"),
-            ("구매 내역", "group2_icn"),
-            ("최근 본 상품", "group3_icn"),
             ("찜", "group4_icn"),
             ("설정", "group5_icn"),
             ("고객센터", "group6_icn")
