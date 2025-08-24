@@ -153,6 +153,8 @@ extension LikeView {
     private var emptyStateView: some View {
         VStack(spacing: 20) {
             Image("like_none_icn")
+                .padding(.leading, 83)
+                .padding(.trailing, 110)
             
             VStack(spacing: 8) {
                 Text("아직 찜한 소장품이 없어요")
