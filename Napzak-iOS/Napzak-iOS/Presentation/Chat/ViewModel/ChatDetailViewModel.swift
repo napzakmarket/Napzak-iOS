@@ -33,6 +33,8 @@ final class ChatDetailViewModel: ObservableObject {
     @Published var isReadMyMessage: Bool = false
     @Published var shouldUpdateProductInfo = false
     @Published var selectedImage: UIImage? = nil
+    @Published var uploadedImageUrl = ""
+    @Published var isImageDetailViewPresented: Bool = false
 
     //MARK: - Properties
     
@@ -463,15 +465,8 @@ extension ChatDetailViewModel {
                     logger.info("✅ 이미지 업로드 성공")
                     
                     let imageURL = uploadURL.components(separatedBy: "?").first ?? uploadURL
-                    
-                    if chatMessages.isEmpty && roomId == nil {
-                        await postChatRoomCreate()
-                        sendFirstImageMessage(firstImageUrls: [imageURL])
-                    } else if shouldUpdateProductInfo {
-                        sendProductUpdateImageMessage(imageUrls: [imageURL])
-                    } else {
-                        await sendImageMessage(imageUrls: [imageURL])
-                    }
+                    uploadedImageUrl = imageURL
+                    isImageDetailViewPresented = true
                                         
                 case .failure(let error):
                     logger.error("❌이미지 업로드 실패: \(error.localizedDescription)")
@@ -479,6 +474,19 @@ extension ChatDetailViewModel {
 
             case .failure(let error):
                 logger.error("❌ Presigned URL 요청 실패: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func sendImage() {
+        Task {
+            if chatMessages.isEmpty && roomId == nil {
+                await postChatRoomCreate()
+                sendFirstImageMessage(firstImageUrls: [uploadedImageUrl])
+            } else if shouldUpdateProductInfo {
+                sendProductUpdateImageMessage(imageUrls: [uploadedImageUrl])
+            } else {
+                await sendImageStompMessage(imageUrls: [uploadedImageUrl])
             }
         }
     }

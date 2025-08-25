@@ -160,6 +160,16 @@ struct ChatDetailView: View {
             
             activeChatState.activeRoomID = nil
         }
+        .fullScreenCover(isPresented: $viewModel.isImageDetailViewPresented) {
+            ImageDetailView(
+                isImageDetailViewPresent: $viewModel.isImageDetailViewPresented,
+                imageUrl: viewModel.uploadedImageUrl,
+                viewType: .beforeSendImage,
+                onSendButtonTapped: {
+                    viewModel.sendImage()
+                }
+            )
+        }
     }
 }
 
