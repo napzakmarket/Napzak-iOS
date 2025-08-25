@@ -266,7 +266,6 @@
 		D6FA34352DCF923500795A54 /* BuyProductListResponseDTO .swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA34342DCF923500795A54 /* BuyProductListResponseDTO .swift */; };
 		D6FA34372DCF924C00795A54 /* ProductWithCountDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA34362DCF924C00795A54 /* ProductWithCountDTO.swift */; };
 		D6FA343E2DCFF2EC00795A54 /* ios.json in Resources */ = {isa = PBXBuildFile; fileRef = D6FA343D2DCFF2EC00795A54 /* ios.json */; };
-		D6FA34402DCFF7E600795A54 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6FA343F2DCFF7E600795A54 /* LaunchScreen.storyboard */; };
 		D6FA34422DD08E6200795A54 /* TabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA34412DD08E6200795A54 /* TabRouter.swift */; };
 		D6FA34442DD08E8D00795A54 /* NZTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA34432DD08E8D00795A54 /* NZTab.swift */; };
 /* End PBXBuildFile section */
@@ -526,7 +525,6 @@
 		D6FA34342DCF923500795A54 /* BuyProductListResponseDTO .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BuyProductListResponseDTO .swift"; sourceTree = "<group>"; };
 		D6FA34362DCF924C00795A54 /* ProductWithCountDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductWithCountDTO.swift; sourceTree = "<group>"; };
 		D6FA343D2DCFF2EC00795A54 /* ios.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ios.json; sourceTree = "<group>"; };
-		D6FA343F2DCFF7E600795A54 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D6FA34412DD08E6200795A54 /* TabRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRouter.swift; sourceTree = "<group>"; };
 		D6FA34432DD08E8D00795A54 /* NZTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NZTab.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -882,7 +880,6 @@
 				D045DEB72D83723A00EB1EB6 /* Assets.xcassets */,
 				D6F5CA752E312D840065F192 /* GoogleService-Info.plist */,
 				D045DEE32D8375D800EB1EB6 /* Info.plist */,
-				D6FA343F2DCFF7E600795A54 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1781,7 +1778,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6FA34402DCFF7E600795A54 /* LaunchScreen.storyboard in Resources */,
 				D045DEBB2D83723A00EB1EB6 /* Preview Assets.xcassets in Resources */,
 				D6F5CA762E312D840065F192 /* GoogleService-Info.plist in Resources */,
 				D045DEBC2D83723A00EB1EB6 /* Assets.xcassets in Resources */,
@@ -2191,7 +2187,6 @@
 				INFOPLIST_FILE = "Napzak-iOS/Global/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -2228,7 +2223,6 @@
 				INFOPLIST_FILE = "Napzak-iOS/Global/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
