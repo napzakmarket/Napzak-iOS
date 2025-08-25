@@ -40,11 +40,11 @@ struct MyPageView: View {
                     profileCardPlaceholder
                 }
                 
-                Rectangle()
-                    .fill(Color.napzakGrayScale(.gray10))
-                    .frame(height: 4)
-                    .padding(.top, 30)
-                    .padding(.bottom, 10)
+//                Rectangle()
+//                    .fill(Color.napzakGrayScale(.gray10))
+//                    .frame(height: 4)
+//                    .padding(.top, 30)
+//                    .padding(.bottom, 10)
                 
                 menuGrid
                 
@@ -235,8 +235,8 @@ struct MyPageView: View {
         .background(Color.napzakGrayScale(.gray50))
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .padding(.horizontal, 27)
-        .padding(.top, 20)
-        .padding(.bottom, 30)
+        .padding(.top, 12)
+        .padding(.bottom, 25)
     }
     
     private func menuItem(title: String, iconName: String) -> some View {
