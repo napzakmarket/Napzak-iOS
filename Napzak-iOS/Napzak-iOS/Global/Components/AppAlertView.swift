@@ -61,13 +61,14 @@ struct AppAlertView: View {
                 .padding(.top, 12)
             
             Text(style.message)
+                .lineLimit(2)
                 .multilineTextAlignment(.center)
                 .applyNapzakFont(.caption1SemiBold12, lineSpacingEnabled: false)
                 .foregroundStyle(Color.napzakGrayScale(.gray200))
                 .padding(.top, 10)
             
             Button {
-                
+                onConfirm()
             } label: {
                 HStack(spacing: 10) {
                     Text(style.buttonTitle)

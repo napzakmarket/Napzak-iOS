@@ -233,6 +233,7 @@
 		D64922D12D9EF5CB00716740 /* RowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64922D02D9EF5CB00716740 /* RowType.swift */; };
 		D65FEDA72E242967005D4AAB /* PermissionAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65FEDA62E242967005D4AAB /* PermissionAlertView.swift */; };
 		D65FEDA92E25284E005D4AAB /* PushOffState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65FEDA82E25284E005D4AAB /* PushOffState.swift */; };
+		D66527752E5C578A00D861B3 /* AppAlertOverlayModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66527742E5C578A00D861B3 /* AppAlertOverlayModifier.swift */; };
 		D66A3E742E1A5FF3003977AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E732E1A5FF3003977AE /* AppDelegate.swift */; };
 		D66A3E812E1AC2F4003977AE /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = D66A3E802E1AC2F4003977AE /* FirebaseMessaging */; };
 		D66A3E842E1AC4F4003977AE /* PushPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E832E1AC4F4003977AE /* PushPermissionManager.swift */; };
@@ -493,6 +494,7 @@
 		D64922D02D9EF5CB00716740 /* RowType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowType.swift; sourceTree = "<group>"; };
 		D65FEDA62E242967005D4AAB /* PermissionAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionAlertView.swift; sourceTree = "<group>"; };
 		D65FEDA82E25284E005D4AAB /* PushOffState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushOffState.swift; sourceTree = "<group>"; };
+		D66527742E5C578A00D861B3 /* AppAlertOverlayModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAlertOverlayModifier.swift; sourceTree = "<group>"; };
 		D66A3E732E1A5FF3003977AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D66A3E832E1AC4F4003977AE /* PushPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPermissionManager.swift; sourceTree = "<group>"; };
 		D66A3E852E1C190B003977AE /* PushAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushAPI.swift; sourceTree = "<group>"; };
@@ -952,6 +954,7 @@
 			children = (
 				6CDD77032DD4BEB2008D2ABC /* SwipePopGestureManager.swift */,
 				6C37C0662DD5EB7F00DE47AE /* KeyboardObserver.swift */,
+				D66527742E5C578A00D861B3 /* AppAlertOverlayModifier.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -2032,6 +2035,7 @@
 				D0F035822DBF6654003D0CBF /* PresignedAPI.swift in Sources */,
 				D0180D602D9F001E006A748F /* RegisterFloatingView.swift in Sources */,
 				6CD972CF2DC7BD41000AE85E /* SellRegisterResponseDTO.swift in Sources */,
+				D66527752E5C578A00D861B3 /* AppAlertOverlayModifier.swift in Sources */,
 				D66A3E922E1C408F003977AE /* PushSettingResponseDTO.swift in Sources */,
 				6CB2EC072DBFED96003BF298 /* RegisterViewModel.swift in Sources */,
 				D0F035A32DC0A0DC003D0CBF /* GenreDetailView.swift in Sources */,
