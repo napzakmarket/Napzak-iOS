@@ -335,7 +335,7 @@ extension ChatDetailView {
                         viewModel.sendProductUpdateMessage(messageText: messageText)
                     } else {
                         Task {
-                            await viewModel.sendTextMessage(text: messageText)
+                            await viewModel.sendTextStompMessage(text: messageText)
                         }
                     }
                 }
