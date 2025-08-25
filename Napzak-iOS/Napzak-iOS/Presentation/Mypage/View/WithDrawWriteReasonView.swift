@@ -122,7 +122,7 @@ extension WithDrawWriteReasonView {
                 print("건너뛰기")
             } label: {
                 Text("건너뛰기")
-                    .applyNapzakFont(.body4Bold14)
+                    .applyNapzakFont(.caption2Medium12)
                     .foregroundStyle(Color.napzakGrayScale(.gray300))
                     .frame(height: 15)
             }
