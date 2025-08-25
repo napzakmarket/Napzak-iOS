@@ -24,6 +24,9 @@ extension SettingViewModel {
         switch result {
         case .success:
             logger.info("[Logout] 성공")
+            
+            ChatStompManager.shared.disconnect()
+
         case .failure(let error):
             logger.error("[Logout] 실패: \(error.localizedDescription)")
         }

@@ -40,8 +40,12 @@ final class ChatStompManager: ObservableObject {
     private let pongTimeout: TimeInterval = 30
     private var subscribedChatRoomIds: [Int]?
     private var subscribedMyStoreId: Int?
+    private var isTearingDown = false
     
     private var cancellables = Set<AnyCancellable>()
+    private var eventsCancellable = Set<AnyCancellable>()
+    private var messagesCancellable = Set<AnyCancellable>()
+    
     private var activeDestinations = Set<String>()
 
     //MARK: - Life Cycle
@@ -66,7 +70,7 @@ private extension ChatStompManager {
         switch KeychainManager.shared.getAccessToken() {
         case .success(let token):
             logger.info("WebSocket 초기화 시작...")
-            self.accessToken = token
+            accessToken = token
             
             guard let urlString = Bundle.main.infoDictionary?["WEBSOCKET_URL"] as? String,
                   let url = URL(string: urlString) else { return }
@@ -126,11 +130,13 @@ private extension ChatStompManager {
                 case let .error(error):
                     logger.error("❌ WebSocket 연결 실패: \(error)")
                     socketStatusSubject.send(.disconnected)
+                    
+                    guard !isTearingDown else { return }
                     logger.debug("🔌 WebSocket 재연결")
                     connect()
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &eventsCancellable)
         
         stompClient?.messagesUpstream
             .receive(on: RunLoop.main)
@@ -173,7 +179,7 @@ private extension ChatStompManager {
                     logger.debug("📥 하트비트 수신, 연결 정상")
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &messagesCancellable)
     }
     
 //    당장은 활용x 추후 활용 가능성 있음
@@ -201,7 +207,6 @@ private extension ChatStompManager {
             .sink { [weak self] _ in
                 guard let self else { return }
                 
-                self.logger.debug("✅ ping 전송")
                 self.sendPing()
             }
     }
@@ -212,6 +217,7 @@ private extension ChatStompManager {
     }
 
     func sendPing() {
+        guard stompClient?.isConnected == true else { return }
         let destination = "/pub/ping"
 
         let payload: [String: Any] = [
@@ -226,6 +232,7 @@ private extension ChatStompManager {
         }
 
         stompClient?.send(body: requestBody, to: destination)
+        logger.debug("✅ ping 전송")
     }
 
     func subscribeChatRooms(roomIds: [Int]) {
@@ -265,33 +272,49 @@ private extension ChatStompManager {
         
         logger.debug("✅ \(storeId) 채널 구독")
     }
+    
+    func teardownSocket() {
+        isTearingDown = true
+        stompClient?.autoReconnect = false
+        stopPing()
+
+        if stompClient?.isConnected == true {
+            unsubscribeAll()
+        }
+        activeDestinations.removeAll()
+        eventsCancellable.removeAll()
+        messagesCancellable.removeAll()
+
+        if stompClient?.isConnected == true {
+            stompClient?.disconnect()
+        }
+
+        stompClient = nil
+        accessToken = nil
+        receivedMyStoreIdSubject.send(nil)
+        receivedRoomIdsSubject.send(nil)
+        socketStatusSubject.send(.disconnected)
+        
+        isTearingDown = false
+        logger.debug("🔚 WebSocket 정상 종료")
+    }
+
+    private func unsubscribeAll() {
+        for destination in activeDestinations {
+            stompClient?.unsubscribe(from: destination)
+        }
+    }
 }
 
 extension ChatStompManager {
     func connect() {
-        if let isConnected = stompClient?.isConnected {
-            if !isConnected {
-                stompClient?.connect()
-            }
-        }
+        guard stompClient?.isConnected == false else { return }
+        stompClient?.connect()
     }
 
     func disconnect() {
-        if let isConnected = stompClient?.isConnected {
-            if isConnected {
-                stompClient?.disconnect()
-            }
-        }
-    }
-    
-    func subscribe(roomId: Int) {
-        let destination = "/topic/chat.room.\(roomId)"
-        stompClient?.subscribe(
-            to: destination,
-            mode: .auto
-        )
-        
-        logger.debug("✅ \(roomId)번 채팅방 구독")
+        guard stompClient?.isConnected == true else { return }
+        teardownSocket()
     }
     
     func sendChat(message: ChatMessageRequestDTO) {
