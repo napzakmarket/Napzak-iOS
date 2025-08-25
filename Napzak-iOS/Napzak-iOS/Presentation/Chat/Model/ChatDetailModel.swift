@@ -20,6 +20,7 @@ struct ChatProductInfo {
     let genreName: String
     let productOwnerId: Int
     let isMyProduct: Bool
+    let isProductDeleted: Bool
     
     //MARK: - Init
     
@@ -33,7 +34,8 @@ struct ChatProductInfo {
         isPriceNegotiable: Bool,
         genreName: String,
         productOwnerId: Int,
-        isMyProduct: Bool
+        isMyProduct: Bool,
+        isProductDeleted: Bool
     ) {
         self.productId = productId
         self.photo = photo
@@ -44,6 +46,7 @@ struct ChatProductInfo {
         self.genreName = genreName
         self.productOwnerId = productOwnerId
         self.isMyProduct = isMyProduct
+        self.isProductDeleted = isProductDeleted
     }
     
     ///init for decoding
@@ -57,6 +60,7 @@ struct ChatProductInfo {
         self.genreName = dto.genreName
         self.productOwnerId = dto.productOwnerId
         self.isMyProduct = dto.isMyProduct
+        self.isProductDeleted = dto.isProductDeleted
     }
 }
 
