@@ -42,6 +42,7 @@ final class ChatStompManager: ObservableObject {
     private var subscribedMyStoreId: Int?
     
     private var cancellables = Set<AnyCancellable>()
+    private var activeDestinations = Set<String>()
 
     //MARK: - Life Cycle
     
@@ -233,7 +234,13 @@ private extension ChatStompManager {
     }
     
     func subscribeChatRoom(roomId: Int) {
+        guard stompClient?.isConnected == true else { return }
+        
         let destination = "/topic/chat.room.\(roomId)"
+        guard activeDestinations.insert(destination).inserted else {
+            logger.debug("⏭️ 이미 구독중: \(destination)")
+            return
+        }
         stompClient?.subscribe(
             to: destination,
             mode: .auto
@@ -243,7 +250,13 @@ private extension ChatStompManager {
     }
     
     func subscribeMyStoreChannel(storeId: Int) {
+        guard stompClient?.isConnected == true else { return }
+        
         let destination = "/queue/chat.room-created.\(storeId)"
+        guard activeDestinations.insert(destination).inserted else {
+            logger.debug("⏭️ 이미 구독중: \(destination)")
+            return
+        }
         stompClient?.subscribe(
             to: destination,
             mode: .auto
