@@ -9,6 +9,7 @@ typealias ChatMessageResponseDTO = BaseResponseDTO<ChatMessagesDTO>
 
 struct ChatMessagesDTO: Decodable {
     let messages: [ChatMessageNormalDTO]
+    let cursor: String?
 }
 
 struct ChatMessageNormalDTO: Codable {

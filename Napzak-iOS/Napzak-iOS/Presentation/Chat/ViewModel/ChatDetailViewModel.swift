@@ -333,7 +333,7 @@ extension ChatDetailViewModel {
         loadingManager.startLoading()
         defer { loadingManager.stopLoading() }
 
-        let result = await NetworkService.shared.chatService.getChatMessages(roomId: roomId)
+        let result = await NetworkService.shared.chatService.getChatMessages(roomId: roomId, cursor: nil, size: nil)
         
         switch result {
         case .success(let response):

@@ -12,7 +12,7 @@ protocol ChatServiceProtocol {
     func getChatInfo(productId: Int, roomId: Int?) async -> Result<ChatDetailResponseDTO, NetworkError>
     func postCreateChatRoom(requestBody: ChatRoomCreateRequestDTO) async -> Result<ChatRoomCreateResponseDTO, NetworkError>
     func patchEnterChatRoom(roomId: Int) async -> Result<ChatRoomEnterResponseDTO, NetworkError>
-    func getChatMessages(roomId: Int) async -> Result<ChatMessageResponseDTO, NetworkError>
+    func getChatMessages(roomId: Int, cursor: String?, size: Int?) async -> Result<ChatMessageResponseDTO, NetworkError>
     func getChatRooms(deviceToken: String?) async -> Result<ChatRoomResponseDTO, NetworkError>
     func patchLeaveChatRoom(roomId: Int) async -> Result<Void, NetworkError>
     func patchExitChatRoom(roomId: Int) async -> Result<Void, NetworkError>
@@ -37,8 +37,8 @@ final class ChatService: BaseService, ChatServiceProtocol {
         return await requestDecodable(provider, .patchEnterChatRoom(roomId: roomId))
     }
     
-    func getChatMessages(roomId: Int) async -> Result<ChatMessageResponseDTO, NetworkError> {
-        return await requestDecodable(provider, .getChatMessages(roomId: roomId))
+    func getChatMessages(roomId: Int, cursor: String?, size: Int?) async -> Result<ChatMessageResponseDTO, NetworkError> {
+        return await requestDecodable(provider, .getChatMessages(roomId: roomId, cursor: cursor, size: size))
     }
     
     func getChatRooms(deviceToken: String? = nil) async -> Result<ChatRoomResponseDTO, NetworkError> {
