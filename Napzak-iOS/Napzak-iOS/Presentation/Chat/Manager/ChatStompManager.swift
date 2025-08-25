@@ -41,6 +41,7 @@ final class ChatStompManager: ObservableObject {
     private var subscribedChatRoomIds: [Int]?
     private var subscribedMyStoreId: Int?
     private var isTearingDown = false
+    private var reconnectCount = 0
     
     private var cancellables = Set<AnyCancellable>()
     private var eventsCancellable = Set<AnyCancellable>()
@@ -116,6 +117,7 @@ private extension ChatStompManager {
                     socketStatusSubject.send(.connected)
                     stompClient?.subscribe(to: "/topic/pong")
                     startPing()
+                    reconnectCount = 0
 
                     if let subscribedMyStoreId {
                         subscribeMyStoreChannel(storeId: subscribedMyStoreId)
@@ -128,16 +130,19 @@ private extension ChatStompManager {
                     stopPing()
                     socketStatusSubject.send(.disconnected)
                     
-                    guard !isTearingDown else { return }
+                    guard !isTearingDown && reconnectCount <= 5 else { return }
                     logger.debug("🔌 WebSocket 재연결")
+                    reconnectCount += 1
+
                     connect()
                 case let .error(error):
                     logger.error("❌ WebSocket 연결 실패: \(error)")
                     stopPing()
                     socketStatusSubject.send(.disconnected)
                     
-                    guard !isTearingDown else { return }
+                    guard !isTearingDown && reconnectCount <= 5 else { return }
                     logger.debug("🔌 WebSocket 재연결")
+                    reconnectCount += 1
                     connect()
                 }
             }
