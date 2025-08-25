@@ -9,10 +9,15 @@ import SwiftUI
 
 struct SplashView: View {
     var body: some View {
-        GeometryReader { geometry in
-            Image(.iosSplash)
-                .resizable()
+        ZStack {
+            Color.napzakPrimary(.purple500)
                 .ignoresSafeArea()
+            
+            Image(.splashLogo)
+                .resizable()
+                .scaledToFit()
+                .padding(.horizontal, 40)
+                .offset(y: -40)
         }
     }
 }
