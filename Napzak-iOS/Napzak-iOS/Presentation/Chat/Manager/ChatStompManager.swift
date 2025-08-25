@@ -127,8 +127,13 @@ private extension ChatStompManager {
                     logger.debug("❎ WebSocket 연결 해제")
                     stopPing()
                     socketStatusSubject.send(.disconnected)
+                    
+                    guard !isTearingDown else { return }
+                    logger.debug("🔌 WebSocket 재연결")
+                    connect()
                 case let .error(error):
                     logger.error("❌ WebSocket 연결 실패: \(error)")
+                    stopPing()
                     socketStatusSubject.send(.disconnected)
                     
                     guard !isTearingDown else { return }
