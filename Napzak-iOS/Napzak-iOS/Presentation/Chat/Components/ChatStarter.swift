@@ -76,16 +76,17 @@ extension ChatStarter {
         Button {
             onProductButtonTapped()
         } label: {
-            Text("상품 보러 가기")
+            Text(product.isProductDeleted ?? false ? "삭제된 상품입니다." : "상품 보러 가기")
                 .applyNapzakFont(.caption4SemiBold10)
                 .foregroundStyle(Color.napzakGrayScale(.white))
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 9)
                 .background(
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(Color.napzakGrayScale(.gray500))
+                        .fill(product.isProductDeleted ?? false ? Color.napzakGrayScale(.gray200) : Color.napzakGrayScale(.gray500))
                 )
         }
+        .disabled(product.isProductDeleted ?? false)
     }
 }
 
@@ -97,7 +98,8 @@ extension ChatStarter {
             productId: 0,
             genreName: "은혼",
             title: "은혼 긴토키 히지카타 룩업",
-            price: 123000
+            price: 123000,
+            isProductDeleted: false
         )
         
         var body: some View {

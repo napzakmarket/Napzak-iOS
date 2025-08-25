@@ -21,7 +21,7 @@ final class ChatDetailViewModel: ObservableObject {
     //MARK: - Property Wrappers
 
     @Published var chatDetailInfo = ChatDetailModel(
-        productInfo: ChatProductInfo(productId: 0, photo: "", tradeType: .buy, title: "", price: 0, isPriceNegotiable: false, genreName: "", productOwnerId: 0, isMyProduct: false),
+        productInfo: ChatProductInfo(productId: 0, photo: "", tradeType: .buy, title: "", price: 0, isPriceNegotiable: false, genreName: "", productOwnerId: 0, isMyProduct: false, isProductDeleted: false),
         chatStoreInfo: ChatStoreInfo(storeId: 0, nickname: "", isWithdrawn: false, isReported: false, storePhoto: "")
     )
     @Published var chatMessages: [ChatMessageModel] = []
@@ -279,7 +279,8 @@ private extension ChatDetailViewModel {
                             productId: chatDetailInfo.productInfo.productId,
                             genreName: chatDetailInfo.productInfo.genreName,
                             title: chatDetailInfo.productInfo.title,
-                            price: chatDetailInfo.productInfo.price
+                            price: chatDetailInfo.productInfo.price,
+                            isProductDeleted: nil
                         )
                     )
         )
