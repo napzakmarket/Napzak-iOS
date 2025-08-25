@@ -234,6 +234,7 @@
 		D65FEDA72E242967005D4AAB /* PermissionAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65FEDA62E242967005D4AAB /* PermissionAlertView.swift */; };
 		D65FEDA92E25284E005D4AAB /* PushOffState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65FEDA82E25284E005D4AAB /* PushOffState.swift */; };
 		D66527752E5C578A00D861B3 /* AppAlertOverlayModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66527742E5C578A00D861B3 /* AppAlertOverlayModifier.swift */; };
+		D6652A642E5CE73100D861B3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6652A632E5CE73100D861B3 /* LaunchScreen.storyboard */; };
 		D66A3E742E1A5FF3003977AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E732E1A5FF3003977AE /* AppDelegate.swift */; };
 		D66A3E812E1AC2F4003977AE /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = D66A3E802E1AC2F4003977AE /* FirebaseMessaging */; };
 		D66A3E842E1AC4F4003977AE /* PushPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E832E1AC4F4003977AE /* PushPermissionManager.swift */; };
@@ -494,6 +495,7 @@
 		D65FEDA62E242967005D4AAB /* PermissionAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionAlertView.swift; sourceTree = "<group>"; };
 		D65FEDA82E25284E005D4AAB /* PushOffState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushOffState.swift; sourceTree = "<group>"; };
 		D66527742E5C578A00D861B3 /* AppAlertOverlayModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAlertOverlayModifier.swift; sourceTree = "<group>"; };
+		D6652A632E5CE73100D861B3 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D66A3E732E1A5FF3003977AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D66A3E832E1AC4F4003977AE /* PushPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPermissionManager.swift; sourceTree = "<group>"; };
 		D66A3E852E1C190B003977AE /* PushAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushAPI.swift; sourceTree = "<group>"; };
@@ -880,6 +882,7 @@
 				D045DEB72D83723A00EB1EB6 /* Assets.xcassets */,
 				D6F5CA752E312D840065F192 /* GoogleService-Info.plist */,
 				D045DEE32D8375D800EB1EB6 /* Info.plist */,
+				D6652A632E5CE73100D861B3 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1784,6 +1787,7 @@
 				D6FA343E2DCFF2EC00795A54 /* ios.json in Resources */,
 				D045DEE22D83759500EB1EB6 /* Pretendard-Regular.otf in Resources */,
 				6CF45D932E05874F006D3CA0 /* ios_loading.json in Resources */,
+				D6652A642E5CE73100D861B3 /* LaunchScreen.storyboard in Resources */,
 				D045DEDD2D83750400EB1EB6 /* Pretendard-SemiBold.otf in Resources */,
 				D045DEDE2D83750400EB1EB6 /* Pretendard-Bold.otf in Resources */,
 				6C5C566B2E194E10000938A3 /* spinner.json in Resources */,

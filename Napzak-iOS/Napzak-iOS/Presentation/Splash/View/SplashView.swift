@@ -14,8 +14,6 @@ struct SplashView: View {
                 .ignoresSafeArea()
             
             Image(.splashLogo)
-                .resizable()
-                .scaledToFit()
                 .padding(.horizontal, 40)
                 .offset(y: -40)
         }
