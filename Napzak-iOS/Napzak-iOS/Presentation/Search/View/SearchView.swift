@@ -236,7 +236,11 @@ extension SearchView {
     
     private var shadowBackground: some View {
         ZStack(alignment: .top) {
-            Color.napzakGrayScale(viewModel.loadingManager.isLoadingNetwork || viewModel.showEmptyView ? .white : .gray10)
+            if viewModel.loadingManager.isLoadingNetwork || viewModel.showEmptyView {
+                Color.clear
+            } else {
+                Color.napzakGrayScale(.gray10)
+            }
             Color.napzakGrayScale(.white)
                 .frame(height: 47)
                 .shadow(color: .black.opacity(0.1), radius: 4)
