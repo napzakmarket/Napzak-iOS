@@ -30,8 +30,8 @@ final class ChatStompManager: ObservableObject {
     var socketStatusSubject = CurrentValueSubject<SocketStatus, Never>(.disconnected)
     var receivedMessageDTOSubject = PassthroughSubject<WebSocketRedeivedChatMessageDTO, Never>()
     var receivedStatusDTOSubject = PassthroughSubject<WebSocketRedeivedChatStatusDTO, Never>()
-    var receivedMyStoreIdSubject = PassthroughSubject<Int, Never>()
-    var receivedRoomIdsSubject = PassthroughSubject<[Int], Never>()
+    var receivedMyStoreIdSubject = PassthroughSubject<Int?, Never>()
+    var receivedRoomIdsSubject = PassthroughSubject<[Int]?, Never>()
     
     private var chatEventManager = ChatEventManager.shared
     
@@ -91,10 +91,11 @@ private extension ChatStompManager {
             .sink { [weak self] (storeId, roomIds) in
                 guard let self else { return }
                 
-                self.logger.debug("📡 내 상점 ID(\(storeId)) 확보, 참여 중인 채팅방 IDs(\(roomIds)) 확보")
-                
                 subscribedMyStoreId = storeId
                 subscribedChatRoomIds = roomIds
+                
+                guard let storeId, let roomIds else { return }
+                self.logger.debug("📡 내 상점 ID(\(storeId)) 확보, 참여 중인 채팅방 IDs(\(roomIds)) 확보")
                 initializeWebSocket()
             }
             .store(in: &cancellables)
