@@ -136,14 +136,15 @@ extension PushManager: UNUserNotificationCenterDelegate {
             if let activeRoomID = activeChatState?.activeRoomID, activeRoomID == roomID {
                 logger.info("현재 활성 채팅방(\(activeRoomID))에서 받은 채팅 알림 클릭, 이동 처리 생략")
                 return
-            } else if let roomIntID = Int(roomID), let chatRoomIds = tabRouter?.chatRoomIds {
+            } else if let roomIntID = Int(roomID) {
                 tabRouter?.switchToChat()
-                if chatRoomIds.contains(roomIntID) {
-                    navigationRouter?.push(next: .chatDetailView(chatEntry: .room(id: roomIntID)))
-                } else {
-                    tabRouter?.showChatRoomExitToast = true
-                    try? await Task.sleep(for: .seconds(1.5))
-                    tabRouter?.showChatRoomExitToast = false
+                
+                if let chatRoomIds = tabRouter?.chatRoomIds {
+                    if chatRoomIds.contains(roomIntID) {
+                        navigationRouter?.push(next: .chatDetailView(chatEntry: .room(id: roomIntID)))
+                    } else {
+                        tabRouter?.showChatRoomExitToast = true
+                    }
                 }
             }
         }
