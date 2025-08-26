@@ -17,6 +17,7 @@ struct ProductMeta: Codable {
     let genreName: String
     let title: String
     let price: Int
+    let isProductDeleted: Bool?
 }
 
 struct SystemMeta: Codable {

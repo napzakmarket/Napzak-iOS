@@ -129,7 +129,7 @@ struct SearchView: View {
                 )
             }
         }
-        .onChange(of: tabRouter.searchParams.sortOption) { newValue in
+        .onChange(of: viewModel.productFetchOption.sortOption) { newValue in
             Task {
                 await viewModel.fetchProducts(
                     searchWord: tabRouter.currentSearchWord,
@@ -137,6 +137,7 @@ struct SearchView: View {
                     selectedTab: viewModel.selectedTabIndex
                 )
             }
+            tabRouter.searchParams.sortOption = newValue
             scrollToTopTrigger.toggle()
         }
         .onChange(of: tabRouter.searchParams.selectedTab) { newValue in
@@ -235,7 +236,11 @@ extension SearchView {
     
     private var shadowBackground: some View {
         ZStack(alignment: .top) {
-            Color.napzakGrayScale(viewModel.loadingManager.isLoadingNetwork || viewModel.showEmptyView ? .white : .gray10)
+            if viewModel.loadingManager.isLoadingNetwork || viewModel.showEmptyView {
+                Color.clear
+            } else {
+                Color.napzakGrayScale(.gray10)
+            }
             Color.napzakGrayScale(.white)
                 .frame(height: 47)
                 .shadow(color: .black.opacity(0.1), radius: 4)

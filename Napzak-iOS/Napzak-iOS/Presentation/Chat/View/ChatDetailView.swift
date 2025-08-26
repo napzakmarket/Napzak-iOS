@@ -160,6 +160,16 @@ struct ChatDetailView: View {
             
             activeChatState.activeRoomID = nil
         }
+        .fullScreenCover(isPresented: $viewModel.isImageDetailViewPresented) {
+            ImageDetailView(
+                isImageDetailViewPresent: $viewModel.isImageDetailViewPresented,
+                imageUrl: viewModel.uploadedImageUrl,
+                viewType: .beforeSendImage,
+                onSendButtonTapped: {
+                    viewModel.sendImage()
+                }
+            )
+        }
     }
 }
 
@@ -196,7 +206,10 @@ extension ChatDetailView {
     }
     
     private var productInfo: some View {
-        Button {
+        let isDisabled: Bool = !viewModel.chatDetailInfo.productInfo.isMyProduct && viewModel.isChatDisabled
+        let isDeleted: Bool = viewModel.chatDetailInfo.productInfo.isProductDeleted
+
+        return Button {
             navigationRouter.push(next: .productDetailView(productId: viewModel.chatDetailInfo.productInfo.productId))
         } label: {
             HStack(alignment: .center, spacing: 12) {
@@ -230,10 +243,19 @@ extension ChatDetailView {
                     }
                     .padding(.bottom, 5)
 
-                    Text(viewModel.chatDetailInfo.productInfo.title)
-                        .applyNapzakFont(.body5SemiBold14)
-                        .foregroundStyle(Color.napzakGrayScale(.black))
-                        .frame(height: 18)
+                    HStack(spacing: 4) {
+                        Text(viewModel.chatDetailInfo.productInfo.title)
+                            .applyNapzakFont(.body5SemiBold14)
+                            .foregroundStyle(Color.napzakGrayScale(.black))
+                            .frame(height: 18)
+                        
+                        if isDeleted {
+                            Text("(삭제됨)")
+                                .applyNapzakFont(.body5SemiBold14)
+                                .foregroundStyle(Color.napzakGrayScale(.gray300))
+                                .frame(height: 18)
+                        }
+                    }
                     Text(viewModel.chatDetailInfo.productInfo.price.convertPriceByTradeType(
                         tradeType: viewModel.chatDetailInfo.productInfo.tradeType)
                     )
@@ -244,6 +266,8 @@ extension ChatDetailView {
                 Spacer()
             }
         }
+        .opacity(isDisabled || isDeleted ? 0.6 : 1.0)
+        .disabled(isDisabled || isDeleted)
         .padding(.vertical, 15)
         .padding(.horizontal, 20)
         .background(
@@ -251,7 +275,6 @@ extension ChatDetailView {
                 .shadow(color: .black.opacity(0.1), radius: 2)
         )
         .padding(.top, 100)
-        .disabled(!viewModel.chatDetailInfo.productInfo.isMyProduct && viewModel.isChatDisabled)
     }
     
     private var chatSection: some View {
@@ -335,7 +358,7 @@ extension ChatDetailView {
                         viewModel.sendProductUpdateMessage(messageText: messageText)
                     } else {
                         Task {
-                            await viewModel.sendTextMessage(text: messageText)
+                            await viewModel.sendTextStompMessage(text: messageText)
                         }
                     }
                 }

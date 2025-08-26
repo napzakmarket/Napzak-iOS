@@ -21,7 +21,7 @@ final class ChatDetailViewModel: ObservableObject {
     //MARK: - Property Wrappers
 
     @Published var chatDetailInfo = ChatDetailModel(
-        productInfo: ChatProductInfo(productId: 0, photo: "", tradeType: .buy, title: "", price: 0, isPriceNegotiable: false, genreName: "", productOwnerId: 0, isMyProduct: false),
+        productInfo: ChatProductInfo(productId: 0, photo: "", tradeType: .buy, title: "", price: 0, isPriceNegotiable: false, genreName: "", productOwnerId: 0, isMyProduct: false, isProductDeleted: false),
         chatStoreInfo: ChatStoreInfo(storeId: 0, nickname: "", isWithdrawn: false, isReported: false, storePhoto: "")
     )
     @Published var chatMessages: [ChatMessageModel] = []
@@ -32,7 +32,10 @@ final class ChatDetailViewModel: ObservableObject {
     @Published var isProfileNeeded: Bool = false
     @Published var isReadMyMessage: Bool = false
     @Published var shouldUpdateProductInfo = false
+    @Published var shouldSendFirstMessage = false
     @Published var selectedImage: UIImage? = nil
+    @Published var uploadedImageUrl = ""
+    @Published var isImageDetailViewPresented: Bool = false
 
     //MARK: - Properties
     
@@ -167,7 +170,14 @@ private extension ChatDetailViewModel {
                         isProfileNeeded = isMessageOwner
                     }
                     
-                    chatMessages.append(messageData)
+                    if shouldSendFirstMessage {
+                        Task {
+                            try? await Task.sleep(nanoseconds: 500_000_000)
+                            await self.fetchChatMessages(roomId: self.roomId ?? Int())
+                        }
+                    } else {
+                        chatMessages.append(messageData)
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -261,6 +271,44 @@ private extension ChatDetailViewModel {
         }
 
     }
+    
+    func sendProductStompMessage() async {
+        guard let roomId else { return }
+        
+        let message = ChatMessageRequestDTO(
+            roomId: roomId,
+            type: .product,
+            content: nil,
+            metadata:
+                    .product(
+                        ProductMeta(
+                            type: .product,
+                            tradeType: chatDetailInfo.productInfo.tradeType,
+                            productId: chatDetailInfo.productInfo.productId,
+                            genreName: chatDetailInfo.productInfo.genreName,
+                            title: chatDetailInfo.productInfo.title,
+                            price: chatDetailInfo.productInfo.price,
+                            isProductDeleted: nil
+                        )
+                    )
+        )
+        
+        chatStompManager.sendChat(message: message)
+    }
+    
+    func sendImageStompMessage(imageUrls: [String]) async {
+        guard let roomId else { return }
+        
+        let imageMeta = ImageMeta(type: .image, imageUrls: imageUrls)
+        let message = ChatMessageRequestDTO(
+            roomId: roomId,
+            type: .image,
+            content: nil,
+            metadata: .image(imageMeta)
+        )
+
+        chatStompManager.sendChat(message: message)
+    }
 }
 
 extension ChatDetailViewModel {
@@ -294,13 +342,17 @@ extension ChatDetailViewModel {
         loadingManager.startLoading()
         defer { loadingManager.stopLoading() }
 
-        let result = await NetworkService.shared.chatService.getChatMessages(roomId: roomId)
+        let result = await NetworkService.shared.chatService.getChatMessages(roomId: roomId, cursor: nil, size: nil)
         
         switch result {
         case .success(let response):
             guard let data = response.data else {
                 logger.error("getChatMessages: No data received")
                 return
+            }
+            
+            if data.messages.isEmpty {
+                shouldSendFirstMessage = true
             }
             
             self.chatMessages = data.messages.reversed().map { ChatMessageModel(dto: $0) }
@@ -359,26 +411,28 @@ extension ChatDetailViewModel {
 
     func sendFirstMessage(firstMessageText: String) {
         Task {
-            await sendProductMessage()
+            await sendProductStompMessage()
             try? await Task.sleep(nanoseconds: 500_000_000)
-            await sendTextMessage(text: firstMessageText)
+            await sendTextStompMessage(text: firstMessageText)
+            shouldSendFirstMessage = false
         }
     }
     
     func sendFirstImageMessage(firstImageUrls: [String]) {
         Task {
-            await sendProductMessage()
+            await sendProductStompMessage()
             try? await Task.sleep(nanoseconds: 500_000_000)
-            await sendImageMessage(imageUrls: firstImageUrls)
+            await sendImageStompMessage(imageUrls: firstImageUrls)
+            shouldSendFirstMessage = false
         }
     }
     
     func sendProductUpdateMessage(messageText: String) {
         Task {
             await updateProductInfo(newProductId: chatDetailInfo.productInfo.productId)
-            await sendProductMessage()
+            await sendProductStompMessage()
             try? await Task.sleep(nanoseconds: 500_000_000)
-            await sendTextMessage(text: messageText)
+            await sendTextStompMessage(text: messageText)
             shouldUpdateProductInfo = false
         }
     }
@@ -386,37 +440,14 @@ extension ChatDetailViewModel {
     func sendProductUpdateImageMessage(imageUrls: [String]) {
         Task {
             await updateProductInfo(newProductId: chatDetailInfo.productInfo.productId)
-            await sendProductMessage()
+            await sendProductStompMessage()
             try? await Task.sleep(nanoseconds: 500_000_000)
-            await sendImageMessage(imageUrls: imageUrls)
+            await sendImageStompMessage(imageUrls: imageUrls)
             shouldUpdateProductInfo = false
         }
     }
-    
-    func sendProductMessage() async {
-        guard let roomId else { return }
         
-        let message = ChatMessageRequestDTO(
-            roomId: roomId,
-            type: .product,
-            content: nil,
-            metadata:
-                    .product(
-                        ProductMeta(
-                            type: .product,
-                            tradeType: chatDetailInfo.productInfo.tradeType,
-                            productId: chatDetailInfo.productInfo.productId,
-                            genreName: chatDetailInfo.productInfo.genreName,
-                            title: chatDetailInfo.productInfo.title,
-                            price: chatDetailInfo.productInfo.price
-                        )
-                    )
-        )
-        
-        chatStompManager.sendChat(message: message)
-    }
-    
-    func sendTextMessage(text: String) async {
+    func sendTextStompMessage(text: String) async {
         guard let roomId else { return }
         
         let message = ChatMessageRequestDTO(
@@ -426,20 +457,6 @@ extension ChatDetailViewModel {
             metadata: nil
         )
         
-        chatStompManager.sendChat(message: message)
-    }
-
-    func sendImageMessage(imageUrls: [String]) async {
-        guard let roomId else { return }
-        
-        let imageMeta = ImageMeta(type: .image, imageUrls: imageUrls)
-        let message = ChatMessageRequestDTO(
-            roomId: roomId,
-            type: .image,
-            content: nil,
-            metadata: .image(imageMeta)
-        )
-
         chatStompManager.sendChat(message: message)
     }
     
@@ -463,15 +480,8 @@ extension ChatDetailViewModel {
                     logger.info("✅ 이미지 업로드 성공")
                     
                     let imageURL = uploadURL.components(separatedBy: "?").first ?? uploadURL
-                    
-                    if chatMessages.isEmpty && roomId == nil {
-                        await postChatRoomCreate()
-                        sendFirstImageMessage(firstImageUrls: [imageURL])
-                    } else if shouldUpdateProductInfo {
-                        sendProductUpdateImageMessage(imageUrls: [imageURL])
-                    } else {
-                        await sendImageMessage(imageUrls: [imageURL])
-                    }
+                    uploadedImageUrl = imageURL
+                    isImageDetailViewPresented = true
                                         
                 case .failure(let error):
                     logger.error("❌이미지 업로드 실패: \(error.localizedDescription)")
@@ -479,6 +489,19 @@ extension ChatDetailViewModel {
 
             case .failure(let error):
                 logger.error("❌ Presigned URL 요청 실패: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func sendImage() {
+        Task {
+            if chatMessages.isEmpty && roomId == nil {
+                await postChatRoomCreate()
+                sendFirstImageMessage(firstImageUrls: [uploadedImageUrl])
+            } else if shouldUpdateProductInfo {
+                sendProductUpdateImageMessage(imageUrls: [uploadedImageUrl])
+            } else {
+                await sendImageStompMessage(imageUrls: [uploadedImageUrl])
             }
         }
     }

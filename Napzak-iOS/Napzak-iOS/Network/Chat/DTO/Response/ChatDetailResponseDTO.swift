@@ -24,6 +24,7 @@ struct ChatProductInfoDTO: Decodable {
     let genreName: String
     let productOwnerId: Int
     let isMyProduct: Bool
+    let isProductDeleted: Bool
 }
 
 struct ChatStoreInfoDTO: Decodable {

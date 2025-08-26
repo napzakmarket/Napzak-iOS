@@ -50,6 +50,14 @@ struct ChatView: View {
         }
         .ignoresSafeArea(edges: [.vertical])
         .animation(.easeInOut(duration: 0.3), value: tabRouter.showChatRoomExitToast)
+        .onAppear {
+            if tabRouter.showChatRoomExitToast {
+                Task {
+                    try? await Task.sleep(for: .seconds(1.5))
+                    tabRouter.showChatRoomExitToast = false
+                }
+            }
+        }
         .onChange(of: viewModel.chatRoomIds) { chatRoomIds in
             tabRouter.chatRoomIds = chatRoomIds
         }

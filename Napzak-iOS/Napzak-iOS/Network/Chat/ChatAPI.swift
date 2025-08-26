@@ -12,7 +12,7 @@ enum ChatAPI {
     case getChatInfo(productId: Int, roomId: Int?)
     case postCreateChatRoom(requestBody: ChatRoomCreateRequestDTO)
     case patchEnterChatRoom(roomId: Int)
-    case getChatMessages(roomId: Int)
+    case getChatMessages(roomId: Int, cursor: String?, size: Int?)
     case getChatRooms(deviceToken: String?)
     case patchLeaveChatRoom(roomId: Int)
     case patchExitChatRoom(roomId: Int)
@@ -38,7 +38,7 @@ extension ChatAPI: BaseTargetType {
             return "chat/rooms"
         case .patchEnterChatRoom(let roomId):
             return "chat/rooms/\(roomId)/enter"
-        case .getChatMessages(let roomId):
+        case .getChatMessages(let roomId, _, _):
             return "chat/rooms/\(roomId)/messages"
         case .patchLeaveChatRoom(let roomId):
             return "chat/rooms/\(roomId)/leave"
@@ -74,6 +74,16 @@ extension ChatAPI: BaseTargetType {
             }
         case .postCreateChatRoom(let requestBody):
             return .requestJSONEncodable(requestBody)
+        case .getChatMessages(_, let cursor, let size):
+            var parameters: [String: Any] = [:]
+            if let cursor {
+                parameters["cursor"] = cursor
+            } else if let size {
+                parameters["size"] = size
+            } else {
+                return .requestPlain
+            }
+            return .requestParameters(parameters: parameters, encoding: URLEncoding.queryString)
         case .getChatRooms(let deviceToken):
             if let deviceToken {
                 return .requestParameters(parameters: ["deviceToken" : deviceToken], encoding: URLEncoding.queryString)
