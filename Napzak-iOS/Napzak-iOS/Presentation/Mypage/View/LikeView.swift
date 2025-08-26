@@ -28,7 +28,13 @@ struct LikeView: View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
                 likeHeader
-                productScrollView
+                
+                if currentProducts.isEmpty {
+                    emptyStateView
+                } else {
+                    productScrollView
+                }
+                
                 Spacer()
             }
             
@@ -135,12 +141,7 @@ extension LikeView {
                     Color.clear
                         .frame(height: 0)
                         .id("top")
-                    
-                    if currentProducts.isEmpty {
-                        emptyStateView
-                    } else {
-                        productsGrid
-                    }
+                    productsGrid
                 }
                 .padding(.bottom, 108)
             }
@@ -153,6 +154,8 @@ extension LikeView {
     private var emptyStateView: some View {
         VStack(spacing: 20) {
             Image("like_none_icn")
+                .padding(.leading, 83)
+                .padding(.trailing, 110)
             
             VStack(spacing: 8) {
                 Text("아직 찜한 소장품이 없어요")
@@ -165,7 +168,6 @@ extension LikeView {
             }
         }
         .frame(maxWidth: .infinity)
-        .frame(height: UIScreen.main.bounds.height - 200)
         .frame(maxHeight: .infinity, alignment: .center)
     }
     

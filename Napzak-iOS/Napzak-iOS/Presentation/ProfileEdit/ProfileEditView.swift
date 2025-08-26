@@ -376,7 +376,7 @@ struct ProfileEditView: View {
                 .frame(height: 50)
                 .background(viewModel.isPrimaryButtonEnabled
                             ? Color.napzakPrimary(.purple500)
-                            : Color.napzakPrimary(.purple500).opacity(0.5))
+                            : Color.napzakGrayScale(.gray100))
                 .cornerRadius(14)
                 .padding(.horizontal, 27)
                 .padding(.bottom, 60)

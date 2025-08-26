@@ -40,11 +40,11 @@ struct MyPageView: View {
                     profileCardPlaceholder
                 }
                 
-                Rectangle()
-                    .fill(Color.napzakGrayScale(.gray10))
-                    .frame(height: 4)
-                    .padding(.top, 30)
-                    .padding(.bottom, 10)
+//                Rectangle()
+//                    .fill(Color.napzakGrayScale(.gray10))
+//                    .frame(height: 4)
+//                    .padding(.top, 30)
+//                    .padding(.bottom, 10)
                 
                 menuGrid
                 
@@ -195,9 +195,6 @@ struct MyPageView: View {
     
     private var menuGrid: some View {
         let menuItems: [(title: String, icon: String)] = [
-            ("판매 내역", "group1_icn"),
-            ("구매 내역", "group2_icn"),
-            ("최근 본 상품", "group3_icn"),
             ("찜", "group4_icn"),
             ("설정", "group5_icn"),
             ("고객센터", "group6_icn")
@@ -238,8 +235,8 @@ struct MyPageView: View {
         .background(Color.napzakGrayScale(.gray50))
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .padding(.horizontal, 27)
-        .padding(.top, 20)
-        .padding(.bottom, 30)
+        .padding(.top, 12)
+        .padding(.bottom, 25)
     }
     
     private func menuItem(title: String, iconName: String) -> some View {
