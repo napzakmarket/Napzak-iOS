@@ -122,7 +122,7 @@ extension UsernameInputField {
             return .invalidMinLength
         }
         
-        if text.count >= maxLength {
+        if text.count > maxLength {
             return .invalidMaxLength
         }
         

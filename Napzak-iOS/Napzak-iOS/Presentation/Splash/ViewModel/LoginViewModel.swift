@@ -16,9 +16,6 @@ final class LoginViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var showAlert = false
     
-    private(set) var alertTitle: String = ""
-    private(set) var alertMessage: String = ""
-    
     private let authManager = AuthManager.shared
     private let onboardingManager = OnboardingManager.shared
     
@@ -37,13 +34,7 @@ final class LoginViewModel: ObservableObject {
             router.push(next: onboardingStep)
             
         case .failure(let error):
-            if case .reportedUser = error {
-                self.alertTitle = "접근이 불가합니다."
-                self.alertMessage = "정책 위반으로 인해 앱 서비스 접근이 불가합니다."
-            } else {
-                self.alertTitle = "로그인 오류"
-                self.alertMessage = "로그인에 실패했습니다. 다시 시도해주세요."
-            }
+            // TODO: - 서버 오류 시 팝업 필요
             
             self.showAlert = true
             
@@ -66,13 +57,7 @@ final class LoginViewModel: ObservableObject {
             router.push(next: onboardingStep)
             
         case .failure(let error):
-            if case .reportedUser = error {
-                self.alertTitle = "접근이 불가합니다"
-                self.alertMessage = "정책 위반으로 인해 앱 서비스 접근이 불가합니다."
-            } else {
-                self.alertTitle = "로그인 오류"
-                self.alertMessage = "로그인에 실패했습니다. 다시 시도해주세요."
-            }
+            // TODO: - 서버 오류 시 팝업 필요
             
             self.showAlert = true
             

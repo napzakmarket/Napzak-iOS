@@ -20,6 +20,14 @@ struct SettingView: View {
     
     @State var logoutButtonTapped: Bool = false
     
+    private var appPushBinding: Binding<Bool> {
+        Binding {
+            permissionManager.isAppPushEnabled
+        } set: { newValue in
+            permissionManager.toggleAppPushEnabled(to: newValue)
+        }
+    }
+    
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
     
     var body: some View {
@@ -235,13 +243,22 @@ extension SettingView {
                 .padding(.vertical, 24)
             
             HStack {
-                Toggle(isOn: $permissionManager.isAppPushEnabled) {
-                    Text(permissionManager.isAppPushEnabled ? "앱 알림" : "기기 알림이 꺼져있어요.")
-                        .applyNapzakFont(.body7Medium16)
-                        .foregroundStyle(permissionManager.isAppPushEnabled ? Color.napzakGrayScale(.gray400) : Color.napzakState(.red))
-                        .frame(height: 20)
+                Text(permissionManager.isOSPushEnabled ? "앱 알림" : "기기 알림이 꺼져있어요.")
+                    .applyNapzakFont(.body7Medium16)
+                    .foregroundStyle(
+                        permissionManager.isOSPushEnabled ?
+                        Color.napzakGrayScale(.gray400) :
+                            Color.napzakState(.red).opacity(0.5)
+                    )
+                    .frame(height: 20)
+                
+                Spacer()
+                
+                Toggle(isOn: appPushBinding) {
+                    EmptyView()
                 }
                 .toggleStyle(CustomToggleStyle())
+                .disabled(!permissionManager.isOSPushEnabled)
             }
         }
         .padding(.horizontal, 28)

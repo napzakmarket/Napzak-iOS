@@ -20,6 +20,8 @@ class TabRouter: ObservableObject {
         sortOption: .recent,
         selectedTab: 0
     )
+    @Published var chatRoomIds = [Int]()
+    @Published var showChatRoomExitToast = false
     
     var currentSearchWord: String {
         return searchParams.searchWord
