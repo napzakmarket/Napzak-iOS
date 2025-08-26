@@ -12,6 +12,7 @@ struct ChatView: View {
     //MARK: - Property Wrappers
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @EnvironmentObject private var tabRouter: TabRouter
     @Environment(\.scenePhase) var scenePhase
 
     @StateObject var viewModel: ChatViewModel
@@ -28,7 +29,7 @@ struct ChatView: View {
     //MARK: - Main Body
     
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
             chatListSection
             
             VStack {
@@ -36,11 +37,22 @@ struct ChatView: View {
                 Spacer()
             }
             
+            if tabRouter.showChatRoomExitToast {
+                toastView
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .zIndex(2)
+                    .padding(.bottom, 120)
+            }
+            
             if viewModel.loadingManager.isLoadingNetwork {
                 LoadingView()
             }
         }
         .ignoresSafeArea(edges: [.vertical])
+        .animation(.easeInOut(duration: 0.3), value: tabRouter.showChatRoomExitToast)
+        .onChange(of: viewModel.chatRoomIds) { chatRoomIds in
+            tabRouter.chatRoomIds = chatRoomIds
+        }
         .onChange(of: scenePhase) { phase in
             if phase == .active {
                 Task {
@@ -124,5 +136,21 @@ extension ChatView {
             .padding(.bottom, 115)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+    
+    var toastView: some View {
+        HStack(spacing: 6) {
+            Text("해당 채팅방을 나간 상태입니다.")
+                .applyNapzakFont(.body5SemiBold14)
+                .foregroundStyle(Color.napzakGrayScale(.white))
+                .frame(height: 18)
+        }
+        .padding(.vertical, 13)
+        .frame(maxWidth: .infinity)
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .fill(Color.napzakTransparency(.transBlack))
+        )
+        .padding(.horizontal, 37)
     }
 }
