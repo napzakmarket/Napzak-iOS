@@ -32,6 +32,7 @@ final class ChatDetailViewModel: ObservableObject {
     @Published var isProfileNeeded: Bool = false
     @Published var isReadMyMessage: Bool = false
     @Published var shouldUpdateProductInfo = false
+    @Published var shouldSendFirstMessage = false
     @Published var selectedImage: UIImage? = nil
     @Published var uploadedImageUrl = ""
     @Published var isImageDetailViewPresented: Bool = false
@@ -169,7 +170,14 @@ private extension ChatDetailViewModel {
                         isProfileNeeded = isMessageOwner
                     }
                     
-                    chatMessages.append(messageData)
+                    if shouldSendFirstMessage {
+                        Task {
+                            try? await Task.sleep(nanoseconds: 500_000_000)
+                            await self.fetchChatMessages(roomId: self.roomId ?? Int())
+                        }
+                    } else {
+                        chatMessages.append(messageData)
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -343,6 +351,10 @@ extension ChatDetailViewModel {
                 return
             }
             
+            if data.messages.isEmpty {
+                shouldSendFirstMessage = true
+            }
+            
             self.chatMessages = data.messages.reversed().map { ChatMessageModel(dto: $0) }
             if !data.messages.isEmpty && data.messages[0].type == .system {
                 isChatDisabled = true
@@ -402,6 +414,7 @@ extension ChatDetailViewModel {
             await sendProductStompMessage()
             try? await Task.sleep(nanoseconds: 500_000_000)
             await sendTextStompMessage(text: firstMessageText)
+            shouldSendFirstMessage = false
         }
     }
     
@@ -410,6 +423,7 @@ extension ChatDetailViewModel {
             await sendProductStompMessage()
             try? await Task.sleep(nanoseconds: 500_000_000)
             await sendImageStompMessage(imageUrls: firstImageUrls)
+            shouldSendFirstMessage = false
         }
     }
     
