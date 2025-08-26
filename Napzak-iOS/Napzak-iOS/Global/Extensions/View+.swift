@@ -35,4 +35,12 @@ extension View {
                 .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
         }
     }
+    
+    func appAlert(
+        isPresented: Binding<Bool>,
+        style: AppAlertView.Style,
+        onConfirm: @escaping () -> Void
+    ) -> some View {
+        self.modifier(AppAlertOverlayModifier(isPresented: isPresented, style: style, onConfirm: onConfirm))
+    }
 }

@@ -20,6 +20,7 @@ final class GenreSelectionViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     
     private let genreService = NetworkService.shared.genreService
+    private let storeService = NetworkService.shared.storeService
     private var cancellables = Set<AnyCancellable>()
     
     init() {
@@ -62,21 +63,49 @@ final class GenreSelectionViewModel: ObservableObject {
         }
     }
     
-    func registerSelectedGenres() async -> Bool {
+    func registerUser(username: String) async -> Bool {
         guard !selectedGenres.isEmpty else { return false }
         
         isLoading = true
-        let genreIds = selectedGenres.map { $0.id }
-        let request = PreferGenreRequestDTO(genreIds: genreIds)
         
-        let result = await genreService.registerPreferGenre(request: request)
+        let nicknameRequest = NicknameRequestDTO(nickname: username)
+        let nicknameResult = await storeService.registerNickname(request: nicknameRequest)
+        
+        switch nicknameResult {
+        case .success:
+            let genreIds = selectedGenres.map { $0.id }
+            let genreRequest = PreferGenreRequestDTO(genreIds: genreIds)
+            let genreResult = await genreService.registerPreferGenre(request: genreRequest)
+            
+            isLoading = false
+            
+            switch genreResult {
+            case .success(_):
+                logger.info("User and genres registered successfully.")
+                return true
+            case .failure(let error):
+                logger.error("registerPreferGenre failed: \(error.localizedDescription)")
+                return false
+            }
+        case .failure(let error):
+            isLoading = false
+            logger.error("registerNickname failed: \(error.localizedDescription)")
+            return false
+        }
+    }
+    
+    func registerOnlyUsername(username: String) async -> Bool {
+        isLoading = true
+        let nicknameRequest = NicknameRequestDTO(nickname: username)
+        let result = await storeService.registerNickname(request: nicknameRequest)
         isLoading = false
         
         switch result {
-        case .success(_):
+        case .success:
+            logger.info("Username registered successfully, skipping genres.")
             return true
         case .failure(let error):
-            logger.error("registerPreferGenre failed: \(error.errorDescription ?? "Unknown error")")
+            logger.error("registerNickname failed for skip action: \(error.localizedDescription)")
             return false
         }
     }

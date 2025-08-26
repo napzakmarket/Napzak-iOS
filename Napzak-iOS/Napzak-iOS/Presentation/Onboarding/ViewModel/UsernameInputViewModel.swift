@@ -36,24 +36,4 @@ final class UsernameInputViewModel: ObservableObject {
         }
     }
     
-    func registerUsername() async -> Bool {
-        guard validationState == .valid else { return false }
-        
-        isRequesting = true
-        let request = NicknameRequestDTO(nickname: username)
-        let result = await service.registerNickname(request: request)
-        isRequesting = false
-        
-        switch result {
-        case .success:
-            return true
-            
-        case .failure(let error):
-            logger.error("registerUsername failed: \(error.errorDescription ?? "Unknown error")")
-            validationState = .serverError("")
-            isPrimaryButtonEnabled = false
-            return false
-        }
-    }
-    
 }

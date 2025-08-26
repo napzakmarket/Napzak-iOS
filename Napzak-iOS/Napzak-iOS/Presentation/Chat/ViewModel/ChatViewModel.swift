@@ -16,7 +16,8 @@ final class ChatViewModel: ObservableObject {
     //MARK: - Property Wrappers
 
     @Published var chatRooms: [ChatRoomModel] = []
-    
+    @Published var chatRoomIds: [Int] = []
+
     //MARK: - Properties
     
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Chat")
@@ -71,7 +72,8 @@ extension ChatViewModel {
                 return
             }
             
-            self.chatRooms = data.chatRooms.map { ChatRoomModel(dto: $0) }
+            chatRooms = data.chatRooms.map { ChatRoomModel(dto: $0) }
+            chatRoomIds = data.chatRooms.map { $0.roomId }
             
         case .failure(let error):
             logger.error("getChatRooms failed: \(error.localizedDescription)")

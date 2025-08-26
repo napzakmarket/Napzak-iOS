@@ -54,17 +54,7 @@ struct NZTabBarView: View {
                         .onTapGesture { isRegisterTabSelected = false }
                 }
                 
-                if showPermissionModal, let state = currentPushOffState {
-                    Color.black.opacity(0.5)
-                        .ignoresSafeArea()
-                    
-                    PermissionAlertView(state: state) {
-                        showPermissionModal = false
-                    }
-                    .frame(width: 284, height: 290)
-                    .transition(.opacity)
-                    .centerInParent()
-                }
+                
             }
             .overlay(
                 Group {
@@ -82,6 +72,21 @@ struct NZTabBarView: View {
                     }
                 },
                 alignment: .bottom
+            )
+            .overlay(
+                Group {
+                    if showPermissionModal, let state = currentPushOffState {
+                        Color.black.opacity(0.5)
+                            .ignoresSafeArea()
+                        
+                        PermissionAlertView(state: state) {
+                            showPermissionModal = false
+                        }
+                        .frame(width: 284, height: 290)
+                        .transition(.opacity)
+                        .centerInParent()
+                    }
+                }
             )
             .animation(.easeInOut(duration: 0.3), value: isRegisterTabSelected)
             .animation(.easeInOut(duration: 0.3), value: showPermissionModal)

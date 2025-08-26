@@ -76,13 +76,13 @@ struct LoginView: View {
                         }
                 }
             }
-            .alert(isPresented: $viewModel.showAlert) {
-                Alert(
-                    title: Text(viewModel.alertTitle),
-                    message: Text(viewModel.alertMessage),
-                    dismissButton: .default(Text("확인"))
-                )
-            }
+            .appAlert(
+                isPresented:  $viewModel.showAlert,
+                style: .banned,
+                onConfirm: {
+                    viewModel.showAlert = false
+                }
+            )
         }
     }
 }

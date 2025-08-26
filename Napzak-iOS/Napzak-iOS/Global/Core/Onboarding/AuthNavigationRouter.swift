@@ -10,6 +10,8 @@ import SwiftUI
 final class AuthNavigationRouter: ObservableObject {
     @Published var path = NavigationPath()
     
+    var temporaryUsername: String?
+    
     func push(next step: OnboardingStep) {
         path.append(step)
     }

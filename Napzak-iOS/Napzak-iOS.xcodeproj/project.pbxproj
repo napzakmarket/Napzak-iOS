@@ -211,6 +211,7 @@
 		D632C5422DCCCBFC005CD429 /* NicknameRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D632C5412DCCCBFC005CD429 /* NicknameRequestDTO.swift */; };
 		D632C5442DCCCE4A005CD429 /* UsernameInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D632C5432DCCCE4A005CD429 /* UsernameInputViewModel.swift */; };
 		D632C5462DCD01FE005CD429 /* ErrorResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D632C5452DCD01FE005CD429 /* ErrorResponseDTO.swift */; };
+		D633540C2E5D5F3100635E36 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D633540B2E5D5F3100635E36 /* LaunchScreen.storyboard */; };
 		D64560F22DC33514003D2E2B /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64560F12DC33514003D2E2B /* LoginView.swift */; };
 		D64560F52DC33A37003D2E2B /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64560F42DC33A37003D2E2B /* AuthManager.swift */; };
 		D64560FA2DC33F2E003D2E2B /* UserRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64560F92DC33F2E003D2E2B /* UserRole.swift */; };
@@ -233,6 +234,7 @@
 		D64922D12D9EF5CB00716740 /* RowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64922D02D9EF5CB00716740 /* RowType.swift */; };
 		D65FEDA72E242967005D4AAB /* PermissionAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65FEDA62E242967005D4AAB /* PermissionAlertView.swift */; };
 		D65FEDA92E25284E005D4AAB /* PushOffState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65FEDA82E25284E005D4AAB /* PushOffState.swift */; };
+		D66527752E5C578A00D861B3 /* AppAlertOverlayModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66527742E5C578A00D861B3 /* AppAlertOverlayModifier.swift */; };
 		D66A3E742E1A5FF3003977AE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E732E1A5FF3003977AE /* AppDelegate.swift */; };
 		D66A3E812E1AC2F4003977AE /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = D66A3E802E1AC2F4003977AE /* FirebaseMessaging */; };
 		D66A3E842E1AC4F4003977AE /* PushPermissionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A3E832E1AC4F4003977AE /* PushPermissionManager.swift */; };
@@ -251,6 +253,7 @@
 		D67F8DBA2DD5C11700C0847F /* ProductLikeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67F8DB92DD5C11700C0847F /* ProductLikeManager.swift */; };
 		D682B50E2DD8EAD7001B5F6B /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D682B50D2DD8EAD7001B5F6B /* SplashView.swift */; };
 		D6920A262DC0C96A00A400CF /* ProductSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6920A252DC0C96A00A400CF /* ProductSection.swift */; };
+		D6952EF42E56332800C983A8 /* AppAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6952EF32E56332800C983A8 /* AppAlertView.swift */; };
 		D6A3A6652E409EDB0075FE48 /* ActiveChatState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A3A6642E409EDB0075FE48 /* ActiveChatState.swift */; };
 		D6BB9E1F2DC16A1D009D9E01 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BB9E1E2DC16A1D009D9E01 /* NetworkError.swift */; };
 		D6F5CA762E312D840065F192 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6F5CA752E312D840065F192 /* GoogleService-Info.plist */; };
@@ -264,7 +267,6 @@
 		D6FA34352DCF923500795A54 /* BuyProductListResponseDTO .swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA34342DCF923500795A54 /* BuyProductListResponseDTO .swift */; };
 		D6FA34372DCF924C00795A54 /* ProductWithCountDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA34362DCF924C00795A54 /* ProductWithCountDTO.swift */; };
 		D6FA343E2DCFF2EC00795A54 /* ios.json in Resources */ = {isa = PBXBuildFile; fileRef = D6FA343D2DCFF2EC00795A54 /* ios.json */; };
-		D6FA34402DCFF7E600795A54 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6FA343F2DCFF7E600795A54 /* LaunchScreen.storyboard */; };
 		D6FA34422DD08E6200795A54 /* TabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA34412DD08E6200795A54 /* TabRouter.swift */; };
 		D6FA34442DD08E8D00795A54 /* NZTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA34432DD08E8D00795A54 /* NZTab.swift */; };
 /* End PBXBuildFile section */
@@ -470,6 +472,7 @@
 		D632C5412DCCCBFC005CD429 /* NicknameRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameRequestDTO.swift; sourceTree = "<group>"; };
 		D632C5432DCCCE4A005CD429 /* UsernameInputViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsernameInputViewModel.swift; sourceTree = "<group>"; };
 		D632C5452DCD01FE005CD429 /* ErrorResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResponseDTO.swift; sourceTree = "<group>"; };
+		D633540B2E5D5F3100635E36 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D64560F12DC33514003D2E2B /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		D64560F42DC33A37003D2E2B /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		D64560F92DC33F2E003D2E2B /* UserRole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRole.swift; sourceTree = "<group>"; };
@@ -492,6 +495,7 @@
 		D64922D02D9EF5CB00716740 /* RowType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowType.swift; sourceTree = "<group>"; };
 		D65FEDA62E242967005D4AAB /* PermissionAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionAlertView.swift; sourceTree = "<group>"; };
 		D65FEDA82E25284E005D4AAB /* PushOffState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushOffState.swift; sourceTree = "<group>"; };
+		D66527742E5C578A00D861B3 /* AppAlertOverlayModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAlertOverlayModifier.swift; sourceTree = "<group>"; };
 		D66A3E732E1A5FF3003977AE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D66A3E832E1AC4F4003977AE /* PushPermissionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPermissionManager.swift; sourceTree = "<group>"; };
 		D66A3E852E1C190B003977AE /* PushAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushAPI.swift; sourceTree = "<group>"; };
@@ -509,6 +513,7 @@
 		D67F8DB92DD5C11700C0847F /* ProductLikeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductLikeManager.swift; sourceTree = "<group>"; };
 		D682B50D2DD8EAD7001B5F6B /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		D6920A252DC0C96A00A400CF /* ProductSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductSection.swift; sourceTree = "<group>"; };
+		D6952EF32E56332800C983A8 /* AppAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAlertView.swift; sourceTree = "<group>"; };
 		D6A3A6642E409EDB0075FE48 /* ActiveChatState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveChatState.swift; sourceTree = "<group>"; };
 		D6BB9E1E2DC16A1D009D9E01 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		D6F5CA752E312D840065F192 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -522,7 +527,6 @@
 		D6FA34342DCF923500795A54 /* BuyProductListResponseDTO .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BuyProductListResponseDTO .swift"; sourceTree = "<group>"; };
 		D6FA34362DCF924C00795A54 /* ProductWithCountDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductWithCountDTO.swift; sourceTree = "<group>"; };
 		D6FA343D2DCFF2EC00795A54 /* ios.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ios.json; sourceTree = "<group>"; };
-		D6FA343F2DCFF7E600795A54 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D6FA34412DD08E6200795A54 /* TabRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRouter.swift; sourceTree = "<group>"; };
 		D6FA34432DD08E8D00795A54 /* NZTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NZTab.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -878,7 +882,7 @@
 				D045DEB72D83723A00EB1EB6 /* Assets.xcassets */,
 				D6F5CA752E312D840065F192 /* GoogleService-Info.plist */,
 				D045DEE32D8375D800EB1EB6 /* Info.plist */,
-				D6FA343F2DCFF7E600795A54 /* LaunchScreen.storyboard */,
+				D633540B2E5D5F3100635E36 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -923,6 +927,7 @@
 				6C0AC0062E02B04E00F99FC1 /* LoadingView.swift */,
 				6C5C566C2E194F1B000938A3 /* SpinnerLoadingView.swift */,
 				6CA043112E0DB2D7006125AD /* LoadingViewManager.swift */,
+				D6952EF32E56332800C983A8 /* AppAlertView.swift */,
 				D07837AA2DB628FE009122F6 /* Modal */,
 				D63270232DA2C802002414DA /* Chip */,
 			);
@@ -949,6 +954,7 @@
 			children = (
 				6CDD77032DD4BEB2008D2ABC /* SwipePopGestureManager.swift */,
 				6C37C0662DD5EB7F00DE47AE /* KeyboardObserver.swift */,
+				D66527742E5C578A00D861B3 /* AppAlertOverlayModifier.swift */,
 			);
 			path = Modifiers;
 			sourceTree = "<group>";
@@ -1775,7 +1781,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6FA34402DCFF7E600795A54 /* LaunchScreen.storyboard in Resources */,
 				D045DEBB2D83723A00EB1EB6 /* Preview Assets.xcassets in Resources */,
 				D6F5CA762E312D840065F192 /* GoogleService-Info.plist in Resources */,
 				D045DEBC2D83723A00EB1EB6 /* Assets.xcassets in Resources */,
@@ -1785,6 +1790,7 @@
 				D045DEDD2D83750400EB1EB6 /* Pretendard-SemiBold.otf in Resources */,
 				D045DEDE2D83750400EB1EB6 /* Pretendard-Bold.otf in Resources */,
 				6C5C566B2E194E10000938A3 /* spinner.json in Resources */,
+				D633540C2E5D5F3100635E36 /* LaunchScreen.storyboard in Resources */,
 				D045DEEC2D837D7D00EB1EB6 /* Pretendard-Medium.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1861,6 +1867,7 @@
 				6CB2EBFB2DBFBE83003BF298 /* ReportViewModel.swift in Sources */,
 				D65FEDA92E25284E005D4AAB /* PushOffState.swift in Sources */,
 				D02905FD2DAE3171008515FD /* FilterContainerView.swift in Sources */,
+				D6952EF42E56332800C983A8 /* AppAlertView.swift in Sources */,
 				877F40672DCA742D00008672 /* MarketProductBuyItemDTO.swift in Sources */,
 				D6055AF82DBFE7C4005D32A3 /* CarouselView.swift in Sources */,
 				D64561232DC3C05C003D2E2B /* TokenRefresher.swift in Sources */,
@@ -2028,6 +2035,7 @@
 				D0F035822DBF6654003D0CBF /* PresignedAPI.swift in Sources */,
 				D0180D602D9F001E006A748F /* RegisterFloatingView.swift in Sources */,
 				6CD972CF2DC7BD41000AE85E /* SellRegisterResponseDTO.swift in Sources */,
+				D66527752E5C578A00D861B3 /* AppAlertOverlayModifier.swift in Sources */,
 				D66A3E922E1C408F003977AE /* PushSettingResponseDTO.swift in Sources */,
 				6CB2EC072DBFED96003BF298 /* RegisterViewModel.swift in Sources */,
 				D0F035A32DC0A0DC003D0CBF /* GenreDetailView.swift in Sources */,
@@ -2183,7 +2191,6 @@
 				INFOPLIST_FILE = "Napzak-iOS/Global/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -2220,7 +2227,6 @@
 				INFOPLIST_FILE = "Napzak-iOS/Global/Resources/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
