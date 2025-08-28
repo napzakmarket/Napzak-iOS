@@ -131,13 +131,26 @@ struct SearchView: View {
         }
         .onChange(of: viewModel.productFetchOption.sortOption) { newValue in
             Task {
+                await viewModel.updateProducts()
+            }
+            tabRouter.searchParams.sortOption = newValue
+            scrollToTopTrigger.toggle()
+        }
+        .onChange(of: viewModel.selectedTabIndex) { newValue in
+            Task {
+                await viewModel.updateProducts()
+            }
+            tabRouter.searchParams.selectedTab = newValue
+            scrollToTopTrigger.toggle()
+        }
+        .onChange(of: tabRouter.searchParams.sortOption) { newValue in
+            Task {
                 await viewModel.fetchProducts(
                     searchWord: tabRouter.currentSearchWord,
                     sortOption: newValue,
                     selectedTab: viewModel.selectedTabIndex
                 )
             }
-            tabRouter.searchParams.sortOption = newValue
             scrollToTopTrigger.toggle()
         }
         .onChange(of: tabRouter.searchParams.selectedTab) { newValue in
@@ -147,12 +160,6 @@ struct SearchView: View {
                     sortOption: viewModel.productFetchOption.sortOption,
                     selectedTab: newValue
                 )
-            }
-            scrollToTopTrigger.toggle()
-        }
-        .onChange(of: viewModel.selectedTabIndex) { _ in
-            Task {
-                await viewModel.updateProducts()
             }
             scrollToTopTrigger.toggle()
         }

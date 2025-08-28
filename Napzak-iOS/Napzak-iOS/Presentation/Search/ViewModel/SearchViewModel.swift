@@ -82,6 +82,7 @@ extension SearchViewModel {
         Task {
             loadingManager.startLoading()
             defer { loadingManager.stopLoading() }
+            
             if selectedTabIndex == 0 {
                 if searchWord.isEmpty {
                     await fetchSellProducts()
