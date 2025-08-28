@@ -39,6 +39,7 @@ struct ImageDetailView: View {
                         .resizable()
                         .zoomable()
                         .aspectRatio(contentMode: .fit)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 Spacer()
             }

@@ -128,6 +128,7 @@ private extension ChatStompManager {
                 case .disconnected(_):
                     logger.debug("❎ WebSocket 연결 해제")
                     stopPing()
+                    activeDestinations.removeAll()
                     socketStatusSubject.send(.disconnected)
                     
                     guard !isTearingDown && reconnectCount <= 5 else { return }
@@ -138,6 +139,7 @@ private extension ChatStompManager {
                 case let .error(error):
                     logger.error("❌ WebSocket 연결 실패: \(error)")
                     stopPing()
+                    activeDestinations.removeAll()
                     socketStatusSubject.send(.disconnected)
                     
                     guard !isTearingDown && reconnectCount <= 5 else { return }

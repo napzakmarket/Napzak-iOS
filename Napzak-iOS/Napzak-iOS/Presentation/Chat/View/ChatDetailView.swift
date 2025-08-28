@@ -348,7 +348,6 @@ extension ChatDetailView {
                 isChatDisabled: viewModel.isChatDisabled,
                 onSubmit: {
                     let messageText = viewModel.messageText
-                    
                     if viewModel.chatMessages.isEmpty && viewModel.roomId == nil {
                         Task {
                             await viewModel.postChatRoomCreate()

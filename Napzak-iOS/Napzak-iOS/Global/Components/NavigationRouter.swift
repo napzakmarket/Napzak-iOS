@@ -38,7 +38,9 @@ final class NavigationRouter: ObservableObject {
     
     //현재 view를 navigationStack에서 pop
     func pop() {
-        path.removeLast()
+        if !path.isEmpty {
+            path.removeLast()
+        }
     }
     
     //맨 처음으로 돌아감(navigationStack 초기화)
