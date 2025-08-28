@@ -32,7 +32,6 @@ final class ChatDetailViewModel: ObservableObject {
     @Published var isProfileNeeded: Bool = false
     @Published var isReadMyMessage: Bool = false
     @Published var shouldUpdateProductInfo = false
-    @Published var shouldSendFirstMessage = false
     @Published var selectedImage: UIImage? = nil
     @Published var uploadedImageUrl = ""
     @Published var isImageDetailViewPresented: Bool = false
@@ -48,6 +47,9 @@ final class ChatDetailViewModel: ObservableObject {
     private var didUpdateProductIdSubject = PassthroughSubject<Void, Never>()
     private var cancellables = Set<AnyCancellable>()
     
+    private var chatMessageBuffer: [ChatMessageModel] = []
+    private var shouldBuffer = false
+    
     //MARK: - Init
 
     init(chatEntry: ChatEntry) {
@@ -55,20 +57,20 @@ final class ChatDetailViewModel: ObservableObject {
         case .product(let productId):
             self.productId = productId
             self.roomId = nil
-            
+            observeRoomId()
+
             Task {
                 await fetchChatDetailInfo(productId: productId)
             }
-            observeRoomId()
         case .room(let roomId):
             self.roomId = roomId
             self.productId = nil
-            
+            observeProductId()
+
             Task {
                 await enterChatRoom(roomId: roomId)
                 await fetchChatMessages(roomId: roomId)
             }
-            observeProductId()
         }
         fetchWebSocket()
         observeChatMessage()
@@ -91,10 +93,7 @@ private extension ChatDetailViewModel {
                 guard let self, let roomId else { return }
                 
                 Task {
-                    await self.fetchChatMessages(roomId: roomId)
-                    if !self.chatMessages.isEmpty {
-                        await self.enterChatRoom(roomId: roomId)
-                    }
+                    await self.enterChatRoom(roomId: roomId)
                 }
             }
             .store(in: &cancellables)
@@ -151,6 +150,10 @@ private extension ChatDetailViewModel {
                             isRead: false
                         )
                     default:
+                        if data.type == .date || data.type == .product {
+                            shouldBuffer = true
+                        }
+                        
                         messageData = ChatMessageModel(
                             id: data.messageId,
                             senderId: data.senderId,
@@ -170,10 +173,13 @@ private extension ChatDetailViewModel {
                         isProfileNeeded = isMessageOwner
                     }
                     
-                    if shouldSendFirstMessage {
-                        Task {
-                            try? await Task.sleep(nanoseconds: 500_000_000)
-                            await self.fetchChatMessages(roomId: self.roomId ?? Int())
+                    if shouldBuffer {
+                        chatMessageBuffer.append(messageData)
+                        
+                        if data.type == .text || data.type == .image {
+                            shouldBuffer = false
+                            chatMessages.append(contentsOf: chatMessageBuffer)
+                            chatMessageBuffer = []
                         }
                     } else {
                         chatMessages.append(messageData)
@@ -229,11 +235,13 @@ private extension ChatDetailViewModel {
             
             chatDetailInfo.productInfo = ChatProductInfo(dto: data.productInfo)
             chatDetailInfo.chatStoreInfo = ChatStoreInfo(dto: data.storeInfo)
-            roomId = data.roomId ?? nil
+            if let receivedRoomId = data.roomId {
+                roomId = receivedRoomId
+                await self.fetchChatMessages(roomId: receivedRoomId)
+            }
             if chatDetailInfo.chatStoreInfo.isWithdrawn || chatDetailInfo.chatStoreInfo.isReported {
                 isChatDisabled = true
             }
-            shouldUpdateProductInfo = data.productInfo.productId != self.productId
             
         case .failure(let error):
             logger.error("getChatInfo failed: \(error.localizedDescription)")
@@ -351,10 +359,6 @@ extension ChatDetailViewModel {
                 return
             }
             
-            if data.messages.isEmpty {
-                shouldSendFirstMessage = true
-            }
-            
             self.chatMessages = data.messages.reversed().map { ChatMessageModel(dto: $0) }
             if !data.messages.isEmpty && data.messages[0].type == .system {
                 isChatDisabled = true
@@ -378,6 +382,9 @@ extension ChatDetailViewModel {
             
             self.productId = data.productId
             isReadMyMessage = !data.onlineStoreIds.isEmpty
+            print("여기")
+            print(chatDetailInfo.productInfo.productId)
+            print(data.productId)
             shouldUpdateProductInfo = data.productId != chatDetailInfo.productInfo.productId
             
         case .failure(let error):
@@ -414,7 +421,6 @@ extension ChatDetailViewModel {
             await sendProductStompMessage()
             try? await Task.sleep(nanoseconds: 500_000_000)
             await sendTextStompMessage(text: firstMessageText)
-            shouldSendFirstMessage = false
         }
     }
     
@@ -423,7 +429,6 @@ extension ChatDetailViewModel {
             await sendProductStompMessage()
             try? await Task.sleep(nanoseconds: 500_000_000)
             await sendImageStompMessage(imageUrls: firstImageUrls)
-            shouldSendFirstMessage = false
         }
     }
     
