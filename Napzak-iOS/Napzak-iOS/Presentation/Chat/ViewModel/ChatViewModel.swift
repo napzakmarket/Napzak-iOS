@@ -16,7 +16,6 @@ final class ChatViewModel: ObservableObject {
     //MARK: - Property Wrappers
 
     @Published var chatRooms: [ChatRoomModel] = []
-    @Published var chatRoomIds: [Int] = []
 
     //MARK: - Properties
     
@@ -73,7 +72,6 @@ extension ChatViewModel {
             }
             
             chatRooms = data.chatRooms.map { ChatRoomModel(dto: $0) }
-            chatRoomIds = data.chatRooms.map { $0.roomId }
             
         case .failure(let error):
             logger.error("getChatRooms failed: \(error.localizedDescription)")

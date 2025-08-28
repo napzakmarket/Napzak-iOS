@@ -137,13 +137,16 @@ extension PushManager: UNUserNotificationCenterDelegate {
                 logger.info("현재 활성 채팅방(\(activeRoomID))에서 받은 채팅 알림 클릭, 이동 처리 생략")
                 return
             } else if let roomIntID = Int(roomID) {
-                tabRouter?.switchToChat()
-                
-                if let chatRoomIds = tabRouter?.chatRoomIds {
-                    if chatRoomIds.contains(roomIntID) {
+                Task { @MainActor in
+                    let canEnter = await canEnterChatRoom(roomId: roomIntID)
+                    tabRouter?.showChatRoomExitToast = !canEnter
+                    
+                    if tabRouter?.selectedTab != .chat {
+                        tabRouter?.switchToChat()
+                    }
+
+                    if canEnter {
                         navigationRouter?.push(next: .chatDetailView(chatEntry: .room(id: roomIntID)))
-                    } else {
-                        tabRouter?.showChatRoomExitToast = true
                     }
                 }
             }
@@ -157,5 +160,26 @@ extension PushManager: @preconcurrency MessagingDelegate {
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         currentFCMToken = fcmToken
         logger.error("FCM 토큰 수신: \(self.currentFCMToken ?? "없음", privacy: .public)")
+    }
+}
+
+private extension PushManager {
+    func canEnterChatRoom(roomId: Int) async -> Bool {
+        let result = await NetworkService.shared.chatService.getChatRooms(deviceToken: nil)
+        
+        switch result {
+        case .success(let response):
+            guard let data = response.data else {
+                logger.error("getChatRooms: No data received")
+                return false
+            }
+            
+            let chatRoomIds = data.chatRooms.map { $0.roomId }
+            return chatRoomIds.contains(roomId)
+            
+        case .failure(let error):
+            logger.error("getChatRooms failed: \(error.localizedDescription)")
+            return false
+        }
     }
 }

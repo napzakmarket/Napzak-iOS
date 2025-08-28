@@ -58,8 +58,13 @@ struct ChatView: View {
                 }
             }
         }
-        .onChange(of: viewModel.chatRoomIds) { chatRoomIds in
-            tabRouter.chatRoomIds = chatRoomIds
+        .onChange(of: tabRouter.showChatRoomExitToast) { newValue in
+            if newValue && tabRouter.selectedTab == .chat {
+                Task {
+                    try? await Task.sleep(for: .seconds(1.5))
+                    tabRouter.showChatRoomExitToast = false
+                }
+            }
         }
         .onChange(of: scenePhase) { phase in
             if phase == .active {
