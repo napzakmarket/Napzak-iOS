@@ -31,7 +31,6 @@ final class ChatDetailViewModel: ObservableObject {
     @Published var isChatDisabled: Bool = false
     @Published var isProfileNeeded: Bool = false
     @Published var isReadMyMessage: Bool = false
-    @Published var shouldUpdateProductInfo = false
     @Published var selectedImage: UIImage? = nil
     @Published var uploadedImageUrl = ""
     @Published var isImageDetailViewPresented: Bool = false
@@ -382,10 +381,6 @@ extension ChatDetailViewModel {
             
             self.productId = data.productId
             isReadMyMessage = !data.onlineStoreIds.isEmpty
-            print("여기")
-            print(chatDetailInfo.productInfo.productId)
-            print(data.productId)
-            shouldUpdateProductInfo = data.productId != chatDetailInfo.productInfo.productId
             
         case .failure(let error):
             logger.error("patchEnterChatRoom failed: \(error.localizedDescription)")
@@ -438,7 +433,6 @@ extension ChatDetailViewModel {
             await sendProductStompMessage()
             try? await Task.sleep(nanoseconds: 500_000_000)
             await sendTextStompMessage(text: messageText)
-            shouldUpdateProductInfo = false
         }
     }
     
@@ -448,7 +442,6 @@ extension ChatDetailViewModel {
             await sendProductStompMessage()
             try? await Task.sleep(nanoseconds: 500_000_000)
             await sendImageStompMessage(imageUrls: imageUrls)
-            shouldUpdateProductInfo = false
         }
     }
         
@@ -499,6 +492,8 @@ extension ChatDetailViewModel {
     }
     
     func sendImage() {
+        let shouldUpdateProductInfo = productId != chatDetailInfo.productInfo.productId
+
         Task {
             if chatMessages.isEmpty && roomId == nil {
                 await postChatRoomCreate()

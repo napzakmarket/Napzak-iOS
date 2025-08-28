@@ -347,13 +347,15 @@ extension ChatDetailView {
                 isFocused: _isFocused,
                 isChatDisabled: viewModel.isChatDisabled,
                 onSubmit: {
+                    let shouldUpdateProductInfo = viewModel.productId != viewModel.chatDetailInfo.productInfo.productId
                     let messageText = viewModel.messageText
+                    
                     if viewModel.chatMessages.isEmpty && viewModel.roomId == nil {
                         Task {
                             await viewModel.postChatRoomCreate()
                             viewModel.sendFirstMessage(firstMessageText: messageText)
                         }
-                    } else if viewModel.shouldUpdateProductInfo {
+                    } else if shouldUpdateProductInfo {
                         viewModel.sendProductUpdateMessage(messageText: messageText)
                     } else {
                         Task {
