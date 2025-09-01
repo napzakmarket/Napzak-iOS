@@ -256,6 +256,9 @@
 		D6952EF42E56332800C983A8 /* AppAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6952EF32E56332800C983A8 /* AppAlertView.swift */; };
 		D6A3A6652E409EDB0075FE48 /* ActiveChatState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A3A6642E409EDB0075FE48 /* ActiveChatState.swift */; };
 		D6BB9E1F2DC16A1D009D9E01 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BB9E1E2DC16A1D009D9E01 /* NetworkError.swift */; };
+		D6C1DAD42E63200200BFAEA0 /* OnboardingManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C1DAD32E63200200BFAEA0 /* OnboardingManagerTests.swift */; };
+		D6C1DAD62E63588B00BFAEA0 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = D6C1DAD52E63588B00BFAEA0 /* FirebaseRemoteConfig */; };
+		D6C1DAD82E63596A00BFAEA0 /* UpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C1DAD72E63596A00BFAEA0 /* UpdateManager.swift */; };
 		D6F5CA762E312D840065F192 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D6F5CA752E312D840065F192 /* GoogleService-Info.plist */; };
 		D6F5CAB02E354DB40065F192 /* CustomToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F5CAAF2E354DB30065F192 /* CustomToggleStyle.swift */; };
 		D6FA34242DCE07FE00795A54 /* PreferGenreRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA34232DCE07FE00795A54 /* PreferGenreRequestDTO.swift */; };
@@ -270,6 +273,16 @@
 		D6FA34422DD08E6200795A54 /* TabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA34412DD08E6200795A54 /* TabRouter.swift */; };
 		D6FA34442DD08E8D00795A54 /* NZTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA34432DD08E8D00795A54 /* NZTab.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D6A834C82E6317F000DE5395 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D045DE932D836F0500EB1EB6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D045DE9A2D836F0500EB1EB6;
+			remoteInfo = "Napzak-iOS";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		6C0AC0062E02B04E00F99FC1 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -515,7 +528,10 @@
 		D6920A252DC0C96A00A400CF /* ProductSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductSection.swift; sourceTree = "<group>"; };
 		D6952EF32E56332800C983A8 /* AppAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAlertView.swift; sourceTree = "<group>"; };
 		D6A3A6642E409EDB0075FE48 /* ActiveChatState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveChatState.swift; sourceTree = "<group>"; };
+		D6A834C42E6317F000DE5395 /* Napzak-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Napzak-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6BB9E1E2DC16A1D009D9E01 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		D6C1DAD32E63200200BFAEA0 /* OnboardingManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingManagerTests.swift; sourceTree = "<group>"; };
+		D6C1DAD72E63596A00BFAEA0 /* UpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateManager.swift; sourceTree = "<group>"; };
 		D6F5CA752E312D840065F192 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D6F5CAAF2E354DB30065F192 /* CustomToggleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomToggleStyle.swift; sourceTree = "<group>"; };
 		D6FA34232DCE07FE00795A54 /* PreferGenreRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferGenreRequestDTO.swift; sourceTree = "<group>"; };
@@ -545,6 +561,14 @@
 				D045DED02D83732D00EB1EB6 /* Moya in Frameworks */,
 				D045DEC92D8372D800EB1EB6 /* KakaoSDKAuth in Frameworks */,
 				D045DED32D83736600EB1EB6 /* Lottie in Frameworks */,
+				D6C1DAD62E63588B00BFAEA0 /* FirebaseRemoteConfig in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D6A834C12E6317F000DE5395 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -795,6 +819,7 @@
 			children = (
 				D0B1FA492DC385360090681E /* Config.xcconfig */,
 				D045DEBA2D83723A00EB1EB6 /* Napzak-iOS */,
+				D6A834CE2E6317FB00DE5395 /* Napzak-iOSTests */,
 				D045DE9C2D836F0500EB1EB6 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -803,6 +828,7 @@
 			isa = PBXGroup;
 			children = (
 				D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */,
+				D6A834C42E6317F000DE5395 /* Napzak-iOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -967,6 +993,7 @@
 				D66A3E822E1AC4A8003977AE /* Push */,
 				D06B835A2DDB15C6008A0D14 /* ProductEventManager.swift */,
 				D67F8DB92DD5C11700C0847F /* ProductLikeManager.swift */,
+				D6C1DAD72E63596A00BFAEA0 /* UpdateManager.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1650,6 +1677,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		D6A834CE2E6317FB00DE5395 /* Napzak-iOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				D6C1DAD32E63200200BFAEA0 /* OnboardingManagerTests.swift */,
+			);
+			path = "Napzak-iOSTests";
+			sourceTree = "<group>";
+		};
 		D6F5CAAE2E354D8F0065F192 /* Style */ = {
 			isa = PBXGroup;
 			children = (
@@ -1728,10 +1763,31 @@
 				D66A3E802E1AC2F4003977AE /* FirebaseMessaging */,
 				D023E3B22E2D727C00267150 /* SwiftStomp */,
 				D04BB46E2E534B4F00B81698 /* Zoomable */,
+				D6C1DAD52E63588B00BFAEA0 /* FirebaseRemoteConfig */,
 			);
 			productName = "Napzak-iOS";
 			productReference = D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */;
 			productType = "com.apple.product-type.application";
+		};
+		D6A834C32E6317F000DE5395 /* Napzak-iOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D6A834CA2E6317F000DE5395 /* Build configuration list for PBXNativeTarget "Napzak-iOSTests" */;
+			buildPhases = (
+				D6A834C02E6317F000DE5395 /* Sources */,
+				D6A834C12E6317F000DE5395 /* Frameworks */,
+				D6A834C22E6317F000DE5395 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D6A834C92E6317F000DE5395 /* PBXTargetDependency */,
+			);
+			name = "Napzak-iOSTests";
+			packageProductDependencies = (
+			);
+			productName = "Napzak-iOSTests";
+			productReference = D6A834C42E6317F000DE5395 /* Napzak-iOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -1740,11 +1796,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1600;
+				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					D045DE9A2D836F0500EB1EB6 = {
 						CreatedOnToolsVersion = 16.0;
+					};
+					D6A834C32E6317F000DE5395 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = D045DE9A2D836F0500EB1EB6;
 					};
 				};
 			};
@@ -1772,6 +1832,7 @@
 			projectRoot = "";
 			targets = (
 				D045DE9A2D836F0500EB1EB6 /* Napzak-iOS */,
+				D6A834C32E6317F000DE5395 /* Napzak-iOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1792,6 +1853,13 @@
 				6C5C566B2E194E10000938A3 /* spinner.json in Resources */,
 				D633540C2E5D5F3100635E36 /* LaunchScreen.storyboard in Resources */,
 				D045DEEC2D837D7D00EB1EB6 /* Pretendard-Medium.otf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D6A834C22E6317F000DE5395 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1866,6 +1934,7 @@
 				87E9206A2DC63C63003C42D5 /* StoreModifyProfileResponseDTO.swift in Sources */,
 				6CB2EBFB2DBFBE83003BF298 /* ReportViewModel.swift in Sources */,
 				D65FEDA92E25284E005D4AAB /* PushOffState.swift in Sources */,
+				D6C1DAD82E63596A00BFAEA0 /* UpdateManager.swift in Sources */,
 				D02905FD2DAE3171008515FD /* FilterContainerView.swift in Sources */,
 				D6952EF42E56332800C983A8 /* AppAlertView.swift in Sources */,
 				877F40672DCA742D00008672 /* MarketProductBuyItemDTO.swift in Sources */,
@@ -2048,7 +2117,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D6A834C02E6317F000DE5395 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D6C1DAD42E63200200BFAEA0 /* OnboardingManagerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D6A834C92E6317F000DE5395 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D045DE9A2D836F0500EB1EB6 /* Napzak-iOS */;
+			targetProxy = D6A834C82E6317F000DE5395 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		D045DEA72D836F0700EB1EB6 /* Debug */ = {
@@ -2246,6 +2331,44 @@
 			};
 			name = Release;
 		};
+		D6A834CB2E6317F000DE5395 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2G7ZY93ALK;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.napzakmarket.napzakTests.Napzak-iOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Napzak-iOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Napzak-iOS";
+			};
+			name = Debug;
+		};
+		D6A834CC2E6317F000DE5395 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2G7ZY93ALK;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.napzakmarket.napzakTests.Napzak-iOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Napzak-iOS.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Napzak-iOS";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2263,6 +2386,15 @@
 			buildConfigurations = (
 				D045DEAA2D836F0700EB1EB6 /* Debug */,
 				D045DEAB2D836F0700EB1EB6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D6A834CA2E6317F000DE5395 /* Build configuration list for PBXNativeTarget "Napzak-iOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D6A834CB2E6317F000DE5395 /* Debug */,
+				D6A834CC2E6317F000DE5395 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -2373,6 +2505,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D66A3E7F2E1AC2F4003977AE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseMessaging;
+		};
+		D6C1DAD52E63588B00BFAEA0 /* FirebaseRemoteConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D66A3E7F2E1AC2F4003977AE /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfig;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

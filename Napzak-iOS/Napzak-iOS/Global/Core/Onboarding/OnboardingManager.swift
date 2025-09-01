@@ -22,13 +22,18 @@ final class OnboardingManager {
     }
     
     func getLastCheckpoint() -> OnboardingStep? {
+        guard let raw = defaults.string(forKey: checkpointKey),
+              let step = OnboardingStep(rawValue: raw) else {
+            return nil
+        }
+        
+        if step == .completed {
+            return step
+        }
+        
         if let lastActive = defaults.object(forKey: lastActiveKey) as? Date,
            Date().timeIntervalSince(lastActive) > 24 * 60 * 60 {
             clearProgress()
-            return nil
-        }
-        guard let raw = defaults.string(forKey: checkpointKey),
-              let step = OnboardingStep(rawValue: raw) else {
             return nil
         }
         
