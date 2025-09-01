@@ -38,17 +38,9 @@ struct CustomToggleStyle: ToggleStyle {
     
     private func backgroundColor(for configuration: Configuration) -> Color {
         if isEnabled {
-            if configuration.isOn {
-                return Color.napzakPrimary(.purple500)
-            } else {
-                return Color.gray.opacity(0.4)
-            }
+            return configuration.isOn ? Color.napzakPrimary(.purple500) : Color.napzakGrayScale(.gray100)
         } else {
-            if configuration.isOn {
-                return Color.napzakPrimary(.purple200)
-            } else {
-                return Color.gray.opacity(0.4)
-            }
+            return configuration.isOn ? Color.napzakPrimary(.purple200) : Color.napzakGrayScale(.gray100)
         }
     }
 }
