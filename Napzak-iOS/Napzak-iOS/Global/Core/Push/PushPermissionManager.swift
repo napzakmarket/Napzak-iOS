@@ -16,13 +16,10 @@ final class PushPermissionManager: ObservableObject {
     @Published var isAppPushEnabled: Bool
     @Published var isOSPushEnabled: Bool = false
     
-    private var lastAppPushState: Bool
-    
     // MARK: - Init
     
     init() {
-        self.lastAppPushState = UserDefaults.standard.object(forKey: "isAppPushEnabled") as? Bool ?? true
-        self.isAppPushEnabled = self.lastAppPushState
+        self.isAppPushEnabled = UserDefaults.standard.object(forKey: "isAppPushEnabled") as? Bool ?? false
         
         Task {
             await refreshOSPushStatus()
@@ -51,46 +48,34 @@ final class PushPermissionManager: ObservableObject {
     // MARK: - Func
     
     func requestNotificationPermission() async -> Bool {
-        let settings = await UNUserNotificationCenter.current().notificationSettings()
+        let center = UNUserNotificationCenter.current()
+        let settings = await center.notificationSettings()
+        
+        var isAuthorized = (settings.authorizationStatus == .authorized)
         
         if settings.authorizationStatus == .notDetermined {
-            let granted = try? await UNUserNotificationCenter.current()
-                .requestAuthorization(options: [.alert, .badge, .sound])
-            
-            self.lastAppPushState = granted ?? false
-            self.isAppPushEnabled = self.lastAppPushState
-            
-            if granted == true {
-                UIApplication.shared.registerForRemoteNotifications()
+            if let granted = try? await center.requestAuthorization(options: [.alert, .badge, .sound]) {
+                isAuthorized = granted
+                if granted {
+                    toggleAppPushEnabled(to: true)
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
             }
-            
-            self.isOSPushEnabled = granted ?? false
-            return self.isOSPushEnabled
-        } else {
-            self.isOSPushEnabled = (settings.authorizationStatus == .authorized)
-            if self.isOSPushEnabled {
-                UIApplication.shared.registerForRemoteNotifications()
-            }
-            return self.isOSPushEnabled
+        } else if isAuthorized {
+            UIApplication.shared.registerForRemoteNotifications()
         }
+        
+        self.isOSPushEnabled = isAuthorized
+        return isAuthorized
     }
     
     func refreshOSPushStatus() async {
         let settings = await UNUserNotificationCenter.current().notificationSettings()
-        let isAuthorized = (settings.authorizationStatus == .authorized)
-        
-        self.isOSPushEnabled = isAuthorized
-        
-        if isAuthorized {
-            self.isAppPushEnabled = self.lastAppPushState
-        } else {
-            self.isAppPushEnabled = false
-        }
+        self.isOSPushEnabled = (settings.authorizationStatus == .authorized)
     }
     
     func toggleAppPushEnabled(to newValue: Bool) {
         self.isAppPushEnabled = newValue
-        self.lastAppPushState = newValue
         UserDefaults.standard.set(newValue, forKey: "isAppPushEnabled")
     }
 }
