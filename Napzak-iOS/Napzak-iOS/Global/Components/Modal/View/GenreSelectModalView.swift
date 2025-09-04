@@ -18,6 +18,10 @@ struct GenreSelectModalView: View {
     @Binding var isGenreSelectModalPresented: Bool
     @Binding var adaptedGenres: [GenreNameModel]
     
+    //MARK: - Properties
+    
+    var onCompleted: ((_ adaptedGenreCount: Int) -> Void)? = nil
+    
     //MARK: - Main Body
     
     var body: some View {
@@ -163,6 +167,7 @@ extension GenreSelectModalView {
             }
             Button {
                 adaptedGenres = viewModel.selectedGenres
+                onCompleted?(viewModel.selectedGenres.count)
                 withAnimation {
                     isGenreSelectModalPresented = false
                 }

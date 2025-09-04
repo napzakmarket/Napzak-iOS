@@ -41,6 +41,7 @@ final class ChatDetailViewModel: ObservableObject {
 
     private let chatStompManager = ChatStompManager.shared
     private let chatEventManager = ChatEventManager.shared
+    private let mixpanelManager = MixpanelManager.shared
     let loadingManager = LoadingViewManager()
 
     private var didUpdateProductIdSubject = PassthroughSubject<Void, Never>()
@@ -412,19 +413,31 @@ extension ChatDetailViewModel {
     }
 
     func sendFirstMessage(firstMessageText: String) {
+        let type = chatDetailInfo.productInfo.tradeType == .sell ? "for_sale" : "wanted"
+        let userRole = chatDetailInfo.productInfo.tradeType == .sell ? "buyer" : "seller"
+
         Task {
             await sendProductStompMessage()
             try? await Task.sleep(nanoseconds: 500_000_000)
             await sendTextStompMessage(text: firstMessageText)
         }
-    }
+        mixpanelManager.trackEvent(event: "Started Chat", properties: ["post_id": chatDetailInfo.productInfo.productId,
+                                                                         "post_type": type,
+                                                                         "user_role": userRole])
+   }
     
     func sendFirstImageMessage(firstImageUrls: [String]) {
+        let type = chatDetailInfo.productInfo.tradeType == .sell ? "for_sale" : "wanted"
+        let userRole = chatDetailInfo.productInfo.tradeType == .sell ? "buyer" : "seller"
+
         Task {
             await sendProductStompMessage()
             try? await Task.sleep(nanoseconds: 500_000_000)
             await sendImageStompMessage(imageUrls: firstImageUrls)
         }
+        mixpanelManager.trackEvent(event: "Started Chat", properties: ["post_id": chatDetailInfo.productInfo.productId,
+                                                                         "post_type": type,
+                                                                         "user_role": userRole])
     }
     
     func sendProductUpdateMessage(messageText: String) {

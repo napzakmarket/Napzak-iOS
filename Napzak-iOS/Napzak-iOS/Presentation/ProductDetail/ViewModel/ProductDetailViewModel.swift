@@ -50,7 +50,7 @@ final class ProductDetailViewModel: ObservableObject {
     private let likeSubject = PassthroughSubject<(Int, Bool), Never>()
     
     private let interestService = NetworkService.shared.interestService
-    private let productId: Int
+    let productId: Int
     let loadingManager = LoadingViewManager()
 
     //MARK: - Init
