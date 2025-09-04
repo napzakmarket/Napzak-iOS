@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+
+import FirebaseCore
 import KakaoSDKCommon
 import KakaoSDKAuth
-import FirebaseCore
 
 @main
 struct Napzak_iOSApp: App {
@@ -22,6 +23,7 @@ struct Napzak_iOSApp: App {
     @StateObject private var tabRouter = TabRouter()
     
     private let chatStompManager = ChatStompManager.shared
+    private var mixpanelManager = MixpanelManager.shared
 
     init() {
         FirebaseApp.configure()
@@ -35,6 +37,7 @@ struct Napzak_iOSApp: App {
         self._pushManager = StateObject(wrappedValue: pushManager)
         
         appDelegate.pushManager = pushManager
+        mixpanelManager.initializeMixpanel()
     }
 
     var body: some Scene {
