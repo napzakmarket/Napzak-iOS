@@ -21,6 +21,7 @@ struct SearchInputView: View {
     
     //MARK: - Properties
     
+    private let mixpanelManager = MixpanelManager.shared
     private let columns = [
         GridItem(.flexible(), spacing: 10),
         GridItem(.flexible(), spacing: 10),
@@ -55,6 +56,9 @@ struct SearchInputView: View {
                 await viewModel.fetchGenreSearchResults()
             }
         }
+        .onAppear {
+            mixpanelManager.trackEvent(event: "Opened Search")
+        }
     }
 }
 
@@ -76,11 +80,18 @@ extension SearchInputView {
                 text: $viewModel.searchInputText,
                 isCompleted: $viewModel.isSearchCompleted,
                 isFocused: _isSearchBarFocused,
-                onSubmit: {
+                onSearchButtonTapped: {
                     if viewModel.searchInputText.isEmpty { return }
                     else {
                         SearchEventManager.shared.searchCompleted.send(viewModel.searchInputText)
+                        mixpanelManager.trackEvent(event: "Executed Search", properties: ["search_source": "icon",
+                                                                                         "keyword": viewModel.searchInputText])
                     }
+                },
+                onSubmit: {
+                    SearchEventManager.shared.searchCompleted.send(viewModel.searchInputText)
+                    mixpanelManager.trackEvent(event: "Executed Search", properties: ["search_source": "enter",
+                                                                                     "keyword": viewModel.searchInputText])
                 }
             )
             .frame(height: 38)
@@ -110,6 +121,8 @@ extension SearchInputView {
         LazyVStack(spacing: 0) {
             Button {
                 SearchEventManager.shared.searchCompleted.send(viewModel.searchInputText)
+                mixpanelManager.trackEvent(event: "Executed Search", properties: ["search_source": "searchbar",
+                                                                                 "keyword": viewModel.searchInputText])
             } label: {
                 HStack(alignment: .center, spacing: 6) {
                     Image(.imgSearchInput)
@@ -130,6 +143,8 @@ extension SearchInputView {
                 Button {
                     navigationRouter.push(next: .genreDetailView(genreId: genre.id,
                                                                  genreName: genre.name))
+                    mixpanelManager.trackEvent(event: "Executed Search", properties: ["search_source": "genre_page",
+                                                                                     "keyword": viewModel.searchInputText])
                 } label: {
                     GenreItemView(genreName: genre.name)
                 }
@@ -148,6 +163,10 @@ extension SearchInputView {
             PlainChipContainerView(
                 titles: viewModel.searchRecommendations.map { $0.searchWord },
                 action: { title in
+                    let index = viewModel.searchRecommendations.firstIndex(where: { $0.searchWord == title }) ?? 0
+                    
+                    mixpanelManager.trackEvent(event: "Clicked Suggestion", properties: ["suggestion_type": "keyword",
+                                                                                         "suggestion_index": index])
                     SearchEventManager.shared.searchCompleted.send(title)
                 }
             )
@@ -165,6 +184,10 @@ extension SearchInputView {
             LazyVGrid(columns: columns, spacing: 13) {
                 ForEach(viewModel.genreRecommendations) { genre in
                     Button {
+                        let index = viewModel.genreRecommendations.firstIndex(where: { $0.name == genre.name }) ?? 0
+
+                        mixpanelManager.trackEvent(event: "Clicked Suggestion", properties: ["suggestion_type": "genre",
+                                                                                             "suggestion_index": index])
                         navigationRouter.push(next: .genreDetailView(genreId: genre.id,
                                                                      genreName: genre.name))
                     } label: {
