@@ -19,6 +19,7 @@ struct HomeView: View {
     @State private var scrollToTopTrigger: Bool = false
     @Binding var isTabBarHidden: Bool
     
+    private let mixpanelManager = MixpanelManager.shared
     private let placeholder: String = "어떤 상품을 찾고 계신가요?"
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
     private let columns = [GridItem(.flexible(), spacing: 20), GridItem(.flexible())]
@@ -153,8 +154,11 @@ extension HomeView {
         CarouselView(
             currentPage: $viewModel.selectedBannerIndex,
             banners: viewModel.banners.topBanners,
-            onTapBanner: { banner in
+            onTapBanner: { banner, bannerIndex in
                 viewModel.handleBannerTap(banner.action)
+                mixpanelManager.trackEvent(event: "Clicked Banner", properties: ["banner_id": banner.id,
+                                                                                 "banner_type": "main",
+                                                                                 "banner_index": bannerIndex])
             }
         )
     }
@@ -189,6 +193,7 @@ extension HomeView {
                         )
                         .onTapGesture {
                             navigationRouter.push(next: .productDetailView(productId: viewModel.recommendedProducts[index].id))
+                            mixpanelManager.trackEvent(event: "Clicked custom genre", properties: ["item_index": index])
                         }
                     }
                 }
@@ -203,6 +208,9 @@ extension HomeView {
             style: .small(cornerRadius: 16)
         ) {
             viewModel.handleBannerTap(viewModel.banners.middleBanner.action)
+            mixpanelManager.trackEvent(event: "Clicked Banner", properties: ["banner_id": viewModel.banners.middleBanner.id,
+                                                                             "banner_type": "mini",
+                                                                             "banner_index": 1])
         }
     }
     
@@ -214,6 +222,8 @@ extension HomeView {
                 showMore: true,
                 onMoreTap: {
                     tabRouter.switchToSearch(searchWord: "", sortOption: .popular, searchTabIndex: 0)
+                    mixpanelManager.trackEvent(event: "Viewed Popular For Sale", properties: ["sort": "popular",
+                                                                                              "from": "home"])
                 }
             )
             
@@ -246,6 +256,9 @@ extension HomeView {
             style: .small(cornerRadius: 16)
         ) {
             viewModel.handleBannerTap(viewModel.banners.bottomBanner.action)
+            mixpanelManager.trackEvent(event: "Clicked Banner", properties: ["banner_id": viewModel.banners.bottomBanner.id,
+                                                                             "banner_type": "mini",
+                                                                             "banner_index": 2])
         }
     }
     
@@ -257,6 +270,8 @@ extension HomeView {
                 showMore: true,
                 onMoreTap: {
                     tabRouter.switchToSearch(searchWord: "", sortOption: .popular, searchTabIndex: 1)
+                    mixpanelManager.trackEvent(event: "Viewed Popular Wanted", properties: ["sort": "popular",
+                                                                                            "from": "home"])
                 }
             )
             
