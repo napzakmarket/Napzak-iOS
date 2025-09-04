@@ -31,4 +31,8 @@ extension MixpanelManager {
         
         Mixpanel.initialize(token: token, trackAutomaticEvents: true)
     }
+    
+    func trackEvent(event: String, properties: [String: MixpanelType]? = nil) {
+        Mixpanel.mainInstance().track(event: event, properties: properties)
+    }
 }
