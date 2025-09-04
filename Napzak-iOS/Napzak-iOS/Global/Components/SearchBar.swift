@@ -16,7 +16,8 @@ struct SearchBar: View {
     @Binding var isCompleted: Bool
     @FocusState var isFocused: Bool
     
-    let onSubmit: () -> Void
+    var onSearchButtonTapped: () -> Void = { }
+    var onSubmit: () -> Void = { }
     
     var body: some View {
         HStack(spacing: 6) {
@@ -53,7 +54,7 @@ struct SearchBar: View {
                         print("돋보기 Tapped: \(text)")
                         isFocused = false
                         isCompleted = true
-                        onSubmit()
+                        onSearchButtonTapped()
                     }
                 } label: {
                     Image(.iconSearch)
@@ -78,8 +79,7 @@ struct SearchBar: View {
             SearchBar(
                 placeholder: "원하는 장르를 직접 검색해보세요",
                 text: $text,
-                isCompleted: $isCompleted,
-                onSubmit: { }
+                isCompleted: $isCompleted
             )
         }
     }

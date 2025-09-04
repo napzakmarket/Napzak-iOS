@@ -10,7 +10,7 @@ import SwiftUI
 struct CarouselView: View {
     @Binding var currentPage: Int
     let banners: [BannerItem]
-    var onTapBanner: ((BannerItem) -> Void)? = nil
+    var onTapBanner: ((BannerItem, Int) -> Void)? = nil
     
     @State private var timerPaused = false
     @GestureState private var isDragging = false
@@ -31,7 +31,7 @@ struct CarouselView: View {
             TabView(selection: $currentPage) {
                 ForEach(0..<displayBanners.count, id: \.self) { index in
                     BannerItemView(banner: displayBanners[index]) {
-                        onTapBanner?(displayBanners[index])
+                        onTapBanner?(displayBanners[index], currentPage)
                         print("배너 눌림")
                     }
                     .tag(index)
@@ -127,7 +127,7 @@ extension CarouselView {
                     BannerItem(id: 2, imageURL: "https://kream-phinf.pstatic.net/MjAyNTA0MjRfMTE1/MDAxNzQ1NDg1MTE4NDAz.x5oe6s5ZD7nSY43_r-ZZCk2_e2UPW686CBdlmL6tC8Ig.F_n_phMvuU_UbSINCTA60QDYy9e3K6_swj9duKKt9AUg.JPEG/a_569512a10c84429d8e31a85c797bd00e.jpg?type=m_2560_webp", action: .none),
                     BannerItem(id: 3, imageURL: "https://kream-phinf.pstatic.net/MjAyNTA0MjVfMjk1/MDAxNzQ1NTQ1MTgzMTM0.eHhgML5dpkPJnXpqjJA0hSNkp4N0h92D8sj6umUPsrYg.nVsPcqjNdwXqI2TCYxkxv-rltS1n4UaRM_JnboJvYBQg.JPEG/a_ec9cddf6aa83486199ce983afb4cd922.jpg", action: .none)
                 ],
-                onTapBanner: { banner in
+                onTapBanner: { banner, bannerIndex in
                     print("Tapped Banner ID: \(banner.id)")
                 }
             )
