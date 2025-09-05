@@ -31,6 +31,7 @@ final class WithDrawViewModel: ObservableObject {
     @Published var withdrawDescription: String = ""
     @Published var withdrawDescriptionNull: Bool = false
     
+    private let mixpanelManager = MixpanelManager.shared
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "WithDrawView")
 }
 
@@ -54,7 +55,8 @@ extension WithDrawViewModel {
             logger.info("✅ 탈퇴 설명: \(response.data!.withdrawDescription ?? "없음")")
             
             ChatStompManager.shared.disconnect()
-            
+            mixpanelManager.trackEvent(event: "Completed Withdrawal")
+
             await AuthManager.shared.forceLogout()
             if case .failure(let error) = keychain.clearTokens() {
                 logger.error("❌ 토큰 삭제 실패: \(error)")
