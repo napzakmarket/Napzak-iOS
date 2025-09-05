@@ -27,8 +27,6 @@ struct ProductDetailView: View {
     @State private var isEditCompleted = false
 
     //MARK: - Properties
-
-    private let mixpanelManager = MixpanelManager.shared
     
     let screenWidth = UIScreen.main.bounds.width
     private let maxPrice: Int = 1_000_000
@@ -200,11 +198,6 @@ struct ProductDetailView: View {
                     }
                 }
             }
-        }
-        .onAppear {
-            let type = viewModel.product.productDetail.tradeType == .sell ? "for_sale" : "wanted"
-            mixpanelManager.trackEvent(event: "Viewed Product", properties: ["post_id": viewModel.productId,
-                                                                             "post_type": type])
         }
     }
 }
