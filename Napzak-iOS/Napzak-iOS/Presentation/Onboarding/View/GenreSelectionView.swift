@@ -13,6 +13,8 @@ struct GenreSelectionView: View {
     @FocusState private var isSearchFocused: Bool
     @State private var isSearchCompleted: Bool = false
     
+    private let mixpanelManager = MixpanelManager.shared
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             OnboardingNavigationBar(step: 3) {
@@ -158,6 +160,14 @@ extension GenreSelectionView {
                     if await viewModel.registerUser(username: username) {
                         authRouter.push(next: .completed)
                     }
+                    
+                    let platform = UserDefaults.standard.string(forKey: "loginPlatform") ?? ""
+                    let selectedGenres = viewModel.selectedGenres.map { $0.name }
+                    
+                    mixpanelManager.trackEvent(event: "Completed Onboarding", properties: ["method" : platform,
+                                                                                           "platform" : "iOS",
+                                                                                           "genres_selected_count" : selectedGenres.count,
+                                                                                           "genres_category" : selectedGenres])
                 }
             } label: {
                 Text("납작마켓 시작하기")
@@ -178,7 +188,7 @@ extension GenreSelectionView {
                         authRouter.push(next: .completed)
                     }
                 }
-                print("건너뛰기")
+                mixpanelManager.trackEvent(event: "Skiped Genres")
             } label: {
                 Text("건너뛰기")
                     .applyNapzakFont(.caption2Medium12)

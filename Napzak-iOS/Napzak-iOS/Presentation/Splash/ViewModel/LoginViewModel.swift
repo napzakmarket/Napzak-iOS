@@ -18,7 +18,8 @@ final class LoginViewModel: ObservableObject {
     
     private let authManager = AuthManager.shared
     private let onboardingManager = OnboardingManager.shared
-    
+    private let mixpanelManager = MixpanelManager.shared
+
     func handleKakaoLogin(router: AuthNavigationRouter) async {
         guard !isLoading else { return }
         isLoading = true
@@ -31,8 +32,12 @@ final class LoginViewModel: ObservableObject {
         switch result {
         case .success(let onboardingStep):
             logger.info("로그인 성공")
+            UserDefaults.standard.set("kakao", forKey: "loginPlatform")
+
             router.push(next: onboardingStep)
-            
+            if onboardingStep == .completed {
+                mixpanelManager.trackEvent(event: "Signed Up")
+            }
         case .failure(let error):
             // TODO: - 서버 오류 시 팝업 필요
             
@@ -54,8 +59,12 @@ final class LoginViewModel: ObservableObject {
         switch result {
         case .success(let onboardingStep):
             logger.info("로그인 성공")
+            UserDefaults.standard.set("apple", forKey: "loginPlatform")
+
             router.push(next: onboardingStep)
-            
+            if onboardingStep == .completed {
+                mixpanelManager.trackEvent(event: "Signed Up")
+            }
         case .failure(let error):
             // TODO: - 서버 오류 시 팝업 필요
             

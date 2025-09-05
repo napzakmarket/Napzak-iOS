@@ -73,7 +73,7 @@ struct LoginView: View {
                             OnboardingManager.shared.saveCheckpoint(.completed)
                             AuthManager.shared.completeOnboarding()
                             authRouter.reset()
-                        }
+                      }
                 }
             }
             .appAlert(
