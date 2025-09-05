@@ -43,7 +43,8 @@ final class MarketViewModel: ObservableObject {
     
     private let interestService = NetworkService.shared.interestService
     let loadingManager = LoadingViewManager()
-    
+    private let mixpanelManager = MixpanelManager.shared
+
     //MARK: - Init
     
     init(storeId: Int) {
@@ -73,6 +74,9 @@ final class MarketViewModel: ObservableObject {
             
             storeDetail = data
             
+            if data.isStoreOwner {
+                mixpanelManager.trackEvent(event: "Viewed MyPage")
+            }
         case .failure(let error):
             logger.error("❌ getMyPageInfo failed: \(error.localizedDescription)")
         }

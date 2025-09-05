@@ -28,7 +28,6 @@ struct MarketView: View {
     
     //MARK: - Properties
 
-    private let mixpanelManager = MixpanelManager.shared
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
     private let columns = [GridItem(.flexible(), spacing: 20), GridItem(.flexible())]
     
@@ -131,7 +130,6 @@ struct MarketView: View {
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .onAppear {
-            mixpanelManager.trackEvent(event: "Viewed MyPage")
             Task {
                 await viewModel.fetchStoreDetail()
             }
