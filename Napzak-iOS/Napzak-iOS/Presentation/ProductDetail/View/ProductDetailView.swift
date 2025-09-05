@@ -29,7 +29,6 @@ struct ProductDetailView: View {
     //MARK: - Properties
     
     let screenWidth = UIScreen.main.bounds.width
-    
     private let maxPrice: Int = 1_000_000
     
     //MARK: - Main Body
@@ -70,6 +69,7 @@ struct ProductDetailView: View {
                     reportType: .product,
                     onReportButtonTapped: {
                         navigationRouter.push(next: .reportView(reportType: .product, id: viewModel.product.productDetail.id))
+                        MixpanelManager.shared.trackEvent(event: "Opened Report Overlay_product")
                     }
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))

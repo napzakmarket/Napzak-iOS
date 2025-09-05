@@ -12,6 +12,7 @@ import os
 final class SettingViewModel: ObservableObject {
     private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "SettingViewModel")
     private let authManager = AuthManager.shared
+    private let mixpanelManager = MixpanelManager.shared
 }
 
 
@@ -26,7 +27,7 @@ extension SettingViewModel {
             logger.info("[Logout] 성공")
             
             ChatStompManager.shared.disconnect()
-
+            mixpanelManager.trackEvent(event: "Logged Out")
         case .failure(let error):
             logger.error("[Logout] 실패: \(error.localizedDescription)")
         }

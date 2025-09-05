@@ -18,6 +18,10 @@ struct GenreSelectModalView: View {
     @Binding var isGenreSelectModalPresented: Bool
     @Binding var adaptedGenres: [GenreNameModel]
     
+    //MARK: - Properties
+    
+    var onCompleted: ((_ adaptedGenreCount: Int) -> Void)? = nil
+    
     //MARK: - Main Body
     
     var body: some View {
@@ -79,8 +83,7 @@ extension GenreSelectModalView {
                     placeholder: "어떤 장르의 굿즈인가요? 검색해보세요!",
                     text: $viewModel.inputGenreText,
                     isCompleted: $viewModel.isSearchCompleted,
-                    isFocused: _isSearchBarFocused,
-                    onSubmit: { }
+                    isFocused: _isSearchBarFocused
                 )
                 .onChange(of: viewModel.inputGenreText) { value in
                     Task {
@@ -164,6 +167,7 @@ extension GenreSelectModalView {
             }
             Button {
                 adaptedGenres = viewModel.selectedGenres
+                onCompleted?(viewModel.selectedGenres.count)
                 withAnimation {
                     isGenreSelectModalPresented = false
                 }

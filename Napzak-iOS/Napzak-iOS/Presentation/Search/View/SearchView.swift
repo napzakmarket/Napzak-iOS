@@ -25,6 +25,7 @@ struct SearchView: View {
 
     //MARK: - Properties
     
+    private let mixpanelManager = MixpanelManager.shared
     private let productCellWidth = (UIScreen.main.bounds.width - 76) / 2
     private let columns = [GridItem(.flexible(), spacing: 20), GridItem(.flexible())]
     
@@ -77,7 +78,12 @@ struct SearchView: View {
                         selectedGenres: viewModel.productFetchOption.genres
                     ),
                     isGenreSelectModalPresented: $isGenreSelectModalPresented,
-                    adaptedGenres: $viewModel.productFetchOption.genres
+                    adaptedGenres: $viewModel.productFetchOption.genres,
+                    onCompleted: { selectedGenreCount in
+                        let tab = viewModel.selectedTabIndex == 0 ? "for_sale" : "wanted"
+                        mixpanelManager.trackEvent(event: "Applied Genre Filter", properties: ["filter_count": selectedGenreCount,
+                                                                                               "tab": tab])
+                    }
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
@@ -122,6 +128,13 @@ struct SearchView: View {
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .onAppear {
             Task {
+                let tab = tabRouter.currentSelectedTab == 0 ? "for_sale" : "wanted"
+                
+                viewModel.searchWord = tabRouter.currentSearchWord
+                viewModel.productFetchOption.sortOption = tabRouter.currentSortOption
+                viewModel.selectedTabIndex = tabRouter.currentSelectedTab
+
+                mixpanelManager.trackEvent(event: "Viewed Explore", properties: ["tab": tab])
                 await viewModel.fetchProducts(
                     searchWord: tabRouter.currentSearchWord,
                     sortOption: tabRouter.currentSortOption,
@@ -130,37 +143,24 @@ struct SearchView: View {
             }
         }
         .onChange(of: viewModel.productFetchOption.sortOption) { newValue in
+            let tab = viewModel.selectedTabIndex == 0 ? "for_sale" : "wanted"
+
             Task {
                 await viewModel.updateProducts()
             }
             tabRouter.searchParams.sortOption = newValue
+            mixpanelManager.trackEvent(event: "Applied array Filter", properties: ["sort": newValue.rawValue,
+                                                                                   "tab": tab])
             scrollToTopTrigger.toggle()
         }
         .onChange(of: viewModel.selectedTabIndex) { newValue in
+            let tab = newValue == 0 ? "for_sale" : "wanted"
+
             Task {
                 await viewModel.updateProducts()
             }
             tabRouter.searchParams.selectedTab = newValue
-            scrollToTopTrigger.toggle()
-        }
-        .onChange(of: tabRouter.searchParams.sortOption) { newValue in
-            Task {
-                await viewModel.fetchProducts(
-                    searchWord: tabRouter.currentSearchWord,
-                    sortOption: newValue,
-                    selectedTab: viewModel.selectedTabIndex
-                )
-            }
-            scrollToTopTrigger.toggle()
-        }
-        .onChange(of: tabRouter.searchParams.selectedTab) { newValue in
-            Task {
-                await viewModel.fetchProducts(
-                    searchWord: tabRouter.currentSearchWord,
-                    sortOption: viewModel.productFetchOption.sortOption,
-                    selectedTab: newValue
-                )
-            }
+            mixpanelManager.trackEvent(event: "Viewed Explore", properties: ["tab": tab])
             scrollToTopTrigger.toggle()
         }
         .onChange(of: viewModel.productFetchOption) { _ in
@@ -368,7 +368,6 @@ private extension SearchView {
             }
         )
         .onTapGesture {
-            print("\(product.wrappedValue.id)번 상품")
             navigationRouter.push(next: .productDetailView(productId: product.wrappedValue.id))
         }
     }

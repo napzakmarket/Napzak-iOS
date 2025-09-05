@@ -44,7 +44,8 @@ final class RegisterViewModel: ObservableObject {
     
     let type: RegisterViewType
     let loadingManager = LoadingViewManager()
-    
+    private let mixpanelManager = MixpanelManager.shared
+
     init(viewType: RegisterViewType)  {
         self.type = viewType
         
@@ -346,9 +347,18 @@ extension RegisterViewModel {
             
             switch result {
             case .success(let response):
-                logger.info("✅ 판매 등록 성공: \(response.data!.productId)")
+                guard let data = response.data else { return }
+                
+                logger.info("✅ 판매 등록 성공: \(data.productId)")
                 ProductEventManager.shared.productChanged.send(())
-                self.productId = response.data?.productId
+                productId = data.productId
+
+                guard let selectedGenre = genreList.first(where: {$0.id == data.genreId}) else { return }
+                
+                mixpanelManager.trackEvent(event: "Created Post", properties: ["post_id": data.productId,
+                                                                               "post_type": "for_sale",
+                                                                               "genres_category": selectedGenre.name,
+                                                                               "user_role": "seller"])
             case .failure(let error):
                 logger.error("❌ 판매 등록 실패: \(error.localizedDescription)")
             }
@@ -357,9 +367,11 @@ extension RegisterViewModel {
             
             switch result {
             case .success(let response):
-                logger.info("✅ 상품 수정 성공: \(response.data!.productId)")
+                guard let data = response.data else { return }
+
+                logger.info("✅ 상품 수정 성공: \(data.productId)")
                 ProductEventManager.shared.productChanged.send(())
-                self.productId = response.data?.productId
+                productId = data.productId
             case .failure(let error):
                 logger.error("❌ 상품 수정 실패: \(error.localizedDescription)")
             }
@@ -409,9 +421,18 @@ extension RegisterViewModel {
             
             switch result {
             case .success(let response):
-                logger.info("✅ 구매 등록 성공: \(response.data!.productId)")
+                guard let data = response.data else { return }
+                
+                logger.info("✅ 구매 등록 성공: \(data.productId)")
                 ProductEventManager.shared.productChanged.send(())
-                self.productId = response.data?.productId
+                productId = data.productId
+                
+                guard let selectedGenre = genreList.first(where: {$0.id == data.genreId}) else { return }
+                
+                mixpanelManager.trackEvent(event: "Created Post", properties: ["post_id": data.productId,
+                                                                               "post_type": "wanted",
+                                                                               "genres_category": selectedGenre.name,
+                                                                               "user_role": "buyer"])
             case .failure(let error):
                 logger.error("❌ 구매 등록 실패: \(error.localizedDescription)")
             }
@@ -420,10 +441,12 @@ extension RegisterViewModel {
             
             switch result {
             case .success(let response):
-                logger.info("✅ 상품 수정 성공: \(response.data!.productId)")
+                guard let data = response.data else { return }
+
+                logger.info("✅ 상품 수정 성공: \(data.productId)")
                 ProductEventManager.shared.productChanged.send(())
-                self.productId = response.data?.productId
-            case .failure(let error):
+                productId = data.productId
+             case .failure(let error):
                 logger.error("❌ 상품 수정 실패: \(error.localizedDescription)")
             }
         }

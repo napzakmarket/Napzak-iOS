@@ -50,8 +50,9 @@ final class ProductDetailViewModel: ObservableObject {
     private let likeSubject = PassthroughSubject<(Int, Bool), Never>()
     
     private let interestService = NetworkService.shared.interestService
-    private let productId: Int
+    let productId: Int
     let loadingManager = LoadingViewManager()
+    private let mixpanelManager = MixpanelManager.shared
 
     //MARK: - Init
     
@@ -100,6 +101,9 @@ extension ProductDetailViewModel {
             self.product.productPhotoList = data.productPhotoList.map { ProductPhotoInfo(dto: $0) }
             self.product.storeInfo = StoreInfo(dto: data.storeInfo)
             
+            let type = data.productDetail.tradeType == .sell ? "for_sale" : "wanted"
+            mixpanelManager.trackEvent(event: "Viewed Product", properties: ["post_id": id,
+                                                                             "post_type": type])
         case .failure(let error):
             logger.error("getSellProduct failed: \(error.localizedDescription)")
         }
@@ -162,6 +166,20 @@ extension ProductDetailViewModel {
             try? await Task.sleep(for: .seconds(1.5))
             showStatusToast = false
             ProductEventManager.shared.productChanged.send(())
+            
+            var status: String?
+            let tradeStatus = product.productDetail.tradeStatus
+            let tradeType = product.productDetail.tradeType
+            
+            if tradeStatus == .reserved {
+                status = "in_progress"
+            } else if tradeStatus == .completed {
+                status = tradeType == .sell ? "sale_completed" : "payment_completed"
+            }
+            
+            guard let status else { return }
+            mixpanelManager.trackEvent(event: "Changed Product_status", properties: ["product_id": productId,
+                                                                                     "product_status": status])
         case .failure(let error):
             logger.error("getSellProduct failed: \(error.localizedDescription)")
         }

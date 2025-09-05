@@ -73,8 +73,7 @@ extension RegisterSearchGenre {
             SearchBar(placeholder: "어떤 장르의 굿즈인가요? 검색해보세요!",
                       cornerRadius: 14,
                       text: $genreSearchText,
-                      isCompleted: $isCompleted,
-                      onSubmit: { })
+                      isCompleted: $isCompleted)
             .padding(.horizontal, 27)
             .padding(.bottom, 24)
             

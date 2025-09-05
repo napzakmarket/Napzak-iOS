@@ -29,7 +29,8 @@ struct SettingView: View {
     }
     
     let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-    
+    private let mixpanelManager = MixpanelManager.shared
+
     var body: some View {
         ZStack {
             VStack(spacing: 0){
@@ -82,6 +83,7 @@ struct SettingView: View {
         .navigationBarHidden(true)
         .onAppear {
             withDrawViewModel.resetWithdraw()
+            mixpanelManager.trackEvent(event: "Viewed Settings")
         }
     }
 }
@@ -219,6 +221,7 @@ extension SettingView {
     
     private var withDrawButton: some View {
         Button {
+            mixpanelManager.trackEvent(event: "Started Withdrawal")
             navigationRouter.push(next: .withDrawSelectReasonView)
         } label: {
             HStack(alignment: .center, spacing: 0) {
@@ -259,6 +262,9 @@ extension SettingView {
                 }
                 .toggleStyle(CustomToggleStyle())
                 .disabled(!permissionManager.isOSPushEnabled)
+                .onChange(of: permissionManager.isAppPushEnabled) { newValue in
+                    mixpanelManager.trackEvent(event: "Toggled Alarm", properties: ["status": newValue ? "on" : "off"])
+                }
             }
         }
         .padding(.horizontal, 28)
