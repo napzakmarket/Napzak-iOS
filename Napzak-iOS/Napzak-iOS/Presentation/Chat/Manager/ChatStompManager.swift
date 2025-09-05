@@ -322,6 +322,12 @@ extension ChatStompManager {
     func connect() {
         guard stompClient?.isConnected == false else { return }
         stompClient?.connect()
+        if let subscribedMyStoreId {
+            subscribeMyStoreChannel(storeId: subscribedMyStoreId)
+        }
+        if let subscribedChatRoomIds {
+            subscribeChatRooms(roomIds: subscribedChatRoomIds)
+        }
     }
 
     func disconnect() {
