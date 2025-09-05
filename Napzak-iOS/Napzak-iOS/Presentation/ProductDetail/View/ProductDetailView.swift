@@ -69,6 +69,7 @@ struct ProductDetailView: View {
                     reportType: .product,
                     onReportButtonTapped: {
                         navigationRouter.push(next: .reportView(reportType: .product, id: viewModel.product.productDetail.id))
+                        MixpanelManager.shared.trackEvent(event: "Opened Report Overlay_product")
                     }
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))

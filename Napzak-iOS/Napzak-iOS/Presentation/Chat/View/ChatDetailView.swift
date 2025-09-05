@@ -69,6 +69,7 @@ struct ChatDetailView: View {
                             isUsedInChat: true,
                             onReportButtonTapped: {
                                 navigationRouter.push(next: .reportView(reportType: .store, id: viewModel.chatDetailInfo.chatStoreInfo.storeId))
+                                MixpanelManager.shared.trackEvent(event: "Opened Report Overlay_market")
                             },
                             onExitButtonTapped: {
                                 isExitAlertPresented = true
