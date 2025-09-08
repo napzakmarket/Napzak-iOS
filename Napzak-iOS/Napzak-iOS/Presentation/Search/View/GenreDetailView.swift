@@ -14,6 +14,7 @@ struct GenreDetailView: View {
     //MARK: - Property Wrappers
 
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @EnvironmentObject private var tabRouter: TabRouter
 
     @StateObject private var viewModel: GenreDetailViewModel
     
@@ -104,6 +105,7 @@ private extension GenreDetailView {
             }
             
             Button {
+                tabRouter.switchToHome()
                 navigationRouter.reset()
             } label: {
                 Image(.iconHome)
