@@ -63,7 +63,7 @@ extension AppleLoginAdapter: ASAuthorizationControllerDelegate {
         if let authError = error as? ASAuthorizationError {
             switch authError.code {
             case .canceled:
-                continuation?.resume(returning: .failure(.loginFailed(service: .apple)))
+                continuation?.resume(returning: .failure(.canceled))
             default:
                 continuation?.resume(returning: .failure(.loginFailed(service: .apple)))
             }

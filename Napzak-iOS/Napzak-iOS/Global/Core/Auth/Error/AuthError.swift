@@ -16,6 +16,7 @@ enum AuthError: Error {
     case invalidResponse
     case networkError
     case reportedUser
+    case canceled
     
     var message: String {
         switch self {
@@ -35,6 +36,8 @@ enum AuthError: Error {
             return "네트워크 오류가 발생했습니다"
         case .reportedUser:
             return "신고된 사용자입니다."
+        case .canceled:
+            return "로그인이 취소되었습니다"
         }
     }
 }
