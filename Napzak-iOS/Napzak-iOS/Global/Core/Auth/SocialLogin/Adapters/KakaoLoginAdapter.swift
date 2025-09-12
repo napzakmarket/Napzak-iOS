@@ -28,7 +28,7 @@ final class KakaoLoginAdapter: SocialLoginService {
             UserApi.shared.loginWithKakaoTalk { oauthToken, error in
                 if let error = error {
                     Self.logger.error("KakaoTalk login failed: \(error.localizedDescription)")
-                    continuation.resume(returning: .failure(.loginFailed(service: .kakao)))
+                    continuation.resume(returning: .failure(.canceled))
                     return
                 }
                 
@@ -50,7 +50,7 @@ final class KakaoLoginAdapter: SocialLoginService {
             UserApi.shared.loginWithKakaoAccount { oauthToken, error in
                 if let error = error {
                     Self.logger.error("KakaoAccount login failed: \(error.localizedDescription)")
-                    continuation.resume(returning: .failure(.loginFailed(service: .kakao)))
+                    continuation.resume(returning: .failure(.canceled))
                     return
                 }
                 

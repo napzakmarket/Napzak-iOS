@@ -41,6 +41,10 @@ final class LoginViewModel: ObservableObject {
         case .failure(let error):
             // TODO: - 서버 오류 시 팝업 필요
             
+            if case AuthError.canceled = error {
+                return
+            }
+            
             self.showAlert = true
             
             logger.error("로그인 실패: \(String(describing: error))")
