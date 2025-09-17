@@ -21,6 +21,7 @@ struct MarketView: View {
     @State private var isSortModalPresented = false
     @State private var selectedSortOption: SortOption = .recent
     @State private var isReportModalPresented = false
+    @State private var isBlockAlertPresented = false
     @State private var scrollToTopTrigger: Bool = false
     
     @State private var isOnSaleSell: Bool = false
@@ -101,14 +102,58 @@ struct MarketView: View {
                 
                 DetailOptionsModalView(
                     isReportModalPresented: $isReportModalPresented,
-                    type: .store(isBlocked: false),
+                    type: .store(isBlocked: viewModel.isUserBlocked),
                     onReportButtonTapped: {
                         navigationRouter.push(next: .reportView(reportType: .store, id: viewModel.storeDetail?.storeId ?? 0))
+                    },
+                    onBlockButtonTapped: {
+                        if viewModel.isUserBlocked {
+                            viewModel.isUserBlocked = false
+                        } else {
+                            isBlockAlertPresented = true
+                        }
                     }
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
             }
+            
+            if isBlockAlertPresented {
+                ZStack(alignment: .center) {
+                    Color.napzakTransparency(.transBlack)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            withAnimation {
+                                isBlockAlertPresented = false
+                            }
+                        }
+                        .transition(.opacity)
+                        .zIndex(1)
+
+                    NZAlertView(
+                        style: .plain,
+                        titleMessage: "마켓을 차단하시겠어요?",
+                        subTitleMessage: "차단하면 해당 마켓과 대화할 수 없어요.",
+                        confirmText: "예",
+                        cancelText: "아니오",
+                        onConfirm: {
+
+                            isBlockAlertPresented = false
+
+                            //TODO: - 차단 서버 통신
+                            viewModel.isUserBlocked = true
+
+                            //TODO: - 차단 완료 토스트
+                        },
+                        onCancel: {
+                            isBlockAlertPresented = false
+                        }
+                    )
+                    .zIndex(2)
+                }
+                .zIndex(3)
+            }
+
 
             if viewModel.showToast {
                 ToastMessageView(

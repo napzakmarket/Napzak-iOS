@@ -30,6 +30,8 @@ final class MarketViewModel: ObservableObject {
     @Published var productCount: Int = 0
     @Published var showToast: Bool = false
     
+    @Published var isUserBlocked: Bool = false
+    
     @ObservedObject private var likeManager = ProductLikeManager.shared
     
     private let storeId: Int
