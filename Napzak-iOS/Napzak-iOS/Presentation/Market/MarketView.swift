@@ -99,9 +99,9 @@ struct MarketView: View {
                     .transition(.opacity)
                     .zIndex(1)
                 
-                ReportModalView(
+                DetailOptionsModalView(
                     isReportModalPresented: $isReportModalPresented,
-                    reportType: .store,
+                    type: .store(isBlocked: false),
                     onReportButtonTapped: {
                         navigationRouter.push(next: .reportView(reportType: .store, id: viewModel.storeDetail?.storeId ?? 0))
                     }

@@ -1,5 +1,5 @@
 //
-//  ReportModalView.swift
+//  DetailOptionModalView.swift
 //  Napzak-iOS
 //
 //  Created by 조혜린 on 5/7/25.
@@ -7,7 +7,31 @@
 
 import SwiftUI
 
-struct ReportModalView: View {
+enum DetailOptionType {
+    case chat(isBlocked: Bool)
+    case store(isBlocked: Bool)
+    case product
+
+    var reportTitle: String {
+        switch self {
+        case .chat, .store:
+            return "마켓"
+        case .product:
+            return "상품"
+        }
+    }
+    
+    var isBlocked: Bool {
+        switch self {
+        case .chat(let isBlocked), .store(let isBlocked):
+            return isBlocked
+        case .product:
+            return false
+        }
+    }
+}
+
+struct DetailOptionsModalView: View {
     
     //MARK: - Property Wrappers
     
@@ -15,9 +39,9 @@ struct ReportModalView: View {
     
     //MARK: - Properties
     
-    let reportType: ReportType
-    var isUsedInChat: Bool = false
+    let type: DetailOptionType
     let onReportButtonTapped: () -> Void
+    var onBlockButtonTapped: () -> Void = { }
     var onExitButtonTapped: () -> Void = { }
     
     //MARK: - Main Body
@@ -37,7 +61,7 @@ struct ReportModalView: View {
             } label: {
                 HStack(spacing: 6) {
                     Image(.imgReportModal)
-                    Text("\(reportType.title) 신고하기")
+                    Text("\(type.reportTitle) 신고하기")
                         .applyNapzakFont(.body4Bold14)
                         .foregroundStyle(Color.napzakState(.red))
                     Spacer()
@@ -45,7 +69,9 @@ struct ReportModalView: View {
                 .padding(.vertical, 10)
             }
             
-            if isUsedInChat {
+            switch type {
+            case .chat(let isBlocked):
+                blockButton(isBlocked)
                 Button {
                     withAnimation {
                         isReportModalPresented = false
@@ -61,6 +87,10 @@ struct ReportModalView: View {
                     }
                     .padding(.vertical, 10)
                 }
+            case .store(let isBlocked):
+                blockButton(isBlocked)
+            case .product:
+                EmptyView()
             }
         }
         .padding(.top, 17)
@@ -81,15 +111,36 @@ struct ReportModalView: View {
     }
 }
 
+extension DetailOptionsModalView {
+    
+    @ViewBuilder
+    func blockButton(_ isBlocked: Bool) -> some View {
+        Button {
+            withAnimation {
+                isReportModalPresented = false
+                onBlockButtonTapped()
+            }
+        } label: {
+            HStack(spacing: 6) {
+                Image(isBlocked ? .imgUnblockModal : .imgBlockModal)
+                Text(isBlocked ? "마켓 차단 해제하기" : "마켓 차단하기")
+                    .applyNapzakFont(.body4Bold14)
+                    .foregroundStyle(Color.napzakGrayScale(.gray500))
+                Spacer()
+            }
+        }
+        .padding(.vertical, 10)
+    }
+}
+
 #Preview {
     struct PreviewContainer: View {
         @State private var isViewerOptionsPresented = true
         
         var body: some View {
-            ReportModalView(
+            DetailOptionsModalView(
                 isReportModalPresented: $isViewerOptionsPresented,
-                reportType: .product,
-                isUsedInChat: true,
+                type: .chat(isBlocked: true),
                 onReportButtonTapped: { },
                 onExitButtonTapped: { }
             )

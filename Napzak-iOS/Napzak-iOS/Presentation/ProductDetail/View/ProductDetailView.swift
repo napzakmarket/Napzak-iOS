@@ -64,9 +64,9 @@ struct ProductDetailView: View {
                     .transition(.opacity)
                     .zIndex(1)
                 
-                ReportModalView(
+                DetailOptionsModalView(
                     isReportModalPresented: $isReportModalPresented,
-                    reportType: .product,
+                    type: .product,
                     onReportButtonTapped: {
                         navigationRouter.push(next: .reportView(reportType: .product, id: viewModel.product.productDetail.id))
                         MixpanelManager.shared.trackEvent(event: "Opened Report Overlay_product")

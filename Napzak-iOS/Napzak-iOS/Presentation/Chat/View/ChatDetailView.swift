@@ -63,10 +63,9 @@ struct ChatDetailView: View {
                     
                     VStack {
                         Spacer()
-                        ReportModalView(
+                        DetailOptionsModalView(
                             isReportModalPresented: $isViewerOptionsPresented,
-                            reportType: .store,
-                            isUsedInChat: true,
+                            type: .chat(isBlocked: false),
                             onReportButtonTapped: {
                                 navigationRouter.push(next: .reportView(reportType: .store, id: viewModel.chatDetailInfo.chatStoreInfo.storeId))
                                 MixpanelManager.shared.trackEvent(event: "Opened Report Overlay_market")
