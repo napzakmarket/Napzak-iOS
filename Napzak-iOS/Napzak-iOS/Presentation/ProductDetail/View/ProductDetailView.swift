@@ -21,7 +21,7 @@ struct ProductDetailView: View {
     @State private var isReportModalPresented = false
     @State private var isOwnerOptionsModalPresented = false
     @State private var isDeleteAlertPresented = false
-    @State private var statusToastStyle: StatusToastStyle = .statusChanged
+    @State private var toastType: ToastType = .productStatuChanged(statusString: "")
     @State private var isRegisterViewPresented = false
     @State private var isImageDetailViewPresented: Bool = false
     @State private var isEditCompleted = false
@@ -89,7 +89,7 @@ struct ProductDetailView: View {
                 ProductOwnerOptionsModalView(
                     isOwnerOptionsModalPresented: $isOwnerOptionsModalPresented,
                     currentStatus: $viewModel.product.productDetail.tradeStatus,
-                    currentToastStyle: $statusToastStyle,
+                    currentToastType: $toastType,
                     tradeType: viewModel.product.productDetail.tradeType,
                     onEditProduct: {
                         isRegisterViewPresented = true
@@ -142,10 +142,7 @@ struct ProductDetailView: View {
             }
             
             if viewModel.showStatusToast {
-                ProductDetailToastView(
-                    style: statusToastStyle,
-                    tradeStatus: statusString(status: viewModel.product.productDetail.tradeStatus)
-                )
+                RoundedRectangleToastView(type: toastType)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(3)
                 .padding(.bottom, 44)
@@ -191,7 +188,7 @@ struct ProductDetailView: View {
                     await viewModel.fetchProduct(id: viewModel.product.productDetail.id)
                 }
                 if isEditCompleted {
-                    statusToastStyle = .editCompleted
+                    toastType = .productEdited
                     Task {
                         viewModel.showStatusToast = true
                         try? await Task.sleep(for: .seconds(1.5))
