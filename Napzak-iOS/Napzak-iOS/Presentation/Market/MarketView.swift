@@ -108,7 +108,9 @@ struct MarketView: View {
                     },
                     onBlockButtonTapped: {
                         if viewModel.isUserBlocked {
-                            viewModel.isUserBlocked = false
+                            Task {
+                                await viewModel.toggleUserBlock()
+                            }
                         } else {
                             isBlockAlertPresented = true
                         }
@@ -139,11 +141,9 @@ struct MarketView: View {
                         onConfirm: {
 
                             isBlockAlertPresented = false
-
-                            //TODO: - 차단 서버 통신
-                            viewModel.isUserBlocked = true
-
-                            //TODO: - 차단 완료 토스트
+                            Task {
+                                await viewModel.toggleUserBlock()
+                            }
                         },
                         onCancel: {
                             isBlockAlertPresented = false
@@ -153,7 +153,6 @@ struct MarketView: View {
                 }
                 .zIndex(3)
             }
-
 
             if viewModel.showToast {
                 ToastMessageView(
@@ -165,6 +164,13 @@ struct MarketView: View {
                 .padding(.bottom, 110)
             }
             
+            if viewModel.showBlockToast {
+                    RoundedRectangleToastView(type: viewModel.isUserBlocked ? .userBlocked : .userUnblocked)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .zIndex(3)
+                    .padding(.bottom, 46)
+            }
+            
             if viewModel.loadingManager.isLoadingNetwork {
                 LoadingView()
             }
@@ -172,6 +178,7 @@ struct MarketView: View {
         .ignoresSafeArea()
         .navigationBarHidden(true)
         .animation(.spring(), value: viewModel.showToast)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.showBlockToast)
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .onAppear {

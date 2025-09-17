@@ -36,6 +36,7 @@ final class ChatDetailViewModel: ObservableObject {
     @Published var isImageDetailViewPresented: Bool = false
     
     @Published var isUserBlocked: Bool = false
+    @Published var showBlockToast = false
 
     //MARK: - Properties
     
@@ -519,5 +520,13 @@ extension ChatDetailViewModel {
                 await sendImageStompMessage(imageUrls: [uploadedImageUrl])
             }
         }
+    }
+    
+    func toggleUserBlock() async {
+        isUserBlocked.toggle()
+        
+        showBlockToast = true
+        try? await Task.sleep(for: .seconds(1.8))
+        showBlockToast = false
     }
 }

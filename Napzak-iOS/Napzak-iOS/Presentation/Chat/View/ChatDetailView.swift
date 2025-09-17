@@ -73,7 +73,9 @@ struct ChatDetailView: View {
                             },
                             onBlockButtonTapped: {
                                 if viewModel.isUserBlocked {
-                                    viewModel.isUserBlocked = false
+                                    Task {
+                                        await viewModel.toggleUserBlock()
+                                    }
                                 } else {
                                     isBlockAlertPresented = true
                                 }
@@ -140,13 +142,10 @@ struct ChatDetailView: View {
                             confirmText: "예",
                             cancelText: "아니오",
                             onConfirm: {
-
                                 isBlockAlertPresented = false
-
-                                //TODO: - 차단 서버 통신
-                                viewModel.isUserBlocked = true
-
-                                //TODO: - 차단 완료 토스트
+                                Task {
+                                    await viewModel.toggleUserBlock()
+                                }
                             },
                             onCancel: {
                                 isBlockAlertPresented = false
@@ -156,12 +155,23 @@ struct ChatDetailView: View {
                     }
                     .zIndex(3)
                 }
+                
+                if viewModel.showBlockToast {
+                    VStack {
+                        Spacer()
+                        RoundedRectangleToastView(type: viewModel.isUserBlocked ? .userBlocked : .userUnblocked)
+                            .padding(.bottom, 80)
+                    }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .zIndex(3)
+                }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .contentShape(Rectangle())
         }
         .ignoresSafeArea(edges: [.top])
         .toolbar(.hidden, for: .navigationBar)
+        .animation(.easeInOut(duration: 0.8), value: viewModel.showBlockToast)
         .animation(.easeInOut(duration: 0.3), value: isViewerOptionsPresented)
         .animation(.easeInOut(duration: 0.3), value: isExitAlertPresented)
         .onTapGesture {

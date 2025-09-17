@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+
 import Combine
 import os
 
@@ -31,7 +32,8 @@ final class MarketViewModel: ObservableObject {
     @Published var showToast: Bool = false
     
     @Published var isUserBlocked: Bool = false
-    
+    @Published var showBlockToast = false
+
     @ObservedObject private var likeManager = ProductLikeManager.shared
     
     private let storeId: Int
@@ -161,6 +163,14 @@ final class MarketViewModel: ObservableObject {
         likeSubject.send((productId, newState))
     }
     
+    func toggleUserBlock() async {
+        isUserBlocked.toggle()
+        
+        showBlockToast = true
+        try? await Task.sleep(for: .seconds(1.8))
+        showBlockToast = false
+    }
+
     private func setupLikePublisher() {
         likeSubject
             .throttle(for: .milliseconds(500), scheduler: DispatchQueue.main, latest: true)
