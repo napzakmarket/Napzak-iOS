@@ -25,6 +25,7 @@ struct ChatDetailView: View {
     @State private var isSent = true
     @State private var tempID = 10
     @State private var isViewerOptionsPresented = false
+    @State private var isBlockAlertPresented = false
     @State private var isExitAlertPresented = false
 
     //MARK: - Properties
@@ -65,10 +66,17 @@ struct ChatDetailView: View {
                         Spacer()
                         DetailOptionsModalView(
                             isReportModalPresented: $isViewerOptionsPresented,
-                            type: .chat(isBlocked: false),
+                            type: .chat(isBlocked: viewModel.isUserBlocked),
                             onReportButtonTapped: {
                                 navigationRouter.push(next: .reportView(reportType: .store, id: viewModel.chatDetailInfo.chatStoreInfo.storeId))
                                 MixpanelManager.shared.trackEvent(event: "Opened Report Overlay_market")
+                            },
+                            onBlockButtonTapped: {
+                                if viewModel.isUserBlocked {
+                                    viewModel.isUserBlocked = false
+                                } else {
+                                    isBlockAlertPresented = true
+                                }
                             },
                             onExitButtonTapped: {
                                 isExitAlertPresented = true
@@ -106,6 +114,42 @@ struct ChatDetailView: View {
                             },
                             onCancel: {
                                 isExitAlertPresented = false
+                            }
+                        )
+                        .zIndex(2)
+                    }
+                    .zIndex(3)
+                }
+
+                if isBlockAlertPresented {
+                    ZStack(alignment: .center) {
+                        Color.napzakTransparency(.transBlack)
+                            .ignoresSafeArea()
+                            .onTapGesture {
+                                withAnimation {
+                                    isBlockAlertPresented = false
+                                }
+                            }
+                            .transition(.opacity)
+                            .zIndex(1)
+
+                        NZAlertView(
+                            style: .plain,
+                            titleMessage: "마켓을 차단하시겠어요?",
+                            subTitleMessage: "차단하면 해당 마켓과 대화할 수 없어요.",
+                            confirmText: "예",
+                            cancelText: "아니오",
+                            onConfirm: {
+
+                                isBlockAlertPresented = false
+
+                                //TODO: - 차단 서버 통신
+                                viewModel.isUserBlocked = true
+
+                                //TODO: - 차단 완료 토스트
+                            },
+                            onCancel: {
+                                isBlockAlertPresented = false
                             }
                         )
                         .zIndex(2)

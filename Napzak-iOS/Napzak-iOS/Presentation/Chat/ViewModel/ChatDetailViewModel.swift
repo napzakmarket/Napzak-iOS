@@ -34,6 +34,8 @@ final class ChatDetailViewModel: ObservableObject {
     @Published var selectedImage: UIImage? = nil
     @Published var uploadedImageUrl = ""
     @Published var isImageDetailViewPresented: Bool = false
+    
+    @Published var isUserBlocked: Bool = false
 
     //MARK: - Properties
     
