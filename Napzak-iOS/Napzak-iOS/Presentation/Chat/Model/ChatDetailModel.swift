@@ -70,6 +70,8 @@ struct ChatStoreInfo {
     let isWithdrawn: Bool
     let isReported: Bool
     let storePhoto: String
+    let isOpponentStoreBlocked: Bool
+    let isChatBlocked: Bool
     
     //MARK: - Init
     
@@ -79,13 +81,17 @@ struct ChatStoreInfo {
         nickname: String,
         isWithdrawn: Bool,
         isReported: Bool,
-        storePhoto: String
+        storePhoto: String,
+        isOpponentStoreBlocked: Bool,
+        isChatBlocked: Bool
     ) {
         self.storeId = storeId
         self.nickname = nickname
         self.isWithdrawn = isWithdrawn
         self.isReported = isReported
         self.storePhoto = storePhoto
+        self.isOpponentStoreBlocked = isOpponentStoreBlocked
+        self.isChatBlocked = isChatBlocked
     }
     
     ///init for decoding
@@ -95,5 +101,7 @@ struct ChatStoreInfo {
         self.isWithdrawn = dto.isWithdrawn
         self.isReported = dto.isReported
         self.storePhoto = dto.storePhoto
+        self.isOpponentStoreBlocked = dto.isOpponentStoreBlocked
+        self.isChatBlocked = dto.isChatBlocked
     }
 }

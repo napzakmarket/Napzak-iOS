@@ -22,7 +22,7 @@ final class ChatDetailViewModel: ObservableObject {
 
     @Published var chatDetailInfo = ChatDetailModel(
         productInfo: ChatProductInfo(productId: 0, photo: "", tradeType: .buy, title: "", price: 0, isPriceNegotiable: false, genreName: "", productOwnerId: 0, isMyProduct: false, isProductDeleted: false),
-        chatStoreInfo: ChatStoreInfo(storeId: 0, nickname: "", isWithdrawn: false, isReported: false, storePhoto: "")
+        chatStoreInfo: ChatStoreInfo(storeId: 0, nickname: "", isWithdrawn: false, isReported: false, storePhoto: "", isOpponentStoreBlocked: false, isChatBlocked: false)
     )
     @Published var chatMessages: [ChatMessageModel] = []
     @Published var messageText = ""
@@ -242,7 +242,7 @@ private extension ChatDetailViewModel {
                 roomId = receivedRoomId
                 await self.fetchChatMessages(roomId: receivedRoomId)
             }
-            if chatDetailInfo.chatStoreInfo.isWithdrawn || chatDetailInfo.chatStoreInfo.isReported {
+            if chatDetailInfo.chatStoreInfo.isWithdrawn || chatDetailInfo.chatStoreInfo.isReported || chatDetailInfo.chatStoreInfo.isChatBlocked {
                 isChatDisabled = true
             }
             
