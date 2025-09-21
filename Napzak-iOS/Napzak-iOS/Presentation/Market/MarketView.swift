@@ -102,12 +102,12 @@ struct MarketView: View {
                 
                 DetailOptionsModalView(
                     isReportModalPresented: $isReportModalPresented,
-                    type: .store(isBlocked: viewModel.isUserBlocked),
+                    type: .store(isBlocked: viewModel.storeDetail?.isStoreBlocked ?? false),
                     onReportButtonTapped: {
                         navigationRouter.push(next: .reportView(reportType: .store, id: viewModel.storeDetail?.storeId ?? 0))
                     },
                     onBlockButtonTapped: {
-                        if viewModel.isUserBlocked {
+                        if viewModel.storeDetail?.isStoreBlocked ?? false {
                             Task {
                                 await viewModel.toggleUserBlock()
                             }
@@ -165,7 +165,7 @@ struct MarketView: View {
             }
             
             if viewModel.showBlockToast {
-                    RoundedRectangleToastView(type: viewModel.isUserBlocked ? .userBlocked : .userUnblocked)
+                    RoundedRectangleToastView(type: viewModel.storeDetail?.isStoreBlocked ?? false ? .userBlocked : .userUnblocked)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                     .zIndex(3)
                     .padding(.bottom, 46)

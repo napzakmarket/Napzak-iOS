@@ -31,7 +31,6 @@ final class MarketViewModel: ObservableObject {
     @Published var productCount: Int = 0
     @Published var showToast: Bool = false
     
-    @Published var isUserBlocked: Bool = false
     @Published var showBlockToast = false
 
     @ObservedObject private var likeManager = ProductLikeManager.shared
@@ -164,11 +163,21 @@ final class MarketViewModel: ObservableObject {
     }
     
     func toggleUserBlock() async {
-        isUserBlocked.toggle()
+        guard let isBlocked = storeDetail?.isStoreBlocked else { return }
         
-        showBlockToast = true
-        try? await Task.sleep(for: .seconds(1.8))
-        showBlockToast = false
+        let result = isBlocked ?
+        await NetworkService.shared.storeService.postUnblockStore(storeId: storeId) :
+        await NetworkService.shared.storeService.postBlockStore(storeId: storeId)
+        
+        switch result {
+        case .success:
+            storeDetail?.isStoreBlocked = !isBlocked
+            showBlockToast = true
+            try? await Task.sleep(for: .seconds(1.8))
+            showBlockToast = false
+        case .failure(let error):
+            logger.error("postBlockStore failed: \(error.localizedDescription)")
+        }
     }
 
     private func setupLikePublisher() {
