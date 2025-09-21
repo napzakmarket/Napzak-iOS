@@ -70,7 +70,7 @@ struct ChatStoreInfo {
     let isWithdrawn: Bool
     let isReported: Bool
     let storePhoto: String
-    let isOpponentStoreBlocked: Bool
+    var isOpponentStoreBlocked: Bool
     let isChatBlocked: Bool
     
     //MARK: - Init

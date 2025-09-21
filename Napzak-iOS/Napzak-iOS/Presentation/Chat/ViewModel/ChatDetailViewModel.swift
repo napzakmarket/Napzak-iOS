@@ -35,7 +35,6 @@ final class ChatDetailViewModel: ObservableObject {
     @Published var uploadedImageUrl = ""
     @Published var isImageDetailViewPresented: Bool = false
     
-    @Published var isUserBlocked: Bool = false
     @Published var showBlockToast = false
 
     //MARK: - Properties
@@ -523,10 +522,28 @@ extension ChatDetailViewModel {
     }
     
     func toggleUserBlock() async {
-        isUserBlocked.toggle()
+        let isBlocked = chatDetailInfo.chatStoreInfo.isOpponentStoreBlocked
         
-        showBlockToast = true
-        try? await Task.sleep(for: .seconds(1.8))
-        showBlockToast = false
+        let result = isBlocked ?
+        await NetworkService.shared.storeService.postUnblockStore(storeId: chatDetailInfo.chatStoreInfo.storeId) :
+        await NetworkService.shared.storeService.postBlockStore(storeId: chatDetailInfo.chatStoreInfo.storeId)
+        
+        switch result {
+        case .success:
+            let isWithdrawn = chatDetailInfo.chatStoreInfo.isWithdrawn
+            let isReported = chatDetailInfo.chatStoreInfo.isReported
+            let isDisabled = !chatMessages.isEmpty && chatMessages.last?.type == .system
+            chatDetailInfo.chatStoreInfo.isOpponentStoreBlocked = !isBlocked
+            
+            if !isWithdrawn && !isReported && !isDisabled {
+                isChatDisabled = !isBlocked || chatDetailInfo.chatStoreInfo.isChatBlocked
+            }
+            
+            showBlockToast = true
+            try? await Task.sleep(for: .seconds(1.8))
+            showBlockToast = false
+        case .failure(let error):
+            logger.error("postBlockStore failed: \(error.localizedDescription)")
+        }
     }
 }

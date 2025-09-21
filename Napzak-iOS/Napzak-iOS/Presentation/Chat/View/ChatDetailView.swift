@@ -66,13 +66,13 @@ struct ChatDetailView: View {
                         Spacer()
                         DetailOptionsModalView(
                             isReportModalPresented: $isViewerOptionsPresented,
-                            type: .chat(isBlocked: viewModel.isUserBlocked),
+                            type: .chat(isBlocked: viewModel.chatDetailInfo.chatStoreInfo.isOpponentStoreBlocked),
                             onReportButtonTapped: {
                                 navigationRouter.push(next: .reportView(reportType: .store, id: viewModel.chatDetailInfo.chatStoreInfo.storeId))
                                 MixpanelManager.shared.trackEvent(event: "Opened Report Overlay_market")
                             },
                             onBlockButtonTapped: {
-                                if viewModel.isUserBlocked {
+                                if viewModel.chatDetailInfo.chatStoreInfo.isOpponentStoreBlocked {
                                     Task {
                                         await viewModel.toggleUserBlock()
                                     }
@@ -159,7 +159,7 @@ struct ChatDetailView: View {
                 if viewModel.showBlockToast {
                     VStack {
                         Spacer()
-                        RoundedRectangleToastView(type: viewModel.isUserBlocked ? .userBlocked : .userUnblocked)
+                        RoundedRectangleToastView(type: viewModel.chatDetailInfo.chatStoreInfo.isOpponentStoreBlocked ? .userBlocked : .userUnblocked)
                             .padding(.bottom, 80)
                     }
                     .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -260,7 +260,9 @@ extension ChatDetailView {
     }
     
     private var productInfo: some View {
-        let isDisabled: Bool = !viewModel.chatDetailInfo.productInfo.isMyProduct && viewModel.isChatDisabled
+        let isWithdrawn = viewModel.chatDetailInfo.chatStoreInfo.isWithdrawn
+        let isReported = viewModel.chatDetailInfo.chatStoreInfo.isReported
+        let isDisabled: Bool = !viewModel.chatDetailInfo.productInfo.isMyProduct && (isWithdrawn || isReported)
         let isDeleted: Bool = viewModel.chatDetailInfo.productInfo.isProductDeleted
 
         return Button {
