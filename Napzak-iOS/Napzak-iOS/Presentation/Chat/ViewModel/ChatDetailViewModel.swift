@@ -241,7 +241,12 @@ private extension ChatDetailViewModel {
                 roomId = receivedRoomId
                 await self.fetchChatMessages(roomId: receivedRoomId)
             }
-            if chatDetailInfo.chatStoreInfo.isWithdrawn || chatDetailInfo.chatStoreInfo.isReported || chatDetailInfo.chatStoreInfo.isChatBlocked {
+            
+            let isWithdrawn = chatDetailInfo.chatStoreInfo.isWithdrawn
+            let isReported = chatDetailInfo.chatStoreInfo.isReported
+            let isBlocked = chatDetailInfo.chatStoreInfo.isChatBlocked || chatDetailInfo.chatStoreInfo.isOpponentStoreBlocked
+            
+            if isWithdrawn || isReported || isBlocked {
                 isChatDisabled = true
             }
             
