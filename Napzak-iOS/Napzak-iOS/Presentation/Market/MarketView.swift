@@ -21,6 +21,7 @@ struct MarketView: View {
     @State private var isSortModalPresented = false
     @State private var selectedSortOption: SortOption = .recent
     @State private var isReportModalPresented = false
+    @State private var isBlockAlertPresented = false
     @State private var scrollToTopTrigger: Bool = false
     
     @State private var isOnSaleSell: Bool = false
@@ -99,15 +100,58 @@ struct MarketView: View {
                     .transition(.opacity)
                     .zIndex(1)
                 
-                ReportModalView(
+                DetailOptionsModalView(
                     isReportModalPresented: $isReportModalPresented,
-                    reportType: .store,
+                    type: .store(isBlocked: viewModel.storeDetail?.isStoreBlocked ?? false),
                     onReportButtonTapped: {
                         navigationRouter.push(next: .reportView(reportType: .store, id: viewModel.storeDetail?.storeId ?? 0))
+                    },
+                    onBlockButtonTapped: {
+                        if viewModel.storeDetail?.isStoreBlocked ?? false {
+                            Task {
+                                await viewModel.toggleUserBlock()
+                            }
+                        } else {
+                            isBlockAlertPresented = true
+                        }
                     }
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(2)
+            }
+            
+            if isBlockAlertPresented {
+                ZStack(alignment: .center) {
+                    Color.napzakTransparency(.transBlack)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            withAnimation {
+                                isBlockAlertPresented = false
+                            }
+                        }
+                        .transition(.opacity)
+                        .zIndex(1)
+
+                    NZAlertView(
+                        style: .plain,
+                        titleMessage: "마켓을 차단하시겠어요?",
+                        subTitleMessage: "차단하면 해당 마켓과 대화할 수 없어요.",
+                        confirmText: "예",
+                        cancelText: "아니오",
+                        onConfirm: {
+
+                            isBlockAlertPresented = false
+                            Task {
+                                await viewModel.toggleUserBlock()
+                            }
+                        },
+                        onCancel: {
+                            isBlockAlertPresented = false
+                        }
+                    )
+                    .zIndex(2)
+                }
+                .zIndex(3)
             }
 
             if viewModel.showToast {
@@ -120,6 +164,13 @@ struct MarketView: View {
                 .padding(.bottom, 110)
             }
             
+            if viewModel.showBlockToast {
+                    FeedbackToastView(type: viewModel.storeDetail?.isStoreBlocked ?? false ? .userBlocked : .userUnblocked)
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .zIndex(3)
+                    .padding(.bottom, 46)
+            }
+            
             if viewModel.loadingManager.isLoadingNetwork {
                 LoadingView()
             }
@@ -127,6 +178,7 @@ struct MarketView: View {
         .ignoresSafeArea()
         .navigationBarHidden(true)
         .animation(.spring(), value: viewModel.showToast)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.showBlockToast)
         .animation(.easeInOut(duration: 0.3), value: isGenreSelectModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isSortModalPresented)
         .onAppear {

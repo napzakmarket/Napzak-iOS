@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+
 import Combine
 import os
 
@@ -30,6 +31,8 @@ final class MarketViewModel: ObservableObject {
     @Published var productCount: Int = 0
     @Published var showToast: Bool = false
     
+    @Published var showBlockToast = false
+
     @ObservedObject private var likeManager = ProductLikeManager.shared
     
     private let storeId: Int
@@ -159,6 +162,24 @@ final class MarketViewModel: ObservableObject {
         likeSubject.send((productId, newState))
     }
     
+    func toggleUserBlock() async {
+        guard let isBlocked = storeDetail?.isStoreBlocked else { return }
+        
+        let result = isBlocked ?
+        await NetworkService.shared.storeService.postUnblockStore(storeId: storeId) :
+        await NetworkService.shared.storeService.postBlockStore(storeId: storeId)
+        
+        switch result {
+        case .success:
+            storeDetail?.isStoreBlocked = !isBlocked
+            showBlockToast = true
+            try? await Task.sleep(for: .seconds(1.8))
+            showBlockToast = false
+        case .failure(let error):
+            logger.error("postBlockStore failed: \(error.localizedDescription)")
+        }
+    }
+
     private func setupLikePublisher() {
         likeSubject
             .throttle(for: .milliseconds(500), scheduler: DispatchQueue.main, latest: true)

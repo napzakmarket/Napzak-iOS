@@ -22,7 +22,7 @@ final class ChatDetailViewModel: ObservableObject {
 
     @Published var chatDetailInfo = ChatDetailModel(
         productInfo: ChatProductInfo(productId: 0, photo: "", tradeType: .buy, title: "", price: 0, isPriceNegotiable: false, genreName: "", productOwnerId: 0, isMyProduct: false, isProductDeleted: false),
-        chatStoreInfo: ChatStoreInfo(storeId: 0, nickname: "", isWithdrawn: false, isReported: false, storePhoto: "")
+        chatStoreInfo: ChatStoreInfo(storeId: 0, nickname: "", isWithdrawn: false, isReported: false, storePhoto: "", isOpponentStoreBlocked: false, isChatBlocked: false)
     )
     @Published var chatMessages: [ChatMessageModel] = []
     @Published var messageText = ""
@@ -34,6 +34,8 @@ final class ChatDetailViewModel: ObservableObject {
     @Published var selectedImage: UIImage? = nil
     @Published var uploadedImageUrl = ""
     @Published var isImageDetailViewPresented: Bool = false
+    
+    @Published var showBlockToast = false
 
     //MARK: - Properties
     
@@ -239,7 +241,12 @@ private extension ChatDetailViewModel {
                 roomId = receivedRoomId
                 await self.fetchChatMessages(roomId: receivedRoomId)
             }
-            if chatDetailInfo.chatStoreInfo.isWithdrawn || chatDetailInfo.chatStoreInfo.isReported {
+            
+            let isWithdrawn = chatDetailInfo.chatStoreInfo.isWithdrawn
+            let isReported = chatDetailInfo.chatStoreInfo.isReported
+            let isBlocked = chatDetailInfo.chatStoreInfo.isChatBlocked || chatDetailInfo.chatStoreInfo.isOpponentStoreBlocked
+            
+            if isWithdrawn || isReported || isBlocked {
                 isChatDisabled = true
             }
             
@@ -516,6 +523,32 @@ extension ChatDetailViewModel {
             } else {
                 await sendImageStompMessage(imageUrls: [uploadedImageUrl])
             }
+        }
+    }
+    
+    func toggleUserBlock() async {
+        let isBlocked = chatDetailInfo.chatStoreInfo.isOpponentStoreBlocked
+        
+        let result = isBlocked ?
+        await NetworkService.shared.storeService.postUnblockStore(storeId: chatDetailInfo.chatStoreInfo.storeId) :
+        await NetworkService.shared.storeService.postBlockStore(storeId: chatDetailInfo.chatStoreInfo.storeId)
+        
+        switch result {
+        case .success:
+            let isWithdrawn = chatDetailInfo.chatStoreInfo.isWithdrawn
+            let isReported = chatDetailInfo.chatStoreInfo.isReported
+            let isDisabled = !chatMessages.isEmpty && chatMessages.last?.type == .system
+            chatDetailInfo.chatStoreInfo.isOpponentStoreBlocked = !isBlocked
+            
+            if !isWithdrawn && !isReported && !isDisabled {
+                isChatDisabled = !isBlocked || chatDetailInfo.chatStoreInfo.isChatBlocked
+            }
+            
+            showBlockToast = true
+            try? await Task.sleep(for: .seconds(1.8))
+            showBlockToast = false
+        case .failure(let error):
+            logger.error("postBlockStore failed: \(error.localizedDescription)")
         }
     }
 }

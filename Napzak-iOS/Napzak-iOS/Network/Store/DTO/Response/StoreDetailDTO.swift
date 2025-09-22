@@ -12,6 +12,7 @@ struct StoreDetailDTO: Decodable {
     let storePhoto: String?
     let storeCover: String?
     let isStoreOwner: Bool
+    var isStoreBlocked: Bool
     let genrePreferences: [GenreDTO]
 }
 

@@ -25,6 +25,7 @@ struct ChatDetailView: View {
     @State private var isSent = true
     @State private var tempID = 10
     @State private var isViewerOptionsPresented = false
+    @State private var isBlockAlertPresented = false
     @State private var isExitAlertPresented = false
 
     //MARK: - Properties
@@ -63,13 +64,21 @@ struct ChatDetailView: View {
                     
                     VStack {
                         Spacer()
-                        ReportModalView(
+                        DetailOptionsModalView(
                             isReportModalPresented: $isViewerOptionsPresented,
-                            reportType: .store,
-                            isUsedInChat: true,
+                            type: .chat(isBlocked: viewModel.chatDetailInfo.chatStoreInfo.isOpponentStoreBlocked),
                             onReportButtonTapped: {
                                 navigationRouter.push(next: .reportView(reportType: .store, id: viewModel.chatDetailInfo.chatStoreInfo.storeId))
                                 MixpanelManager.shared.trackEvent(event: "Opened Report Overlay_market")
+                            },
+                            onBlockButtonTapped: {
+                                if viewModel.chatDetailInfo.chatStoreInfo.isOpponentStoreBlocked {
+                                    Task {
+                                        await viewModel.toggleUserBlock()
+                                    }
+                                } else {
+                                    isBlockAlertPresented = true
+                                }
                             },
                             onExitButtonTapped: {
                                 isExitAlertPresented = true
@@ -113,12 +122,56 @@ struct ChatDetailView: View {
                     }
                     .zIndex(3)
                 }
+
+                if isBlockAlertPresented {
+                    ZStack(alignment: .center) {
+                        Color.napzakTransparency(.transBlack)
+                            .ignoresSafeArea()
+                            .onTapGesture {
+                                withAnimation {
+                                    isBlockAlertPresented = false
+                                }
+                            }
+                            .transition(.opacity)
+                            .zIndex(1)
+
+                        NZAlertView(
+                            style: .plain,
+                            titleMessage: "마켓을 차단하시겠어요?",
+                            subTitleMessage: "차단하면 해당 마켓과 대화할 수 없어요.",
+                            confirmText: "예",
+                            cancelText: "아니오",
+                            onConfirm: {
+                                isBlockAlertPresented = false
+                                Task {
+                                    await viewModel.toggleUserBlock()
+                                }
+                            },
+                            onCancel: {
+                                isBlockAlertPresented = false
+                            }
+                        )
+                        .zIndex(2)
+                    }
+                    .zIndex(3)
+                }
+                
+                if viewModel.showBlockToast {
+                    VStack {
+                        Spacer()
+                        FeedbackToastView(type: viewModel.chatDetailInfo.chatStoreInfo.isOpponentStoreBlocked ? .userBlocked : .userUnblocked)
+                            .padding(.bottom, 80)
+                    }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .zIndex(3)
+                }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .contentShape(Rectangle())
         }
         .ignoresSafeArea(edges: [.top])
         .toolbar(.hidden, for: .navigationBar)
+        .animation(.easeInOut(duration: 0.8), value: viewModel.showBlockToast)
         .animation(.easeInOut(duration: 0.3), value: isViewerOptionsPresented)
         .animation(.easeInOut(duration: 0.3), value: isExitAlertPresented)
         .onTapGesture {
@@ -207,7 +260,9 @@ extension ChatDetailView {
     }
     
     private var productInfo: some View {
-        let isDisabled: Bool = !viewModel.chatDetailInfo.productInfo.isMyProduct && viewModel.isChatDisabled
+        let isWithdrawn = viewModel.chatDetailInfo.chatStoreInfo.isWithdrawn
+        let isReported = viewModel.chatDetailInfo.chatStoreInfo.isReported
+        let isDisabled: Bool = !viewModel.chatDetailInfo.productInfo.isMyProduct && (isWithdrawn || isReported)
         let isDeleted: Bool = viewModel.chatDetailInfo.productInfo.isProductDeleted
 
         return Button {

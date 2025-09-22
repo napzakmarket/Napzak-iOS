@@ -38,7 +38,7 @@ struct ChatView: View {
             }
             
             if tabRouter.showChatRoomExitToast {
-                toastView
+                FeedbackToastView(type: .chatRoomExited)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                     .zIndex(2)
                     .padding(.bottom, 120)
@@ -149,21 +149,5 @@ extension ChatView {
             .padding(.bottom, 115)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-    
-    var toastView: some View {
-        HStack(spacing: 6) {
-            Text("해당 채팅방을 나간 상태입니다.")
-                .applyNapzakFont(.body5SemiBold14)
-                .foregroundStyle(Color.napzakGrayScale(.white))
-                .frame(height: 18)
-        }
-        .padding(.vertical, 13)
-        .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .fill(Color.napzakTransparency(.transBlack))
-        )
-        .padding(.horizontal, 37)
     }
 }

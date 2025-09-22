@@ -33,6 +33,8 @@ struct ChatStoreInfoDTO: Decodable {
     let isWithdrawn: Bool
     let isReported: Bool
     let storePhoto: String
+    let isOpponentStoreBlocked: Bool
+    let isChatBlocked: Bool
 }
 
 struct UpdatedProductIdDTO: Decodable {

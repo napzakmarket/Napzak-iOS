@@ -15,7 +15,7 @@ struct ProductOwnerOptionsModalView: View {
     
     @Binding var isOwnerOptionsModalPresented: Bool
     @Binding var currentStatus: TradeStatus
-    @Binding var currentToastStyle: StatusToastStyle
+    @Binding var currentToastType: ToastType
 
     //MARK: - Properties
     
@@ -110,7 +110,7 @@ private extension ProductOwnerOptionsModalView {
                 HStack(alignment: .center, spacing: 4) {
                     Button {
                         currentStatus = status
-                        currentToastStyle = .statusChanged
+                        currentToastType = .productStatusChanged(statusString: statusString(status: status))
                         isChangeStatusButtonSelected = false
                         isOwnerOptionsModalPresented = false
                         onChangeStatus()
@@ -132,7 +132,7 @@ private extension ProductOwnerOptionsModalView {
     var deleteButton: some View {
         Button {
             isChangeStatusButtonSelected = false
-            currentToastStyle = .deleteProduct
+            currentToastType = .productDeleted
             onDeletePtoduct()
         } label: {
             HStack(spacing: 6) {
