@@ -159,7 +159,7 @@ struct ChatDetailView: View {
                 if viewModel.showBlockToast {
                     VStack {
                         Spacer()
-                        RoundedRectangleToastView(type: viewModel.chatDetailInfo.chatStoreInfo.isOpponentStoreBlocked ? .userBlocked : .userUnblocked)
+                        FeedbackToastView(type: viewModel.chatDetailInfo.chatStoreInfo.isOpponentStoreBlocked ? .userBlocked : .userUnblocked)
                             .padding(.bottom, 80)
                     }
                     .transition(.move(edge: .bottom).combined(with: .opacity))

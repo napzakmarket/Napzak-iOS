@@ -165,7 +165,7 @@ struct MarketView: View {
             }
             
             if viewModel.showBlockToast {
-                    RoundedRectangleToastView(type: viewModel.storeDetail?.isStoreBlocked ?? false ? .userBlocked : .userUnblocked)
+                    FeedbackToastView(type: viewModel.storeDetail?.isStoreBlocked ?? false ? .userBlocked : .userUnblocked)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                     .zIndex(3)
                     .padding(.bottom, 46)

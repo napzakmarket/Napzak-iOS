@@ -1,5 +1,5 @@
 //
-//  RoundedRectangleToastView.swift
+//  FeedbackToastView.swift
 //  Napzak-iOS
 //
 //  Created by 조혜린 on 5/8/25.
@@ -38,7 +38,7 @@ enum ToastType {
     }
 }
 
-struct RoundedRectangleToastView: View {
+struct FeedbackToastView: View {
     
     //MARK: - Properties
 
@@ -65,5 +65,5 @@ struct RoundedRectangleToastView: View {
 }
 
 #Preview {
-    RoundedRectangleToastView(type: .productStatusChanged(statusString: "판매중"))
+    FeedbackToastView(type: .productStatusChanged(statusString: "판매중"))
 }

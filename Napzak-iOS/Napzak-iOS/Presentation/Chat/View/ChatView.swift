@@ -38,7 +38,7 @@ struct ChatView: View {
             }
             
             if tabRouter.showChatRoomExitToast {
-                RoundedRectangleToastView(type: .chatRoomExited)
+                FeedbackToastView(type: .chatRoomExited)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                     .zIndex(2)
                     .padding(.bottom, 120)

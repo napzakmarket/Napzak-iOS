@@ -142,7 +142,7 @@ struct ProductDetailView: View {
             }
             
             if viewModel.showStatusToast {
-                RoundedRectangleToastView(type: toastType)
+                FeedbackToastView(type: toastType)
                 .transition(.move(edge: .bottom).combined(with: .opacity))
                 .zIndex(3)
                 .padding(.bottom, 44)
