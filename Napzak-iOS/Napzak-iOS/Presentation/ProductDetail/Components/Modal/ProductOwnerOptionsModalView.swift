@@ -110,7 +110,7 @@ private extension ProductOwnerOptionsModalView {
                 HStack(alignment: .center, spacing: 4) {
                     Button {
                         currentStatus = status
-                        currentToastType = .productStatuChanged(statusString: statusString(status: status))
+                        currentToastType = .productStatusChanged(statusString: statusString(status: status))
                         isChangeStatusButtonSelected = false
                         isOwnerOptionsModalPresented = false
                         onChangeStatus()

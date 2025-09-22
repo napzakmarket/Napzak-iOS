@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum ToastType {
-    case productStatuChanged(statusString: String)
+    case productStatusChanged(statusString: String)
     case productDeleted
     case productEdited
     case chatRoomExited
@@ -27,7 +27,7 @@ enum ToastType {
     
     var message: String {
         switch self {
-        case .productStatuChanged(let string): return "상품 상태를 \"\(string)\"으로 변경하였습니다."
+        case .productStatusChanged(let string): return "상품 상태를 \"\(string)\"으로 변경하였습니다."
         case .productDeleted: return "상품이 삭제되었습니다."
         case .productEdited: return "수정이 완료되었습니다."
         case .chatRoomExited: return "해당 채팅방을 나간 상태입니다."
@@ -65,5 +65,5 @@ struct RoundedRectangleToastView: View {
 }
 
 #Preview {
-    RoundedRectangleToastView(type: .productStatuChanged(statusString: "판매중"))
+    RoundedRectangleToastView(type: .productStatusChanged(statusString: "판매중"))
 }

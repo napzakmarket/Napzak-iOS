@@ -21,7 +21,7 @@ struct ProductDetailView: View {
     @State private var isReportModalPresented = false
     @State private var isOwnerOptionsModalPresented = false
     @State private var isDeleteAlertPresented = false
-    @State private var toastType: ToastType = .productStatuChanged(statusString: "")
+    @State private var toastType: ToastType = .productStatusChanged(statusString: "")
     @State private var isRegisterViewPresented = false
     @State private var isImageDetailViewPresented: Bool = false
     @State private var isEditCompleted = false
