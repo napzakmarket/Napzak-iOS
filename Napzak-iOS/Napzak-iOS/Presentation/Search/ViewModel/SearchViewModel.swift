@@ -163,9 +163,11 @@ extension SearchViewModel {
             self.sellProductsCount = data.productCount
             
             if data.productSellList.isEmpty {
+                self.sellProducts = []
                 showEmptyView = true
             } else {
                 self.sellProducts = data.productSellList.map { ProductItemModel(dto: $0) }
+                showEmptyView = false
             }
             
         case .failure(let error):
@@ -186,9 +188,11 @@ extension SearchViewModel {
             self.buyProductsCount = data.productCount
             
             if data.productBuyList.isEmpty {
+                self.buyProducts = []
                 showEmptyView = true
             } else {
                 self.buyProducts = data.productBuyList.map { ProductItemModel(dto: $0) }
+                showEmptyView = false
             }
             
         case .failure(let error):
