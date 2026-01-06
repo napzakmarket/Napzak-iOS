@@ -29,7 +29,7 @@ struct AppAlertView: View {
         var message: String {
             switch self {
             case .update: return "원활한 서비스 이용을 위해\n최신 버전으로 업데이트해주세요."
-            case .banned: return "해당 계정은 정책 위반으로 인해\n앱 서비스 접근이 불가합니다."
+            case .banned: return "서비스 운영 정책에 따라\n현재 계정은 이용이 제한된 상태입니다.\n관련 문의: napzakmarket@gmail.com"
             }
         }
         
@@ -61,7 +61,6 @@ struct AppAlertView: View {
                 .padding(.top, 12)
             
             Text(style.message)
-                .lineLimit(2)
                 .multilineTextAlignment(.center)
                 .applyNapzakFont(.caption1SemiBold12, lineSpacingEnabled: false)
                 .foregroundStyle(Color.napzakGrayScale(.gray200))
