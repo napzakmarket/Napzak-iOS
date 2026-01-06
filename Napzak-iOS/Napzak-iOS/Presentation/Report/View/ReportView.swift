@@ -217,18 +217,18 @@ extension ReportView {
             .frame(height: 13)
         }
         .padding(.horizontal, 28)
-        .padding(.bottom, 8)
+        .padding(.bottom, 9)
     }
     
     private var contactAddressSection: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("연락처 입력")
+            Text("이메일 주소 입력")
                 .applyNapzakFont(.body5SemiBold14)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
                 .frame(height: 18)
                 .padding(.bottom, 16)
             
-            TextField("신고 검토결과를 받아볼 이메일 또는 전화번호를 알려주세요", text: $viewModel.reportModel.contactAddress)
+            TextField("신고 관련 안내 및 확인을 위해 이메일 주소를 입력해 주세요.", text: $viewModel.reportModel.contactAddress)
                 .applyNapzakFont(.caption2Medium12)
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
                 .padding(.horizontal, 16)
@@ -273,7 +273,7 @@ extension ReportView {
     private var toastView: some View {
         VStack {
             Spacer()
-            Text("소중한 신고 감사합니다! 🙏\n\n신고 내용을 꼼꼼히 검토하여 \n입력하신 연락처로 결과를 안내해드릴게요.\n추가 정보가 필요할 경우 동일한 연락처로 문의드릴 수 있어요.")
+            Text("소중한 신고 감사합니다! 🙏\n\n신고 내용을 꼼꼼히 검토하여 \n입력하신 이메일로 결과를 안내해드릴게요.\n추가 정보가 필요할 경우 동일한 이메일로 문의드릴 수 있어요.")
                 .applyNapzakFont(.caption1SemiBold12)
                 .foregroundColor(Color.napzakGrayScale(.white))
                 .multilineTextAlignment(.center)
