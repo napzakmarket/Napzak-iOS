@@ -29,7 +29,14 @@ struct AppAlertView: View {
         var message: String {
             switch self {
             case .update: return "원활한 서비스 이용을 위해\n최신 버전으로 업데이트해주세요."
-            case .banned: return "서비스 운영 정책에 따라\n현재 계정은 이용이 제한된 상태입니다.\n관련 문의: napzakmarket@gmail.com"
+            case .banned: return "서비스 운영 정책에 따라\n현재 계정은 이용이 제한된 상태입니다."
+            }
+        }
+        
+        var napzakEmail: String? {
+            switch self {
+            case .update: return nil
+            case .banned: return "napzakmarket@gmail.com"
             }
         }
         
@@ -60,11 +67,25 @@ struct AppAlertView: View {
                 .applyNapzakFont(.body1Bold16)
                 .padding(.top, 12)
             
-            Text(style.message)
-                .multilineTextAlignment(.center)
-                .applyNapzakFont(.caption1SemiBold12, lineSpacingEnabled: false)
-                .foregroundStyle(Color.napzakGrayScale(.gray200))
-                .padding(.top, 10)
+            Group {
+                Text(style.message)
+                    .padding(.top, 10)
+                
+                if let email = style.napzakEmail {
+                    HStack(alignment: .center, spacing: 0) {
+                        Text("관련 문의: ")
+                        
+                        Text(email)
+                            .underline()
+                            .onTapGesture {
+                                UIPasteboard.general.string = email
+                            }
+                    }
+                }
+            }
+            .multilineTextAlignment(.center)
+            .applyNapzakFont(.caption1SemiBold12, lineSpacingEnabled: false)
+            .foregroundStyle(Color.napzakGrayScale(.gray200))
             
             Button {
                 onConfirm()
