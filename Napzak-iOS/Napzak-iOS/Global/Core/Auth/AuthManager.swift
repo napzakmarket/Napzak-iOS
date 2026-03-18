@@ -127,17 +127,16 @@ final class AuthManager: ObservableObject {
         logger.debug("Starting logout")
         
         let result = await authService.logout()
+        
         switch result {
         case .success(let response):
             if response.status == 200 {
                 logger.info("Server logout success")
             } else {
                 logger.error("Server logout failed:  - status code: \(response.status)")
-                return .failure(.invalidResponse)
             }
         case .failure(let error):
             logger.error("Server logout failed: \(error)")
-            return .failure(.networkError)
         }
         
         onboardingManager.clearProgress()
