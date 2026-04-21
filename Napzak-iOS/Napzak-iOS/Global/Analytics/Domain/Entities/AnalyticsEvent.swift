@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+public protocol AnalyticsEvent {
+    var name: AnalyticsEventName { get }
+    var parameters: [AnalyticsParameterKey: Any]? { get }
+}

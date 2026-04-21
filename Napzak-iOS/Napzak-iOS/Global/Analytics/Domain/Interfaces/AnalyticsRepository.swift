@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+public protocol AnalyticsRepository: Sendable {
+    func logEvent(_ event: AnalyticsEvent) async
+}
