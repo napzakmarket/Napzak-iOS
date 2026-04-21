@@ -621,20 +621,12 @@
 			path = Domain;
 			sourceTree = "<group>";
 		};
-		6C6F64DB2F97888800F69A00 /* Presentation */ = {
-			isa = PBXGroup;
-			children = (
-				6C6F64DC2F97888800F69A00 /* MixpanelManager.swift */,
-			);
-			path = Presentation;
-			sourceTree = "<group>";
-		};
 		6C6F64DD2F97888800F69A00 /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
 				6C6F64D92F97888800F69A00 /* Data */,
 				6C6F64DA2F97888800F69A00 /* Domain */,
-				6C6F64DB2F97888800F69A00 /* Presentation */,
+				6C6F64DC2F97888800F69A00 /* MixpanelManager.swift */,
 			);
 			path = Analytics;
 			sourceTree = "<group>";
