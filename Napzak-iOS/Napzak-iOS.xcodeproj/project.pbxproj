@@ -890,6 +890,7 @@
 				D045DEB82D83723A00EB1EB6 /* ContentView.swift */,
 				D045DF002D83855B00EB1EB6 /* Splash */,
 				D045DF0B2D83856F00EB1EB6 /* Onboarding */,
+				D614ACAC2F9CA36300C3C420 /* Auth */,
 				D045DF102D83856F00EB1EB6 /* Home */,
 				D045DF192D83856F00EB1EB6 /* Search */,
 				D045DF2E2D83856F00EB1EB6 /* Register */,
@@ -1024,7 +1025,6 @@
 		D045DF002D83855B00EB1EB6 /* Splash */ = {
 			isa = PBXGroup;
 			children = (
-				D645612A2DC4B355003D2E2B /* ViewModel */,
 				D64561292DC4B34F003D2E2B /* View */,
 			);
 			path = Splash;
@@ -1468,6 +1468,39 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		D614ACAC2F9CA36300C3C420 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACAF2F9CA39600C3C420 /* Login */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		D614ACAD2F9CA37300C3C420 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				D645612B2DC4B35F003D2E2B /* LoginViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		D614ACAE2F9CA38500C3C420 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D64560F12DC33514003D2E2B /* LoginView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		D614ACAF2F9CA39600C3C420 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACAD2F9CA37300C3C420 /* ViewModel */,
+				D614ACAE2F9CA38500C3C420 /* View */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
 		D6323DCF2DBD216200DD48A3 /* View */ = {
 			isa = PBXGroup;
 			children = (
@@ -1610,18 +1643,9 @@
 		D64561292DC4B34F003D2E2B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				D64560F12DC33514003D2E2B /* LoginView.swift */,
 				D682B50D2DD8EAD7001B5F6B /* SplashView.swift */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		D645612A2DC4B355003D2E2B /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				D645612B2DC4B35F003D2E2B /* LoginViewModel.swift */,
-			);
-			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		D66A3E822E1AC4A8003977AE /* Push */ = {
