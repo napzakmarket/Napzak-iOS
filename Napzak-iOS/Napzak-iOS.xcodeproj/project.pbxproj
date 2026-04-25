@@ -198,6 +198,15 @@
 		D6055AF22DBF3AE2005D32A3 /* BannerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6055AF12DBF3AE2005D32A3 /* BannerItem.swift */; };
 		D6055AF62DBFADF3005D32A3 /* BannerItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6055AF52DBFADF3005D32A3 /* BannerItemView.swift */; };
 		D6055AF82DBFE7C4005D32A3 /* CarouselView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6055AF72DBFE7C4005D32A3 /* CarouselView.swift */; };
+		D614ACB42F9CB01E00C3C420 /* VerificationNavigationStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACB32F9CB01E00C3C420 /* VerificationNavigationStyle.swift */; };
+		D614ACB72F9CB2A800C3C420 /* VerificationNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACB62F9CB2A800C3C420 /* VerificationNavigationBar.swift */; };
+		D614ACB92F9CB52D00C3C420 /* PhoneVerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACB82F9CB52D00C3C420 /* PhoneVerificationView.swift */; };
+		D614ACBB2F9CB71E00C3C420 /* VerificationHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACBA2F9CB71E00C3C420 /* VerificationHeaderView.swift */; };
+		D614ACBD2F9CBD0800C3C420 /* VerificationToastType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACBC2F9CBD0800C3C420 /* VerificationToastType.swift */; };
+		D614ACBF2F9CC47D00C3C420 /* PhoneInputSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACBE2F9CC47D00C3C420 /* PhoneInputSectionView.swift */; };
+		D614ACC12F9CDB4800C3C420 /* VerificationSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACC02F9CDB4800C3C420 /* VerificationSectionView.swift */; };
+		D614ACC52F9CE87C00C3C420 /* VerifyButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACC42F9CE87C00C3C420 /* VerifyButtonState.swift */; };
+		D614ACC72F9CFDC100C3C420 /* VerificationBottomActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACC62F9CFDC100C3C420 /* VerificationBottomActionView.swift */; };
 		D6323DD12DBD216F00DD48A3 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6323DD02DBD216F00DD48A3 /* HomeView.swift */; };
 		D63270162DA19639002414DA /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63270152DA19639002414DA /* SearchBar.swift */; };
 		D63270252DA2C879002414DA /* GenreChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63270242DA2C879002414DA /* GenreChip.swift */; };
@@ -472,6 +481,15 @@
 		D6055AF12DBF3AE2005D32A3 /* BannerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerItem.swift; sourceTree = "<group>"; };
 		D6055AF52DBFADF3005D32A3 /* BannerItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerItemView.swift; sourceTree = "<group>"; };
 		D6055AF72DBFE7C4005D32A3 /* CarouselView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselView.swift; sourceTree = "<group>"; };
+		D614ACB32F9CB01E00C3C420 /* VerificationNavigationStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationNavigationStyle.swift; sourceTree = "<group>"; };
+		D614ACB62F9CB2A800C3C420 /* VerificationNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationNavigationBar.swift; sourceTree = "<group>"; };
+		D614ACB82F9CB52D00C3C420 /* PhoneVerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationView.swift; sourceTree = "<group>"; };
+		D614ACBA2F9CB71E00C3C420 /* VerificationHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationHeaderView.swift; sourceTree = "<group>"; };
+		D614ACBC2F9CBD0800C3C420 /* VerificationToastType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationToastType.swift; sourceTree = "<group>"; };
+		D614ACBE2F9CC47D00C3C420 /* PhoneInputSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneInputSectionView.swift; sourceTree = "<group>"; };
+		D614ACC02F9CDB4800C3C420 /* VerificationSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationSectionView.swift; sourceTree = "<group>"; };
+		D614ACC42F9CE87C00C3C420 /* VerifyButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyButtonState.swift; sourceTree = "<group>"; };
+		D614ACC62F9CFDC100C3C420 /* VerificationBottomActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationBottomActionView.swift; sourceTree = "<group>"; };
 		D6323DD02DBD216F00DD48A3 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		D63270152DA19639002414DA /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		D63270242DA2C879002414DA /* GenreChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreChip.swift; sourceTree = "<group>"; };
@@ -1043,6 +1061,7 @@
 			isa = PBXGroup;
 			children = (
 				D6055AEA2DBF2011005D32A3 /* ViewModel */,
+				D6055AF42DBFADE0005D32A3 /* Components */,
 				D6323DCF2DBD216200DD48A3 /* View */,
 			);
 			path = Home;
@@ -1472,6 +1491,7 @@
 			isa = PBXGroup;
 			children = (
 				D614ACAF2F9CA39600C3C420 /* Login */,
+				D614ACB02F9CAED100C3C420 /* Verification */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -1501,10 +1521,49 @@
 			path = Login;
 			sourceTree = "<group>";
 		};
+		D614ACB02F9CAED100C3C420 /* Verification */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACB22F9CAFFF00C3C420 /* Model */,
+				D614ACB12F9CAED800C3C420 /* View */,
+				D614ACB52F9CB28800C3C420 /* Components */,
+			);
+			path = Verification;
+			sourceTree = "<group>";
+		};
+		D614ACB12F9CAED800C3C420 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACB82F9CB52D00C3C420 /* PhoneVerificationView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		D614ACB22F9CAFFF00C3C420 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACB32F9CB01E00C3C420 /* VerificationNavigationStyle.swift */,
+				D614ACBC2F9CBD0800C3C420 /* VerificationToastType.swift */,
+				D614ACC42F9CE87C00C3C420 /* VerifyButtonState.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		D614ACB52F9CB28800C3C420 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACB62F9CB2A800C3C420 /* VerificationNavigationBar.swift */,
+				D614ACBA2F9CB71E00C3C420 /* VerificationHeaderView.swift */,
+				D614ACBE2F9CC47D00C3C420 /* PhoneInputSectionView.swift */,
+				D614ACC02F9CDB4800C3C420 /* VerificationSectionView.swift */,
+				D614ACC62F9CFDC100C3C420 /* VerificationBottomActionView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		D6323DCF2DBD216200DD48A3 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				D6055AF42DBFADE0005D32A3 /* Components */,
 				D6323DD02DBD216F00DD48A3 /* HomeView.swift */,
 			);
 			path = View;
@@ -2001,6 +2060,7 @@
 				D632C5442DCCCE4A005CD429 /* UsernameInputViewModel.swift in Sources */,
 				D6FA34242DCE07FE00795A54 /* PreferGenreRequestDTO.swift in Sources */,
 				D06D42932E11910100EEA82A /* ChatMessageInputBar.swift in Sources */,
+				D614ACBB2F9CB71E00C3C420 /* VerificationHeaderView.swift in Sources */,
 				D029061C2DB16532008515FD /* GenreItemView.swift in Sources */,
 				6CDC85E12DCFC9ED001C3921 /* LogoutResponseDTO.swift in Sources */,
 				D6055AF62DBFADF3005D32A3 /* BannerItemView.swift in Sources */,
@@ -2025,10 +2085,12 @@
 				D632C5462DCD01FE005CD429 /* ErrorResponseDTO.swift in Sources */,
 				D6FA34332DCF82D600795A54 /* SellProductListResponseDTO.swift in Sources */,
 				877F405E2DCA72A300008672 /* MarketProductItemDTO.swift in Sources */,
+				D614ACBF2F9CC47D00C3C420 /* PhoneInputSectionView.swift in Sources */,
 				D6055AEE2DBF2638005D32A3 /* HomeBannersModel.swift in Sources */,
 				D045DEEA2D837B9D00EB1EB6 /* FontLiteral.swift in Sources */,
 				D0310AF62DCBAD9200C265EC /* FeedbackToastView.swift in Sources */,
 				D06D429B2E11C5BD00EEA82A /* Int+.swift in Sources */,
+				D614ACB72F9CB2A800C3C420 /* VerificationNavigationBar.swift in Sources */,
 				D06943102E3E9CC700FE012D /* StoreIdResponseDTO.swift in Sources */,
 				D06E5B382DAE2121002E68A1 /* NZSegmentedControl.swift in Sources */,
 				6CF689432DC67AF500BC63AD /* ReportResponseDTO.swift in Sources */,
@@ -2037,10 +2099,12 @@
 				D06DC5F52E1630DB00A47DD6 /* ChatItemView.swift in Sources */,
 				D09C948D2DC11B1800D13485 /* GenreDetailViewModel.swift in Sources */,
 				D64560F22DC33514003D2E2B /* LoginView.swift in Sources */,
+				D614ACC12F9CDB4800C3C420 /* VerificationSectionView.swift in Sources */,
 				6CC472332DA432370086E345 /* SellRegisterHeader.swift in Sources */,
 				6CC472372DA4474A0086E345 /* RegisterGenre.swift in Sources */,
 				877F40602DCA72FA00008672 /* MarketProductListResponseDTO.swift in Sources */,
 				D682B50E2DD8EAD7001B5F6B /* SplashView.swift in Sources */,
+				D614ACBD2F9CBD0800C3C420 /* VerificationToastType.swift in Sources */,
 				D67C177D2D9B07E300CFCDFA /* UsernameInputField.swift in Sources */,
 				D64561362DC5E15C003D2E2B /* RootView.swift in Sources */,
 				D64561162DC3751D003D2E2B /* AuthService.swift in Sources */,
@@ -2058,6 +2122,7 @@
 				D0F035722DBF4C63003D0CBF /* GenreDTO.swift in Sources */,
 				D03079E32E3693D8000D2144 /* ChatMessageRequestDTO.swift in Sources */,
 				D05A03922D91B67200659C74 /* View+.swift in Sources */,
+				D614ACC52F9CE87C00C3C420 /* VerifyButtonState.swift in Sources */,
 				D03079E52E36957D000D2144 /* ChatMessageResponseDTO.swift in Sources */,
 				D0310B072DCFBDAE00C265EC /* GenreDetailResponseDTO.swift in Sources */,
 				D07B039C2E35584700D9D985 /* ChatRoomCreateResponseDTO.swift in Sources */,
@@ -2085,6 +2150,7 @@
 				D07BF2762D9D16A3000E4FD5 /* NZTabBarView.swift in Sources */,
 				D6FA34352DCF923500795A54 /* BuyProductListResponseDTO .swift in Sources */,
 				D64561282DC48101003D2E2B /* OnboardingManager.swift in Sources */,
+				D614ACB42F9CB01E00C3C420 /* VerificationNavigationStyle.swift in Sources */,
 				D06F13962DA300CB0029698C /* NavigationRouter.swift in Sources */,
 				D0310B182DD1AFA300C265EC /* RegisterNavigationRouter.swift in Sources */,
 				6CD972D32DC7C468000AE85E /* BuyRegisterResponseDTO.swift in Sources */,
@@ -2130,6 +2196,7 @@
 				877F40622DCA73F300008672 /* MarketProductBuyListResponseDTO.swift in Sources */,
 				6C4886BD2DC0CA07009352ED /* RegisterSearchGenre.swift in Sources */,
 				D045DEBE2D83723A00EB1EB6 /* Napzak_iOSApp.swift in Sources */,
+				D614ACC72F9CFDC100C3C420 /* VerificationBottomActionView.swift in Sources */,
 				6CA043122E0DB2D7006125AD /* LoadingViewManager.swift in Sources */,
 				D0F035802DBF6654003D0CBF /* PresignedService.swift in Sources */,
 				87669CA52E114E030051B655 /* LikedProductsResponseDTO.swift in Sources */,
@@ -2145,6 +2212,7 @@
 				D061C2702E00088700734834 /* SearchEventManager.swift in Sources */,
 				D06B835B2DDB15D1008A0D14 /* ProductEventManager.swift in Sources */,
 				6CD972CD2DC7BCB7000AE85E /* SellRegisterRequestDTO.swift in Sources */,
+				D614ACB92F9CB52D00C3C420 /* PhoneVerificationView.swift in Sources */,
 				D0F035702DBF441E003D0CBF /* GenreNameResponseDTO.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
