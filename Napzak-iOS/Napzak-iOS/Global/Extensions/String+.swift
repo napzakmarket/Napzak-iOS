@@ -37,5 +37,30 @@ extension String {
     
         return price
     }
-    
+
+    var digitsOnly: String {
+        self.filter { $0.isNumber }
+    }
+
+    var normalizedPhoneNumberInput: String {
+        String(digitsOnly.prefix(11))
+    }
+
+    var formattedPhoneNumber: String {
+        let digits = normalizedPhoneNumberInput
+
+        switch digits.count {
+        case 0...3:
+            return digits
+        case 4...7:
+            let prefix = digits.prefix(3)
+            let middle = digits.dropFirst(3)
+            return "\(prefix)-\(middle)"
+        default:
+            let prefix = digits.prefix(3)
+            let middle = digits.dropFirst(3).prefix(4)
+            let suffix = digits.dropFirst(7)
+            return "\(prefix)-\(middle)-\(suffix)"
+        }
+    }
 }

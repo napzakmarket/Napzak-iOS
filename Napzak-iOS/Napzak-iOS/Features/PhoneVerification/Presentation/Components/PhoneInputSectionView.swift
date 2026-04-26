@@ -10,6 +10,7 @@ import SwiftUI
 struct PhoneInputSectionView: View {
     @Binding var name: String
     @Binding var phoneNumber: String
+    @State private var phoneNumberText: String = ""
     
     let isSendButtonEnabled: Bool
     let isSendingCode: Bool
@@ -21,6 +22,15 @@ struct PhoneInputSectionView: View {
         VStack(alignment: .leading, spacing: 12) {
             nameField
             phoneField
+        }
+        .onAppear {
+            phoneNumberText = phoneNumber.formattedPhoneNumber
+        }
+        .onChange(of: phoneNumber) { newValue in
+            let formattedValue = newValue.formattedPhoneNumber
+            if phoneNumberText != formattedValue {
+                phoneNumberText = formattedValue
+            }
         }
     }
 }
@@ -52,7 +62,7 @@ extension PhoneInputSectionView {
             
             TextField(
                 "",
-                text: $phoneNumber,
+                text: $phoneNumberText,
                 prompt: Text("010-1234-5678")
                     .font(.napzakFont(.caption2Medium12))
                     .foregroundColor(Color.napzakGrayScale(.gray200))
@@ -61,6 +71,18 @@ extension PhoneInputSectionView {
             .foregroundStyle(Color.napzakGrayScale(.gray500))
             .tint(Color.napzakGrayScale(.gray500))
             .keyboardType(.numberPad)
+            .onChange(of: phoneNumberText) { newValue in
+                let normalizedValue = newValue.normalizedPhoneNumberInput
+                let formattedValue = normalizedValue.formattedPhoneNumber
+
+                if phoneNumberText != formattedValue {
+                    phoneNumberText = formattedValue
+                }
+
+                if phoneNumber != normalizedValue {
+                    phoneNumber = normalizedValue
+                }
+            }
             .padding(.vertical, 18)
             
             sendButton

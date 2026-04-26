@@ -207,6 +207,27 @@
 		D614ACC12F9CDB4800C3C420 /* VerificationSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACC02F9CDB4800C3C420 /* VerificationSectionView.swift */; };
 		D614ACC52F9CE87C00C3C420 /* VerifyButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACC42F9CE87C00C3C420 /* VerifyButtonState.swift */; };
 		D614ACC72F9CFDC100C3C420 /* VerificationBottomActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACC62F9CFDC100C3C420 /* VerificationBottomActionView.swift */; };
+		D614ACCB2F9D010100C3C420 /* PhoneVerificationViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACCA2F9D010000C3C420 /* PhoneVerificationViewState.swift */; };
+		D614ACCD2F9D010300C3C420 /* PhoneVerificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACCC2F9D010200C3C420 /* PhoneVerificationViewModel.swift */; };
+		D614ACCF2F9D010500C3C420 /* PhoneVerificationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACCE2F9D010400C3C420 /* PhoneVerificationSession.swift */; };
+		D614ACD12F9D010700C3C420 /* PhoneVerificationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACD02F9D010600C3C420 /* PhoneVerificationRepository.swift */; };
+		D614ACD32F9D010900C3C420 /* RequestPhoneVerificationCodeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACD22F9D010800C3C420 /* RequestPhoneVerificationCodeUseCase.swift */; };
+		D614ACD52F9D010B00C3C420 /* VerifyPhoneVerificationCodeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACD42F9D010A00C3C420 /* VerifyPhoneVerificationCodeUseCase.swift */; };
+		D614ACD72F9D010D00C3C420 /* DefaultPhoneVerificationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACD62F9D010C00C3C420 /* DefaultPhoneVerificationRepository.swift */; };
+		D614ACE02F9D012000C3C420 /* PhoneVerificationRemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACDF2F9D011F00C3C420 /* PhoneVerificationRemoteDataSource.swift */; };
+		D614ACE22F9D012200C3C420 /* DefaultPhoneVerificationRemoteDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACE12F9D012100C3C420 /* DefaultPhoneVerificationRemoteDataSource.swift */; };
+		D614ACE42F9D012400C3C420 /* PhoneVerificationStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACE32F9D012300C3C420 /* PhoneVerificationStatus.swift */; };
+		D614ACE62F9D012600C3C420 /* PhoneVerificationCodeSendResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACE52F9D012500C3C420 /* PhoneVerificationCodeSendResult.swift */; };
+		D614ACE82F9D012800C3C420 /* PhoneVerificationCodeVerificationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACE72F9D012700C3C420 /* PhoneVerificationCodeVerificationResult.swift */; };
+		D614ACEA2F9D012A00C3C420 /* PhoneVerificationError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACE92F9D012900C3C420 /* PhoneVerificationError.swift */; };
+		D614ACEC2F9D012C00C3C420 /* FetchPhoneVerificationStatusUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACEB2F9D012B00C3C420 /* FetchPhoneVerificationStatusUseCase.swift */; };
+		D614ACEE2F9D012E00C3C420 /* PhoneVerificationAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACED2F9D012D00C3C420 /* PhoneVerificationAPI.swift */; };
+		D614ACF02F9D013000C3C420 /* PhoneVerificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACEF2F9D012F00C3C420 /* PhoneVerificationService.swift */; };
+		D614ACF22F9D013200C3C420 /* PhoneVerificationSendCodeRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACF12F9D013100C3C420 /* PhoneVerificationSendCodeRequestDTO.swift */; };
+		D614ACF42F9D013400C3C420 /* PhoneVerificationVerifyCodeRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACF32F9D013300C3C420 /* PhoneVerificationVerifyCodeRequestDTO.swift */; };
+		D614ACF62F9D013600C3C420 /* PhoneVerificationStatusResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACF52F9D013500C3C420 /* PhoneVerificationStatusResponseDTO.swift */; };
+		D614ACF82F9D013800C3C420 /* PhoneVerificationSendCodeResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACF72F9D013700C3C420 /* PhoneVerificationSendCodeResponseDTO.swift */; };
+		D614ACFA2F9D013A00C3C420 /* PhoneVerificationVerifyCodeResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614ACF92F9D013900C3C420 /* PhoneVerificationVerifyCodeResponseDTO.swift */; };
 		D6323DD12DBD216F00DD48A3 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6323DD02DBD216F00DD48A3 /* HomeView.swift */; };
 		D63270162DA19639002414DA /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63270152DA19639002414DA /* SearchBar.swift */; };
 		D63270252DA2C879002414DA /* GenreChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63270242DA2C879002414DA /* GenreChip.swift */; };
@@ -490,6 +511,27 @@
 		D614ACC02F9CDB4800C3C420 /* VerificationSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationSectionView.swift; sourceTree = "<group>"; };
 		D614ACC42F9CE87C00C3C420 /* VerifyButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyButtonState.swift; sourceTree = "<group>"; };
 		D614ACC62F9CFDC100C3C420 /* VerificationBottomActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationBottomActionView.swift; sourceTree = "<group>"; };
+		D614ACCA2F9D010000C3C420 /* PhoneVerificationViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationViewState.swift; sourceTree = "<group>"; };
+		D614ACCC2F9D010200C3C420 /* PhoneVerificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationViewModel.swift; sourceTree = "<group>"; };
+		D614ACCE2F9D010400C3C420 /* PhoneVerificationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationSession.swift; sourceTree = "<group>"; };
+		D614ACD02F9D010600C3C420 /* PhoneVerificationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationRepository.swift; sourceTree = "<group>"; };
+		D614ACD22F9D010800C3C420 /* RequestPhoneVerificationCodeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestPhoneVerificationCodeUseCase.swift; sourceTree = "<group>"; };
+		D614ACD42F9D010A00C3C420 /* VerifyPhoneVerificationCodeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyPhoneVerificationCodeUseCase.swift; sourceTree = "<group>"; };
+		D614ACD62F9D010C00C3C420 /* DefaultPhoneVerificationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultPhoneVerificationRepository.swift; sourceTree = "<group>"; };
+		D614ACDF2F9D011F00C3C420 /* PhoneVerificationRemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationRemoteDataSource.swift; sourceTree = "<group>"; };
+		D614ACE12F9D012100C3C420 /* DefaultPhoneVerificationRemoteDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultPhoneVerificationRemoteDataSource.swift; sourceTree = "<group>"; };
+		D614ACE32F9D012300C3C420 /* PhoneVerificationStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationStatus.swift; sourceTree = "<group>"; };
+		D614ACE52F9D012500C3C420 /* PhoneVerificationCodeSendResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationCodeSendResult.swift; sourceTree = "<group>"; };
+		D614ACE72F9D012700C3C420 /* PhoneVerificationCodeVerificationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationCodeVerificationResult.swift; sourceTree = "<group>"; };
+		D614ACE92F9D012900C3C420 /* PhoneVerificationError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationError.swift; sourceTree = "<group>"; };
+		D614ACEB2F9D012B00C3C420 /* FetchPhoneVerificationStatusUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchPhoneVerificationStatusUseCase.swift; sourceTree = "<group>"; };
+		D614ACED2F9D012D00C3C420 /* PhoneVerificationAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationAPI.swift; sourceTree = "<group>"; };
+		D614ACEF2F9D012F00C3C420 /* PhoneVerificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationService.swift; sourceTree = "<group>"; };
+		D614ACF12F9D013100C3C420 /* PhoneVerificationSendCodeRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationSendCodeRequestDTO.swift; sourceTree = "<group>"; };
+		D614ACF32F9D013300C3C420 /* PhoneVerificationVerifyCodeRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationVerifyCodeRequestDTO.swift; sourceTree = "<group>"; };
+		D614ACF52F9D013500C3C420 /* PhoneVerificationStatusResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationStatusResponseDTO.swift; sourceTree = "<group>"; };
+		D614ACF72F9D013700C3C420 /* PhoneVerificationSendCodeResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationSendCodeResponseDTO.swift; sourceTree = "<group>"; };
+		D614ACF92F9D013900C3C420 /* PhoneVerificationVerifyCodeResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationVerifyCodeResponseDTO.swift; sourceTree = "<group>"; };
 		D6323DD02DBD216F00DD48A3 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		D63270152DA19639002414DA /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		D63270242DA2C879002414DA /* GenreChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreChip.swift; sourceTree = "<group>"; };
@@ -871,6 +913,7 @@
 				D045DED52D8374BF00EB1EB6 /* Global */,
 				D045DEFF2D83852600EB1EB6 /* Network */,
 				D045DED62D8374C700EB1EB6 /* Presentation */,
+				D614ACC82F9D000100C3C420 /* Features */,
 			);
 			path = "Napzak-iOS";
 			sourceTree = "<group>";
@@ -1491,7 +1534,6 @@
 			isa = PBXGroup;
 			children = (
 				D614ACAF2F9CA39600C3C420 /* Login */,
-				D614ACB02F9CAED100C3C420 /* Verification */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -1521,14 +1563,15 @@
 			path = Login;
 			sourceTree = "<group>";
 		};
-		D614ACB02F9CAED100C3C420 /* Verification */ = {
+		D614ACB02F9CAED100C3C420 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
 				D614ACB22F9CAFFF00C3C420 /* Model */,
 				D614ACB12F9CAED800C3C420 /* View */,
 				D614ACB52F9CB28800C3C420 /* Components */,
+				D614ACDE2F9D010E00C3C420 /* ViewModel */,
 			);
-			path = Verification;
+			path = Presentation;
 			sourceTree = "<group>";
 		};
 		D614ACB12F9CAED800C3C420 /* View */ = {
@@ -1542,6 +1585,7 @@
 		D614ACB22F9CAFFF00C3C420 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				D614ACCA2F9D010000C3C420 /* PhoneVerificationViewState.swift */,
 				D614ACB32F9CB01E00C3C420 /* VerificationNavigationStyle.swift */,
 				D614ACBC2F9CBD0800C3C420 /* VerificationToastType.swift */,
 				D614ACC42F9CE87C00C3C420 /* VerifyButtonState.swift */,
@@ -1559,6 +1603,106 @@
 				D614ACC62F9CFDC100C3C420 /* VerificationBottomActionView.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		D614ACC82F9D000100C3C420 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACC92F9D000200C3C420 /* PhoneVerification */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		D614ACC92F9D000200C3C420 /* PhoneVerification */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACD82F9D010810C3C420 /* Data */,
+				D614ACDA2F9D010A10C3C420 /* Domain */,
+				D614ACB02F9CAED100C3C420 /* Presentation */,
+			);
+			path = PhoneVerification;
+			sourceTree = "<group>";
+		};
+		D614ACD82F9D010810C3C420 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACFB2F9D013B00C3C420 /* DataSources */,
+				D614ACD92F9D010910C3C420 /* Repositories */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		D614ACD92F9D010910C3C420 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACD62F9D010C00C3C420 /* DefaultPhoneVerificationRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		D614ACDA2F9D010A10C3C420 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACDB2F9D010B10C3C420 /* Entities */,
+				D614ACFC2F9D013C00C3C420 /* Error */,
+				D614ACDC2F9D010C10C3C420 /* Repositories */,
+				D614ACDD2F9D010D10C3C420 /* UseCases */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		D614ACDB2F9D010B10C3C420 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACE52F9D012500C3C420 /* PhoneVerificationCodeSendResult.swift */,
+				D614ACE72F9D012700C3C420 /* PhoneVerificationCodeVerificationResult.swift */,
+				D614ACCE2F9D010400C3C420 /* PhoneVerificationSession.swift */,
+				D614ACE32F9D012300C3C420 /* PhoneVerificationStatus.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		D614ACDC2F9D010C10C3C420 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACD02F9D010600C3C420 /* PhoneVerificationRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		D614ACDD2F9D010D10C3C420 /* UseCases */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACEB2F9D012B00C3C420 /* FetchPhoneVerificationStatusUseCase.swift */,
+				D614ACD22F9D010800C3C420 /* RequestPhoneVerificationCodeUseCase.swift */,
+				D614ACD42F9D010A00C3C420 /* VerifyPhoneVerificationCodeUseCase.swift */,
+			);
+			path = UseCases;
+			sourceTree = "<group>";
+		};
+		D614ACDE2F9D010E00C3C420 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACCC2F9D010200C3C420 /* PhoneVerificationViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		D614ACFB2F9D013B00C3C420 /* DataSources */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACDF2F9D011F00C3C420 /* PhoneVerificationRemoteDataSource.swift */,
+				D614ACE12F9D012100C3C420 /* DefaultPhoneVerificationRemoteDataSource.swift */,
+			);
+			path = DataSources;
+			sourceTree = "<group>";
+		};
+		D614ACFC2F9D013C00C3C420 /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				D614ACE92F9D012900C3C420 /* PhoneVerificationError.swift */,
+			);
+			path = Error;
 			sourceTree = "<group>";
 		};
 		D6323DCF2DBD216200DD48A3 /* View */ = {
@@ -1628,6 +1772,8 @@
 				D64560FD2DC3406D003D2E2B /* DTO */,
 				D64561132DC36B4D003D2E2B /* AuthAPI.swift */,
 				D64561152DC3751D003D2E2B /* AuthService.swift */,
+				D614ACED2F9D012D00C3C420 /* PhoneVerificationAPI.swift */,
+				D614ACEF2F9D012F00C3C420 /* PhoneVerificationService.swift */,
 				D64561202DC3BECC003D2E2B /* TokenRefreshService.swift */,
 			);
 			path = Auth;
@@ -1674,6 +1820,9 @@
 			children = (
 				D64560F92DC33F2E003D2E2B /* UserRole.swift */,
 				D64561002DC3411C003D2E2B /* AuthResponseDTO.swift */,
+				D614ACF72F9D013700C3C420 /* PhoneVerificationSendCodeResponseDTO.swift */,
+				D614ACF52F9D013500C3C420 /* PhoneVerificationStatusResponseDTO.swift */,
+				D614ACF92F9D013900C3C420 /* PhoneVerificationVerifyCodeResponseDTO.swift */,
 				D645611E2DC39AE0003D2E2B /* TokenResponseDTO.swift */,
 				6CDC85E02DCFC9ED001C3921 /* LogoutResponseDTO.swift */,
 				6C0FA8B52DD1D8E700D81065 /* WithDrawResponseDTO.swift */,
@@ -1684,6 +1833,8 @@
 		D64561182DC375D5003D2E2B /* Request */ = {
 			isa = PBXGroup;
 			children = (
+				D614ACF12F9D013100C3C420 /* PhoneVerificationSendCodeRequestDTO.swift */,
+				D614ACF32F9D013300C3C420 /* PhoneVerificationVerifyCodeRequestDTO.swift */,
 				6C0FA8B32DD1D89400D81065 /* WithDrawRequestDTO.swift */,
 			);
 			path = Request;
@@ -2061,6 +2212,8 @@
 				D6FA34242DCE07FE00795A54 /* PreferGenreRequestDTO.swift in Sources */,
 				D06D42932E11910100EEA82A /* ChatMessageInputBar.swift in Sources */,
 				D614ACBB2F9CB71E00C3C420 /* VerificationHeaderView.swift in Sources */,
+				D614ACCD2F9D010300C3C420 /* PhoneVerificationViewModel.swift in Sources */,
+				D614ACF42F9D013400C3C420 /* PhoneVerificationVerifyCodeRequestDTO.swift in Sources */,
 				D029061C2DB16532008515FD /* GenreItemView.swift in Sources */,
 				6CDC85E12DCFC9ED001C3921 /* LogoutResponseDTO.swift in Sources */,
 				D6055AF62DBFADF3005D32A3 /* BannerItemView.swift in Sources */,
@@ -2105,6 +2258,8 @@
 				877F40602DCA72FA00008672 /* MarketProductListResponseDTO.swift in Sources */,
 				D682B50E2DD8EAD7001B5F6B /* SplashView.swift in Sources */,
 				D614ACBD2F9CBD0800C3C420 /* VerificationToastType.swift in Sources */,
+				D614ACD32F9D010900C3C420 /* RequestPhoneVerificationCodeUseCase.swift in Sources */,
+				D614ACEC2F9D012C00C3C420 /* FetchPhoneVerificationStatusUseCase.swift in Sources */,
 				D67C177D2D9B07E300CFCDFA /* UsernameInputField.swift in Sources */,
 				D64561362DC5E15C003D2E2B /* RootView.swift in Sources */,
 				D64561162DC3751D003D2E2B /* AuthService.swift in Sources */,
@@ -2123,6 +2278,8 @@
 				D03079E32E3693D8000D2144 /* ChatMessageRequestDTO.swift in Sources */,
 				D05A03922D91B67200659C74 /* View+.swift in Sources */,
 				D614ACC52F9CE87C00C3C420 /* VerifyButtonState.swift in Sources */,
+				D614ACD72F9D010D00C3C420 /* DefaultPhoneVerificationRepository.swift in Sources */,
+				D614ACE82F9D012800C3C420 /* PhoneVerificationCodeVerificationResult.swift in Sources */,
 				D03079E52E36957D000D2144 /* ChatMessageResponseDTO.swift in Sources */,
 				D0310B072DCFBDAE00C265EC /* GenreDetailResponseDTO.swift in Sources */,
 				D07B039C2E35584700D9D985 /* ChatRoomCreateResponseDTO.swift in Sources */,
@@ -2131,6 +2288,7 @@
 				6CF689412DC67AE800BC63AD /* ReportRequestDTO.swift in Sources */,
 				D0F0355A2DBF27F1003D0CBF /* StoreService.swift in Sources */,
 				D0BDAC6B2E3535E900FD3E27 /* ChatService.swift in Sources */,
+				D614ACE22F9D012200C3C420 /* DefaultPhoneVerificationRemoteDataSource.swift in Sources */,
 				D0310B052DCF88F600C265EC /* ProductDTO.swift in Sources */,
 				6C0FA8B42DD1D89400D81065 /* WithDrawRequestDTO.swift in Sources */,
 				D06D42962E11BE1500EEA82A /* ChatDetailModel.swift in Sources */,
@@ -2138,6 +2296,7 @@
 				D06DC5F92E165EDC00A47DD6 /* ChatViewModel.swift in Sources */,
 				D645612C2DC4B35F003D2E2B /* LoginViewModel.swift in Sources */,
 				D0F0355D2DBF27F1003D0CBF /* ProductService.swift in Sources */,
+				D614ACF62F9D013600C3C420 /* PhoneVerificationStatusResponseDTO.swift in Sources */,
 				D0F0355F2DBF27F1003D0CBF /* GenreAPI.swift in Sources */,
 				D65FEDA72E242967005D4AAB /* PermissionAlertView.swift in Sources */,
 				D64561262DC48028003D2E2B /* OnboardingStep.swift in Sources */,
@@ -2151,6 +2310,8 @@
 				D6FA34352DCF923500795A54 /* BuyProductListResponseDTO .swift in Sources */,
 				D64561282DC48101003D2E2B /* OnboardingManager.swift in Sources */,
 				D614ACB42F9CB01E00C3C420 /* VerificationNavigationStyle.swift in Sources */,
+				D614ACCF2F9D010500C3C420 /* PhoneVerificationSession.swift in Sources */,
+				D614ACFA2F9D013A00C3C420 /* PhoneVerificationVerifyCodeResponseDTO.swift in Sources */,
 				D06F13962DA300CB0029698C /* NavigationRouter.swift in Sources */,
 				D0310B182DD1AFA300C265EC /* RegisterNavigationRouter.swift in Sources */,
 				6CD972D32DC7C468000AE85E /* BuyRegisterResponseDTO.swift in Sources */,
@@ -2162,26 +2323,34 @@
 				6CB945542DA55E230020A17D /* SellRegisterProductStateSection.swift in Sources */,
 				D6FA342D2DCF2EAB00795A54 /* HomeAPI.swift in Sources */,
 				D64561062DC3463A003D2E2B /* SocialLoginType.swift in Sources */,
+				D614ACCB2F9D010100C3C420 /* PhoneVerificationViewState.swift in Sources */,
+				D614ACEE2F9D012E00C3C420 /* PhoneVerificationAPI.swift in Sources */,
 				6CD0249D2DC522B1005004DB /* ImagePickerManager.swift in Sources */,
 				D67C17762D9AEDC000CFCDFA /* PrimaryButton.swift in Sources */,
 				D64560F52DC33A37003D2E2B /* AuthManager.swift in Sources */,
+				D614ACD12F9D010700C3C420 /* PhoneVerificationRepository.swift in Sources */,
+				D614ACF02F9D013000C3C420 /* PhoneVerificationService.swift in Sources */,
 				D64561042DC342E4003D2E2B /* SocialLoginService.swift in Sources */,
 				D06943142E3EB46500FE012D /* ChatInfoRequestDTO.swift in Sources */,
 				6C6CBE012DA58A5600763CBA /* BuyRegisterHeader.swift in Sources */,
 				D632702D2DA37E93002414DA /* GenreSelectionViewModel.swift in Sources */,
+				D614ACEA2F9D012A00C3C420 /* PhoneVerificationError.swift in Sources */,
 				D0310B0E2DD079EC00C265EC /* SearchWordModel.swift in Sources */,
 				D67C17772D9AEDC000CFCDFA /* CheckRow.swift in Sources */,
 				D07837B02DB6295A009122F6 /* GenreSelectModalViewModel.swift in Sources */,
 				D0F035302DBF1A96003D0CBF /* BaseService.swift in Sources */,
+				D614ACE42F9D012400C3C420 /* PhoneVerificationStatus.swift in Sources */,
 				D66A3E8D2E1C3111003977AE /* PushTokenRequestDTO.swift in Sources */,
 				D67C17782D9AEDC000CFCDFA /* OnboardingNavigationBar.swift in Sources */,
 				D632C5402DCCBB34005CD429 /* OnboardingTermsViewModel.swift in Sources */,
 				D0C704B92E4390A100902FA5 /* Comparable.swift in Sources */,
 				D0F035292DBF17B3003D0CBF /* BaseTargetType.swift in Sources */,
 				D64561142DC36B4D003D2E2B /* AuthAPI.swift in Sources */,
+				D614ACE02F9D012000C3C420 /* PhoneVerificationRemoteDataSource.swift in Sources */,
 				D67C17792D9AEDC000CFCDFA /* OnboardingTermsView.swift in Sources */,
 				D0BDAC6F2E353B1000FD3E27 /* ChatDetailResponseDTO.swift in Sources */,
 				87E920682DC63C41003C42D5 /* StoreModifyProfileRequestDTO.swift in Sources */,
+				D614ACE62F9D012600C3C420 /* PhoneVerificationCodeSendResult.swift in Sources */,
 				6CC472392DA44C5F0086E345 /* RegisterTitle.swift in Sources */,
 				D6920A262DC0C96A00A400CF /* ProductSection.swift in Sources */,
 				87669CA32E1149000051B655 /* LikeViewModel.swift in Sources */,
@@ -2197,6 +2366,7 @@
 				6C4886BD2DC0CA07009352ED /* RegisterSearchGenre.swift in Sources */,
 				D045DEBE2D83723A00EB1EB6 /* Napzak_iOSApp.swift in Sources */,
 				D614ACC72F9CFDC100C3C420 /* VerificationBottomActionView.swift in Sources */,
+				D614ACD52F9D010B00C3C420 /* VerifyPhoneVerificationCodeUseCase.swift in Sources */,
 				6CA043122E0DB2D7006125AD /* LoadingViewManager.swift in Sources */,
 				D0F035802DBF6654003D0CBF /* PresignedService.swift in Sources */,
 				87669CA52E114E030051B655 /* LikedProductsResponseDTO.swift in Sources */,
@@ -2213,6 +2383,8 @@
 				D06B835B2DDB15D1008A0D14 /* ProductEventManager.swift in Sources */,
 				6CD972CD2DC7BCB7000AE85E /* SellRegisterRequestDTO.swift in Sources */,
 				D614ACB92F9CB52D00C3C420 /* PhoneVerificationView.swift in Sources */,
+				D614ACF22F9D013200C3C420 /* PhoneVerificationSendCodeRequestDTO.swift in Sources */,
+				D614ACF82F9D013800C3C420 /* PhoneVerificationSendCodeResponseDTO.swift in Sources */,
 				D0F035702DBF441E003D0CBF /* GenreNameResponseDTO.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

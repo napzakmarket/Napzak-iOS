@@ -52,7 +52,12 @@ class BaseService {
                             continuation.resume(returning: .failure(.decodingError))
                         }
                     case 400:
-                        continuation.resume(returning: .failure(.badRequest))
+                        if let apiError = try? JSONDecoder()
+                            .decode(ErrorResponseDTO.self, from: response.data) {
+                            continuation.resume(returning: .failure(.apiError(message: apiError.message)))
+                        } else {
+                            continuation.resume(returning: .failure(.badRequest))
+                        }
                     case 401 where retry:
                         RefreshTask {
                             let refreshResult = await TokenRefresher.shared.refresh()
@@ -76,10 +81,34 @@ class BaseService {
                            errorResponse.message.contains("신고 처리된 계정") {
                             continuation.resume(returning: .failure(.reportedUser))
                         } else {
-                            continuation.resume(returning: .failure(.forbidden))
+                            if let apiError = try? JSONDecoder()
+                                .decode(ErrorResponseDTO.self, from: response.data) {
+                                continuation.resume(returning: .failure(.apiError(message: apiError.message)))
+                            } else {
+                                continuation.resume(returning: .failure(.forbidden))
+                            }
                         }
                     case 404:
-                        continuation.resume(returning: .failure(.notFound))
+                        if let apiError = try? JSONDecoder()
+                            .decode(ErrorResponseDTO.self, from: response.data) {
+                            continuation.resume(returning: .failure(.apiError(message: apiError.message)))
+                        } else {
+                            continuation.resume(returning: .failure(.notFound))
+                        }
+                    case 409:
+                        if let apiError = try? JSONDecoder()
+                            .decode(ErrorResponseDTO.self, from: response.data) {
+                            continuation.resume(returning: .failure(.apiError(message: apiError.message)))
+                        } else {
+                            continuation.resume(returning: .failure(.badRequest))
+                        }
+                    case 429:
+                        if let apiError = try? JSONDecoder()
+                            .decode(ErrorResponseDTO.self, from: response.data) {
+                            continuation.resume(returning: .failure(.apiError(message: apiError.message)))
+                        } else {
+                            continuation.resume(returning: .failure(.networkFail))
+                        }
                     case 500...599:
                         if let errorResponse = try? JSONDecoder().decode(ErrorResponseDTO.self, from: response.data),
                            errorResponse.message.contains("[REPORTED]") {

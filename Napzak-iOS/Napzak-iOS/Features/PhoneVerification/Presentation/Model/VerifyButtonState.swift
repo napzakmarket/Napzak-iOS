@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum VerifyButtonState {
+enum VerifyButtonState: Equatable {
     case disabled
     case enabled
     case completed
