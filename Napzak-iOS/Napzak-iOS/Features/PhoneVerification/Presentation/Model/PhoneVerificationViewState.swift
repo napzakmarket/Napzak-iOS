@@ -10,6 +10,7 @@ import Foundation
 struct PhoneVerificationViewState: Equatable {
     var session: PhoneVerificationSession = .empty
     var remainingSeconds: Int = 0
+    var remainingRequestCount: Int?
     var isSendingCode = false
     var toastType: VerificationToastType?
 
@@ -23,9 +24,20 @@ struct PhoneVerificationViewState: Equatable {
         return String(format: "%02d:%02d", minutes, seconds)
     }
 
+    var isVerificationSectionVisible: Bool {
+        session.isCodeSent
+    }
+
+    var isResendAvailable: Bool {
+        session.isCodeSent
+        && session.isVerified == false
+        && remainingSeconds == 0
+        && (remainingRequestCount ?? 0) > 0
+    }
+
     var isSendButtonEnabled: Bool {
-        !session.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        && session.phoneNumber.digitsOnly.count == 11
+        session.name.isEmpty == false
+        && session.phoneNumber.isEmpty == false
     }
 
     var verifyButtonState: VerifyButtonState {

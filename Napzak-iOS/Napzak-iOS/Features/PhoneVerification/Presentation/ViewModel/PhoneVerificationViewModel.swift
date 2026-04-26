@@ -44,11 +44,12 @@ final class PhoneVerificationViewModel: ObservableObject {
             isCodeSent: false,
             isVerified: false
         )
+        state.toastType = nil
     }
 
     func updateVerificationCode(_ code: String) {
         state.session = state.session.copy(
-            verificationCode: code,
+            verificationCode: String(code.digitsOnly.prefix(6)),
             isVerified: false
         )
     }
@@ -60,7 +61,10 @@ final class PhoneVerificationViewModel: ObservableObject {
     }
 
     func requestCode() async {
-        guard state.isSendButtonEnabled else { return }
+        if let validationToastType = sendValidationToastType {
+            showToast(validationToastType)
+            return
+        }
 
         state.isSendingCode = true
         defer { state.isSendingCode = false }
@@ -70,19 +74,25 @@ final class PhoneVerificationViewModel: ObservableObject {
         )
 
         switch result {
-        case .success:
+        case .success(let sendResult):
             state.session = state.session.copy(
                 verificationCode: "",
                 isCodeSent: true,
                 isVerified: false
             )
+            state.remainingRequestCount = sendResult.remainingRequestCount
             state.remainingSeconds = 180
             startTimer()
-            state.toastType = .verificationCodeSent
+            showToast(.verificationCodeSent)
 
         case .failure(let error):
-            state.toastType = mapToastType(from: error)
+            showToast(mapToastType(from: error))
         }
+    }
+
+    func resendCode() async {
+        guard state.isResendAvailable else { return }
+        await requestCode()
     }
 
     func verifyCode() async {
@@ -98,17 +108,19 @@ final class PhoneVerificationViewModel: ObservableObject {
             state.session = state.session.copy(
                 isVerified: verificationResult.isPhoneVerified
             )
+            state.remainingRequestCount = verificationResult.remainingRequestCount
 
             if verificationResult.isPhoneVerified {
                 timerTask?.cancel()
             }
 
             if verificationResult.isPhoneVerified == false {
-                state.toastType = .verificationCodeConfirmFailed
+                state.session = state.session.copy(verificationCode: "")
+                showToast(.invalidVerificationCode)
             }
 
         case .failure(let error):
-            state.toastType = mapToastType(from: error)
+            showToast(mapToastType(from: error))
         }
     }
 }
@@ -127,12 +139,22 @@ private extension PhoneVerificationViewModel {
 
                 self.state.remainingSeconds -= 1
             }
+
+            guard Task.isCancelled == false,
+                  self.state.session.isCodeSent,
+                  self.state.session.isVerified == false,
+                  self.state.remainingSeconds == 0 else {
+                return
+            }
+
+            self.showToast(.verificationCodeExpired)
         }
     }
 
     func invalidateVerificationSession() {
         timerTask?.cancel()
         state.remainingSeconds = 0
+        state.remainingRequestCount = nil
     }
 
     func mapToastType(from error: PhoneVerificationError) -> VerificationToastType {
@@ -145,10 +167,62 @@ private extension PhoneVerificationViewModel {
             return .verificationRequestLimitExceeded
         case .networkDisconnected:
             return .networkDisconnected
-        case .expiredOrMissingSession, .tooManyVerificationAttempts:
-            return .verificationCodeConfirmFailed
+        case .expiredOrMissingSession:
+            return .verificationCodeExpired
+        case .tooManyVerificationAttempts:
+            return .tooManyVerificationAttempts
         case .unauthorized, .invalidRequest, .unknown:
             return .verificationCodeRequestFailed
+        }
+    }
+
+    var sendValidationToastType: VerificationToastType? {
+        if let nameValidationToastType = validateName(state.session.name) {
+            return nameValidationToastType
+        }
+
+        if let phoneValidationToastType = validatePhoneNumber(state.session.phoneNumber) {
+            return phoneValidationToastType
+        }
+
+        return nil
+    }
+
+    func validateName(_ name: String) -> VerificationToastType? {
+        if name.isEmpty {
+            return .invalidName
+        }
+
+        if name.count < 2 || name.count > 20 {
+            return .invalidName
+        }
+
+        let completeHangulPattern = "^[가-힣]+$"
+        let hasOnlyCompleteHangul = name.range(
+            of: completeHangulPattern,
+            options: .regularExpression
+        ) != nil
+
+        return hasOnlyCompleteHangul ? nil : .invalidName
+    }
+
+    func validatePhoneNumber(_ phoneNumber: String) -> VerificationToastType? {
+        if phoneNumber.isEmpty {
+            return .invalidPhoneNumber
+        }
+
+        return (10...11).contains(phoneNumber.digitsOnly.count)
+        ? nil
+        : .invalidPhoneNumber
+    }
+
+    func showToast(_ toastType: VerificationToastType) {
+        state.toastType = toastType
+
+        Task { [weak self] in
+            try? await Task.sleep(for: .seconds(2))
+            guard let self, self.state.toastType == toastType else { return }
+            self.state.toastType = nil
         }
     }
 }

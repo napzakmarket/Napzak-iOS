@@ -13,6 +13,7 @@ struct PhoneInputSectionView: View {
     @State private var phoneNumberText: String = ""
     
     let isSendButtonEnabled: Bool
+    let isResendEnabled: Bool
     let isSendingCode: Bool
     let hasSentCode: Bool
     
@@ -88,7 +89,6 @@ extension PhoneInputSectionView {
             sendButton
         }
         .padding(.horizontal, 16)
-        
         .background(Color.napzakGrayScale(.gray50))
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
@@ -97,18 +97,30 @@ extension PhoneInputSectionView {
         Button {
             onTapSendCode()
         } label: {
-            Text(hasSentCode ? "재전송" : "인증하기")
+            Text(buttonTitle)
                 .applyNapzakFont(.caption1SemiBold12)
                 .foregroundStyle(Color.napzakGrayScale(.gray50))
                 .frame(width: 64, height: 30)
                 .background(buttonColor)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
         }
-        .disabled(!isSendButtonEnabled || isSendingCode)
+        .disabled(isButtonDisabled)
     }
     
+    private var buttonTitle: String {
+        hasSentCode ? "재전송" : "인증하기"
+    }
+
+    private var isButtonDisabled: Bool {
+        if hasSentCode {
+            return !isResendEnabled || isSendingCode
+        }
+
+        return !isSendButtonEnabled || isSendingCode
+    }
+
     private var buttonColor: Color {
-        (isSendButtonEnabled && !isSendingCode)
+        (!isButtonDisabled)
         ? .napzakPrimary(.purple500)
         : .napzakGrayScale(.gray200)
     }
@@ -119,6 +131,7 @@ extension PhoneInputSectionView {
         name: .constant(""),
         phoneNumber: .constant(""),
         isSendButtonEnabled: false,
+        isResendEnabled: false,
         isSendingCode: false,
         hasSentCode: false,
         onTapSendCode: {}
@@ -131,6 +144,7 @@ extension PhoneInputSectionView {
         name: .constant("홍길동"),
         phoneNumber: .constant(""),
         isSendButtonEnabled: false,
+        isResendEnabled: false,
         isSendingCode: false,
         hasSentCode: false,
         onTapSendCode: {}
@@ -143,6 +157,7 @@ extension PhoneInputSectionView {
         name: .constant("홍길동"),
         phoneNumber: .constant("01012345678"),
         isSendButtonEnabled: true,
+        isResendEnabled: false,
         isSendingCode: false,
         hasSentCode: false,
         onTapSendCode: {}
@@ -155,6 +170,7 @@ extension PhoneInputSectionView {
         name: .constant("홍길동"),
         phoneNumber: .constant("01012345678"),
         isSendButtonEnabled: false,
+        isResendEnabled: false,
         isSendingCode: true,
         hasSentCode: false,
         onTapSendCode: {}
@@ -167,6 +183,7 @@ extension PhoneInputSectionView {
         name: .constant("홍길동"),
         phoneNumber: .constant("01012345678"),
         isSendButtonEnabled: false,
+        isResendEnabled: true,
         isSendingCode: false,
         hasSentCode: true,
         onTapSendCode: {}
