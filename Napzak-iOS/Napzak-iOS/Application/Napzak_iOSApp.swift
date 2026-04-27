@@ -21,6 +21,7 @@ struct Napzak_iOSApp: App {
     @StateObject private var pushManager: PushManager
     @StateObject private var navigationRouter = NavigationRouter()
     @StateObject private var tabRouter = TabRouter()
+    @StateObject private var phoneVerificationManager = PhoneVerificationManager()
     
     private let chatStompManager = ChatStompManager.shared
     private var mixpanelManager = MixpanelManager.shared
@@ -53,6 +54,7 @@ struct Napzak_iOSApp: App {
                 .environmentObject(navigationRouter)
                 .environmentObject(tabRouter)
                 .environmentObject(activeChatState)
+                .environmentObject(phoneVerificationManager)
                 .onAppear {
                     pushManager.navigationRouter = navigationRouter
                     pushManager.tabRouter = tabRouter

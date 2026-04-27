@@ -86,7 +86,7 @@ final class PhoneVerificationViewModel: ObservableObject {
             showToast(.verificationCodeSent)
 
         case .failure(let error):
-            showToast(mapToastType(from: error))
+            handleCodeRequestFailure(error)
         }
     }
 
@@ -210,6 +210,17 @@ private extension PhoneVerificationViewModel {
                 .alreadyVerifiedMember,
                 .blockedPhoneNumber,
                 .requestLimitExceeded:
+            showToast(mapToastType(from: error))
+        }
+    }
+
+    func handleCodeRequestFailure(_ error: PhoneVerificationError) {
+        switch error {
+        case .requestLimitExceeded:
+            state.remainingRequestCount = 0
+            showToast(.verificationRequestLimitExceeded)
+
+        default:
             showToast(mapToastType(from: error))
         }
     }

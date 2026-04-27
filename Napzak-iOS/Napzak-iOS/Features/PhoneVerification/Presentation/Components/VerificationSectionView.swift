@@ -12,6 +12,7 @@ struct VerificationSectionView: View {
 
     let timerText: String
     let isVerified: Bool
+    let isCodeInputEnabled: Bool
     let buttonState: VerifyButtonState
 
     let onTapVerify: () -> Void
@@ -51,7 +52,7 @@ extension VerificationSectionView {
             .foregroundStyle(Color.napzakGrayScale(.gray500))
             .tint(Color.napzakGrayScale(.gray500))
             .keyboardType(.numberPad)
-            .disabled(isVerified)
+            .disabled(isCodeInputEnabled == false)
 
             Spacer()
 
@@ -132,6 +133,7 @@ extension VerificationSectionView {
         code: .constant(""),
         timerText: "02:59",
         isVerified: false,
+        isCodeInputEnabled: true,
         buttonState: .disabled,
         onTapVerify: {}
     )
@@ -143,6 +145,7 @@ extension VerificationSectionView {
         code: .constant("123456"),
         timerText: "00:21",
         isVerified: false,
+        isCodeInputEnabled: true,
         buttonState: .enabled,
         onTapVerify: {}
     )
@@ -154,6 +157,7 @@ extension VerificationSectionView {
         code: .constant("123456"),
         timerText: "00:00",
         isVerified: true,
+        isCodeInputEnabled: false,
         buttonState: .completed,
         onTapVerify: {}
     )

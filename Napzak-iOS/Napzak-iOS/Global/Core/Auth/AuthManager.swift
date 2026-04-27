@@ -221,5 +221,4 @@ extension AuthManager {
             logger.error("getMyStoreId failed: \(error.localizedDescription)")
         }
     }
-
 }

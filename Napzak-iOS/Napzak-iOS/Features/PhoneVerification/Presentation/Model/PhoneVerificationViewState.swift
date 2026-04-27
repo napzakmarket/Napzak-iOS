@@ -40,6 +40,12 @@ struct PhoneVerificationViewState: Equatable {
         && session.phoneNumber.isEmpty == false
     }
 
+    var isVerificationCodeInputEnabled: Bool {
+        session.isCodeSent
+        && session.isVerified == false
+        && remainingSeconds > 0
+    }
+
     var verifyButtonState: VerifyButtonState {
         if session.isVerified {
             return .completed

@@ -9,17 +9,26 @@ import SwiftUI
 
 struct PhoneVerificationView: View {
     @StateObject private var viewModel = PhoneVerificationViewModel()
+    @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
     
     private let navigationStyle: VerificationNavigationStyle
+    private let onBack: () -> Void
+    private let onNext: () -> Void
     
-    init(navigationStyle: VerificationNavigationStyle = .basic) {
+    init(
+        navigationStyle: VerificationNavigationStyle = .basic,
+        onBack: @escaping () -> Void = {},
+        onNext: @escaping () -> Void = {}
+    ) {
         self.navigationStyle = navigationStyle
+        self.onBack = onBack
+        self.onNext = onNext
     }
 
     var body: some View {
         ZStack(alignment: .bottom) {
             VStack(spacing: 0) {
-                VerificationNavigationBar(style: navigationStyle, onBack: {})
+                VerificationNavigationBar(style: navigationStyle, onBack: onBack)
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 24) {
@@ -57,6 +66,7 @@ struct PhoneVerificationView: View {
                                 ),
                                 timerText: viewModel.state.timerText,
                                 isVerified: viewModel.state.session.isVerified,
+                                isCodeInputEnabled: viewModel.state.isVerificationCodeInputEnabled,
                                 buttonState: viewModel.state.verifyButtonState,
                                 onTapVerify: {
                                     Task {
@@ -84,12 +94,17 @@ struct PhoneVerificationView: View {
                         set: { _ in viewModel.toggleAgeConfirmation() }
                     ),
                     isNextEnabled: viewModel.state.isNextEnabled,
-                    onTapNext: {}
+                    onTapNext: onNext
                 )
             }
             .zIndex(1)
         }
         .animation(.easeInOut(duration: 0.2), value: viewModel.state.toastType)
+        .onChange(of: viewModel.state.session.isVerified) { isVerified in
+            if isVerified {
+                phoneVerificationManager.setPhoneVerified(true)
+            }
+        }
     }
 
     @ViewBuilder

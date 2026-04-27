@@ -79,9 +79,26 @@ struct NZTabBarView: View {
                         Color.black.opacity(0.5)
                             .ignoresSafeArea()
                         
-                        PermissionAlertView(state: state) {
-                            showPermissionModal = false
-                        }
+                        PermissionAlertView(
+                            content: .push(state),
+                            onDismiss: {
+                                showPermissionModal = false
+                            },
+                            onPrimaryAction: {
+                                switch state {
+                                case .appOnlyOff:
+                                    showPermissionModal = false
+                                    tabRouter.switchToMy()
+                                    navigationRouter.push(next: .settingView)
+
+                                case .osOnlyOff, .bothOff:
+                                    showPermissionModal = false
+                                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                                        UIApplication.shared.open(url)
+                                    }
+                                }
+                            }
+                        )
                         .frame(width: 284, height: 290)
                         .transition(.opacity)
                         .centerInParent()
