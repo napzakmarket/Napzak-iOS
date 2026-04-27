@@ -115,12 +115,12 @@ final class PhoneVerificationViewModel: ObservableObject {
             }
 
             if verificationResult.isPhoneVerified == false {
-                state.session = state.session.copy(verificationCode: "")
+                resetVerificationCodeInput()
                 showToast(.invalidVerificationCode)
             }
 
         case .failure(let error):
-            showToast(mapToastType(from: error))
+            handleVerificationFailure(error)
         }
     }
 }
@@ -147,6 +147,7 @@ private extension PhoneVerificationViewModel {
                 return
             }
 
+            self.resetVerificationCodeInput()
             self.showToast(.verificationCodeExpired)
         }
     }
@@ -155,6 +156,19 @@ private extension PhoneVerificationViewModel {
         timerTask?.cancel()
         state.remainingSeconds = 0
         state.remainingRequestCount = nil
+    }
+
+    func resetVerificationCodeInput() {
+        state.session = state.session.copy(
+            verificationCode: "",
+            isVerified: false
+        )
+    }
+
+    func expireVerificationSession() {
+        timerTask?.cancel()
+        state.remainingSeconds = 0
+        resetVerificationCodeInput()
     }
 
     func mapToastType(from error: PhoneVerificationError) -> VerificationToastType {
@@ -173,6 +187,30 @@ private extension PhoneVerificationViewModel {
             return .tooManyVerificationAttempts
         case .unauthorized, .invalidRequest, .unknown:
             return .verificationCodeRequestFailed
+        }
+    }
+
+    func handleVerificationFailure(_ error: PhoneVerificationError) {
+        switch error {
+        case .expiredOrMissingSession:
+            expireVerificationSession()
+            showToast(.verificationCodeExpired)
+
+        case .tooManyVerificationAttempts:
+            expireVerificationSession()
+            showToast(.tooManyVerificationAttempts)
+
+        case .networkDisconnected:
+            showToast(.networkDisconnected)
+
+        case .unauthorized, .invalidRequest, .unknown:
+            showToast(.verificationCodeConfirmFailed)
+
+        case .alreadyRegisteredPhoneNumber,
+                .alreadyVerifiedMember,
+                .blockedPhoneNumber,
+                .requestLimitExceeded:
+            showToast(mapToastType(from: error))
         }
     }
 
