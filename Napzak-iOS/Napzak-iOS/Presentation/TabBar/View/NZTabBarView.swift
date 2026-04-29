@@ -103,7 +103,7 @@ struct NZTabBarView: View {
                         .frame(width: 284, height: 290)
                         .transition(.opacity)
                         .centerInParent()
-                    } else if phoneVerificationManager.isModalPresented {
+                    } else if shouldPresentRootPhoneVerificationModal {
                         Color.black.opacity(0.5)
                             .ignoresSafeArea()
 
@@ -266,6 +266,20 @@ struct NZTabBarView: View {
         }
 
         phoneVerificationManager.presentModal(for: .homeModal)
+    }
+
+    private var shouldPresentRootPhoneVerificationModal: Bool {
+        guard phoneVerificationManager.isModalPresented,
+              let entryPoint = phoneVerificationManager.currentEntryPoint else {
+            return false
+        }
+
+        switch entryPoint {
+        case .homeModal, .registerSell, .registerBuy:
+            return true
+        case .chatPush, .productDetailChat, .chatRoom:
+            return false
+        }
     }
 
     private func handlePhoneVerificationCompletion() {

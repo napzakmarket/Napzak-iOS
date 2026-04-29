@@ -152,6 +152,27 @@ struct ProductDetailView: View {
             if viewModel.loadingManager.isLoadingNetwork {
                 LoadingView()
             }
+
+            if shouldPresentPhoneVerificationModal {
+                ZStack(alignment: .center) {
+                    Color.black.opacity(0.5)
+                        .ignoresSafeArea()
+
+                    PermissionAlertView(
+                        content: .phoneVerification,
+                        onDismiss: {
+                            phoneVerificationManager.dismissModal()
+                        },
+                        onPrimaryAction: {
+                            phoneVerificationManager.dismissModal()
+                            navigationRouter.push(next: .phoneVerificationView)
+                        }
+                    )
+                    .frame(width: 284, height: 290)
+                }
+                .transition(.opacity)
+                .zIndex(5)
+            }
         }
         .navigationBarHidden(true)
         .ignoresSafeArea()
@@ -202,6 +223,15 @@ struct ProductDetailView: View {
 }
 
 extension ProductDetailView {
+    private var shouldPresentPhoneVerificationModal: Bool {
+        guard phoneVerificationManager.isModalPresented,
+              case .productDetailChat(let productID) = phoneVerificationManager.currentEntryPoint else {
+            return false
+        }
+
+        return productID == viewModel.product.productDetail.id
+    }
+
     
     //MARK: - UI Properties
     

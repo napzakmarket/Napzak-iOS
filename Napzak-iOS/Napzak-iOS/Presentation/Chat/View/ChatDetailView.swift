@@ -166,6 +166,27 @@ struct ChatDetailView: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                     .zIndex(3)
                 }
+
+                if shouldPresentPhoneVerificationModal {
+                    ZStack(alignment: .center) {
+                        Color.black.opacity(0.5)
+                            .ignoresSafeArea()
+
+                        PermissionAlertView(
+                            content: .phoneVerification,
+                            onDismiss: {
+                                phoneVerificationManager.dismissModal()
+                            },
+                            onPrimaryAction: {
+                                phoneVerificationManager.dismissModal()
+                                navigationRouter.push(next: .phoneVerificationView)
+                            }
+                        )
+                        .frame(width: 284, height: 290)
+                    }
+                    .transition(.opacity)
+                    .zIndex(5)
+                }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .contentShape(Rectangle())
@@ -233,6 +254,21 @@ struct ChatDetailView: View {
 }
 
 extension ChatDetailView {
+    private var shouldPresentPhoneVerificationModal: Bool {
+        guard phoneVerificationManager.isModalPresented,
+              let roomId = viewModel.roomId,
+              let entryPoint = phoneVerificationManager.currentEntryPoint else {
+            return false
+        }
+
+        switch entryPoint {
+        case .chatPush(let currentRoomID), .chatRoom(let currentRoomID):
+            return currentRoomID == roomId
+        case .homeModal, .registerSell, .registerBuy, .productDetailChat:
+            return false
+        }
+    }
+
     
     //MARK: - UI Properties
     
