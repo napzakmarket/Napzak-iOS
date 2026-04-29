@@ -34,34 +34,40 @@ extension VerificationSectionView {
     }
 
     private var codeField: some View {
-        HStack(spacing: 6) {
-            if isVerified {
-                Image(systemName: "checkmark.circle")
-                    .font(.system(size: 12))
-                    .foregroundStyle(Color.green)
+        ZStack {
+            Rectangle()
+                .fill(Color.clear)
+                .frame(width: 1, height: 30)
+
+            HStack(spacing: 6) {
+                if isVerified {
+                    Image(systemName: "checkmark.circle")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color.green)
+                }
+
+                TextField(
+                    "",
+                    text: $code,
+                    prompt: Text("6자리 숫자를 입력해주세요")
+                        .font(.napzakFont(.caption1SemiBold12))
+                        .foregroundColor(Color.napzakGrayScale(.gray200))
+                )
+                .applyNapzakFont(.caption1SemiBold12, lineSpacingEnabled: false)
+                .foregroundStyle(Color.napzakGrayScale(.gray500))
+                .tint(Color.napzakGrayScale(.gray500))
+                .keyboardType(.numberPad)
+                .disabled(isCodeInputEnabled == false)
+
+                Spacer()
+
+                Text(timerText)
+                    .applyNapzakFont(.caption1SemiBold12)
+                    .foregroundStyle(timerTextColor)
             }
-
-            TextField(
-                "",
-                text: $code,
-                prompt: Text("6자리 숫자를 입력해주세요")
-                    .font(.napzakFont(.caption2Medium12))
-                    .foregroundColor(Color.napzakGrayScale(.gray200))
-            )
-            .applyNapzakFont(.caption1SemiBold12)
-            .foregroundStyle(Color.napzakGrayScale(.gray500))
-            .tint(Color.napzakGrayScale(.gray500))
-            .keyboardType(.numberPad)
-            .disabled(isCodeInputEnabled == false)
-
-            Spacer()
-
-            Text(timerText)
-                .applyNapzakFont(.caption1SemiBold12)
-                .foregroundStyle(timerTextColor)
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 18)
+        .padding(.vertical, 12)
         .background(Color.napzakGrayScale(.gray50))
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
@@ -70,7 +76,7 @@ extension VerificationSectionView {
         Button {
             onTapVerify()
         } label: {
-            Text("인증번호 확인하기")
+            Text(buttonTitle)
                 .applyNapzakFont(.body4Bold14)
                 .foregroundStyle(buttonTextColor)
                 .frame(maxWidth: .infinity)
@@ -83,6 +89,15 @@ extension VerificationSectionView {
                 .clipShape(RoundedRectangle(cornerRadius: 14))
         }
         .disabled(buttonState != .enabled)
+    }
+
+    private var buttonTitle: String {
+        switch buttonState {
+        case .disabled, .enabled:
+            return "인증번호 확인하기"
+        case .completed:
+            return "인증 완료"
+        }
     }
 
     private var timerTextColor: Color {

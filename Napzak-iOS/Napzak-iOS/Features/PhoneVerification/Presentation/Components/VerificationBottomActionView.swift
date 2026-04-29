@@ -18,7 +18,7 @@ struct VerificationBottomActionView: View {
             nextButton
         }
         .padding(.horizontal, 20)
-        .padding(.bottom, 20)
+        .padding(.vertical, 20)
         .background(Color.white)
     }
 }

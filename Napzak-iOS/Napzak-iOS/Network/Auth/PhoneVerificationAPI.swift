@@ -23,11 +23,11 @@ extension PhoneVerificationAPI: BaseTargetType {
     var path: String {
         switch self {
         case .fetchStatus:
-            return "auth/phone-verification/status"
+            return "stores/phone-verification-status"
         case .sendCode:
-            return "auth/phone-verification/send-code"
+            return "stores/phone-verifications/send"
         case .verifyCode:
-            return "auth/phone-verification/verify-code"
+            return "stores/phone-verifications/confirm"
         }
     }
 

@@ -16,6 +16,7 @@ struct ProductDetailView: View {
     @StateObject var viewModel: ProductDetailViewModel
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
 
     @State private var currentPage = 0
     @State private var isReportModalPresented = false
@@ -569,13 +570,23 @@ extension ProductDetailView {
                     viewModel.product.isInterested ? Image(.btnHeartSelectedBig) : Image(.btnHeartDefaultBig)
                 }
                 Button {
-                    navigationRouter.push(
-                        next: .chatDetailView(
-                            chatEntry: .product(
-                                id: viewModel.product.productDetail.id
+                    Task {
+                        let status = await phoneVerificationManager.resolveVerificationStatusIfNeeded()
+
+                        if status == .verified {
+                            navigationRouter.push(
+                                next: .chatDetailView(
+                                    chatEntry: .product(
+                                        id: viewModel.product.productDetail.id
+                                    )
+                                )
                             )
-                        )
-                    )
+                        } else if status == .unverified {
+                            phoneVerificationManager.presentModal(
+                                for: .productDetailChat(productID: viewModel.product.productDetail.id)
+                            )
+                        }
+                    }
                 } label: {
                     HStack(spacing: 5) {
                         Text("채팅하기")

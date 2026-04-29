@@ -80,6 +80,10 @@ struct PhoneVerificationView: View {
                     .padding(.top, 20)
                     .padding(.bottom, 140)
                 }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    dismissKeyboard()
+                }
             }
 
             VStack(spacing: 16) {
@@ -100,6 +104,12 @@ struct PhoneVerificationView: View {
             .zIndex(1)
         }
         .animation(.easeInOut(duration: 0.2), value: viewModel.state.toastType)
+        .toolbar(.hidden, for: .navigationBar)
+        .ignoresSafeArea(.keyboard, edges: .bottom)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            dismissKeyboard()
+        }
         .onChange(of: viewModel.state.session.isVerified) { isVerified in
             if isVerified {
                 phoneVerificationManager.setPhoneVerified(true)

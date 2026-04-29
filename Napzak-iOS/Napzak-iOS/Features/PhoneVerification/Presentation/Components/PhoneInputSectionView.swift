@@ -38,19 +38,27 @@ struct PhoneInputSectionView: View {
 
 extension PhoneInputSectionView {
     private var nameField: some View {
-        TextField(
-            "",
-            text: $name,
-            prompt: Text("이름")
-                .font(.napzakFont(.caption2Medium12))
-                .foregroundColor(Color.napzakGrayScale(.gray200))
-        )
-        .applyNapzakFont(.caption1SemiBold12)
-        .foregroundStyle(Color.napzakGrayScale(.gray500))
-        .tint(Color.napzakGrayScale(.gray500))
-        .autocorrectionDisabled()
+        ZStack {
+            Rectangle()
+                .fill(Color.clear)
+                .frame(width: 1, height: 30)
+
+            HStack(spacing: 0) {
+                TextField(
+                    "",
+                    text: $name,
+                    prompt: Text("이름")
+                        .font(.napzakFont(.caption1SemiBold12))
+                        .foregroundColor(Color.napzakGrayScale(.gray200))
+                )
+                .applyNapzakFont(.caption1SemiBold12, lineSpacingEnabled: false)
+                .foregroundStyle(Color.napzakGrayScale(.gray500))
+                .tint(Color.napzakGrayScale(.gray500))
+                .autocorrectionDisabled()
+            }
+        }
         .padding(.horizontal, 16)
-        .padding(.vertical, 18)
+        .padding(.vertical, 12)
         .background(Color.napzakGrayScale(.gray50))
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
@@ -62,13 +70,13 @@ extension PhoneInputSectionView {
                 .foregroundStyle(Color.napzakGrayScale(.gray500))
             
             TextField(
-                "",
+                "전화번호",
                 text: $phoneNumberText,
                 prompt: Text("010-1234-5678")
-                    .font(.napzakFont(.caption2Medium12))
+                    .font(.napzakFont(.caption1SemiBold12))
                     .foregroundColor(Color.napzakGrayScale(.gray200))
             )
-            .applyNapzakFont(.caption1SemiBold12)
+            .applyNapzakFont(.caption1SemiBold12, lineSpacingEnabled: false)
             .foregroundStyle(Color.napzakGrayScale(.gray500))
             .tint(Color.napzakGrayScale(.gray500))
             .keyboardType(.numberPad)
@@ -84,11 +92,11 @@ extension PhoneInputSectionView {
                     phoneNumber = normalizedValue
                 }
             }
-            .padding(.vertical, 18)
             
             sendButton
         }
         .padding(.horizontal, 16)
+        .padding(.vertical, 12)
         .background(Color.napzakGrayScale(.gray50))
         .clipShape(RoundedRectangle(cornerRadius: 14))
     }
@@ -136,7 +144,7 @@ extension PhoneInputSectionView {
         hasSentCode: false,
         onTapSendCode: {}
     )
-    .padding(20)
+    .frame(height: 100)
 }
 
 #Preview("이름 입력만") {

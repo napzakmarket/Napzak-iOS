@@ -84,9 +84,12 @@ final class AuthManager: ObservableObject {
                 
                 let onboardingStep: OnboardingStep
                 if data.role.needsOnboarding {
-                    logger.info("User needs onboarding - starting from terms")
-                    onboardingStep = .terms
-                    onboardingManager.saveCheckpoint(.terms)
+                    let savedCheckpoint = onboardingManager.getLastCheckpoint()
+                    let resumedStep = savedCheckpoint == .completed ? nil : savedCheckpoint
+
+                    onboardingStep = resumedStep ?? .terms
+                    logger.info("User needs onboarding - resuming from \(onboardingStep.rawValue)")
+                    onboardingManager.saveCheckpoint(onboardingStep)
                 } else {
                     logger.info("Existing user - onboarding completed")
                     onboardingStep = .completed

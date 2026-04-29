@@ -59,6 +59,7 @@ struct Napzak_iOSApp: App {
                     pushManager.navigationRouter = navigationRouter
                     pushManager.tabRouter = tabRouter
                     pushManager.activeChatState = activeChatState
+                    pushManager.phoneVerificationManager = phoneVerificationManager
                 }
         }
         .onChange(of: scenePhase) { phase in

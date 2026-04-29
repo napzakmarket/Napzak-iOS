@@ -246,7 +246,6 @@
 		D633540C2E5D5F3100635E36 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D633540B2E5D5F3100635E36 /* LaunchScreen.storyboard */; };
 		D64560F22DC33514003D2E2B /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64560F12DC33514003D2E2B /* LoginView.swift */; };
 		D64560F52DC33A37003D2E2B /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64560F42DC33A37003D2E2B /* AuthManager.swift */; };
-		E1A1B0012F9E000100C3C420 /* PhoneVerificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A1B0022F9E000100C3C420 /* PhoneVerificationManager.swift */; };
 		D64560FA2DC33F2E003D2E2B /* UserRole.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64560F92DC33F2E003D2E2B /* UserRole.swift */; };
 		D64561012DC3411C003D2E2B /* AuthResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561002DC3411C003D2E2B /* AuthResponseDTO.swift */; };
 		D64561042DC342E4003D2E2B /* SocialLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64561032DC342E4003D2E2B /* SocialLoginService.swift */; };
@@ -305,6 +304,8 @@
 		D6FA343E2DCFF2EC00795A54 /* ios.json in Resources */ = {isa = PBXBuildFile; fileRef = D6FA343D2DCFF2EC00795A54 /* ios.json */; };
 		D6FA34422DD08E6200795A54 /* TabRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA34412DD08E6200795A54 /* TabRouter.swift */; };
 		D6FA34442DD08E8D00795A54 /* NZTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA34432DD08E8D00795A54 /* NZTab.swift */; };
+		E1A1B0012F9E000100C3C420 /* PhoneVerificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A1B0022F9E000100C3C420 /* PhoneVerificationManager.swift */; };
+		E1A1B0032F9E000200C3C420 /* PhoneVerificationEntryPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A1B0042F9E000200C3C420 /* PhoneVerificationEntryPoint.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -552,7 +553,6 @@
 		D633540B2E5D5F3100635E36 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D64560F12DC33514003D2E2B /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		D64560F42DC33A37003D2E2B /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
-		E1A1B0022F9E000100C3C420 /* PhoneVerificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationManager.swift; sourceTree = "<group>"; };
 		D64560F92DC33F2E003D2E2B /* UserRole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRole.swift; sourceTree = "<group>"; };
 		D64561002DC3411C003D2E2B /* AuthResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthResponseDTO.swift; sourceTree = "<group>"; };
 		D64561032DC342E4003D2E2B /* SocialLoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialLoginService.swift; sourceTree = "<group>"; };
@@ -610,6 +610,8 @@
 		D6FA343D2DCFF2EC00795A54 /* ios.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ios.json; sourceTree = "<group>"; };
 		D6FA34412DD08E6200795A54 /* TabRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabRouter.swift; sourceTree = "<group>"; };
 		D6FA34432DD08E8D00795A54 /* NZTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NZTab.swift; sourceTree = "<group>"; };
+		E1A1B0022F9E000100C3C420 /* PhoneVerificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationManager.swift; sourceTree = "<group>"; };
+		E1A1B0042F9E000200C3C420 /* PhoneVerificationEntryPoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneVerificationEntryPoint.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1616,6 +1618,14 @@
 			path = Features;
 			sourceTree = "<group>";
 		};
+		D614ACC82F9F9AF100C3C420 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E1A1B0042F9E000200C3C420 /* PhoneVerificationEntryPoint.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		D614ACC92F9D000200C3C420 /* PhoneVerification */ = {
 			isa = PBXGroup;
 			children = (
@@ -1646,6 +1656,7 @@
 		D614ACDA2F9D010A10C3C420 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				D614ACC82F9F9AF100C3C420 /* Model */,
 				D614ACDB2F9D010B10C3C420 /* Entities */,
 				D614ACFC2F9D013C00C3C420 /* Error */,
 				D614ACDC2F9D010C10C3C420 /* Repositories */,
@@ -2321,6 +2332,7 @@
 				D03079E72E369722000D2144 /* ChatType.swift in Sources */,
 				D07837B22DB6C156009122F6 /* SortModalView.swift in Sources */,
 				D64561212DC3BECC003D2E2B /* TokenRefreshService.swift in Sources */,
+				E1A1B0032F9E000200C3C420 /* PhoneVerificationEntryPoint.swift in Sources */,
 				E1A1B0012F9E000100C3C420 /* PhoneVerificationManager.swift in Sources */,
 				6CDD77042DD4BEB2008D2ABC /* SwipePopGestureManager.swift in Sources */,
 				D07837A92DB57203009122F6 /* GenreSelectModalView.swift in Sources */,

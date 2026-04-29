@@ -13,6 +13,7 @@ struct RegisterFloatingView: View {
     
     @Binding var isRegisterViewPresented: Bool
     @Binding var registerType: TradeType
+    @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
     
     @State private var isHighlightedSellArea = false
     @State private var isHighlightedBuyArea = false
@@ -58,8 +59,16 @@ struct RegisterFloatingView: View {
                 }
                 .onEnded { _ in
                     isHighlightedSellArea = false
-                    registerType = .sell
-                    isRegisterViewPresented = true
+                    Task {
+                        let status = await phoneVerificationManager.resolveVerificationStatusIfNeeded()
+
+                        if status == .verified {
+                            registerType = .sell
+                            isRegisterViewPresented = true
+                        } else if status == .unverified {
+                            phoneVerificationManager.presentModal(for: .registerSell)
+                        }
+                    }
 
                 }
         )
@@ -86,8 +95,16 @@ struct RegisterFloatingView: View {
                 }
                 .onEnded { _ in
                     isHighlightedBuyArea = false
-                    registerType = .buy
-                    isRegisterViewPresented = true
+                    Task {
+                        let status = await phoneVerificationManager.resolveVerificationStatusIfNeeded()
+
+                        if status == .verified {
+                            registerType = .buy
+                            isRegisterViewPresented = true
+                        } else if status == .unverified {
+                            phoneVerificationManager.presentModal(for: .registerBuy)
+                        }
+                    }
 
                 }
         )

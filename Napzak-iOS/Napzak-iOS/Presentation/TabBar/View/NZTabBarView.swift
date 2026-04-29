@@ -13,6 +13,7 @@ struct NZTabBarView: View {
     @EnvironmentObject private var navigationRouter: NavigationRouter
     @EnvironmentObject private var tabRouter: TabRouter
     @EnvironmentObject private var permissionManager: PushPermissionManager
+    @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
     
     @State private var isRegisterTabSelected = false
     @State private var isRegisterViewPresented = false
@@ -102,11 +103,29 @@ struct NZTabBarView: View {
                         .frame(width: 284, height: 290)
                         .transition(.opacity)
                         .centerInParent()
+                    } else if phoneVerificationManager.isModalPresented {
+                        Color.black.opacity(0.5)
+                            .ignoresSafeArea()
+
+                        PermissionAlertView(
+                            content: .phoneVerification,
+                            onDismiss: {
+                                phoneVerificationManager.dismissModal()
+                            },
+                            onPrimaryAction: {
+                                phoneVerificationManager.dismissModal()
+                                navigationRouter.push(next: .phoneVerificationView)
+                            }
+                        )
+                        .frame(width: 284, height: 290)
+                        .transition(.opacity)
+                        .centerInParent()
                     }
                 }
             )
             .animation(.easeInOut(duration: 0.3), value: isRegisterTabSelected)
             .animation(.easeInOut(duration: 0.3), value: showPermissionModal)
+            .animation(.easeInOut(duration: 0.3), value: phoneVerificationManager.isModalPresented)
             .fullScreenCover(isPresented: $isRegisterViewPresented) {
                 switch registerType {
                 case .sell:
@@ -121,6 +140,20 @@ struct NZTabBarView: View {
             }
             .navigationDestination(for: Route.self) { route in
                 switch route {
+                case .phoneVerificationView:
+                    PhoneVerificationView(
+                        navigationStyle: .basic,
+                        onBack: {
+                            if let entryPoint = phoneVerificationManager.currentEntryPoint {
+                                phoneVerificationManager.presentModal(for: entryPoint)
+                            }
+                            navigationRouter.pop()
+                        },
+                        onNext: {
+                            handlePhoneVerificationCompletion()
+                        }
+                    )
+
                 case .searchInputView:
                     SearchInputView()
                     
@@ -198,6 +231,17 @@ struct NZTabBarView: View {
                 showPermissionModal = true
                 pushModalShown = true
             }
+
+            if newTab == .home {
+                Task {
+                    await presentHomePhoneVerificationModalIfNeeded()
+                }
+            }
+        }
+        .onAppear {
+            Task {
+                await presentHomePhoneVerificationModalIfNeeded()
+            }
         }
         .onReceive(SearchEventManager.shared.searchCompleted) { searchWord in
             navigationRouter.reset()
@@ -210,6 +254,43 @@ struct NZTabBarView: View {
         }
     }
     
+    private func presentHomePhoneVerificationModalIfNeeded() async {
+        guard tabRouter.selectedTab == .home else {
+            return
+        }
+
+        let status = await phoneVerificationManager.resolveVerificationStatusIfNeeded()
+        guard status == .unverified,
+              phoneVerificationManager.canPresentHomeModal() else {
+            return
+        }
+
+        phoneVerificationManager.presentModal(for: .homeModal)
+    }
+
+    private func handlePhoneVerificationCompletion() {
+        let entryPoint = phoneVerificationManager.currentEntryPoint
+
+        phoneVerificationManager.dismissModal()
+        phoneVerificationManager.setEntryPoint(nil)
+        navigationRouter.pop()
+
+        switch entryPoint {
+        case .registerSell:
+            registerType = .sell
+            isRegisterTabSelected = false
+            isRegisterViewPresented = true
+
+        case .registerBuy:
+            registerType = .buy
+            isRegisterTabSelected = false
+            isRegisterViewPresented = true
+
+        case .homeModal, .productDetailChat, .chatPush, .chatRoom, .none:
+            break
+        }
+    }
+
     var tabBar: some View {
         HStack {
             Button {
