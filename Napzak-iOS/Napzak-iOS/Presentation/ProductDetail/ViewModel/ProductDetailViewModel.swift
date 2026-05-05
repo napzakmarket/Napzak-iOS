@@ -40,6 +40,7 @@ final class ProductDetailViewModel: ObservableObject {
     
     @Published var showInterestToast: Bool = false
     @Published var showStatusToast = false
+    @Published var isTooltipPresented = false
 
     @ObservedObject private var likeManager = ProductLikeManager.shared
 
@@ -104,6 +105,13 @@ extension ProductDetailViewModel {
             let type = data.productDetail.tradeType == .sell ? "for_sale" : "wanted"
             mixpanelManager.trackEvent(event: "Viewed Product", properties: ["post_id": id,
                                                                              "post_type": type])
+            
+            let hasSeenTooltip = UserDefaults.standard.bool(forKey: "hasSeenTooltip")
+            if self.product.productDetail.isOwnedByCurrentUser && !hasSeenTooltip {
+                isTooltipPresented = true
+                UserDefaults.standard.set(true, forKey: "hasSeenTooltip")
+            }
+
         case .failure(let error):
             logger.error("getSellProduct failed: \(error.localizedDescription)")
         }
