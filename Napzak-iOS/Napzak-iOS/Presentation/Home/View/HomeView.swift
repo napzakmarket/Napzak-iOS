@@ -158,7 +158,7 @@ extension HomeView {
                 viewModel.handleBannerTap(banner.action)
                 mixpanelManager.trackEvent(event: "Clicked Banner", properties: ["banner_id": banner.id,
                                                                                  "banner_type": "main",
-                                                                                 "banner_index": bannerIndex])
+                                                                                 "banner_index": bannerIndex%3])
             }
         )
     }
