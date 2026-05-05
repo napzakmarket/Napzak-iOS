@@ -188,7 +188,7 @@ extension GenreSelectionView {
                         authRouter.push(next: .completed)
                     }
                 }
-                mixpanelManager.trackEvent(event: "Skiped Genres")
+                mixpanelManager.trackEvent(event: "Skipped Genres")
             } label: {
                 Text("건너뛰기")
                     .applyNapzakFont(.caption2Medium12)
