@@ -102,8 +102,6 @@ extension ProductDetailViewModel {
             self.product.storeInfo = StoreInfo(dto: data.storeInfo)
             
             let type = data.productDetail.tradeType == .sell ? "for_sale" : "wanted"
-            mixpanelManager.trackEvent(event: "Viewed Product", properties: ["post_id": id,
-                                                                             "post_type": type])
         case .failure(let error):
             logger.error("getSellProduct failed: \(error.localizedDescription)")
         }

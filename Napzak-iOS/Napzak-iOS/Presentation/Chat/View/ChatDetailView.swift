@@ -267,6 +267,16 @@ extension ChatDetailView {
 
         return Button {
             navigationRouter.push(next: .productDetailView(productId: viewModel.chatDetailInfo.productInfo.productId))
+            
+            MixpanelManager.shared.trackEvent(
+                event: "Viewed Product",
+                properties: [
+                    "post_id": viewModel.chatDetailInfo.productInfo.productId,
+                    "post_type": viewModel.chatDetailInfo.productInfo.tradeType.mixpanelName,
+                    "source": "chat_room"
+                ]
+            )
+            
         } label: {
             HStack(alignment: .center, spacing: 12) {
                 Group {

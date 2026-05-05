@@ -201,6 +201,16 @@ extension HomeView {
                                     "post_id": viewModel.recommendedProducts[index].id
                                 ]
                             )
+
+                            mixpanelManager.trackEvent(
+                                event: "Viewed Product",
+                                properties: [
+                                    "post_id": viewModel.recommendedProducts[index].id,
+                                    "post_type": viewModel.recommendedProducts[index].tradeType.mixpanelName,
+                                    "source": "home_feed"
+                                ]
+                            )
+                            
                         }
                     }
                 }
@@ -252,6 +262,16 @@ extension HomeView {
                 },
                 onTapProduct: { productId in
                     navigationRouter.push(next: .productDetailView(productId: productId))
+                    
+                    mixpanelManager.trackEvent(
+                        event: "Viewed Product",
+                        properties: [
+                            "post_id": productId,
+                            "post_type": "for_sale",
+                            "source": "home_feed"
+                        ]
+                    )
+                    
                 }
             )
         }
@@ -299,6 +319,16 @@ extension HomeView {
                 },
                 onTapProduct: { productId in
                     navigationRouter.push(next: .productDetailView(productId: productId))
+                    
+                    mixpanelManager.trackEvent(
+                        event: "Viewed Product",
+                        properties: [
+                            "post_id": productId,
+                            "post_type": "wanted",
+                            "source": "home_feed"
+                        ]
+                    )
+                    
                 }
             )
         }

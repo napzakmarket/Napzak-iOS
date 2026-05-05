@@ -24,4 +24,11 @@ enum TradeType: String, Codable {
         case .buy: return "구해요"
         }
     }
+    
+    var mixpanelName: String {
+        switch self {
+        case .sell: return "for_sale"
+        case .buy: return "wanted"
+        }
+    }
 }
