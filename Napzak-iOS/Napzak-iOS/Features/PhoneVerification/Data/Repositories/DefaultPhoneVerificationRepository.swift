@@ -10,6 +10,12 @@ import Foundation
 struct DefaultPhoneVerificationRepository: PhoneVerificationRepository {
     private let remoteDataSource: PhoneVerificationRemoteDataSource
 
+    private enum VerificationOperation {
+        case fetchStatus
+        case requestCode
+        case verifyCode
+    }
+
     init(remoteDataSource: PhoneVerificationRemoteDataSource = DefaultPhoneVerificationRemoteDataSource()) {
         self.remoteDataSource = remoteDataSource
     }
@@ -28,7 +34,7 @@ struct DefaultPhoneVerificationRepository: PhoneVerificationRepository {
             )
 
         case .failure(let error):
-            return .failure(mapError(error))
+            return .failure(mapError(error, operation: .fetchStatus))
         }
     }
 
@@ -48,7 +54,7 @@ struct DefaultPhoneVerificationRepository: PhoneVerificationRepository {
             )
 
         case .failure(let error):
-            return .failure(mapError(error))
+            return .failure(mapError(error, operation: .requestCode))
         }
     }
 
@@ -72,14 +78,32 @@ struct DefaultPhoneVerificationRepository: PhoneVerificationRepository {
             )
 
         case .failure(let error):
-            return .failure(mapError(error))
+            return .failure(mapError(error, operation: .verifyCode))
         }
     }
 }
 
 private extension DefaultPhoneVerificationRepository {
-    func mapError(_ error: NetworkError) -> PhoneVerificationError {
+    private func mapError(_ error: NetworkError, operation: VerificationOperation) -> PhoneVerificationError {
         switch error {
+        case .conflict:
+            switch operation {
+            case .requestCode:
+                return .alreadyRegisteredPhoneNumber
+            case .fetchStatus, .verifyCode:
+                return .unknown(error.errorDescription ?? "알 수 없는 번호 인증 오류가 발생했습니다.")
+            }
+
+        case .tooManyRequests:
+            switch operation {
+            case .requestCode:
+                return .requestLimitExceeded
+            case .verifyCode:
+                return .tooManyVerificationAttempts
+            case .fetchStatus:
+                return .unknown(error.errorDescription ?? "알 수 없는 번호 인증 오류가 발생했습니다.")
+            }
+
         case .unauthorized:
             return .unauthorized
 

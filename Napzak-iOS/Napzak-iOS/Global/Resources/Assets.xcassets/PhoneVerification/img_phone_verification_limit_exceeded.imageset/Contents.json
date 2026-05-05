@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "img_phone_verification_invalid_code.png",
+      "filename" : "img_phone_verification_limit_exceeded.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "img_phone_verification_invalid_code@2x.png",
+      "filename" : "img_phone_verification_limit_exceeded@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "img_phone_verification_invalid_code@3x.png",
+      "filename" : "img_phone_verification_limit_exceeded@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

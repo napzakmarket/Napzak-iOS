@@ -100,14 +100,14 @@ class BaseService {
                             .decode(ErrorResponseDTO.self, from: response.data) {
                             continuation.resume(returning: .failure(.apiError(message: apiError.message)))
                         } else {
-                            continuation.resume(returning: .failure(.badRequest))
+                            continuation.resume(returning: .failure(.conflict))
                         }
                     case 429:
                         if let apiError = try? JSONDecoder()
                             .decode(ErrorResponseDTO.self, from: response.data) {
                             continuation.resume(returning: .failure(.apiError(message: apiError.message)))
                         } else {
-                            continuation.resume(returning: .failure(.networkFail))
+                            continuation.resume(returning: .failure(.tooManyRequests))
                         }
                     case 500...599:
                         if let errorResponse = try? JSONDecoder().decode(ErrorResponseDTO.self, from: response.data),
@@ -206,7 +206,14 @@ class BaseService {
                             .decode(ErrorResponseDTO.self, from: response.data) {
                             continuation.resume(returning: .failure(.apiError(message: apiError.message)))
                         } else {
-                            continuation.resume(returning: .failure(.badRequest))
+                            continuation.resume(returning: .failure(.conflict))
+                        }
+                    case 429:
+                        if let apiError = try? JSONDecoder()
+                            .decode(ErrorResponseDTO.self, from: response.data) {
+                            continuation.resume(returning: .failure(.apiError(message: apiError.message)))
+                        } else {
+                            continuation.resume(returning: .failure(.tooManyRequests))
                         }
                     case 500...599:
                         if let errorResponse = try? JSONDecoder().decode(ErrorResponseDTO.self, from: response.data),

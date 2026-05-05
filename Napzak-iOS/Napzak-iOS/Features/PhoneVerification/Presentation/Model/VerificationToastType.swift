@@ -67,7 +67,7 @@ extension VerificationToastType {
         case .verificationCodeRequestFailed:
             return "img_phone_verification_code_request_failed"
         case .invalidVerificationCode:
-            return "img_phone_verification_invalid_code"
+            return "img_invalid_verification_code"
         case .verificationCodeConfirmFailed:
             return "img_phone_verification_code_confirm_failed"
         case .verificationCodeExpired:
@@ -75,7 +75,7 @@ extension VerificationToastType {
         case .networkDisconnected:
             return "img_phone_verification_network_disconnected"
         case .verificationRequestLimitExceeded:
-            return "img_phone_verification_request_limit_exceeded"
+            return "img_phone_verification_limit_exceeded"
         case .tooManyVerificationAttempts:
             return "img_phone_verification_too_many_attempts"
         }
