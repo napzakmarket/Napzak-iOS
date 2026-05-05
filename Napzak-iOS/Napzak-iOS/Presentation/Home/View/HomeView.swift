@@ -193,7 +193,14 @@ extension HomeView {
                         )
                         .onTapGesture {
                             navigationRouter.push(next: .productDetailView(productId: viewModel.recommendedProducts[index].id))
-                            mixpanelManager.trackEvent(event: "Clicked custom genre", properties: ["item_index": index])
+                            mixpanelManager.trackEvent(
+                                event: "Clicked custom genre",
+                                properties: [
+                                    "item_index": index,
+                                    "genre_name": viewModel.recommendedProducts[index].genreName,
+                                    "post_id": viewModel.recommendedProducts[index].id
+                                ]
+                            )
                         }
                     }
                 }
