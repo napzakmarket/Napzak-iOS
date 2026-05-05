@@ -168,12 +168,25 @@ extension ProductDetailViewModel {
             var status: String?
             let tradeStatus = product.productDetail.tradeStatus
             let tradeType = product.productDetail.tradeType
+            var mixpanleStatus_label: String = "on_sale"
             
             if tradeStatus == .reserved {
                 status = "in_progress"
+                mixpanleStatus_label = "reserved"
             } else if tradeStatus == .completed {
                 status = tradeType == .sell ? "sale_completed" : "payment_completed"
+                mixpanleStatus_label = "completed"
             }
+            
+            mixpanelManager.trackEvent(
+                event: "Item Status Updated",
+                properties: [
+                    "post_id": productId,
+                    "genre_name": product.productDetail.genreName,
+                    "tab": tradeType.mixpanelName,
+                    "status_label": mixpanleStatus_label
+                ]
+            )
             
             guard let status else { return }
             mixpanelManager.trackEvent(event: "Changed Product_status", properties: ["product_id": productId,
