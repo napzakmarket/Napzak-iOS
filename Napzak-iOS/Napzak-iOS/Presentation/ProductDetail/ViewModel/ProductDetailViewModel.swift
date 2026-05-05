@@ -100,8 +100,6 @@ extension ProductDetailViewModel {
             self.product.productDetail = ProductDetailInfo(dto: data.productDetail)
             self.product.productPhotoList = data.productPhotoList.map { ProductPhotoInfo(dto: $0) }
             self.product.storeInfo = StoreInfo(dto: data.storeInfo)
-            
-            let type = data.productDetail.tradeType == .sell ? "for_sale" : "wanted"
         case .failure(let error):
             logger.error("getSellProduct failed: \(error.localizedDescription)")
         }
@@ -113,6 +111,17 @@ extension ProductDetailViewModel {
         likeManager.productLikeUpdated(
             productId: product.productDetail.id,
             isLiked: newState
+        )
+        
+        MixpanelManager.shared.trackEvent(
+            event: "Item Liked",
+            properties: [
+                "post_id": productId,
+                "genre_name": product.productDetail.genreName,
+                "tab": product.productDetail.tradeType.mixpanelName,
+                "source": "item_detail",
+                "action_type": newState ? "add" : "remove"
+            ]
         )
         
         if newState {

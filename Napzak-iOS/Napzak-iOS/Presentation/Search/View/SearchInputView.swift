@@ -86,7 +86,6 @@ extension SearchInputView {
                         SearchEventManager.shared.searchCompleted.send(viewModel.searchInputText)
                         mixpanelManager.trackEvent(event: "Executed Search", properties: ["search_source": "icon",
                                                                                          "keyword": viewModel.searchInputText])
-                        //TODO: - 여기에서 검색 후 아이템 항목 로깅해야함
                     }
                 },
                 onSubmit: {

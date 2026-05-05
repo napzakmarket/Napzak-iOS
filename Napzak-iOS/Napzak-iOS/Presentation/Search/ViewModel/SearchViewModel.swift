@@ -170,6 +170,9 @@ extension SearchViewModel {
                 showEmptyView = false
             }
             
+            MixpanelManager.shared.trackEvent(event: "Viewed Search Result", properties: ["result_count": data.productCount,
+                                                                             "keyword": searchWord])
+            
         case .failure(let error):
             logger.error("getSellProduct failed: \(error.localizedDescription)")
         }
@@ -195,6 +198,9 @@ extension SearchViewModel {
                 showEmptyView = false
             }
             
+            MixpanelManager.shared.trackEvent(event: "Viewed Search Result", properties: ["result_count": data.productCount,
+                                                                             "keyword": searchWord])
+            
         case .failure(let error):
             logger.error("getBuyProduct failed: \(error.localizedDescription)")
         }
@@ -210,6 +216,17 @@ extension SearchViewModel {
         
         updateProductInterestState(productId: productId, isInterested: newState)
         likeManager.productLikeUpdated(productId: productId, isLiked: newState)
+        
+        MixpanelManager.shared.trackEvent(
+            event: "Item Liked",
+            properties: [
+                "post_id": productId,
+                "genre_name": currentProduct.genreName,
+                "tab": currentProduct.tradeType.mixpanelName,
+                "source": searchWord.isEmpty ? "explore_feed" : "search_result",
+                "action_type": newState ? "add" : "remove"
+            ]
+        )
         
         if newState {
             showToast = true
