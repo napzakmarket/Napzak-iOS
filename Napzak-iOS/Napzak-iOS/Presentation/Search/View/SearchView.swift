@@ -149,7 +149,7 @@ struct SearchView: View {
                 await viewModel.updateProducts()
             }
             tabRouter.searchParams.sortOption = newValue
-            mixpanelManager.trackEvent(event: "Applied array Filter", properties: ["sort": newValue.rawValue,
+            mixpanelManager.trackEvent(event: "Applied array Filter", properties: ["sort": newValue.mixpanelName,
                                                                                    "tab": tab])
             scrollToTopTrigger.toggle()
         }
