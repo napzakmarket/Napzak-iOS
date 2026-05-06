@@ -16,6 +16,7 @@ struct ProductDetailView: View {
     @StateObject var viewModel: ProductDetailViewModel
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
 
     @State private var currentPage = 0
     @State private var isReportModalPresented = false
@@ -163,6 +164,27 @@ struct ProductDetailView: View {
             if viewModel.loadingManager.isLoadingNetwork {
                 LoadingView()
             }
+
+            if shouldPresentPhoneVerificationModal {
+                ZStack(alignment: .center) {
+                    Color.black.opacity(0.5)
+                        .ignoresSafeArea()
+
+                    PermissionAlertView(
+                        content: .phoneVerification,
+                        onDismiss: {
+                            phoneVerificationManager.dismissModal()
+                        },
+                        onPrimaryAction: {
+                            phoneVerificationManager.dismissModal()
+                            navigationRouter.push(next: .phoneVerificationView)
+                        }
+                    )
+                    .frame(width: 284, height: 290)
+                }
+                .transition(.opacity)
+                .zIndex(5)
+            }
         }
         .navigationBarHidden(true)
         .ignoresSafeArea()
@@ -213,6 +235,15 @@ struct ProductDetailView: View {
 }
 
 extension ProductDetailView {
+    private var shouldPresentPhoneVerificationModal: Bool {
+        guard phoneVerificationManager.isModalPresented,
+              case .productDetailChat(let productID) = phoneVerificationManager.currentEntryPoint else {
+            return false
+        }
+
+        return productID == viewModel.product.productDetail.id
+    }
+
     
     //MARK: - UI Properties
     
@@ -582,13 +613,23 @@ extension ProductDetailView {
                     viewModel.product.isInterested ? Image(.btnHeartSelectedBig) : Image(.btnHeartDefaultBig)
                 }
                 Button {
-                    navigationRouter.push(
-                        next: .chatDetailView(
-                            chatEntry: .product(
-                                id: viewModel.product.productDetail.id
+                    Task {
+                        let status = await phoneVerificationManager.resolveVerificationStatusIfNeeded()
+
+                        if status == .verified {
+                            navigationRouter.push(
+                                next: .chatDetailView(
+                                    chatEntry: .product(
+                                        id: viewModel.product.productDetail.id
+                                    )
+                                )
                             )
-                        )
-                    )
+                        } else if status == .unverified {
+                            phoneVerificationManager.presentModal(
+                                for: .productDetailChat(productID: viewModel.product.productDetail.id)
+                            )
+                        }
+                    }
                 } label: {
                     HStack(spacing: 5) {
                         Text("채팅하기")

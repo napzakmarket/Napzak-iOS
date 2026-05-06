@@ -59,7 +59,8 @@ struct OnboardingTermsView: View {
                     title: "다음으로",
                     isEnabled: isAllAgreed
                 ) {
-                    authRouter.push(next: .username)
+                    OnboardingManager.shared.saveCheckpoint(.phoneVerification)
+                    authRouter.push(next: .phoneVerification)
                     print("다음으로")
                 }
                 .padding(.bottom, 75)
@@ -75,6 +76,9 @@ struct OnboardingTermsView: View {
         }
         .onChange(of: isPrivacyAgreed) { _ in
             updateAllAgreeState()
+        }
+        .onAppear {
+            OnboardingManager.shared.saveCheckpoint(.terms)
         }
         .task {
             await viewModel.fetchTermsUrls()

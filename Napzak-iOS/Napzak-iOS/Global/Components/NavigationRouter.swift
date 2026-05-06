@@ -8,6 +8,7 @@
 import SwiftUI
 
 enum Route: Hashable {
+    case phoneVerificationView
     case settingView
     case withDrawSelectReasonView
     case withDrawWriteReasonView

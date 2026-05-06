@@ -24,4 +24,5 @@ final class NetworkService {
     let homeService: HomeServiceProtocol = HomeService()
     let pushService: PushServiceProtocol = PushService()
     let chatService: ChatServiceProtocol = ChatService()
+    let phoneVerificationService: PhoneVerificationServiceProtocol = PhoneVerificationService()
 }

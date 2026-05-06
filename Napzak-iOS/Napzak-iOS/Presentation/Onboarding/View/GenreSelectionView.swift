@@ -17,7 +17,7 @@ struct GenreSelectionView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            OnboardingNavigationBar(step: 3) {
+            OnboardingNavigationBar(step: 4) {
                 authRouter.pop()
             }
             
@@ -54,6 +54,9 @@ struct GenreSelectionView: View {
             if isSearchFocused {
                 isSearchFocused = false
             }
+        }
+        .onAppear {
+            OnboardingManager.shared.saveCheckpoint(.genre)
         }
         .task {
             await viewModel.fetchAllGenres()
