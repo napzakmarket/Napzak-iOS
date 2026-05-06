@@ -35,9 +35,7 @@ final class LoginViewModel: ObservableObject {
             UserDefaults.standard.set("kakao", forKey: "loginPlatform")
 
             router.push(next: onboardingStep)
-            if onboardingStep == .completed {
-                mixpanelManager.trackEvent(event: "Signed Up")
-            }
+            mixpanelManager.trackEvent(event: "Signed Up")
         case .failure(let error):
             // TODO: - 서버 오류 시 팝업 필요
             

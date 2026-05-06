@@ -25,4 +25,17 @@ enum SortOption: String, CaseIterable {
             return "저가순"
         }
     }
+    
+    var mixpanelName: String {
+        switch self {
+        case .recent:
+            return "latest"
+        case .popular:
+            return "popular"
+        case .highPrice:
+            return "high_price"
+        case .lowPrice:
+            return "low_price"
+        }
+    }
 }

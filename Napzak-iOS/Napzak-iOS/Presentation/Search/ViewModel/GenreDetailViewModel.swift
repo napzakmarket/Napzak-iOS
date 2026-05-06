@@ -109,6 +109,17 @@ extension GenreDetailViewModel {
         updateProductInterestState(productId: productId, isInterested: newState)
         likeManager.productLikeUpdated(productId: productId, isLiked: newState)
         
+        MixpanelManager.shared.trackEvent(
+            event: "Item Liked",
+            properties: [
+                "post_id": productId,
+                "genre_name": currentProduct.genreName,
+                "tab": currentProduct.tradeType.mixpanelName,
+                "source": "genre_page",
+                "action_type": newState ? "add" : "remove"
+            ]
+        )
+        
         if newState {
             showToast = true
             Task {

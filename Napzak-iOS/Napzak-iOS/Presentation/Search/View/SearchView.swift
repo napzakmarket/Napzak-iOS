@@ -149,7 +149,7 @@ struct SearchView: View {
                 await viewModel.updateProducts()
             }
             tabRouter.searchParams.sortOption = newValue
-            mixpanelManager.trackEvent(event: "Applied array Filter", properties: ["sort": newValue.rawValue,
+            mixpanelManager.trackEvent(event: "Applied array Filter", properties: ["sort": newValue.mixpanelName,
                                                                                    "tab": tab])
             scrollToTopTrigger.toggle()
         }
@@ -369,6 +369,16 @@ private extension SearchView {
         )
         .onTapGesture {
             navigationRouter.push(next: .productDetailView(productId: product.wrappedValue.id))
+            
+            mixpanelManager.trackEvent(
+                event: "Viewed Product",
+                properties: [
+                    "post_id": product.wrappedValue.id,
+                    "post_type": product.wrappedValue.tradeType.mixpanelName,
+                    "source": viewModel.searchWord.isEmpty ? "explore_feed" : "search_result"
+                ]
+            )
+            
         }
     }
 }

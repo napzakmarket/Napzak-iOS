@@ -205,6 +205,16 @@ private extension LikeView {
         )
         .onTapGesture {
             navigationRouter.push(next: .productDetailView(productId: product.id))
+            
+            MixpanelManager.shared.trackEvent(
+                event: "Viewed Product",
+                properties: [
+                    "post_id": product.id,
+                    "post_type": product.tradeType.mixpanelName,
+                    "source": "wish_list"
+                ]
+            )
+            
         }
     }
 }

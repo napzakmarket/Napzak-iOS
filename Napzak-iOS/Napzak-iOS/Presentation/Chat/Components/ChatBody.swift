@@ -85,6 +85,16 @@ struct ChatBody: View {
                         isMessageOwner: chatData.isMessageOwner,
                         onProductButtonTapped: {
                             navigationRouter.push(next: .productDetailView(productId: product.productId))
+                            
+                            MixpanelManager.shared.trackEvent(
+                                event: "Viewed Product",
+                                properties: [
+                                    "post_id": product.productId,
+                                    "post_type": product.tradeType.mixpanelName,
+                                    "source": "chat_room"
+                                ]
+                            )
+                            
                         }
                     )
                     .frame(width: screenWidth - 140)

@@ -158,7 +158,7 @@ extension HomeView {
                 viewModel.handleBannerTap(banner.action)
                 mixpanelManager.trackEvent(event: "Clicked Banner", properties: ["banner_id": banner.id,
                                                                                  "banner_type": "main",
-                                                                                 "banner_index": bannerIndex])
+                                                                                 "banner_index": bannerIndex%3])
             }
         )
     }
@@ -193,7 +193,24 @@ extension HomeView {
                         )
                         .onTapGesture {
                             navigationRouter.push(next: .productDetailView(productId: viewModel.recommendedProducts[index].id))
-                            mixpanelManager.trackEvent(event: "Clicked custom genre", properties: ["item_index": index])
+                            mixpanelManager.trackEvent(
+                                event: "Clicked custom genre",
+                                properties: [
+                                    "item_index": index,
+                                    "genre_name": viewModel.recommendedProducts[index].genreName,
+                                    "post_id": viewModel.recommendedProducts[index].id
+                                ]
+                            )
+
+                            mixpanelManager.trackEvent(
+                                event: "Viewed Product",
+                                properties: [
+                                    "post_id": viewModel.recommendedProducts[index].id,
+                                    "post_type": viewModel.recommendedProducts[index].tradeType.mixpanelName,
+                                    "source": "home_feed"
+                                ]
+                            )
+                            
                         }
                     }
                 }
@@ -245,6 +262,16 @@ extension HomeView {
                 },
                 onTapProduct: { productId in
                     navigationRouter.push(next: .productDetailView(productId: productId))
+                    
+                    mixpanelManager.trackEvent(
+                        event: "Viewed Product",
+                        properties: [
+                            "post_id": productId,
+                            "post_type": "for_sale",
+                            "source": "home_feed"
+                        ]
+                    )
+                    
                 }
             )
         }
@@ -292,6 +319,16 @@ extension HomeView {
                 },
                 onTapProduct: { productId in
                     navigationRouter.push(next: .productDetailView(productId: productId))
+                    
+                    mixpanelManager.trackEvent(
+                        event: "Viewed Product",
+                        properties: [
+                            "post_id": productId,
+                            "post_type": "wanted",
+                            "source": "home_feed"
+                        ]
+                    )
+                    
                 }
             )
         }

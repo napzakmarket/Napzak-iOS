@@ -314,7 +314,16 @@ private extension GenreDetailView {
         )
         .onTapGesture {
             navigationRouter.push(next: .productDetailView(productId: product.wrappedValue.id))
-            print("\(product.wrappedValue.id)번 상품")
+            
+            MixpanelManager.shared.trackEvent(
+                event: "Viewed Product",
+                properties: [
+                    "post_id": product.wrappedValue.id,
+                    "post_type": product.wrappedValue.tradeType.mixpanelName,
+                    "source": "genre_page"
+                ]
+            )
+            
         }
     }
 }
