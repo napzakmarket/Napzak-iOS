@@ -65,8 +65,8 @@ private extension ChatMessageInputBar {
     //MARK: - private Func
     
     func canSendMessage() -> Bool {
-        //띄어쓰기, 공백을 제외한 텍스트로 변환
-        !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !isChatDisabled
+        && !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }
 

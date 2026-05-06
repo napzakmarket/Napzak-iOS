@@ -15,6 +15,7 @@ struct ChatDetailView: View {
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
     @EnvironmentObject private var activeChatState: ActiveChatState
+    @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
     @Environment(\.scenePhase) var scenePhase
     
     @StateObject var viewModel: ChatDetailViewModel
@@ -165,6 +166,27 @@ struct ChatDetailView: View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
                     .zIndex(3)
                 }
+
+                if shouldPresentPhoneVerificationModal {
+                    ZStack(alignment: .center) {
+                        Color.black.opacity(0.5)
+                            .ignoresSafeArea()
+
+                        PermissionAlertView(
+                            content: .phoneVerification,
+                            onDismiss: {
+                                phoneVerificationManager.dismissModal()
+                            },
+                            onPrimaryAction: {
+                                phoneVerificationManager.dismissModal()
+                                navigationRouter.push(next: .phoneVerificationView)
+                            }
+                        )
+                        .frame(width: 284, height: 290)
+                    }
+                    .transition(.opacity)
+                    .zIndex(5)
+                }
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .contentShape(Rectangle())
@@ -206,6 +228,10 @@ struct ChatDetailView: View {
             if let roomId = viewModel.roomId {
                 activeChatState.activeRoomID = String(roomId)
             }
+            
+            Task {
+                await presentPhoneVerificationModalIfNeeded()
+            }
         }
         .onDisappear {
             Task {
@@ -228,6 +254,21 @@ struct ChatDetailView: View {
 }
 
 extension ChatDetailView {
+    private var shouldPresentPhoneVerificationModal: Bool {
+        guard phoneVerificationManager.isModalPresented,
+              let roomId = viewModel.roomId,
+              let entryPoint = phoneVerificationManager.currentEntryPoint else {
+            return false
+        }
+
+        switch entryPoint {
+        case .chatPush(let currentRoomID), .chatRoom(let currentRoomID):
+            return currentRoomID == roomId
+        case .homeModal, .registerSell, .registerBuy, .productDetailChat:
+            return false
+        }
+    }
+
     
     //MARK: - UI Properties
     
@@ -396,12 +437,12 @@ extension ChatDetailView {
             chatImagePickerManager.photoPickerView(maxCount: 1) {
                 Image(.iconGallary)
             }
-            .disabled(viewModel.isChatDisabled)
+            .disabled(isChatInputDisabled)
             
             ChatMessageInputBar (
                 text: $viewModel.messageText,
                 isFocused: _isFocused,
-                isChatDisabled: viewModel.isChatDisabled,
+                isChatDisabled: isChatInputDisabled,
                 onSubmit: {
                     let shouldUpdateProductInfo = viewModel.productId != viewModel.chatDetailInfo.productInfo.productId
                     let messageText = viewModel.messageText
@@ -429,5 +470,30 @@ extension ChatDetailView {
         )
         .padding(.top, 10)
         .clipped()
+    }
+
+    private var isChatInputDisabled: Bool {
+        viewModel.isChatDisabled || phoneVerificationManager.verificationStatus != .verified
+    }
+
+    private func presentPhoneVerificationModalIfNeeded() async {
+        let status = await phoneVerificationManager.resolveVerificationStatusIfNeeded()
+
+        guard status == .unverified,
+              let roomId = viewModel.roomId else {
+            return
+        }
+
+        let entryPoint: PhoneVerificationEntryPoint
+        switch phoneVerificationManager.currentEntryPoint {
+        case .chatPush(let currentRoomID) where currentRoomID == roomId:
+            entryPoint = .chatPush(roomID: roomId)
+        case .chatRoom(let currentRoomID) where currentRoomID == roomId:
+            entryPoint = .chatRoom(roomID: roomId)
+        default:
+            entryPoint = .chatRoom(roomID: roomId)
+        }
+
+        phoneVerificationManager.presentModal(for: entryPoint)
     }
 }

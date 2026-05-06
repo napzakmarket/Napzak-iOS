@@ -9,6 +9,7 @@ import Foundation
 
 enum OnboardingStep: String, CaseIterable, Hashable {
     case terms
+    case phoneVerification
     case username
     case genre
     case completed

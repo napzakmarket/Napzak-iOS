@@ -11,6 +11,8 @@ struct OnboardingNavigationBar: View {
     let step: Int
     let onBack: () -> Void
     
+    private let totalSteps = 4
+    
     var body: some View {
         HStack {
             Button {
@@ -24,15 +26,23 @@ struct OnboardingNavigationBar: View {
             
             Spacer()
             
-            Image("indicator\(String(format: "%02d", step))")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 24, height: 6)
-                .padding(.trailing, 20)
+            HStack(spacing: 4) {
+                ForEach(1...totalSteps, id: \.self) { index in
+                    Circle()
+                        .fill(
+                            index == step
+                            ? Color.napzakPrimary(.purple500)
+                            : Color.napzakGrayScale(.gray100)
+                        )
+                        .frame(width: 6, height: 6)
+                }
+            }
+            .padding(.trailing, 20)
+            .animation(.easeInOut(duration: 0.4), value: step)
         }
     }
 }
 
 #Preview {
-    OnboardingNavigationBar(step: 1, onBack: {})
+    OnboardingNavigationBar(step: 2, onBack: {})
 }

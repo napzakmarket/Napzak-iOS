@@ -27,6 +27,7 @@ final class PushManager: NSObject, ObservableObject {
     
     weak var tabRouter: TabRouter?
     weak var navigationRouter: NavigationRouter?
+    weak var phoneVerificationManager: PhoneVerificationManager?
     var activeChatState: ActiveChatState?
     
     private var cancellables = Set<AnyCancellable>()
@@ -146,6 +147,12 @@ extension PushManager: UNUserNotificationCenterDelegate {
                     }
 
                     if canEnter {
+                        if let phoneVerificationManager = self.phoneVerificationManager {
+                            let status = await phoneVerificationManager.resolveVerificationStatusIfNeeded()
+                            if status == .unverified {
+                                phoneVerificationManager.setEntryPoint(.chatPush(roomID: roomIntID))
+                            }
+                        }
                         navigationRouter?.push(next: .chatDetailView(chatEntry: .room(id: roomIntID)))
                     }
                 }
