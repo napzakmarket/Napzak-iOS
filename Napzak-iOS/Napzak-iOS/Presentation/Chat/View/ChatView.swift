@@ -13,6 +13,7 @@ struct ChatView: View {
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
     @EnvironmentObject private var tabRouter: TabRouter
+    @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
     @Environment(\.scenePhase) var scenePhase
 
     @StateObject var viewModel: ChatViewModel
@@ -139,7 +140,17 @@ extension ChatView {
             LazyVStack(spacing: 0) {
                 ForEach(viewModel.chatRooms) { data in
                     Button {
-                        navigationRouter.push(next: .chatDetailView(chatEntry: .room(id: data.id)))
+                        Task {
+                            let status = await phoneVerificationManager.resolveVerificationStatusIfNeeded()
+
+                            if status == .unverified {
+                                phoneVerificationManager.setEntryPoint(.chatRoom(roomID: data.id))
+                            }
+
+                            if status != .unknown {
+                                navigationRouter.push(next: .chatDetailView(chatEntry: .room(id: data.id)))
+                            }
+                        }
                     } label: {
                         ChatItemView(chatRoom: data)
                     }

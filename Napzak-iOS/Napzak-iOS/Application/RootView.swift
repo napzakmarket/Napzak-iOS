@@ -10,6 +10,7 @@ import SwiftUI
 struct RootView: View {
     @StateObject private var authRouter = AuthNavigationRouter()
     @StateObject private var updateManager = UpdateManager()
+    @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
     
     @ObservedObject private var authManager = AuthManager.shared
     @State private var isShowingSplash = true
@@ -43,13 +44,24 @@ struct RootView: View {
                 
                 await updateManager.checkAppVersion()
             }
+
+            if authManager.isAuthenticated {
+                Task {
+                    await phoneVerificationManager.refreshStatus()
+                }
+            } else {
+                phoneVerificationManager.reset()
+            }
         }
         .onChange(of: authManager.isAuthenticated) { isAuthenticated in
             if isAuthenticated {
                 Task {
                     await authManager.fetchMyStoreId()
                     await authManager.fetchChatRoomIdsToWebSocket()
+                    await phoneVerificationManager.refreshStatus()
                 }
+            } else {
+                phoneVerificationManager.reset()
             }
         }
         .appAlert(

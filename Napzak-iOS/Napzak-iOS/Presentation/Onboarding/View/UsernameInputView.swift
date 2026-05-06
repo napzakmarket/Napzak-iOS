@@ -14,7 +14,7 @@ struct UsernameInputView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            OnboardingNavigationBar(step: 2) {
+            OnboardingNavigationBar(step: 3) {
                 authRouter.pop()
             }
             
@@ -49,6 +49,7 @@ struct UsernameInputView: View {
                     isEnabled: viewModel.isPrimaryButtonEnabled
                 ) {
                     authRouter.temporaryUsername = viewModel.username
+                    OnboardingManager.shared.saveCheckpoint(.genre)
                     authRouter.push(next: .genre)
                     print("다음으로")
                 }
@@ -60,6 +61,9 @@ struct UsernameInputView: View {
         .contentShape(Rectangle())
         .onTapGesture {
             isKeyboardActive = false
+        }
+        .onAppear {
+            OnboardingManager.shared.saveCheckpoint(.username)
         }
         .ignoresSafeArea(.keyboard)
     }
