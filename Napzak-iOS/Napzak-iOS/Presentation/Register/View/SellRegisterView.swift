@@ -178,6 +178,16 @@ extension SellRegisterView {
                         dismiss()
                         if viewModel.type == .initialRegister {
                             navigationRouter.push(next: .productDetailView(productId: productId))
+                            
+                            MixpanelManager.shared.trackEvent(
+                                event: "Viewed Product",
+                                properties: [
+                                    "post_id": productId,
+                                    "post_type": "for_sale",
+                                    "source": "my_post"
+                                ]
+                            )
+                            
                         } else {
                             isEditCompleted = true
                         }

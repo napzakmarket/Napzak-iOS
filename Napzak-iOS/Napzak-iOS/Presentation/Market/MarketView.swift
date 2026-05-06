@@ -528,7 +528,16 @@ struct MarketView: View {
                             })
                         .onTapGesture {
                             navigationRouter.push(next: .productDetailView(productId: viewModel.products[i].id))
-                            print("\(viewModel.products[i].id)번 상품")
+                            
+                            MixpanelManager.shared.trackEvent(
+                                event: "Viewed Product",
+                                properties: [
+                                    "post_id": viewModel.products[i].id,
+                                    "post_type": viewModel.products[i].tradeType.mixpanelName,
+                                    "source": "my_page"
+                                ]
+                            )
+                            
                         }
                     }
                 }

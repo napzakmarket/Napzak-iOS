@@ -100,10 +100,6 @@ extension ProductDetailViewModel {
             self.product.productDetail = ProductDetailInfo(dto: data.productDetail)
             self.product.productPhotoList = data.productPhotoList.map { ProductPhotoInfo(dto: $0) }
             self.product.storeInfo = StoreInfo(dto: data.storeInfo)
-            
-            let type = data.productDetail.tradeType == .sell ? "for_sale" : "wanted"
-            mixpanelManager.trackEvent(event: "Viewed Product", properties: ["post_id": id,
-                                                                             "post_type": type])
         case .failure(let error):
             logger.error("getSellProduct failed: \(error.localizedDescription)")
         }
@@ -115,6 +111,17 @@ extension ProductDetailViewModel {
         likeManager.productLikeUpdated(
             productId: product.productDetail.id,
             isLiked: newState
+        )
+        
+        MixpanelManager.shared.trackEvent(
+            event: "Item Liked",
+            properties: [
+                "post_id": productId,
+                "genre_name": product.productDetail.genreName,
+                "tab": product.productDetail.tradeType.mixpanelName,
+                "source": "item_detail",
+                "action_type": newState ? "add" : "remove"
+            ]
         )
         
         if newState {
@@ -170,12 +177,25 @@ extension ProductDetailViewModel {
             var status: String?
             let tradeStatus = product.productDetail.tradeStatus
             let tradeType = product.productDetail.tradeType
+            var mixpanleStatus_label: String = "on_sale"
             
             if tradeStatus == .reserved {
                 status = "in_progress"
+                mixpanleStatus_label = "reserved"
             } else if tradeStatus == .completed {
                 status = tradeType == .sell ? "sale_completed" : "payment_completed"
+                mixpanleStatus_label = "completed"
             }
+            
+            mixpanelManager.trackEvent(
+                event: "Item Status Updated",
+                properties: [
+                    "post_id": productId,
+                    "genre_name": product.productDetail.genreName,
+                    "tab": tradeType.mixpanelName,
+                    "status_label": mixpanleStatus_label
+                ]
+            )
             
             guard let status else { return }
             mixpanelManager.trackEvent(event: "Changed Product_status", properties: ["product_id": productId,

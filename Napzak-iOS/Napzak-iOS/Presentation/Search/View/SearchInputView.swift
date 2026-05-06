@@ -144,7 +144,8 @@ extension SearchInputView {
                     navigationRouter.push(next: .genreDetailView(genreId: genre.id,
                                                                  genreName: genre.name))
                     mixpanelManager.trackEvent(event: "Executed Search", properties: ["search_source": "genre_page",
-                                                                                     "keyword": viewModel.searchInputText])
+                                                                                     "keyword": viewModel.searchInputText,
+                                                                                      "genre_name": genre.name])
                 } label: {
                     GenreItemView(genreName: genre.name)
                 }
