@@ -55,6 +55,18 @@ struct ProductDetailView: View {
                 }
             }
             
+            if viewModel.isTooltipPresented {
+                VStack {
+                    HStack {
+                        Spacer()
+                        Image(.imgTradeStateTooltip)
+                    }
+                    .padding(.top, 94)
+                    Spacer()
+                }
+                .padding(.trailing, 16)
+            }
+            
             if isReportModalPresented {
                 Color.napzakTransparency(.transBlack)
                     .onTapGesture {
@@ -248,7 +260,8 @@ extension ProductDetailView {
                 Spacer()
                 Button {
                     if viewModel.product.productDetail.isOwnedByCurrentUser {
-                            isOwnerOptionsModalPresented  = true
+                        isOwnerOptionsModalPresented  = true
+                        viewModel.isTooltipPresented = false
                     } else {
                         isReportModalPresented = true
                     }
