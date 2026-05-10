@@ -65,7 +65,7 @@ struct PhoneVerificationView: View {
                                     set: { viewModel.updateVerificationCode($0) }
                                 ),
                                 timerText: viewModel.state.timerText,
-                                isVerified: viewModel.state.session.isVerified,
+                                isCodeVerified: viewModel.state.session.isCodeVerified,
                                 isCodeInputEnabled: viewModel.state.isVerificationCodeInputEnabled,
                                 buttonState: viewModel.state.verifyButtonState,
                                 onTapVerify: {
@@ -98,7 +98,10 @@ struct PhoneVerificationView: View {
                         set: { _ in viewModel.toggleAgeConfirmation() }
                     ),
                     isNextEnabled: viewModel.state.isNextEnabled,
-                    onTapNext: onNext
+                    onTapNext: {
+                        phoneVerificationManager.setPhoneVerified(true)
+                        onNext()
+                    }
                 )
             }
             .zIndex(1)
@@ -109,11 +112,6 @@ struct PhoneVerificationView: View {
         .contentShape(Rectangle())
         .onTapGesture {
             dismissKeyboard()
-        }
-        .onChange(of: viewModel.state.session.isVerified) { isVerified in
-            if isVerified {
-                phoneVerificationManager.setPhoneVerified(true)
-            }
         }
     }
 

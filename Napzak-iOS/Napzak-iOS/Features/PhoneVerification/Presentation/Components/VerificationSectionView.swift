@@ -11,7 +11,7 @@ struct VerificationSectionView: View {
     @Binding var code: String
 
     let timerText: String
-    let isVerified: Bool
+    let isCodeVerified: Bool
     let isCodeInputEnabled: Bool
     let buttonState: VerifyButtonState
 
@@ -40,7 +40,7 @@ extension VerificationSectionView {
                 .frame(width: 1, height: 30)
 
             HStack(spacing: 6) {
-                if isVerified {
+                if isCodeVerified {
                     Image(systemName: "checkmark.circle")
                         .font(.system(size: 12))
                         .foregroundStyle(Color.green)
@@ -101,7 +101,7 @@ extension VerificationSectionView {
     }
 
     private var timerTextColor: Color {
-        isVerified
+        isCodeVerified
         ? Color.napzakGrayScale(.gray300)
         : Color.napzakPrimary(.purple500)
     }
@@ -147,7 +147,7 @@ extension VerificationSectionView {
     VerificationSectionView(
         code: .constant(""),
         timerText: "02:59",
-        isVerified: false,
+        isCodeVerified: false,
         isCodeInputEnabled: true,
         buttonState: .disabled,
         onTapVerify: {}
@@ -159,7 +159,7 @@ extension VerificationSectionView {
     VerificationSectionView(
         code: .constant("123456"),
         timerText: "00:21",
-        isVerified: false,
+        isCodeVerified: false,
         isCodeInputEnabled: true,
         buttonState: .enabled,
         onTapVerify: {}
@@ -171,7 +171,7 @@ extension VerificationSectionView {
     VerificationSectionView(
         code: .constant("123456"),
         timerText: "00:00",
-        isVerified: true,
+        isCodeVerified: true,
         isCodeInputEnabled: false,
         buttonState: .completed,
         onTapVerify: {}
