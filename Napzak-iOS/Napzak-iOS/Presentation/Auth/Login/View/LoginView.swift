@@ -164,20 +164,16 @@ extension OnboardingPhoneVerificationRouteView {
         guard hasResolvedRoute == false else { return }
         hasResolvedRoute = true
 
-        let status = await phoneVerificationManager.resolveVerificationStatusIfNeeded()
+        let status = await phoneVerificationManager.refreshStatus()
         logger.info("Onboarding phone verification route resolved - status: \(String(describing: status))")
-
-        if status == .verified {
-            logger.info("Phone already verified - skipping onboarding phone verification step")
-            OnboardingManager.shared.saveCheckpoint(.username)
-            authRouter.pop()
-            authRouter.push(next: .username)
-            return
-        }
-
-        logger.info("Phone not verified - presenting onboarding phone verification view")
         OnboardingManager.shared.saveCheckpoint(.phoneVerification)
         shouldShowVerificationView = true
+
+        if status == .verified {
+            logger.info("Phone already verified - presenting onboarding phone verification view in completed state")
+        } else {
+            logger.info("Phone not verified - presenting onboarding phone verification view")
+        }
     }
 }
 

@@ -110,6 +110,13 @@ struct PhoneVerificationView: View {
         .toolbar(.hidden, for: .navigationBar)
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .contentShape(Rectangle())
+        .task {
+            let status = await phoneVerificationManager.resolveVerificationStatusIfNeeded()
+
+            if status == .verified {
+                viewModel.applyExistingPhoneVerification()
+            }
+        }
         .onTapGesture {
             dismissKeyboard()
         }

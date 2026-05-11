@@ -141,6 +141,20 @@ final class PhoneVerificationViewModel: ObservableObject {
             handleVerificationFailure(error)
         }
     }
+
+    func applyExistingPhoneVerification() {
+        timerTask?.cancel()
+
+        updateState {
+            $0.session = $0.session.copy(
+                isCodeSent: true,
+                isCodeVerified: true
+            )
+            $0.remainingSeconds = 0
+            $0.toastType = nil
+        }
+    }
+
 }
 
 private extension PhoneVerificationViewModel {

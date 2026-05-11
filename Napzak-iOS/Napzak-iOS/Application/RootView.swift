@@ -16,7 +16,6 @@ struct RootView: View {
     @State private var isShowingSplash = true
     
     let appID = "6740986515"
-    
     var body: some View {
         Group {
             if isShowingSplash {

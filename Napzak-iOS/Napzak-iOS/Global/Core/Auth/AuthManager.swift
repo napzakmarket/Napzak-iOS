@@ -102,7 +102,7 @@ final class AuthManager: ObservableObject {
                     logger.info("Successfully saved tokens to Keychain.")
                 }
                 
-                Task { @MainActor in
+                await MainActor.run {
                     self.isAuthenticated = true
                 }
 
@@ -152,7 +152,7 @@ final class AuthManager: ObservableObject {
         }
         logger.info("logout success")
         
-        Task { @MainActor in
+        await MainActor.run {
             self.isAuthenticated = false
         }
         

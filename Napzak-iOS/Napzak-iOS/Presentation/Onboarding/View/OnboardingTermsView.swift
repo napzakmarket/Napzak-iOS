@@ -9,6 +9,7 @@ import SwiftUI
 
 struct OnboardingTermsView: View {
     @EnvironmentObject private var authRouter: AuthNavigationRouter
+    @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
     @StateObject private var viewModel = OnboardingTermsViewModel()
     @State private var isAllAgreed: Bool = false
     @State private var isTermsAgreed: Bool = false
@@ -17,7 +18,9 @@ struct OnboardingTermsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             OnboardingNavigationBar(step: 1) {
-                authRouter.pop()
+                phoneVerificationManager.reset()
+                AuthManager.shared.forceLogout()
+                authRouter.reset()
             }
             .frame(height: 48)
             
