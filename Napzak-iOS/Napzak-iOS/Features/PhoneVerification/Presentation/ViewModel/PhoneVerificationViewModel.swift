@@ -262,6 +262,10 @@ private extension PhoneVerificationViewModel {
             }
             showToast(.verificationRequestLimitExceeded)
 
+        case .invalidRequest(let message), .unknown(let message)
+            where message.contains("올바른 휴대폰 번호 형식이 아닙니다."):
+            showToast(.invalidPhoneNumber)
+
         default:
             showToast(mapToastType(from: error))
         }
