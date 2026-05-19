@@ -86,5 +86,13 @@ struct OnboardingManagerTests {
         // then
         #expect(checkpoint == nil, "저장된 온보딩 정보가 없으면 nil을 반환해야 합니다.")
     }
-}
 
+    @Test("시나리오 5: 마지막 체크포인트에 맞춰 이전 온보딩 화면 스택이 복원되어야 한다")
+    func restorationPath_matchesExpectedOnboardingStack() throws {
+        #expect(OnboardingStep.terms.restorationPath == [.terms])
+        #expect(OnboardingStep.phoneVerification.restorationPath == [.terms, .phoneVerification])
+        #expect(OnboardingStep.username.restorationPath == [.terms, .phoneVerification, .username])
+        #expect(OnboardingStep.genre.restorationPath == [.terms, .phoneVerification, .username, .genre])
+        #expect(OnboardingStep.completed.restorationPath == [.completed])
+    }
+}

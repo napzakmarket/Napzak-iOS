@@ -34,7 +34,7 @@ final class LoginViewModel: ObservableObject {
             logger.info("로그인 성공")
             UserDefaults.standard.set("kakao", forKey: "loginPlatform")
 
-            router.push(next: onboardingStep)
+            router.replacePath(with: onboardingStep.restorationPath)
             mixpanelManager.trackEvent(event: "Signed Up")
         case .failure(let error):
             // TODO: - 서버 오류 시 팝업 필요
@@ -63,7 +63,7 @@ final class LoginViewModel: ObservableObject {
             logger.info("로그인 성공")
             UserDefaults.standard.set("apple", forKey: "loginPlatform")
 
-            router.push(next: onboardingStep)
+            router.replacePath(with: onboardingStep.restorationPath)
             if onboardingStep == .completed {
                 mixpanelManager.trackEvent(event: "Signed Up")
             }

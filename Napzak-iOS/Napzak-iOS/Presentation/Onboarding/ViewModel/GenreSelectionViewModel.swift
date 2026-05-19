@@ -76,14 +76,22 @@ final class GenreSelectionViewModel: ObservableObject {
             let genreIds = selectedGenres.map { $0.id }
             let genreRequest = PreferGenreRequestDTO(genreIds: genreIds)
             let genreResult = await genreService.registerPreferGenre(request: genreRequest)
-            
-            isLoading = false
-            
+
             switch genreResult {
             case .success(_):
-                logger.info("User and genres registered successfully.")
-                return true
+                let phoneResult = await storeService.registerPhoneVerification()
+                isLoading = false
+
+                switch phoneResult {
+                case .success:
+                    logger.info("User, genres, and phone number registered successfully.")
+                    return true
+                case .failure(let error):
+                    logger.error("registerPhoneVerification failed: \(error.localizedDescription)")
+                    return false
+                }
             case .failure(let error):
+                isLoading = false
                 logger.error("registerPreferGenre failed: \(error.localizedDescription)")
                 return false
             }
@@ -98,13 +106,22 @@ final class GenreSelectionViewModel: ObservableObject {
         isLoading = true
         let nicknameRequest = NicknameRequestDTO(nickname: username)
         let result = await storeService.registerNickname(request: nicknameRequest)
-        isLoading = false
         
         switch result {
         case .success:
-            logger.info("Username registered successfully, skipping genres.")
-            return true
+            let phoneResult = await storeService.registerPhoneVerification()
+            isLoading = false
+
+            switch phoneResult {
+            case .success:
+                logger.info("Username and phone number registered successfully, skipping genres.")
+                return true
+            case .failure(let error):
+                logger.error("registerPhoneVerification failed for skip action: \(error.localizedDescription)")
+                return false
+            }
         case .failure(let error):
+            isLoading = false
             logger.error("registerNickname failed for skip action: \(error.localizedDescription)")
             return false
         }

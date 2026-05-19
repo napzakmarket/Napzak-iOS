@@ -6,13 +6,16 @@
 //
 
 import Foundation
+import os
 
 @MainActor
 final class PhoneVerificationViewModel: ObservableObject {
     @Published private(set) var state = PhoneVerificationViewState()
 
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "PhoneVerification")
     private let requestCodeUseCase: RequestPhoneVerificationCodeUseCase
     private let verifyCodeUseCase: VerifyPhoneVerificationCodeUseCase
+    private let storeService: StoreServiceProtocol
     private var timerTask: Task<Void, Never>?
 
     init(
@@ -21,10 +24,12 @@ final class PhoneVerificationViewModel: ObservableObject {
         ),
         verifyCodeUseCase: VerifyPhoneVerificationCodeUseCase = VerifyPhoneVerificationCodeUseCase(
             repository: DefaultPhoneVerificationRepository()
-        )
+        ),
+        storeService: StoreServiceProtocol = NetworkService.shared.storeService
     ) {
         self.requestCodeUseCase = requestCodeUseCase
         self.verifyCodeUseCase = verifyCodeUseCase
+        self.storeService = storeService
     }
 
     deinit {
@@ -52,9 +57,15 @@ final class PhoneVerificationViewModel: ObservableObject {
     }
 
     func updateVerificationCode(_ code: String) {
+        let normalizedCode = String(code.digitsOnly.prefix(6))
+
+        guard state.session.verificationCode != normalizedCode else {
+            return
+        }
+
         updateState {
             $0.session = $0.session.copy(
-                verificationCode: String(code.digitsOnly.prefix(6)),
+                verificationCode: normalizedCode,
                 isCodeVerified: false
             )
         }
@@ -123,16 +134,16 @@ final class PhoneVerificationViewModel: ObservableObject {
         case .success(let verificationResult):
             updateState {
                 $0.session = $0.session.copy(
-                    isCodeVerified: verificationResult.isPhoneVerified
+                    isCodeVerified: verificationResult.isCodeMatched
                 )
                 $0.remainingRequestCount = verificationResult.remainingRequestCount
             }
 
-            if verificationResult.isPhoneVerified {
+            if verificationResult.isCodeMatched {
                 timerTask?.cancel()
             }
 
-            if verificationResult.isPhoneVerified == false {
+            if verificationResult.isCodeMatched == false {
                 resetVerificationCodeInput()
                 showToast(.invalidVerificationCode)
             }
@@ -142,16 +153,18 @@ final class PhoneVerificationViewModel: ObservableObject {
         }
     }
 
-    func applyExistingPhoneVerification() {
-        timerTask?.cancel()
+    func registerPhoneVerification() async -> Bool {
+        let result = await storeService.registerPhoneVerification()
 
-        updateState {
-            $0.session = $0.session.copy(
-                isCodeSent: true,
-                isCodeVerified: true
-            )
-            $0.remainingSeconds = 0
-            $0.toastType = nil
+        switch result {
+        case .success:
+            logger.info("Phone verification registration completed successfully.")
+            return true
+
+        case .failure(let error):
+            logger.error("registerPhoneVerification failed: \(error.localizedDescription)")
+            showToast(.verificationCodeConfirmFailed)
+            return false
         }
     }
 
@@ -262,7 +275,8 @@ private extension PhoneVerificationViewModel {
             }
             showToast(.verificationRequestLimitExceeded)
 
-        case .invalidRequest(let message), .unknown(let message)
+        case .invalidRequest(let message), 
+                .unknown(let message)
             where message.contains("올바른 휴대폰 번호 형식이 아닙니다."):
             showToast(.invalidPhoneNumber)
 

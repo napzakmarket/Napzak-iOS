@@ -12,15 +12,18 @@ struct PhoneVerificationView: View {
     @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
     
     private let navigationStyle: VerificationNavigationStyle
+    private let shouldRegisterOnNext: Bool
     private let onBack: () -> Void
     private let onNext: () -> Void
     
     init(
         navigationStyle: VerificationNavigationStyle = .basic,
+        shouldRegisterOnNext: Bool = false,
         onBack: @escaping () -> Void = {},
         onNext: @escaping () -> Void = {}
     ) {
         self.navigationStyle = navigationStyle
+        self.shouldRegisterOnNext = shouldRegisterOnNext
         self.onBack = onBack
         self.onNext = onNext
     }
@@ -99,8 +102,17 @@ struct PhoneVerificationView: View {
                     ),
                     isNextEnabled: viewModel.state.isNextEnabled,
                     onTapNext: {
-                        phoneVerificationManager.setPhoneVerified(true)
-                        onNext()
+                        if shouldRegisterOnNext == false {
+                            onNext()
+                            return
+                        }
+
+                        Task {
+                            if await viewModel.registerPhoneVerification() {
+                                phoneVerificationManager.setPhoneVerified(true)
+                                onNext()
+                            }
+                        }
                     }
                 )
             }
@@ -110,12 +122,9 @@ struct PhoneVerificationView: View {
         .toolbar(.hidden, for: .navigationBar)
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .contentShape(Rectangle())
-        .task {
-            let status = await phoneVerificationManager.resolveVerificationStatusIfNeeded()
-
-            if status == .verified {
-                viewModel.applyExistingPhoneVerification()
-            }
+        .onChange(of: viewModel.state.session.isCodeVerified) { isCodeVerified in
+            guard shouldRegisterOnNext == false, isCodeVerified else { return }
+            phoneVerificationManager.setPhoneVerified(true)
         }
         .onTapGesture {
             dismissKeyboard()

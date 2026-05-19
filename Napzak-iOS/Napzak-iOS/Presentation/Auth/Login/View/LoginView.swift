@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import os
 
 import Lottie
 
@@ -118,62 +117,24 @@ extension LoginView {
         hasResumedOnboarding = true
 
         let checkpoint = OnboardingManager.shared.getLastCheckpoint() ?? .terms
-        authRouter.push(next: checkpoint)
+        authRouter.replacePath(with: checkpoint.restorationPath)
     }
 }
 
 private struct OnboardingPhoneVerificationRouteView: View {
     @EnvironmentObject private var authRouter: AuthNavigationRouter
-    @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
-
-    @State private var hasResolvedRoute = false
-    @State private var shouldShowVerificationView = false
-
-    private let logger = Logger(
-        subsystem: Bundle.main.bundleIdentifier ?? "Napzak",
-        category: "OnboardingPhoneVerificationRoute"
-    )
 
     var body: some View {
-        Group {
-            if shouldShowVerificationView {
-                PhoneVerificationView(
-                    navigationStyle: .onboarding(step: 2),
-                    onBack: {
-                        authRouter.pop()
-                    },
-                    onNext: {
-                        OnboardingManager.shared.saveCheckpoint(.username)
-                        authRouter.push(next: .username)
-                    }
-                )
-            } else {
-                Color.clear
-                    .ignoresSafeArea()
+        PhoneVerificationView(
+            navigationStyle: .onboarding(step: 2),
+            onBack: {
+                authRouter.pop()
+            },
+            onNext: {
+                OnboardingManager.shared.saveCheckpoint(.username)
+                authRouter.push(next: .username)
             }
-        }
-        .task {
-            await resolveRouteIfNeeded()
-        }
-    }
-}
-
-extension OnboardingPhoneVerificationRouteView {
-    @MainActor
-    private func resolveRouteIfNeeded() async {
-        guard hasResolvedRoute == false else { return }
-        hasResolvedRoute = true
-
-        let status = await phoneVerificationManager.refreshStatus()
-        logger.info("Onboarding phone verification route resolved - status: \(String(describing: status))")
-        OnboardingManager.shared.saveCheckpoint(.phoneVerification)
-        shouldShowVerificationView = true
-
-        if status == .verified {
-            logger.info("Phone already verified - presenting onboarding phone verification view in completed state")
-        } else {
-            logger.info("Phone not verified - presenting onboarding phone verification view")
-        }
+        )
     }
 }
 
