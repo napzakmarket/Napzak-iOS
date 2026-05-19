@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GenreSelectionView: View {
     @EnvironmentObject private var authRouter: AuthNavigationRouter
+    @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
     @StateObject private var viewModel = GenreSelectionViewModel()
     @FocusState private var isSearchFocused: Bool
     @State private var isSearchCompleted: Bool = false
@@ -161,6 +162,7 @@ extension GenreSelectionView {
                     let username = authRouter.temporaryUsername ?? ""
                     
                     if await viewModel.registerUser(username: username) {
+                        phoneVerificationManager.setPhoneVerified(true)
                         authRouter.push(next: .completed)
                     }
                     
@@ -188,6 +190,7 @@ extension GenreSelectionView {
                     let username = authRouter.temporaryUsername ?? ""
                     
                     if await viewModel.registerOnlyUsername(username: username) {
+                        phoneVerificationManager.setPhoneVerified(true)
                         authRouter.push(next: .completed)
                     }
                 }
