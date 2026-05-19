@@ -102,10 +102,6 @@ final class AuthManager: ObservableObject {
                     logger.info("Successfully saved tokens to Keychain.")
                 }
                 
-                await MainActor.run {
-                    self.isAuthenticated = true
-                }
-
                 return .success(onboardingStep)
                 
             case .failure(let error):
@@ -165,6 +161,11 @@ final class AuthManager: ObservableObject {
     
     func getRefreshToken() -> Result<String, AuthError> {
         return keychain.getRefreshToken()
+    }
+
+    @MainActor
+    func startAuthenticatedSession() {
+        self.isAuthenticated = true
     }
     
     @MainActor

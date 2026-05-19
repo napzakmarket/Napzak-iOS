@@ -45,21 +45,13 @@ struct RootView: View {
             }
 
             if authManager.isAuthenticated {
-                Task {
-                    await phoneVerificationManager.refreshStatus()
-                }
+                handleAuthenticatedSessionStart()
             } else {
                 phoneVerificationManager.reset()
             }
         }
         .onChange(of: authManager.isAuthenticated) { isAuthenticated in
-            if isAuthenticated {
-                Task {
-                    await authManager.fetchMyStoreId()
-                    await authManager.fetchChatRoomIdsToWebSocket()
-                    await phoneVerificationManager.refreshStatus()
-                }
-            } else {
+            if isAuthenticated == false {
                 phoneVerificationManager.reset()
             }
         }
@@ -74,6 +66,16 @@ struct RootView: View {
 }
 
 extension RootView {
+    private func handleAuthenticatedSessionStart() {
+        phoneVerificationManager.reset()
+
+        Task {
+            await authManager.fetchMyStoreId()
+            await authManager.fetchChatRoomIdsToWebSocket()
+            await phoneVerificationManager.refreshStatus()
+        }
+    }
+
     private func openAppStore() {
         if let url = URL(string: "itms-apps://itunes.apple.com/app/id\(appID)") {
             UIApplication.shared.open(url)

@@ -43,7 +43,10 @@ struct LoginView: View {
                         VStack(spacing: 15) {
                             Button {
                                 Task {
-                                    await viewModel.handleKakaoLogin(router: authRouter)
+                                    await viewModel.handleKakaoLogin(
+                                        router: authRouter,
+                                        phoneVerificationManager: phoneVerificationManager
+                                    )
                                 }
                             } label: {
                                 Image(.buttonLoginKakao)
@@ -52,7 +55,10 @@ struct LoginView: View {
                             
                             Button {
                                 Task {
-                                    await viewModel.handleAppleAuthCode(router: authRouter)
+                                    await viewModel.handleAppleAuthCode(
+                                        router: authRouter,
+                                        phoneVerificationManager: phoneVerificationManager
+                                    )
                                 }
                             } label: {
                                 Image(.buttonLoginApple)
