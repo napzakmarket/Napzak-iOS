@@ -10,6 +10,6 @@ import Foundation
 typealias PhoneVerificationVerifyCodeResponseDTO = BaseResponseDTO<PhoneVerificationVerifyCodeDataDTO>
 
 struct PhoneVerificationVerifyCodeDataDTO: Decodable {
-    let isPhoneVerified: Bool
+    let isCodeMatched: Bool
     let remainingRequestCount: Int
 }

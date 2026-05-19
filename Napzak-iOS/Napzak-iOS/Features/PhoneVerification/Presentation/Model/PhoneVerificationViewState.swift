@@ -30,7 +30,7 @@ struct PhoneVerificationViewState: Equatable {
 
     var isResendAvailable: Bool {
         session.isCodeSent
-        && session.isVerified == false
+        && session.isCodeVerified == false
         && remainingSeconds == 0
         && (remainingRequestCount ?? 0) > 0
     }
@@ -42,12 +42,12 @@ struct PhoneVerificationViewState: Equatable {
 
     var isVerificationCodeInputEnabled: Bool {
         session.isCodeSent
-        && session.isVerified == false
+        && session.isCodeVerified == false
         && remainingSeconds > 0
     }
 
     var verifyButtonState: VerifyButtonState {
-        if session.isVerified {
+        if session.isCodeVerified {
             return .completed
         }
 
@@ -59,6 +59,6 @@ struct PhoneVerificationViewState: Equatable {
     }
 
     var isNextEnabled: Bool {
-        session.isVerified && session.isAgeConfirmed
+        session.isCodeVerified && session.isAgeConfirmed
     }
 }

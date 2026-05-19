@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import os
 
 import Lottie
 
@@ -44,7 +43,10 @@ struct LoginView: View {
                         VStack(spacing: 15) {
                             Button {
                                 Task {
-                                    await viewModel.handleKakaoLogin(router: authRouter)
+                                    await viewModel.handleKakaoLogin(
+                                        router: authRouter,
+                                        phoneVerificationManager: phoneVerificationManager
+                                    )
                                 }
                             } label: {
                                 Image(.buttonLoginKakao)
@@ -53,7 +55,10 @@ struct LoginView: View {
                             
                             Button {
                                 Task {
-                                    await viewModel.handleAppleAuthCode(router: authRouter)
+                                    await viewModel.handleAppleAuthCode(
+                                        router: authRouter,
+                                        phoneVerificationManager: phoneVerificationManager
+                                    )
                                 }
                             } label: {
                                 Image(.buttonLoginApple)
@@ -118,66 +123,24 @@ extension LoginView {
         hasResumedOnboarding = true
 
         let checkpoint = OnboardingManager.shared.getLastCheckpoint() ?? .terms
-        authRouter.push(next: checkpoint)
+        authRouter.replacePath(with: checkpoint.restorationPath)
     }
 }
 
 private struct OnboardingPhoneVerificationRouteView: View {
     @EnvironmentObject private var authRouter: AuthNavigationRouter
-    @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
-
-    @State private var hasResolvedRoute = false
-    @State private var shouldShowVerificationView = false
-
-    private let logger = Logger(
-        subsystem: Bundle.main.bundleIdentifier ?? "Napzak",
-        category: "OnboardingPhoneVerificationRoute"
-    )
 
     var body: some View {
-        Group {
-            if shouldShowVerificationView {
-                PhoneVerificationView(
-                    navigationStyle: .onboarding(step: 2),
-                    onBack: {
-                        authRouter.pop()
-                    },
-                    onNext: {
-                        OnboardingManager.shared.saveCheckpoint(.username)
-                        authRouter.push(next: .username)
-                    }
-                )
-            } else {
-                Color.clear
-                    .ignoresSafeArea()
+        PhoneVerificationView(
+            navigationStyle: .onboarding(step: 2),
+            onBack: {
+                authRouter.pop()
+            },
+            onNext: {
+                OnboardingManager.shared.saveCheckpoint(.username)
+                authRouter.push(next: .username)
             }
-        }
-        .task {
-            await resolveRouteIfNeeded()
-        }
-    }
-}
-
-extension OnboardingPhoneVerificationRouteView {
-    @MainActor
-    private func resolveRouteIfNeeded() async {
-        guard hasResolvedRoute == false else { return }
-        hasResolvedRoute = true
-
-        let status = await phoneVerificationManager.resolveVerificationStatusIfNeeded()
-        logger.info("Onboarding phone verification route resolved - status: \(String(describing: status))")
-
-        if status == .verified {
-            logger.info("Phone already verified - skipping onboarding phone verification step")
-            OnboardingManager.shared.saveCheckpoint(.username)
-            authRouter.pop()
-            authRouter.push(next: .username)
-            return
-        }
-
-        logger.info("Phone not verified - presenting onboarding phone verification view")
-        OnboardingManager.shared.saveCheckpoint(.phoneVerification)
-        shouldShowVerificationView = true
+        )
     }
 }
 

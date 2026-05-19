@@ -6,13 +6,16 @@
 //
 
 import Foundation
+import os
 
 @MainActor
 final class PhoneVerificationViewModel: ObservableObject {
     @Published private(set) var state = PhoneVerificationViewState()
 
+    private let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "PhoneVerification")
     private let requestCodeUseCase: RequestPhoneVerificationCodeUseCase
     private let verifyCodeUseCase: VerifyPhoneVerificationCodeUseCase
+    private let storeService: StoreServiceProtocol
     private var timerTask: Task<Void, Never>?
 
     init(
@@ -21,10 +24,12 @@ final class PhoneVerificationViewModel: ObservableObject {
         ),
         verifyCodeUseCase: VerifyPhoneVerificationCodeUseCase = VerifyPhoneVerificationCodeUseCase(
             repository: DefaultPhoneVerificationRepository()
-        )
+        ),
+        storeService: StoreServiceProtocol = NetworkService.shared.storeService
     ) {
         self.requestCodeUseCase = requestCodeUseCase
         self.verifyCodeUseCase = verifyCodeUseCase
+        self.storeService = storeService
     }
 
     deinit {
@@ -32,32 +37,46 @@ final class PhoneVerificationViewModel: ObservableObject {
     }
 
     func updateName(_ name: String) {
-        state.session = state.session.copy(name: name)
+        updateState {
+            $0.session = $0.session.copy(name: name)
+        }
     }
 
     func updatePhoneNumber(_ phoneNumber: String) {
         invalidateVerificationSession()
 
-        state.session = state.session.copy(
-            phoneNumber: phoneNumber.normalizedPhoneNumberInput,
-            verificationCode: "",
-            isCodeSent: false,
-            isVerified: false
-        )
-        state.toastType = nil
+        updateState {
+            $0.session = $0.session.copy(
+                phoneNumber: phoneNumber.normalizedPhoneNumberInput,
+                verificationCode: "",
+                isCodeSent: false,
+                isCodeVerified: false
+            )
+            $0.toastType = nil
+        }
     }
 
     func updateVerificationCode(_ code: String) {
-        state.session = state.session.copy(
-            verificationCode: String(code.digitsOnly.prefix(6)),
-            isVerified: false
-        )
+        let normalizedCode = String(code.digitsOnly.prefix(6))
+
+        guard state.session.verificationCode != normalizedCode else {
+            return
+        }
+
+        updateState {
+            $0.session = $0.session.copy(
+                verificationCode: normalizedCode,
+                isCodeVerified: false
+            )
+        }
     }
 
     func toggleAgeConfirmation() {
-        state.session = state.session.copy(
-            isAgeConfirmed: !state.session.isAgeConfirmed
-        )
+        updateState {
+            $0.session = $0.session.copy(
+                isAgeConfirmed: !$0.session.isAgeConfirmed
+            )
+        }
     }
 
     func requestCode() async {
@@ -66,8 +85,14 @@ final class PhoneVerificationViewModel: ObservableObject {
             return
         }
 
-        state.isSendingCode = true
-        defer { state.isSendingCode = false }
+        updateState {
+            $0.isSendingCode = true
+        }
+        defer {
+            updateState {
+                $0.isSendingCode = false
+            }
+        }
 
         let result = await requestCodeUseCase.execute(
             phoneNumber: state.session.phoneNumber
@@ -75,13 +100,15 @@ final class PhoneVerificationViewModel: ObservableObject {
 
         switch result {
         case .success(let sendResult):
-            state.session = state.session.copy(
-                verificationCode: "",
-                isCodeSent: true,
-                isVerified: false
-            )
-            state.remainingRequestCount = sendResult.remainingRequestCount
-            state.remainingSeconds = 180
+            updateState {
+                $0.session = $0.session.copy(
+                    verificationCode: "",
+                    isCodeSent: true,
+                    isCodeVerified: false
+                )
+                $0.remainingRequestCount = sendResult.remainingRequestCount
+                $0.remainingSeconds = 180
+            }
             startTimer()
             showToast(.verificationCodeSent)
 
@@ -105,16 +132,18 @@ final class PhoneVerificationViewModel: ObservableObject {
 
         switch result {
         case .success(let verificationResult):
-            state.session = state.session.copy(
-                isVerified: verificationResult.isPhoneVerified
-            )
-            state.remainingRequestCount = verificationResult.remainingRequestCount
+            updateState {
+                $0.session = $0.session.copy(
+                    isCodeVerified: verificationResult.isCodeMatched
+                )
+                $0.remainingRequestCount = verificationResult.remainingRequestCount
+            }
 
-            if verificationResult.isPhoneVerified {
+            if verificationResult.isCodeMatched {
                 timerTask?.cancel()
             }
 
-            if verificationResult.isPhoneVerified == false {
+            if verificationResult.isCodeMatched == false {
                 resetVerificationCodeInput()
                 showToast(.invalidVerificationCode)
             }
@@ -123,6 +152,22 @@ final class PhoneVerificationViewModel: ObservableObject {
             handleVerificationFailure(error)
         }
     }
+
+    func registerPhoneVerification() async -> Bool {
+        let result = await storeService.registerPhoneVerification()
+
+        switch result {
+        case .success:
+            logger.info("Phone verification registration completed successfully.")
+            return true
+
+        case .failure(let error):
+            logger.error("registerPhoneVerification failed: \(error.localizedDescription)")
+            showToast(.verificationCodeConfirmFailed)
+            return false
+        }
+    }
+
 }
 
 private extension PhoneVerificationViewModel {
@@ -137,12 +182,14 @@ private extension PhoneVerificationViewModel {
 
                 guard Task.isCancelled == false else { return }
 
-                self.state.remainingSeconds -= 1
+                self.updateState {
+                    $0.remainingSeconds -= 1
+                }
             }
 
             guard Task.isCancelled == false,
                   self.state.session.isCodeSent,
-                  self.state.session.isVerified == false,
+                  self.state.session.isCodeVerified == false,
                   self.state.remainingSeconds == 0 else {
                 return
             }
@@ -154,20 +201,26 @@ private extension PhoneVerificationViewModel {
 
     func invalidateVerificationSession() {
         timerTask?.cancel()
-        state.remainingSeconds = 0
-        state.remainingRequestCount = nil
+        updateState {
+            $0.remainingSeconds = 0
+            $0.remainingRequestCount = nil
+        }
     }
 
     func resetVerificationCodeInput() {
-        state.session = state.session.copy(
-            verificationCode: "",
-            isVerified: false
-        )
+        updateState {
+            $0.session = $0.session.copy(
+                verificationCode: "",
+                isCodeVerified: false
+            )
+        }
     }
 
     func expireVerificationSession() {
         timerTask?.cancel()
-        state.remainingSeconds = 0
+        updateState {
+            $0.remainingSeconds = 0
+        }
         resetVerificationCodeInput()
     }
 
@@ -217,8 +270,15 @@ private extension PhoneVerificationViewModel {
     func handleCodeRequestFailure(_ error: PhoneVerificationError) {
         switch error {
         case .requestLimitExceeded:
-            state.remainingRequestCount = 0
+            updateState {
+                $0.remainingRequestCount = 0
+            }
             showToast(.verificationRequestLimitExceeded)
+
+        case .invalidRequest(let message), 
+                .unknown(let message)
+            where message.contains("올바른 휴대폰 번호 형식이 아닙니다."):
+            showToast(.invalidPhoneNumber)
 
         default:
             showToast(mapToastType(from: error))
@@ -266,12 +326,22 @@ private extension PhoneVerificationViewModel {
     }
 
     func showToast(_ toastType: VerificationToastType) {
-        state.toastType = toastType
+        updateState {
+            $0.toastType = toastType
+        }
 
         Task { [weak self] in
             try? await Task.sleep(for: .seconds(2))
             guard let self, self.state.toastType == toastType else { return }
-            self.state.toastType = nil
+            self.updateState {
+                $0.toastType = nil
+            }
         }
+    }
+
+    func updateState(_ transform: (inout PhoneVerificationViewState) -> Void) {
+        var newState = state
+        transform(&newState)
+        state = newState
     }
 }

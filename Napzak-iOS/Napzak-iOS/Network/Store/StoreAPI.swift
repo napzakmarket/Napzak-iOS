@@ -11,6 +11,7 @@ enum StoreAPI {
     case getMyPageInfo
     case getStoreDetail(storeId: Int)
     case modifyProfile(request: StoreModifyProfileRequestDTO)
+    case registerPhoneVerification
     case getTerms
     case validateNickname(request: NicknameRequestDTO)
     case registerNickname(request: NicknameRequestDTO)
@@ -35,6 +36,8 @@ extension StoreAPI: BaseTargetType {
             return "stores/\(storeId)"
         case .modifyProfile:
             return "stores/modify/profile"
+        case .registerPhoneVerification:
+            return "stores/phone-verifications"
         case .getTerms:
             return "stores/terms"
         case .validateNickname:
@@ -54,6 +57,8 @@ extension StoreAPI: BaseTargetType {
             return .get
         case .modifyProfile:
             return .put
+        case .registerPhoneVerification:
+            return .patch
         default:
             return .post
         }

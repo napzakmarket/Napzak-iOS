@@ -12,15 +12,18 @@ struct PhoneVerificationView: View {
     @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
     
     private let navigationStyle: VerificationNavigationStyle
+    private let shouldRegisterOnNext: Bool
     private let onBack: () -> Void
     private let onNext: () -> Void
     
     init(
         navigationStyle: VerificationNavigationStyle = .basic,
+        shouldRegisterOnNext: Bool = false,
         onBack: @escaping () -> Void = {},
         onNext: @escaping () -> Void = {}
     ) {
         self.navigationStyle = navigationStyle
+        self.shouldRegisterOnNext = shouldRegisterOnNext
         self.onBack = onBack
         self.onNext = onNext
     }
@@ -65,7 +68,7 @@ struct PhoneVerificationView: View {
                                     set: { viewModel.updateVerificationCode($0) }
                                 ),
                                 timerText: viewModel.state.timerText,
-                                isVerified: viewModel.state.session.isVerified,
+                                isCodeVerified: viewModel.state.session.isCodeVerified,
                                 isCodeInputEnabled: viewModel.state.isVerificationCodeInputEnabled,
                                 buttonState: viewModel.state.verifyButtonState,
                                 onTapVerify: {
@@ -98,7 +101,19 @@ struct PhoneVerificationView: View {
                         set: { _ in viewModel.toggleAgeConfirmation() }
                     ),
                     isNextEnabled: viewModel.state.isNextEnabled,
-                    onTapNext: onNext
+                    onTapNext: {
+                        if shouldRegisterOnNext == false {
+                            onNext()
+                            return
+                        }
+
+                        Task {
+                            if await viewModel.registerPhoneVerification() {
+                                phoneVerificationManager.setPhoneVerified(true)
+                                onNext()
+                            }
+                        }
+                    }
                 )
             }
             .zIndex(1)
@@ -107,13 +122,12 @@ struct PhoneVerificationView: View {
         .toolbar(.hidden, for: .navigationBar)
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .contentShape(Rectangle())
+        .onChange(of: viewModel.state.session.isCodeVerified) { isCodeVerified in
+            guard shouldRegisterOnNext == false, isCodeVerified else { return }
+            phoneVerificationManager.setPhoneVerified(true)
+        }
         .onTapGesture {
             dismissKeyboard()
-        }
-        .onChange(of: viewModel.state.session.isVerified) { isVerified in
-            if isVerified {
-                phoneVerificationManager.setPhoneVerified(true)
-            }
         }
     }
 

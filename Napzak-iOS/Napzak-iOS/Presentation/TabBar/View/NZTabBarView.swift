@@ -143,6 +143,7 @@ struct NZTabBarView: View {
                 case .phoneVerificationView:
                     PhoneVerificationView(
                         navigationStyle: .basic,
+                        shouldRegisterOnNext: true,
                         onBack: {
                             if let entryPoint = phoneVerificationManager.currentEntryPoint {
                                 phoneVerificationManager.presentModal(for: entryPoint)

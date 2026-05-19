@@ -17,10 +17,12 @@ final class LoginViewModel: ObservableObject {
     @Published var showAlert = false
     
     private let authManager = AuthManager.shared
-    private let onboardingManager = OnboardingManager.shared
     private let mixpanelManager = MixpanelManager.shared
 
-    func handleKakaoLogin(router: AuthNavigationRouter) async {
+    func handleKakaoLogin(
+        router: AuthNavigationRouter,
+        phoneVerificationManager: PhoneVerificationManager
+    ) async {
         guard !isLoading else { return }
         isLoading = true
         defer { isLoading = false }
@@ -34,7 +36,16 @@ final class LoginViewModel: ObservableObject {
             logger.info("로그인 성공")
             UserDefaults.standard.set("kakao", forKey: "loginPlatform")
 
-            router.push(next: onboardingStep)
+            phoneVerificationManager.reset()
+            await authManager.fetchMyStoreId()
+            await authManager.fetchChatRoomIdsToWebSocket()
+            await phoneVerificationManager.refreshStatus()
+
+            if onboardingStep != .completed {
+                router.replacePath(with: onboardingStep.restorationPath)
+            }
+
+            authManager.startAuthenticatedSession()
             mixpanelManager.trackEvent(event: "Signed Up")
         case .failure(let error):
             // TODO: - 서버 오류 시 팝업 필요
@@ -49,7 +60,10 @@ final class LoginViewModel: ObservableObject {
         }
     }
     
-    func handleAppleAuthCode(router: AuthNavigationRouter) async {
+    func handleAppleAuthCode(
+        router: AuthNavigationRouter,
+        phoneVerificationManager: PhoneVerificationManager
+    ) async {
         guard !isLoading else { return }
         isLoading = true
         defer { isLoading = false }
@@ -63,7 +77,16 @@ final class LoginViewModel: ObservableObject {
             logger.info("로그인 성공")
             UserDefaults.standard.set("apple", forKey: "loginPlatform")
 
-            router.push(next: onboardingStep)
+            phoneVerificationManager.reset()
+            await authManager.fetchMyStoreId()
+            await authManager.fetchChatRoomIdsToWebSocket()
+            await phoneVerificationManager.refreshStatus()
+
+            if onboardingStep != .completed {
+                router.replacePath(with: onboardingStep.restorationPath)
+            }
+
+            authManager.startAuthenticatedSession()
             if onboardingStep == .completed {
                 mixpanelManager.trackEvent(event: "Signed Up")
             }

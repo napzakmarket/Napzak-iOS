@@ -8,6 +8,6 @@
 import Foundation
 
 struct PhoneVerificationCodeVerificationResult: Equatable {
-    let isPhoneVerified: Bool
+    let isCodeMatched: Bool
     let remainingRequestCount: Int
 }

@@ -12,7 +12,7 @@ struct PhoneVerificationSession: Equatable {
     let phoneNumber: String
     let verificationCode: String
     let isCodeSent: Bool
-    let isVerified: Bool
+    let isCodeVerified: Bool
     let isAgeConfirmed: Bool
 
     static let empty = PhoneVerificationSession(
@@ -20,7 +20,7 @@ struct PhoneVerificationSession: Equatable {
         phoneNumber: "",
         verificationCode: "",
         isCodeSent: false,
-        isVerified: false,
+        isCodeVerified: false,
         isAgeConfirmed: false
     )
 
@@ -29,7 +29,7 @@ struct PhoneVerificationSession: Equatable {
         phoneNumber: String? = nil,
         verificationCode: String? = nil,
         isCodeSent: Bool? = nil,
-        isVerified: Bool? = nil,
+        isCodeVerified: Bool? = nil,
         isAgeConfirmed: Bool? = nil
     ) -> PhoneVerificationSession {
         PhoneVerificationSession(
@@ -37,7 +37,7 @@ struct PhoneVerificationSession: Equatable {
             phoneNumber: phoneNumber ?? self.phoneNumber,
             verificationCode: verificationCode ?? self.verificationCode,
             isCodeSent: isCodeSent ?? self.isCodeSent,
-            isVerified: isVerified ?? self.isVerified,
+            isCodeVerified: isCodeVerified ?? self.isCodeVerified,
             isAgeConfirmed: isAgeConfirmed ?? self.isAgeConfirmed
         )
     }

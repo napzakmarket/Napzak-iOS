@@ -72,7 +72,7 @@ struct DefaultPhoneVerificationRepository: PhoneVerificationRepository {
 
             return .success(
                 PhoneVerificationCodeVerificationResult(
-                    isPhoneVerified: data.isPhoneVerified,
+                    isCodeMatched: data.isCodeMatched,
                     remainingRequestCount: data.remainingRequestCount
                 )
             )
