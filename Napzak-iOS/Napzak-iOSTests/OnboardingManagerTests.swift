@@ -12,6 +12,12 @@ import Foundation
 @MainActor
 struct OnboardingManagerTests {
 
+    private func makeTestDefaults(suiteName: String = UUID().uuidString) -> UserDefaults {
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defaults.removePersistentDomain(forName: suiteName)
+        return defaults
+    }
+
     private func cleanupUserDefaults() {
         let defaults = UserDefaults.standard
         defaults.removeObject(forKey: "onboarding_Checkpoint")
@@ -94,5 +100,87 @@ struct OnboardingManagerTests {
         #expect(OnboardingStep.username.restorationPath == [.terms, .phoneVerification, .username])
         #expect(OnboardingStep.genre.restorationPath == [.terms, .phoneVerification, .username, .genre])
         #expect(OnboardingStep.completed.restorationPath == [.completed])
+    }
+
+    @Test("시나리오 6: 앱 첫 실행으로 판단되면 Keychain 정리 로직이 한 번 실행되어야 한다")
+    func clearKeychainIfNeededOnFirstLaunch_whenMarkerMissing() throws {
+        let defaults = makeTestDefaults()
+        var clearCallCount = 0
+        let manager = AppInstallStateManager(
+            defaults: defaults,
+            keychainClearAction: {
+                clearCallCount += 1
+                return .success(())
+            }
+        )
+
+        let result = manager.clearKeychainIfNeededOnFirstLaunch()
+
+        switch result {
+        case .success(let didClear):
+            #expect(didClear)
+        case .failure(let error):
+            Issue.record("Expected success but received \(error)")
+        }
+
+        #expect(clearCallCount == 1, "첫 실행 시 Keychain 정리 로직이 정확히 한 번 호출되어야 합니다.")
+        #expect(
+            defaults.bool(forKey: "app_HasLaunchedBefore"),
+            "첫 실행 처리 후에는 다음 실행을 구분할 수 있도록 마커가 저장되어야 합니다."
+        )
+    }
+
+    @Test("시나리오 7: 이미 실행 마커가 있으면 Keychain 정리 로직이 다시 호출되지 않아야 한다")
+    func clearKeychainIfNeededOnFirstLaunch_whenMarkerExists() throws {
+        let defaults = makeTestDefaults()
+        defaults.set(true, forKey: "app_HasLaunchedBefore")
+        var clearCallCount = 0
+        let manager = AppInstallStateManager(
+            defaults: defaults,
+            keychainClearAction: {
+                clearCallCount += 1
+                return .success(())
+            }
+        )
+
+        let result = manager.clearKeychainIfNeededOnFirstLaunch()
+
+        switch result {
+        case .success(let didClear):
+            #expect(didClear == false)
+        case .failure(let error):
+            Issue.record("Expected success but received \(error)")
+        }
+
+        #expect(clearCallCount == 0, "재실행에서는 Keychain 정리 로직이 호출되지 않아야 합니다.")
+    }
+
+    @Test("시나리오 8: Keychain 정리에 실패하면 실행 마커를 저장하지 않아야 한다")
+    func clearKeychainIfNeededOnFirstLaunch_whenCleanupFails() throws {
+        let defaults = makeTestDefaults()
+        let manager = AppInstallStateManager(
+            defaults: defaults,
+            keychainClearAction: {
+                .failure(.keychainError)
+            }
+        )
+
+        let result = manager.clearKeychainIfNeededOnFirstLaunch()
+
+        switch result {
+        case .success:
+            Issue.record("Expected failure but received success")
+        case .failure(let error):
+            if case .keychainError = error {
+                break
+            } else {
+                Issue.record("Expected keychainError but received \(error)")
+            }
+        }
+
+        #expect(
+            defaults.object(forKey: "app_HasLaunchedBefore") == nil,
+            "정리에 실패한 경우에는 다음 실행에서 재시도할 수 있도록 마커가 저장되면 안 됩니다."
+        )
     }
 }

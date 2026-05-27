@@ -17,6 +17,7 @@ final class AuthManager: ObservableObject {
     private let keychain = KeychainManager.shared
     private let onboardingManager = OnboardingManager.shared
     private let authService = NetworkService.shared.authService
+    private let appInstallStateManager = AppInstallStateManager()
     
     @Published var isAuthenticated: Bool
     
@@ -30,6 +31,15 @@ final class AuthManager: ObservableObject {
 //        OnboardingManager.shared.clearProgress()
 //        logger.info("[DEBUG] Keychain cleared for login testing")
 //        #endif
+        switch appInstallStateManager.clearKeychainIfNeededOnFirstLaunch() {
+        case .success(true):
+            logger.info("First launch detected. Cleared persisted Keychain tokens.")
+        case .success(false):
+            break
+        case .failure(let error):
+            logger.error("Failed to clear Keychain tokens on first launch: \(error.localizedDescription)")
+        }
+
         self.isAuthenticated = (try? keychain.getAccessToken().get()) != nil
         
         if let checkpoint = onboardingManager.getLastCheckpoint() {
@@ -183,6 +193,36 @@ final class AuthManager: ObservableObject {
         keychain.clearTokens()
         onboardingManager.clearProgress()
         self.isAuthenticated = false
+    }
+}
+
+final class AppInstallStateManager {
+    private let defaults: UserDefaults
+    private let installMarkerKey = "app_HasLaunchedBefore"
+    private let keychainClearAction: () -> Result<Void, AuthError>
+
+    init(
+        defaults: UserDefaults = .standard,
+        keychainClearAction: @escaping () -> Result<Void, AuthError> = {
+            KeychainManager.shared.clearTokens()
+        }
+    ) {
+        self.defaults = defaults
+        self.keychainClearAction = keychainClearAction
+    }
+
+    func clearKeychainIfNeededOnFirstLaunch() -> Result<Bool, AuthError> {
+        guard defaults.object(forKey: installMarkerKey) == nil else {
+            return .success(false)
+        }
+
+        switch keychainClearAction() {
+        case .success:
+            defaults.set(true, forKey: installMarkerKey)
+            return .success(true)
+        case .failure(let error):
+            return .failure(error)
+        }
     }
 }
 
