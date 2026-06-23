@@ -24,6 +24,7 @@ final class KeychainManager {
             case .success:
                 return .success(())
             case .failure(let error):
+                delete(key: accessTokenKey)
                 return .failure(error)
             }
         case .failure(let error):

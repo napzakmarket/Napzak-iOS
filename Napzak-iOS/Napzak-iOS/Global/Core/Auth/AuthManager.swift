@@ -57,6 +57,7 @@ final class AuthManager: ObservableObject {
             }
         } else {
             logger.info("No complete token pair found in Keychain at startup")
+            keychain.clearTokens()
         }
     }
 
