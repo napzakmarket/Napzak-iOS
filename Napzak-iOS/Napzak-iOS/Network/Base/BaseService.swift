@@ -15,6 +15,12 @@ class BaseService {
     private static var logger: Logger {
         Logger(subsystem: Bundle.main.bundleIdentifier ?? "Napzak", category: "Network.Service")
     }
+
+    private static func handleRefreshFailure() {
+        DispatchQueue.main.async {
+            AuthManager.shared.forceLogout()
+        }
+    }
     
     /// 네트워크 요청을 수행하고 제네릭 타입으로 응답 데이터를 디코딩합니다.
     ///
@@ -70,6 +76,7 @@ class BaseService {
                                 
                             case .failure:
                                 Self.logger.error("Token refresh failed")
+                                Self.handleRefreshFailure()
                                 continuation.resume(returning: .failure(.unauthorized))
                             }
                         }
@@ -185,6 +192,7 @@ class BaseService {
                                 
                             case .failure:
                                 Self.logger.error("Token refresh failed")
+                                Self.handleRefreshFailure()
                                 continuation.resume(returning: .failure(.unauthorized))
                             }
                         }
