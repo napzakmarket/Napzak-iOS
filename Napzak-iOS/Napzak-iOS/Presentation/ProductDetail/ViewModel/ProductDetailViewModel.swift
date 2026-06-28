@@ -41,6 +41,7 @@ final class ProductDetailViewModel: ObservableObject {
     @Published var showInterestToast: Bool = false
     @Published var showStatusToast = false
     @Published var isTooltipPresented = false
+    @Published var showCopyToast = false
 
     @ObservedObject private var likeManager = ProductLikeManager.shared
 
@@ -52,13 +53,15 @@ final class ProductDetailViewModel: ObservableObject {
     
     private let interestService = NetworkService.shared.interestService
     let productId: Int
+    let universalLink: URL
     let loadingManager = LoadingViewManager()
     private let mixpanelManager = MixpanelManager.shared
-
+    
     //MARK: - Init
     
     init(productId: Int) {
         self.productId = productId
+        self.universalLink = URL(string: "https://napzak.kro.kr/product/\(productId)")!
         setupLikeObserver()
         setupLikePublisher()
         

@@ -26,6 +26,7 @@ struct ProductDetailView: View {
     @State private var isRegisterViewPresented = false
     @State private var isImageDetailViewPresented: Bool = false
     @State private var isEditCompleted = false
+    @State private var isShareSheetPresented = false
 
     //MARK: - Properties
     
@@ -45,6 +46,14 @@ struct ProductDetailView: View {
                         if viewModel.showInterestToast {
                             ToastMessageView(
                                 style: .success
+                            )
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
+                            .zIndex(1)
+                        }
+                        
+                        if viewModel.showCopyToast {
+                            ToastMessageView(
+                                style: .share
                             )
                             .transition(.move(edge: .bottom).combined(with: .opacity))
                             .zIndex(1)
@@ -188,6 +197,7 @@ struct ProductDetailView: View {
         .navigationBarHidden(true)
         .ignoresSafeArea()
         .animation(.spring(), value: viewModel.showInterestToast)
+        .animation(.spring(), value: viewModel.showCopyToast)
         .animation(.easeInOut(duration: 0.3), value: viewModel.showStatusToast)
         .animation(.easeInOut(duration: 0.3), value: isReportModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isOwnerOptionsModalPresented)
@@ -230,6 +240,24 @@ struct ProductDetailView: View {
                 }
             }
         }
+        .sheet(isPresented: $isShareSheetPresented) {
+            ActivitySheetView(activityItems: [viewModel.universalLink]) { activityType, completed in
+                guard completed else { return }
+                
+                if activityType == .copyToPasteboard {
+                    Task {
+                        UIPasteboard.general.url = viewModel.universalLink
+                        viewModel.showCopyToast = true
+                        try? await Task.sleep(for: .seconds(2))
+                        await MainActor.run {
+                            viewModel.showCopyToast = false
+                        }
+                    }
+                }
+            }
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
+        }
     }
 }
 
@@ -258,6 +286,12 @@ extension ProductDetailView {
                 }
                 Spacer()
                 Button {
+                    isShareSheetPresented = true
+                } label: {
+                    Image(.iconShare)
+                        .frame(width: 24, height: 24)
+                }
+                Button {
                     if viewModel.product.productDetail.isOwnedByCurrentUser {
                         isOwnerOptionsModalPresented  = true
                         viewModel.isTooltipPresented = false
@@ -266,8 +300,9 @@ extension ProductDetailView {
                     }
                 } label: {
                     Image(.iconMoreOptions)
-                        .frame(width: 48, height: 48)
+                        .frame(width: 24, height: 24)
                 }
+                .padding(.trailing, 18)
             }
         }
         .frame(height: 94)
