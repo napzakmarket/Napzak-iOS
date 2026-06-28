@@ -677,7 +677,3 @@ private extension ProductDetailView {
         }
     }
 }
-
-#Preview {
-    ProductDetailView(viewModel: ProductDetailViewModel(productId: 1))
-}
