@@ -16,6 +16,7 @@ struct ProductDetailView: View {
     @StateObject var viewModel: ProductDetailViewModel
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @EnvironmentObject private var tabRouter: TabRouter
     @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
 
     @State private var currentPage = 0
@@ -175,7 +176,8 @@ struct ProductDetailView: View {
             
             if viewModel.showDeletedProductAlert {
                 DeletedProductView(onGoToHomeButtonTapped: {
-                    navigationRouter.pop()
+                    tabRouter.switchToHome()
+                    navigationRouter.reset()
                 })
                 .zIndex(4)
             }
