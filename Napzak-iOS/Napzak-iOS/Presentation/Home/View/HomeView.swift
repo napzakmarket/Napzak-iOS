@@ -80,7 +80,6 @@ struct HomeView: View {
             
             if viewModel.showLikeToast {
                 ToastMessageView(
-                    message: "찜한 상품에 추가되었어요!",
                     style: .success
                 )
                 .transition(.move(edge: .bottom).combined(with: .opacity))

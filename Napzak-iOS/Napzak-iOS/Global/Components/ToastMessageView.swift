@@ -11,38 +11,39 @@ struct ToastMessageView: View {
     enum Style {
         case warning
         case success
+        case share
         
-        var icon: Image {
+        var icon: Image? {
             switch self {
             case .warning: return Image(.toastWarning)
-            case .success: return Image(.iconHeart)
+            default: return nil
             }
         }
         
-        var textColor: Color {
+        var textColor: Color? {
             switch self {
             case .warning: return Color.napzakState(.red)
-            case .success: return .white
+            default: return nil
             }
         }
         
-        var backgroundColor: Color {
+        var backgroundColor: Color? {
             switch self {
             case .warning: return
                 Color.napzakTransparency(.transWhite, opacity: 0.5)
-            case .success: return Color.napzakPrimary(.purple500)
+            default: return nil
             }
         }
         
         var borderColor: Color? {
             switch self {
             case .warning: return Color.napzakState(.red)
-            case .success: return nil
-            }
+            default: return nil
+           }
         }
     }
 
-    let message: String
+    var message: String = ""
     let style: Style
 
     var body: some View {
@@ -52,7 +53,7 @@ struct ToastMessageView: View {
                 style.icon
                 Text(message)
                     .applyNapzakFont(.caption1SemiBold12)
-                    .foregroundStyle(style.textColor)
+                    .foregroundStyle(style.textColor ?? Color.clear)
             }
             .padding(.horizontal, 15)
             .padding(.vertical, 7)
@@ -69,6 +70,8 @@ struct ToastMessageView: View {
             
         case .success:
             Image(.toastLike)
+        case .share:
+            Image(.imgToastShare)
         }
         
     }
@@ -83,7 +86,12 @@ struct ToastMessageView: View {
 
 #Preview("success") {
     ToastMessageView(
-        message: "찜한 상품에 추가되었어요!",
         style: .success
+    )
+}
+
+#Preview("share") {
+    ToastMessageView(
+        style: .share
     )
 }
