@@ -42,6 +42,7 @@ final class ProductDetailViewModel: ObservableObject {
     @Published var showStatusToast = false
     @Published var isTooltipPresented = false
     @Published var showCopyToast = false
+    @Published var showDeletedProductAlert = false
 
     @ObservedObject private var likeManager = ProductLikeManager.shared
 
@@ -117,6 +118,10 @@ extension ProductDetailViewModel {
 
         case .failure(let error):
             logger.error("getSellProduct failed: \(error.localizedDescription)")
+            
+            if error.localizedDescription == "상품을 찾을 수 없습니다." {
+                showDeletedProductAlert = true
+            }
         }
     }
     

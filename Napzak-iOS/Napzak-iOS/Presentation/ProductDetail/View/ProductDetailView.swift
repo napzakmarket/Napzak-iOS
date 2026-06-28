@@ -172,6 +172,13 @@ struct ProductDetailView: View {
             if viewModel.loadingManager.isLoadingNetwork {
                 LoadingView()
             }
+            
+            if viewModel.showDeletedProductAlert {
+                DeletedProductView(onGoToHomeButtonTapped: {
+                    navigationRouter.pop()
+                })
+                .zIndex(4)
+            }
 
             if shouldPresentPhoneVerificationModal {
                 ZStack(alignment: .center) {
