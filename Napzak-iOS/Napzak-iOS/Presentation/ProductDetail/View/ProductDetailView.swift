@@ -39,6 +39,16 @@ struct ProductDetailView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             mainScrollView
+            
+            if viewModel.showCopyToast {
+                ToastMessageView(
+                    style: .share
+                )
+                .padding(.bottom, viewModel.product.productDetail.isOwnedByCurrentUser ? 80 : 130)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(1)
+           }
+
             VStack(spacing: 0) {
                 navigationBar
                 Spacer()
@@ -47,14 +57,6 @@ struct ProductDetailView: View {
                         if viewModel.showInterestToast {
                             ToastMessageView(
                                 style: .success
-                            )
-                            .transition(.move(edge: .bottom).combined(with: .opacity))
-                            .zIndex(1)
-                        }
-                        
-                        if viewModel.showCopyToast {
-                            ToastMessageView(
-                                style: .share
                             )
                             .transition(.move(edge: .bottom).combined(with: .opacity))
                             .zIndex(1)
@@ -206,7 +208,7 @@ struct ProductDetailView: View {
         .navigationBarHidden(true)
         .ignoresSafeArea()
         .animation(.spring(), value: viewModel.showInterestToast)
-        .animation(.spring(), value: viewModel.showCopyToast)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.showCopyToast)
         .animation(.easeInOut(duration: 0.3), value: viewModel.showStatusToast)
         .animation(.easeInOut(duration: 0.3), value: isReportModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isOwnerOptionsModalPresented)
@@ -324,7 +326,7 @@ extension ProductDetailView {
     }
     
     private var mainScrollView: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0) {
                 productImagePageView
                 productInfo
