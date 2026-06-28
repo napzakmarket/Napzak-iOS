@@ -49,6 +49,9 @@ struct Napzak_iOSApp: App {
                         _ = AuthController.handleOpenUrl(url: url)
                     }
                 }
+                .onOpenURL { url in
+                    handleUniversalLink(url)
+                }
                 .environmentObject(pushManager)
                 .environmentObject(permission)
                 .environmentObject(navigationRouter)
@@ -67,5 +70,20 @@ struct Napzak_iOSApp: App {
                 chatStompManager.connect()
             }
         }
+    }
+    
+    private func handleUniversalLink(_ url: URL) {
+        guard url.host == "napzak.kro.kr" else { return }
+        
+        let pathComponents = url.pathComponents
+        
+        guard pathComponents.count >= 3,
+              pathComponents[1] == "product",
+              let productId = Int(pathComponents[2]) else {
+            return
+        }
+        
+        print("\(productId)번 상품 상세 페이지 이동")
+        navigationRouter.push(next: .productDetailView(productId: productId))
     }
 }
