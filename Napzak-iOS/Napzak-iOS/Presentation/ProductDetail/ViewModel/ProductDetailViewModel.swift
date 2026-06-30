@@ -54,7 +54,7 @@ final class ProductDetailViewModel: ObservableObject {
     
     private let interestService = NetworkService.shared.interestService
     let productId: Int
-    let universalLink: URL
+    let universalLink: URL?
     let loadingManager = LoadingViewManager()
     private let mixpanelManager = MixpanelManager.shared
     
@@ -62,7 +62,14 @@ final class ProductDetailViewModel: ObservableObject {
     
     init(productId: Int) {
         self.productId = productId
-        self.universalLink = URL(string: "https://napzak.kro.kr/product/\(productId)")!
+        
+        if let universalLink = URL(string: "https://napzak.kro.kr/product/\(productId)") {
+            self.universalLink = universalLink
+        } else {
+            logger.error("Universal Link 생성 실패")
+            self.universalLink = nil
+        }
+        
         setupLikeObserver()
         setupLikePublisher()
         
