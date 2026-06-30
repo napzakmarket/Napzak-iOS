@@ -41,6 +41,8 @@ final class ProductDetailViewModel: ObservableObject {
     @Published var showInterestToast: Bool = false
     @Published var showStatusToast = false
     @Published var isTooltipPresented = false
+    @Published var showCopyToast = false
+    @Published var showDeletedProductAlert = false
 
     @ObservedObject private var likeManager = ProductLikeManager.shared
 
@@ -52,13 +54,22 @@ final class ProductDetailViewModel: ObservableObject {
     
     private let interestService = NetworkService.shared.interestService
     let productId: Int
+    let universalLink: URL?
     let loadingManager = LoadingViewManager()
     private let mixpanelManager = MixpanelManager.shared
-
+    
     //MARK: - Init
     
     init(productId: Int) {
         self.productId = productId
+        
+        if let universalLink = URL(string: "https://napzak.kro.kr/product/\(productId)") {
+            self.universalLink = universalLink
+        } else {
+            logger.error("Universal Link 생성 실패")
+            self.universalLink = nil
+        }
+        
         setupLikeObserver()
         setupLikePublisher()
         
@@ -114,6 +125,10 @@ extension ProductDetailViewModel {
 
         case .failure(let error):
             logger.error("getSellProduct failed: \(error.localizedDescription)")
+            
+            if error.localizedDescription == "상품을 찾을 수 없습니다." {
+                showDeletedProductAlert = true
+            }
         }
     }
     

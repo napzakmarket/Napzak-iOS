@@ -16,6 +16,7 @@ struct ProductDetailView: View {
     @StateObject var viewModel: ProductDetailViewModel
     
     @EnvironmentObject private var navigationRouter: NavigationRouter
+    @EnvironmentObject private var tabRouter: TabRouter
     @EnvironmentObject private var phoneVerificationManager: PhoneVerificationManager
 
     @State private var currentPage = 0
@@ -26,6 +27,7 @@ struct ProductDetailView: View {
     @State private var isRegisterViewPresented = false
     @State private var isImageDetailViewPresented: Bool = false
     @State private var isEditCompleted = false
+    @State private var isShareSheetPresented = false
 
     //MARK: - Properties
     
@@ -37,6 +39,16 @@ struct ProductDetailView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             mainScrollView
+            
+            if viewModel.showCopyToast {
+                ToastMessageView(
+                    style: .share
+                )
+                .padding(.bottom, viewModel.product.productDetail.isOwnedByCurrentUser ? 80 : 130)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
+                .zIndex(1)
+           }
+
             VStack(spacing: 0) {
                 navigationBar
                 Spacer()
@@ -44,7 +56,6 @@ struct ProductDetailView: View {
                     VStack(spacing: 52) {
                         if viewModel.showInterestToast {
                             ToastMessageView(
-                                message: "찜한 상품에 추가되었어요!",
                                 style: .success
                             )
                             .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -164,6 +175,14 @@ struct ProductDetailView: View {
             if viewModel.loadingManager.isLoadingNetwork {
                 LoadingView()
             }
+            
+            if viewModel.showDeletedProductAlert {
+                DeletedProductView(onGoToHomeButtonTapped: {
+                    tabRouter.switchToHome()
+                    navigationRouter.reset()
+                })
+                .zIndex(4)
+            }
 
             if shouldPresentPhoneVerificationModal {
                 ZStack(alignment: .center) {
@@ -189,6 +208,7 @@ struct ProductDetailView: View {
         .navigationBarHidden(true)
         .ignoresSafeArea()
         .animation(.spring(), value: viewModel.showInterestToast)
+        .animation(.easeInOut(duration: 0.3), value: viewModel.showCopyToast)
         .animation(.easeInOut(duration: 0.3), value: viewModel.showStatusToast)
         .animation(.easeInOut(duration: 0.3), value: isReportModalPresented)
         .animation(.easeInOut(duration: 0.3), value: isOwnerOptionsModalPresented)
@@ -231,6 +251,24 @@ struct ProductDetailView: View {
                 }
             }
         }
+        .sheet(isPresented: $isShareSheetPresented) {
+            ActivitySheetView(activityItems: [viewModel.universalLink]) { activityType, completed in
+                guard completed else { return }
+                
+                if activityType == .copyToPasteboard {
+                    Task {
+                        UIPasteboard.general.url = viewModel.universalLink
+                        viewModel.showCopyToast = true
+                        try? await Task.sleep(for: .seconds(2))
+                        await MainActor.run {
+                            viewModel.showCopyToast = false
+                        }
+                    }
+                }
+            }
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
+        }
     }
 }
 
@@ -259,6 +297,12 @@ extension ProductDetailView {
                 }
                 Spacer()
                 Button {
+                    isShareSheetPresented = true
+                } label: {
+                    Image(.iconShare)
+                        .frame(width: 24, height: 24)
+                }
+                Button {
                     if viewModel.product.productDetail.isOwnedByCurrentUser {
                         isOwnerOptionsModalPresented  = true
                         viewModel.isTooltipPresented = false
@@ -267,8 +311,9 @@ extension ProductDetailView {
                     }
                 } label: {
                     Image(.iconMoreOptions)
-                        .frame(width: 48, height: 48)
+                        .frame(width: 24, height: 24)
                 }
+                .padding(.trailing, 18)
             }
         }
         .frame(height: 94)
@@ -281,7 +326,7 @@ extension ProductDetailView {
     }
     
     private var mainScrollView: some View {
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             VStack(alignment: .leading, spacing: 0) {
                 productImagePageView
                 productInfo
@@ -676,8 +721,4 @@ private extension ProductDetailView {
             return "\(viewModel.product.productDetail.tradeType.type)완료"
         }
     }
-}
-
-#Preview {
-    ProductDetailView(viewModel: ProductDetailViewModel(productId: 1))
 }
