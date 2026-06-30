@@ -40,7 +40,8 @@ final class AuthManager: ObservableObject {
             logger.error("Failed to clear Keychain tokens on first launch: \(error.localizedDescription)")
         }
 
-        self.isAuthenticated = (try? keychain.getAccessToken().get()) != nil
+        let hasStoredTokens = Self.hasStoredTokens(in: keychain)
+        self.isAuthenticated = hasStoredTokens
         
         if let checkpoint = onboardingManager.getLastCheckpoint() {
             logger.info("Current onboarding checkpoint: \(checkpoint.rawValue)")
@@ -48,18 +49,21 @@ final class AuthManager: ObservableObject {
             logger.info("No onboarding checkpoint found")
         }
         
-        switch keychain.getAccessToken() {
-        case .success(let token):
-            logger.info("Existing accessToken in Keychain: \(token, privacy: .private)")
-            
+        if hasStoredTokens {
+            logger.info("Existing accessToken and refreshToken found in Keychain")
             Task {
                 await fetchMyStoreId()
                 await fetchChatRoomIdsToWebSocket()
             }
-            
-        case .failure:
-            logger.info("No accessToken found in Keychain at startup")
+        } else {
+            logger.info("No complete token pair found in Keychain at startup")
+            keychain.clearTokens()
         }
+    }
+
+    private static func hasStoredTokens(in keychain: KeychainManager) -> Bool {
+        (try? keychain.getAccessToken().get()) != nil &&
+        (try? keychain.getRefreshToken().get()) != nil
     }
     
     func login(with type: SocialLoginType) async -> Result<OnboardingStep, AuthError> {

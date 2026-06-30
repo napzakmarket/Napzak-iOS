@@ -16,6 +16,9 @@ final class TokenRefreshService: BaseService, TokenRefreshServiceProtocol {
     private let provider = MoyaProvider<AuthAPI>(plugins: [MoyaPlugin()])
 
     func refresh() async -> Result<TokenResponseDTO, NetworkError> {
-        return await requestDecodable(provider, .refresh)
+        guard case .success = KeychainManager.shared.getRefreshToken() else {
+            return .failure(.unauthorized)
+        }
+        return await requestDecodable(provider, .refresh, retry: false)
     }
 }
