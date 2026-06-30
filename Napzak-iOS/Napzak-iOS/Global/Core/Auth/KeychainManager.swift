@@ -12,6 +12,7 @@ final class KeychainManager {
     
     private let accessTokenKey = "accessToken"
     private let refreshTokenKey = "refreshToken"
+    private let service = Bundle.main.bundleIdentifier ?? "com.napzakmarket.napzak"
     
     private init() {}
 
@@ -24,6 +25,7 @@ final class KeychainManager {
             case .success:
                 return .success(())
             case .failure(let error):
+                delete(key: accessTokenKey)
                 return .failure(error)
             }
         case .failure(let error):
@@ -71,6 +73,7 @@ final class KeychainManager {
 
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
             kSecAttrAccount as String: key
         ]
 
@@ -98,6 +101,7 @@ final class KeychainManager {
     private func load(key: String) -> Result<String, AuthError> {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
             kSecAttrAccount as String: key,
             kSecReturnData as String: true
         ]
@@ -117,6 +121,7 @@ final class KeychainManager {
     private func delete(key: String) -> Result<Void, AuthError> {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service,
             kSecAttrAccount as String: key
         ]
         

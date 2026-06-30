@@ -484,6 +484,8 @@
 		D07BF2752D9D169F000E4FD5 /* NZTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NZTabBarView.swift; sourceTree = "<group>"; };
 		D09C948C2DC11B0F00D13485 /* GenreDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenreDetailViewModel.swift; sourceTree = "<group>"; };
 		D0B1FA492DC385360090681E /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		D0B1FA4A2DC385360090681E /* Config-Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-Debug.xcconfig"; sourceTree = "<group>"; };
+		D0B1FA4B2DC385360090681E /* Config-Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-Release.xcconfig"; sourceTree = "<group>"; };
 		D0BDAC682E3531F200FD3E27 /* ChatAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatAPI.swift; sourceTree = "<group>"; };
 		D0BDAC6A2E3535E000FD3E27 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
 		D0BDAC6E2E353B0200FD3E27 /* ChatDetailResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailResponseDTO.swift; sourceTree = "<group>"; };
@@ -969,6 +971,8 @@
 			isa = PBXGroup;
 			children = (
 				D0B1FA492DC385360090681E /* Config.xcconfig */,
+				D0B1FA4A2DC385360090681E /* Config-Debug.xcconfig */,
+				D0B1FA4B2DC385360090681E /* Config-Release.xcconfig */,
 				D045DEBA2D83723A00EB1EB6 /* Napzak-iOS */,
 				D6A834CE2E6317FB00DE5395 /* Napzak-iOSTests */,
 				D045DE9C2D836F0500EB1EB6 /* Products */,
@@ -2518,7 +2522,7 @@
 /* Begin XCBuildConfiguration section */
 		D045DEA72D836F0700EB1EB6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D0B1FA492DC385360090681E /* Config.xcconfig */;
+			baseConfigurationReference = D0B1FA4A2DC385360090681E /* Config-Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -2583,7 +2587,7 @@
 		};
 		D045DEA82D836F0700EB1EB6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D0B1FA492DC385360090681E /* Config.xcconfig */;
+			baseConfigurationReference = D0B1FA4B2DC385360090681E /* Config-Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -2641,9 +2645,9 @@
 		};
 		D045DEAA2D836F0700EB1EB6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D0B1FA492DC385360090681E /* Config.xcconfig */;
+			baseConfigurationReference = D0B1FA4A2DC385360090681E /* Config-Debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(APP_ICON_NAME)";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Napzak-iOS/Napzak-iOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -2654,7 +2658,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Napzak-iOS/Global/Resources/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "납작마켓";
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_DISPLAY_NAME)";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -2667,7 +2671,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.napzakmarket.napzak.debug;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -2682,9 +2686,9 @@
 		};
 		D045DEAB2D836F0700EB1EB6 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D0B1FA492DC385360090681E /* Config.xcconfig */;
+			baseConfigurationReference = D0B1FA4B2DC385360090681E /* Config-Release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(APP_ICON_NAME)";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Napzak-iOS/Napzak-iOS.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -2695,7 +2699,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Napzak-iOS/Global/Resources/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "납작마켓";
+				INFOPLIST_KEY_CFBundleDisplayName = "$(APP_DISPLAY_NAME)";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -2708,7 +2712,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 2.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.napzakmarket.napzak.debug;
+				PRODUCT_BUNDLE_IDENTIFIER = "$(APP_BUNDLE_IDENTIFIER)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
