@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>MIXPANEL_TOKEN</key>
-	<string>$(MIXPANEL_TOKEN)</string>
 	<key>BASE_URL</key>
 	<string>$(BASE_URL)</string>
 	<key>CFBundleURLTypes</key>
@@ -16,6 +14,16 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>kakao$(KAKAO_APP_KEY)</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>napzak</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>napzak</string>
 			</array>
 		</dict>
 	</array>
@@ -31,6 +39,8 @@
 		<string>kakaolink</string>
 		<string>kakaoplus</string>
 	</array>
+	<key>MIXPANEL_TOKEN</key>
+	<string>$(MIXPANEL_TOKEN)</string>
 	<key>NOTICE_URL</key>
 	<string>$(NOTICE_URL)</string>
 	<key>NSAppTransportSecurity</key>
