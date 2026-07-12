@@ -73,17 +73,49 @@ struct Napzak_iOSApp: App {
     }
     
     private func handleUniversalLink(_ url: URL) {
-        guard url.host == "napzak.kro.kr" else { return }
+        if handleHTTPSUniversalLink(url) {
+            return
+        }
+        
+        if handleCustomSchemeDeepLink(url) {
+            return
+        }
+    }
+    
+    private func handleHTTPSUniversalLink(_ url: URL) -> Bool {
+        guard url.scheme == "https",
+              url.host == "napzak.kro.kr" else {
+            return false
+        }
         
         let pathComponents = url.pathComponents
         
         guard pathComponents.count >= 3,
               pathComponents[1] == "product",
               let productId = Int(pathComponents[2]) else {
-            return
+            return false
         }
         
         print("\(productId)번 상품 상세 페이지 이동")
         navigationRouter.push(next: .productDetailView(productId: productId))
+        return true
+    }
+    
+    private func handleCustomSchemeDeepLink(_ url: URL) -> Bool {
+        guard url.scheme == "napzak",
+              url.host == "product" else {
+            return false
+        }
+        
+        let pathComponents = url.pathComponents
+        
+        guard pathComponents.count >= 2,
+              let productId = Int(pathComponents[1]) else {
+            return false
+        }
+        
+        print("\(productId)번 상품 상세 페이지 이동")
+        navigationRouter.push(next: .productDetailView(productId: productId))
+        return true
     }
 }
