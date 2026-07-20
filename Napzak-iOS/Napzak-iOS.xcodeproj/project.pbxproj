@@ -167,6 +167,7 @@
 		D07B039C2E35584700D9D985 /* ChatRoomCreateResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07B039B2E35584700D9D985 /* ChatRoomCreateResponseDTO.swift */; };
 		D07B039F2E3558F000D9D985 /* ChatRoomCreateRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07B039E2E3558DD00D9D985 /* ChatRoomCreateRequestDTO.swift */; };
 		D07BF2762D9D16A3000E4FD5 /* NZTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D07BF2752D9D169F000E4FD5 /* NZTabBarView.swift */; };
+		D09ACD38300E404F00E4FA98 /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = D09ACD37300E404F00E4FA98 /* FacebookCore */; };
 		D09C948D2DC11B1800D13485 /* GenreDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D09C948C2DC11B0F00D13485 /* GenreDetailViewModel.swift */; };
 		D0BDAC692E3531F500FD3E27 /* ChatAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BDAC682E3531F200FD3E27 /* ChatAPI.swift */; };
 		D0BDAC6B2E3535E900FD3E27 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0BDAC6A2E3535E000FD3E27 /* ChatService.swift */; };
@@ -646,6 +647,7 @@
 				D023E3B32E2D727C00267150 /* SwiftStomp in Frameworks */,
 				D04BB46F2E534B4F00B81698 /* Zoomable in Frameworks */,
 				D045DED02D83732D00EB1EB6 /* Moya in Frameworks */,
+				D09ACD38300E404F00E4FA98 /* FacebookCore in Frameworks */,
 				D045DEC92D8372D800EB1EB6 /* KakaoSDKAuth in Frameworks */,
 				D045DED32D83736600EB1EB6 /* Lottie in Frameworks */,
 				D6C1DAD62E63588B00BFAEA0 /* FirebaseRemoteConfig in Frameworks */,
@@ -2105,6 +2107,7 @@
 				D04BB46E2E534B4F00B81698 /* Zoomable */,
 				D6C1DAD52E63588B00BFAEA0 /* FirebaseRemoteConfig */,
 				D0D6C73C2E68096E009B0175 /* Mixpanel */,
+				D09ACD37300E404F00E4FA98 /* FacebookCore */,
 			);
 			productName = "Napzak-iOS";
 			productReference = D045DE9B2D836F0500EB1EB6 /* Napzak-iOS.app */;
@@ -2167,6 +2170,7 @@
 				D023E3B12E2D727C00267150 /* XCRemoteSwiftPackageReference "SwiftStomp" */,
 				D04BB46D2E534B4E00B81698 /* XCRemoteSwiftPackageReference "Zoomable" */,
 				D0D6C73B2E68096D009B0175 /* XCRemoteSwiftPackageReference "mixpanel-swift" */,
+				D09ACD36300E404F00E4FA98 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D045DE9C2D836F0500EB1EB6 /* Products */;
@@ -2844,6 +2848,14 @@
 				kind = branch;
 			};
 		};
+		D09ACD36300E404F00E4FA98 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/facebook-ios-sdk";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		D0D6C73B2E68096D009B0175 /* XCRemoteSwiftPackageReference "mixpanel-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mixpanel/mixpanel-swift";
@@ -2902,6 +2914,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D04BB46D2E534B4E00B81698 /* XCRemoteSwiftPackageReference "Zoomable" */;
 			productName = Zoomable;
+		};
+		D09ACD37300E404F00E4FA98 /* FacebookCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D09ACD36300E404F00E4FA98 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookCore;
 		};
 		D0D6C73C2E68096E009B0175 /* Mixpanel */ = {
 			isa = XCSwiftPackageProductDependency;
