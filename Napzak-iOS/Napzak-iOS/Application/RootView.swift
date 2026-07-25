@@ -14,11 +14,12 @@ struct RootView: View {
     
     @ObservedObject private var authManager = AuthManager.shared
     @State private var isShowingSplash = true
+    @State private var hasStartedAuthenticatedSession = false
     
     let appID = "6740986515"
     var body: some View {
         Group {
-            if isShowingSplash {
+            if isShowingSplash || authManager.isRestoringSession {
                 SplashView()
                     .transition(.opacity)
             } else if authManager.isAuthenticated && !authManager.needsOnboarding {
@@ -51,7 +52,10 @@ struct RootView: View {
             }
         }
         .onChange(of: authManager.isAuthenticated) { isAuthenticated in
-            if isAuthenticated == false {
+            if isAuthenticated {
+                handleAuthenticatedSessionStart()
+            } else {
+                hasStartedAuthenticatedSession = false
                 phoneVerificationManager.reset()
             }
         }
@@ -67,11 +71,15 @@ struct RootView: View {
 
 extension RootView {
     private func handleAuthenticatedSessionStart() {
+        guard hasStartedAuthenticatedSession == false else { return }
+        hasStartedAuthenticatedSession = true
         phoneVerificationManager.reset()
 
         Task {
             await authManager.fetchMyStoreId()
+            guard authManager.isAuthenticated else { return }
             await authManager.fetchChatRoomIdsToWebSocket()
+            guard authManager.isAuthenticated else { return }
             await phoneVerificationManager.refreshStatus()
         }
     }
