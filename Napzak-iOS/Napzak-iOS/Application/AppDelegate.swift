@@ -7,6 +7,7 @@
 
 import UIKit
 import UserNotifications
+import FacebookCore
 import FirebaseMessaging
 
 class AppDelegate: NSObject, UIApplicationDelegate {
@@ -15,6 +16,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        
+        // Meta SDK
+        ApplicationDelegate.shared.application(
+            application,
+            didFinishLaunchingWithOptions: launchOptions
+        )
+        
+        // Push Notification
         UNUserNotificationCenter.current().delegate = pushManager
         Messaging.messaging().delegate = pushManager
         
