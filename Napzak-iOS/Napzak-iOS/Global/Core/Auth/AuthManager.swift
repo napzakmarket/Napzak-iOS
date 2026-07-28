@@ -20,6 +20,7 @@ final class AuthManager: ObservableObject {
     private let appInstallStateManager = AppInstallStateManager()
     
     @Published var isAuthenticated: Bool
+    @Published var isRestoringSession: Bool
     
     var needsOnboarding: Bool {
         onboardingManager.getLastCheckpoint() != .completed
@@ -41,7 +42,8 @@ final class AuthManager: ObservableObject {
         }
 
         let hasStoredTokens = Self.hasStoredTokens(in: keychain)
-        self.isAuthenticated = hasStoredTokens
+        self.isAuthenticated = false
+        self.isRestoringSession = hasStoredTokens
         
         if let checkpoint = onboardingManager.getLastCheckpoint() {
             logger.info("Current onboarding checkpoint: \(checkpoint.rawValue)")
@@ -50,14 +52,14 @@ final class AuthManager: ObservableObject {
         }
         
         if hasStoredTokens {
-            logger.info("Existing accessToken and refreshToken found in Keychain")
+            logger.info("Existing token pair found. Restoring session")
             Task {
-                await fetchMyStoreId()
-                await fetchChatRoomIdsToWebSocket()
+                await restoreStoredSession()
             }
         } else {
             logger.info("No complete token pair found in Keychain at startup")
             keychain.clearTokens()
+            self.isRestoringSession = false
         }
     }
 
@@ -163,6 +165,7 @@ final class AuthManager: ObservableObject {
         logger.info("logout success")
         
         await MainActor.run {
+            self.isRestoringSession = false
             self.isAuthenticated = false
         }
         
@@ -179,6 +182,7 @@ final class AuthManager: ObservableObject {
 
     @MainActor
     func startAuthenticatedSession() {
+        self.isRestoringSession = false
         self.isAuthenticated = true
     }
     
@@ -196,7 +200,27 @@ final class AuthManager: ObservableObject {
     func forceLogout() {
         keychain.clearTokens()
         onboardingManager.clearProgress()
+        self.isRestoringSession = false
         self.isAuthenticated = false
+    }
+
+    private func restoreStoredSession() async {
+        let refreshResult = await TokenRefresher.shared.refresh()
+
+        await MainActor.run {
+            self.isRestoringSession = false
+
+            switch refreshResult {
+            case .success:
+                self.logger.info("Session restored")
+                self.isAuthenticated = true
+
+            case .failure(let error):
+                self.logger.error("Session restore failed: \(error.localizedDescription)")
+                self.keychain.clearTokens()
+                self.isAuthenticated = false
+            }
+        }
     }
 }
 
