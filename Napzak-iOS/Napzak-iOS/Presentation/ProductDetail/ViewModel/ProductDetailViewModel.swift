@@ -63,13 +63,18 @@ final class ProductDetailViewModel: ObservableObject {
     init(productId: Int) {
         self.productId = productId
         
-        if let universalLink = URL(string: "https://napzak.kro.kr/product/\(productId)") {
+    #if DEBUG
+        let universalLinkString = "https://napzak.kro.kr/product/\(productId)"
+    #else
+        let universalLinkString = "https://napzakmarket.kro.kr/product/\(productId)"
+    #endif
+        
+        if let universalLink = URL(string: universalLinkString) {
             self.universalLink = universalLink
         } else {
             logger.error("Universal Link 생성 실패")
             self.universalLink = nil
         }
-        
         setupLikeObserver()
         setupLikePublisher()
         

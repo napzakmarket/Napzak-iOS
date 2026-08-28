@@ -83,10 +83,19 @@ struct Napzak_iOSApp: App {
     }
     
     private func handleHTTPSUniversalLink(_ url: URL) -> Bool {
-        guard url.scheme == "https",
-              url.host == "napzak.kro.kr" else {
+        guard url.scheme == "https" else {
             return false
         }
+
+    #if DEBUG
+        guard url.host == "napzak" else {
+            return false
+        }
+    #else
+        guard url.host == "napzakmarket" else {
+            return false
+        }
+    #endif
         
         let pathComponents = url.pathComponents
         
@@ -102,8 +111,17 @@ struct Napzak_iOSApp: App {
     }
     
     private func handleCustomSchemeDeepLink(_ url: URL) -> Bool {
-        guard url.scheme == "napzak",
-              url.host == "product" else {
+        #if DEBUG
+        guard url.scheme == "napzakdev" else {
+            return false
+        }
+        #else
+        guard url.scheme == "napzak" else {
+            return false
+        }
+        #endif
+        
+        guard url.host == "product" else {
             return false
         }
         
